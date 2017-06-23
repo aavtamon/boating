@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	
+  <script src="lib/jquery-1.11.2.min.js"></script>
+  <script src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="lib/jquery-ui-1.11.4/jquery-ui.css">
+  <script src="js/utils.js"></script>
+	<script src="js/backend.js"></script>
+  
+  
+  <script>
+  	$(document).ready(function() {
+  	  var screen = Utils.getQueryParameterByName("screen");
+  	  if (screen == null || screen == "") {
+  	    screen = "home";
+  	  }
+      
+  	  $("#Main-ScreenContainer").load("screens/" + screen + ".html");
+    });
+  	
+  </script>
+	
+</head>
+<body>
+	<div id="Main-Header">
+		Header
+	</div>
+
+	<div id="Main-ScreenContainer"></div>
+
+	<div id="Main-Footer">
+		Footer
+	</div>
+</body>
+</html>

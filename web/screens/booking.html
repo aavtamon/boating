@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="screens/booking.css">  
+
+<script>
+	$(document).ready(function() {
+ 	  $("#Booking-Screen-Calendar").datepicker({
+	    onSelect: function(dateText, instance) {
+	      showTimes(new Date(dateText));
+	      
+        $("#Booking-Screen-Calendar").animate({ 
+            marginLeft: "50px",
+        }, 1000, function() {
+          $("#Booking-Screen-TimeFrame").animate({ 
+            opacity: 1,
+  	      }, 1000);
+        });
+	    },
+	    defaultDate: Backend.getCurrentDate(),
+ 	    minDate: Backend.getSchedulingBeginDate(),
+	    maxDate: Backend.getSchedulingEndDate()
+ 	  });
+ 	  
+ 	  function showTimes(date) {
+ 	   $("#Booking-Screen-TimeFrame-Times").empty();
+ 	    
+ 	    var intervals = Backend.getAvailableTimes(date);
+ 	    for (var i in intervals) {
+ 	      var interval = intervals[i];
+ 	      
+        var hours = interval.time.getHours();
+	 	    var minutes = interval.time.getMinutes();
+	 	    var ampm = hours >= 12 ? 'pm' : 'am';
+	 	    hours = hours % 12;
+	 	    hours = hours ? hours : 12;
+	 	    
+	 	    var duration = interval.duration + (interval.duration > 1 ? " hours" : " hour");
+ 	      
+ 	     	$("#Booking-Screen-TimeFrame-Times").append("<div>" + hours + ampm + " (" + duration + ")</div>");
+ 	    }
+ 	  }
+ 	  
+	});
+</script>
+
+<div id="Booking-Screen">
+	<a href="main.html?screen=home">Home!</a>
+	<div>
+		<div id="Booking-Screen-Calendar"></div>
+		<div id="Booking-Screen-TimeFrame">
+			<div id="Booking-Screen-TimeFrame-Title">Select Timeframe</div>
+			<div id="Booking-Screen-TimeFrame-Times"></div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,20 @@
+#Booking-Screen-Calendar {
+	display: inline-block;
+	margin-left: 300px;
+	vertical-align: top;
+}
+
+#Booking-Screen-TimeFrame {
+	display: inline-block;
+	height: 100px;
+	margin-left: 50px;
+	vertical-align: top;
+	padding: 10px;
+
+	opacity: 0;
+	background: red;
+}
+
+#Booking-Screen-TimeFrame-Title {
+	text-align: center;
+}
