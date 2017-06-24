@@ -4,7 +4,13 @@
 	$(document).ready(function() {
  	  $("#Booking-Screen-Calendar").datepicker({
 	    onSelect: function(dateText, instance) {
-	      showTimes(new Date(dateText));
+	      var newSelectedDate = new Date(dateText);
+	      if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == Backend.getReservationContext().date.getTime()) {
+	        return;
+	      }
+	      Backend.getReservationContext().date = newSelectedDate;
+	      
+	      showTimes();
 	      
         $("#Booking-Screen-Calendar").animate({ 
             marginLeft: "50px",
@@ -19,10 +25,15 @@
 	    maxDate: Backend.getSchedulingEndDate()
  	  });
  	  
- 	  function showTimes(date) {
- 	   $("#Booking-Screen-TimeFrame-Times").empty();
+ 	  function showTimes() {
+  	  $("#Booking-Screen-Duration").css("opacity", 0);
+ 	    $("#Booking-Screen-TimeFrame-Times").empty();
+      $("#Booking-Screen-TimeFrame").animate({ 
+        marginLeft: "150px",
+      }, 1000);
+ 	   
  	    
- 	    var intervals = Backend.getAvailableTimes(date);
+ 	    var intervals = Backend.getAvailableTimes(Backend.getReservationContext().date);
  	    for (var i in intervals) {
  	      var interval = intervals[i];
  	      
@@ -32,12 +43,49 @@
 	 	    hours = hours % 12;
 	 	    hours = hours ? hours : 12;
 	 	    
-	 	    var duration = interval.duration + (interval.duration > 1 ? " hours" : " hour");
+	 	    var duration = interval.maxDuration + (interval.maxDuration > 1 ? " hours" : " hour");
  	      
- 	     	$("#Booking-Screen-TimeFrame-Times").append("<div>" + hours + ampm + " (" + duration + ")</div>");
+	 	    var timeInterval = $("<div class=\"booking-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#Booking-Screen-TimeFrame-Times"));
+ 	      timeInterval.click(function(interval) {
+ 	       Backend.getReservationContext().interval = interval;
+ 	        
+          showDurations();
+ 	        $("#Booking-Screen-TimeFrame").animate({ 
+            marginLeft: "50px",
+          }, 1000);
+ 	      }.bind(this, interval));
  	    }
  	  }
  	  
+ 	  function showDurations() {
+ 	    $("#Booking-Screen-Duration-Durations").empty();
+
+      $("#Booking-Screen-Duration").animate({ 
+        opacity: 1,
+      }, 1000, function() {
+   	    if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration) {
+   	     Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
+   	      showLocationMap();
+   	    }
+      });
+ 	    
+ 	    for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
+ 	      var duration = $("<div class=\"booking-duration\">" + i + "</div>").appendTo($("#Booking-Screen-Duration-Durations"));
+ 	      duration.click(function(duration) {
+ 	       Backend.getReservationContext().duration = i;
+ 	        
+ 	        showLocationMap();
+ 	      }.bind(this, i));
+ 	    }
+ 	  }
+ 	  
+ 	  
+ 	  function showLocationMap() {
+      $("#Booking-Screen-LocationMap").animate({ 
+        marginTop: "50px",
+        opacity: 1
+      }, 1000);
+ 	  }
 	});
 </script>
 
@@ -46,8 +94,13 @@
 	<div>
 		<div id="Booking-Screen-Calendar"></div>
 		<div id="Booking-Screen-TimeFrame">
-			<div id="Booking-Screen-TimeFrame-Title">Select Timeframe</div>
+			<div id="Booking-Screen-TimeFrame-Title">Take-off time</div>
 			<div id="Booking-Screen-TimeFrame-Times"></div>
 		</div>
+		<div id="Booking-Screen-Duration">
+			<div id="Booking-Screen-Duration-Title">Ride duration</div>
+			<div id="Booking-Screen-Duration-Durations"></div>
+		</div>
+		<div id="Booking-Screen-LocationMap"></div>
 	</div>
 </div>

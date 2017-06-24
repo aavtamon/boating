@@ -1,4 +1,10 @@
 Backend = {
+    resevrationContext: {},
+    
+    getReservationContext: function() {
+      return this.resevrationContext;
+    },
+    
     getCurrentDate: function() {
       return new Date("9/10/2002");
     },
@@ -18,6 +24,6 @@ Backend = {
       var secondTime = new Date(date);
       secondTime.setHours(13, 0);
 
-      return [{time: firstTime, duration: 2}, {time: secondTime, duration: 1}];
+      return [{time: firstTime, minDuration: 2, maxDuration: 2}, {time: secondTime, minDuration: 1, maxDuration: 2}];
     }
 }
