@@ -1,6 +1,10 @@
 Backend = {
     resevrationContext: {},
     
+    
+    resetReservationContext: function() {
+      this.resevrationContext = {};
+    },
     getReservationContext: function() {
       return this.resevrationContext;
     },
@@ -18,6 +22,10 @@ Backend = {
     },
     
     getAvailableTimes: function(date) {
+      if (date.getDate() == 19) {
+        return [];
+      }
+      
       var firstTime = new Date(date);
       firstTime.setHours(10, 0);
       

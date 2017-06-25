@@ -1,21 +1,42 @@
 <link rel="stylesheet" href="screens/booking.css">  
 
 <script>
+  function canProceedToNextStep() {
+    var reservationContext = Backend.getReservationContext();
+    if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null && reservationContext.location != null) {
+      $("#Booking-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
+    } else {
+      $("#Booking-Screen-ButtonsPanel-NextButton").attr("disabled", true);
+    }
+  }
+
+
 	$(document).ready(function() {
- 	  $("#Booking-Screen-Calendar").datepicker({
+	  Backend.resetReservationContext();
+	  canProceedToNextStep();
+	  
+	  
+ 	  $("#Booking-Screen-SelectionPanel-Calendar").datepicker({
+ 	    beforeShowDay: function(date) {
+ 	      var isSelectable = Backend.getAvailableTimes(date).length > 0;
+ 	      
+ 	      return [isSelectable, "", null];
+ 	    },
+ 	    
 	    onSelect: function(dateText, instance) {
 	      var newSelectedDate = new Date(dateText);
 	      if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == Backend.getReservationContext().date.getTime()) {
 	        return;
 	      }
 	      Backend.getReservationContext().date = newSelectedDate;
+	      canProceedToNextStep();
 	      
 	      showTimes();
 	      
-        $("#Booking-Screen-Calendar").animate({ 
+        $("#Booking-Screen-SelectionPanel-Calendar").animate({ 
             marginLeft: "50px",
         }, 1000, function() {
-          $("#Booking-Screen-TimeFrame").animate({ 
+          $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
             opacity: 1,
   	      }, 1000);
         });
@@ -26,9 +47,12 @@
  	  });
  	  
  	  function showTimes() {
-  	  $("#Booking-Screen-Duration").css("opacity", 0);
- 	    $("#Booking-Screen-TimeFrame-Times").empty();
-      $("#Booking-Screen-TimeFrame").animate({ 
+  	  $("#Booking-Screen-SelectionPanel-Duration").css("opacity", 0);
+ 	    $("#Booking-Screen-SelectionPanel-TimeFrame-Times").empty();
+ 	    Backend.getReservationContext().interval = null;
+ 	    canProceedToNextStep();
+ 	   
+      $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
         marginLeft: "150px",
       }, 1000);
  	   
@@ -45,12 +69,13 @@
 	 	    
 	 	    var duration = interval.maxDuration + (interval.maxDuration > 1 ? " hours" : " hour");
  	      
-	 	    var timeInterval = $("<div class=\"booking-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#Booking-Screen-TimeFrame-Times"));
+	 	    var timeInterval = $("<div class=\"booking-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#Booking-Screen-SelectionPanel-TimeFrame-Times"));
  	      timeInterval.click(function(interval) {
- 	       Backend.getReservationContext().interval = interval;
+ 	        Backend.getReservationContext().interval = interval;
+ 	        canProceedToNextStep();
  	        
           showDurations();
- 	        $("#Booking-Screen-TimeFrame").animate({ 
+ 	        $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
             marginLeft: "50px",
           }, 1000);
  	      }.bind(this, interval));
@@ -58,19 +83,23 @@
  	  }
  	  
  	  function showDurations() {
- 	    $("#Booking-Screen-Duration-Durations").empty();
+ 	    $("#Booking-Screen-SelectionPanel-Duration-Durations").empty();
+ 	    Backend.getReservationContext().duration = null;
+ 	    canProceedToNextStep();
 
-      $("#Booking-Screen-Duration").animate({ 
+      $("#Booking-Screen-SelectionPanel-Duration").animate({ 
         opacity: 1,
       }, 1000, function() {
    	    if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration) {
-   	     Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
+   	      Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
+   	      canProceedToNextStep();
+   	      
    	      showLocationMap();
    	    }
       });
  	    
  	    for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
- 	      var duration = $("<div class=\"booking-duration\">" + i + "</div>").appendTo($("#Booking-Screen-Duration-Durations"));
+ 	      var duration = $("<div class=\"booking-duration\">" + i + "</div>").appendTo($("#Booking-Screen-SelectionPanel-Duration-Durations"));
  	      duration.click(function(duration) {
  	       Backend.getReservationContext().duration = i;
  	        
@@ -81,26 +110,38 @@
  	  
  	  
  	  function showLocationMap() {
-      $("#Booking-Screen-LocationMap").animate({ 
+      $("#Booking-Screen-SelectionPanel-LocationMap").animate({ 
         marginTop: "50px",
         opacity: 1
       }, 1000);
+      
+      $(".booking-map-location").click(function(event) {
+        var locationId = $(event.target).attr("location-id");
+        Backend.getReservationContext().location = locationId;
+        canProceedToNextStep();
+      });
  	  }
 	});
 </script>
 
 <div id="Booking-Screen">
-	<a href="main.html?screen=home">Home!</a>
-	<div>
-		<div id="Booking-Screen-Calendar"></div>
-		<div id="Booking-Screen-TimeFrame">
-			<div id="Booking-Screen-TimeFrame-Title">Take-off time</div>
-			<div id="Booking-Screen-TimeFrame-Times"></div>
+	<div id="Booking-Screen-SelectionPanel">
+		<div id="Booking-Screen-SelectionPanel-Calendar"></div>
+		<div id="Booking-Screen-SelectionPanel-TimeFrame">
+			<div id="Booking-Screen-SelectionPanel-TimeFrame-Title">Take-off time</div>
+			<div id="Booking-Screen-SelectionPanel-TimeFrame-Times"></div>
 		</div>
-		<div id="Booking-Screen-Duration">
-			<div id="Booking-Screen-Duration-Title">Ride duration</div>
-			<div id="Booking-Screen-Duration-Durations"></div>
+		<div id="Booking-Screen-SelectionPanel-Duration">
+			<div id="Booking-Screen-SelectionPanel-Duration-Title">Ride duration</div>
+			<div id="Booking-Screen-SelectionPanel-Duration-Durations"></div>
 		</div>
-		<div id="Booking-Screen-LocationMap"></div>
+		<div id="Booking-Screen-SelectionPanel-LocationMap">
+			<div class="booking-map-location" id="Booking-Screen-SelectionPanel-LocationMap-Location1" location-id="1"></div>
+			<div class="booking-map-location" id="Booking-Screen-SelectionPanel-LocationMap-Location2" location-id="2"></div>
+			<div class="booking-map-location" id="Booking-Screen-SelectionPanel-LocationMap-Location3" location-id="3"></div>			
+		</div>
+	</div>
+	<div id="Booking-Screen-ButtonsPanel">
+		<button id="Booking-Screen-ButtonsPanel-NextButton">Next</button>
 	</div>
 </div>
