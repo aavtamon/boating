@@ -1,0 +1,66 @@
+#BookingTime-Screen-SelectionPanel {
+	height: 500px;
+}
+
+#BookingTime-Screen-SelectionPanel-Calendar {
+	display: inline-block;
+	margin-left: 300px;
+	vertical-align: top;
+}
+
+#BookingTime-Screen-SelectionPanel-TimeFrame {
+	display: inline-block;
+	height: 100px;
+	margin-left: 150px;
+	vertical-align: top;
+	padding: 10px;
+
+	opacity: 0;
+	background: blue;
+}
+
+#BookingTime-Screen-SelectionPanel-TimeFrame-Title {
+	text-align: center;
+}
+
+#BookingTime-Screen-SelectionPanel-Duration {
+	display: inline-block;
+	height: 100px;
+	margin-left: 50px;
+	vertical-align: top;
+	padding: 10px;
+
+	opacity: 0;
+	background: green;
+}
+
+
+#BookingTime-Screen-ButtonsPanel {
+	position: fixed;
+	bottom: 70px;
+	width: 100%;
+}
+
+#BookingTime-Screen-ButtonsPanel-Summary {
+	display: inline-block;
+	height: 50px;
+	margin-left: 50px;
+}
+
+#BookingTime-Screen-ButtonsPanel-NextButton {
+	display: inline-block;
+	float: right;
+	width: 100px;
+	padding: 5px 10px 5px 10px;
+	margin-right: 100px;
+	
+	font-size: 20px;
+	
+	text-align: center;
+	
+	background-color: rgb(65, 117, 22);
+	color: white;
+}
+#BookingTime-Screen-ButtonsPanel-NextButton:disabled {
+	background-color: gray;
+}

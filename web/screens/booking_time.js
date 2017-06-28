@@ -1,10 +1,10 @@
-Booking = {
+BookingTime = {
   onLoad: function() {
     Backend.resetReservationContext();
     this._canProceedToNextStep();
     
     
-    $("#Booking-Screen-SelectionPanel-Calendar").datepicker({
+    $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = Backend.getAvailableTimes(date).length > 0;
         
@@ -21,10 +21,10 @@ Booking = {
         
         this._showTimes();
         
-        $("#Booking-Screen-SelectionPanel-Calendar").animate({ 
+        $("#BookingTime-Screen-SelectionPanel-Calendar").animate({ 
             marginLeft: "50px",
         }, 1000, function() {
-          $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
+          $("#BookingTime-Screen-SelectionPanel-TimeFrame").animate({ 
             opacity: 1,
           }, 1000);
         });
@@ -33,35 +33,41 @@ Booking = {
       defaultDate: Backend.getCurrentDate(),
       minDate: Backend.getSchedulingBeginDate(),
       maxDate: Backend.getSchedulingEndDate()
-    })
+    });
+    
+    $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
+      Main.loadScreen("booking_location");
+    });
+  },
+  
+  onSelect: function() {
+    
   },
     
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null) {
-      $("#Booking-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
-      
-      var locationDetails = Backend.getLocationInfo(reservationContext.location);
+      $("#BookingTime-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
       
       var tripDate = reservationContext.date.getMonth() + "/" + reservationContext.date.getDate() + "/" + reservationContext.date.getFullYear();
       var tripTime = reservationContext.interval.time.getHours() + " " + (reservationContext.interval.time.getHours() >= 12 ? 'pm' : 'am');
       var tripDuration = reservationContext.duration + (reservationContext.duration == 1 ? " hour" : " hours");
       var summaryInfo = "You selected " + tripDate + ", " + tripTime + " for " + tripDuration + ".";
       
-      $("#Booking-Screen-ButtonsPanel-Summary").text(summaryInfo);
+      $("#BookingTime-Screen-ButtonsPanel-Summary").text(summaryInfo);
     } else {
-      $("#Booking-Screen-ButtonsPanel-NextButton").attr("disabled", true);
-      $("#Booking-Screen-ButtonsPanel-Summary").text("");
+      $("#BookingTime-Screen-ButtonsPanel-NextButton").attr("disabled", true);
+      $("#BookingTime-Screen-ButtonsPanel-Summary").text("");
     }
   },
 
   _showTimes: function() {
-    $("#Booking-Screen-SelectionPanel-Duration").css("opacity", 0);
-    $("#Booking-Screen-SelectionPanel-TimeFrame-Times").empty();
+    $("#BookingTime-Screen-SelectionPanel-Duration").css("opacity", 0);
+    $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").empty();
     Backend.getReservationContext().interval = null;
     this._canProceedToNextStep();
    
-    $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
+    $("#BookingTime-Screen-SelectionPanel-TimeFrame").animate({ 
       marginLeft: "150px",
     }, 1000);
    
@@ -78,13 +84,13 @@ Booking = {
       
       var duration = interval.maxDuration + (interval.maxDuration > 1 ? " hours" : " hour");
       
-      var timeInterval = $("<div class=\"booking-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#Booking-Screen-SelectionPanel-TimeFrame-Times"));
+      var timeInterval = $("<div class=\"bookingtime-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
       timeInterval.click(function(interval) {
         Backend.getReservationContext().interval = interval;
         this._canProceedToNextStep();
         
         this._showDurations();
-        $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
+        $("#BookingTime-Screen-SelectionPanel-TimeFrame").animate({ 
           marginLeft: "50px",
         }, 1000);
       }.bind(this, interval));
@@ -92,11 +98,11 @@ Booking = {
   },
       
   _showDurations: function() {
-    $("#Booking-Screen-SelectionPanel-Duration-Durations").empty();
+    $("#BookingTime-Screen-SelectionPanel-Duration-Durations").empty();
     Backend.getReservationContext().duration = null;
     this._canProceedToNextStep();
 
-    $("#Booking-Screen-SelectionPanel-Duration").animate({ 
+    $("#BookingTime-Screen-SelectionPanel-Duration").animate({ 
       opacity: 1,
     }, 1000, function() {
       if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration) {
@@ -106,30 +112,11 @@ Booking = {
     }.bind(this));
     
     for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
-      var duration = $("<div class=\"booking-duration\">" + i + "</div>").appendTo($("#Booking-Screen-SelectionPanel-Duration-Durations"));
+      var duration = $("<div class=\"bookingtime-duration\">" + i + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
       duration.click(function(duration) {
         Backend.getReservationContext().duration = i;
         this._canProceedToNextStep();
       }.bind(this, i));
     }
-  }
-      
-      
-//      function showLocationMap() {
-//        $("#Booking-Screen-SelectionPanel-LocationMap").animate({ 
-//          marginTop: "-150px",
-//          opacity: 1
-//        }, 1000);
-//        
-//        $(".booking-map-location").click(function(event) {
-//          var locationId = $(event.target).attr("location-id");
-//          Backend.getReservationContext().location = locationId;
-//          
-//          $(".booking-map-location").removeClass("selected");
-//          $(event.target).addClass("selected");
-//          
-//          canProceedToNextStep();
-//        });
-//      }
-    
+  }   
 }
