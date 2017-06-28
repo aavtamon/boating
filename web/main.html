@@ -11,41 +11,9 @@
 	<script src="js/backend.js"></script>
   
   <link rel="stylesheet" href="main.css">
-  
-  <script>
-    function loadScreen(screen) {
-      if (window.currentScreen == screen) {
-        return;
-      }
-      window.currentScreen = screen;
-      
-	    $("#Main-ScreenContainer").load("screens/" + screen + ".html");
-	    
-	    $(".main-menu-item").css("font-weight", "normal");
-	    $(".main-menu-item[screen=" + screen + "]").css("font-weight", "bold");
-    }
-  
-  
-  	$(document).ready(function() {
-  	  $(".main-menu-item").click(function(event) {
-  	    var targetScreen = $(event.target).attr("screen");
-  	    loadScreen(targetScreen);
-  	  });
-  	  
-/*   	  var screen = Utils.getQueryParameterByName("screen");
-  	  if (screen == null || screen == "") {
-  	    screen = "home";
-  	  }
- */      
-  	  
-  	  loadScreen("home");
-  	  
-    });
-  	
-  </script>
-	
+  <script src="main.js"></script>
 </head>
-<body>
+<body onload="Main.onLoad()">
 	<div id="Main-Header">
 		<div id="Main-Header-Title">Worry-Free Boating On Lanier</div>
 		<div id="Main-Header-Menu">

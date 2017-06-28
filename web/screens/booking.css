@@ -37,13 +37,16 @@
 #Booking-Screen-SelectionPanel-LocationMap {
 	position: relative;
 	display: block;
-	width: 300px;
-	height: 100px;
+	width: 400px;
+	height: 320px;
 	margin-top: 200px;
+	margin-left: 600px;
 
 	opacity: 0;
-	background: brown;
-}
+/* 	background-image: url(../imgs/lake_lanier_map.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+ */}
 
 .booking-map-location {
 	position: absolute;
@@ -52,16 +55,74 @@
 	height: 20px;
 	border-radius: 10px;
 	
-	background-color: blue;
+	background-color: brown;
+	
+  -webkit-animation: booking-map-location-animation 1s infinite;
+  animation: booking-map-location-animation 1s infinite;
 }
+.booking-map-location:hover {
+	background-color: yellow;
+	
+  -webkit-animation: booking-map-location-animation-hovered 1s infinite;
+  animation: booking-map-location-animation-hovered 1s infinite;
+}
+.booking-map-location:active {
+	background-color: red;
+	
+	-webkit-animation: none;
+	animation: none;
+}
+.booking-map-location.selected {
+	background-color: red;
+	
+  -webkit-animation: booking-map-location-animation-selected 1s infinite;
+  animation: booking-map-location-animation-selected 1s infinite;
+}
+@-webkit-keyframes booking-map-location-animation {
+  0% { background-color: brown; }
+  50% { background-color: gray; }
+  100% { background-color: brown; }
+}
+@keyframes booking-map-location-animation {
+  0% { background-color: brown; }
+  50% { background-color: gray; }
+  100% { background-color: brown; }
+}
+@-webkit-keyframes booking-map-location-animation-hovered {
+  0% { background-color: yellow; }
+  50% { background-color: gray; }
+  100% { background-color: yellow; }
+}
+@keyframes booking-map-location-animation-hovered {
+  0% { background-color: yellow; }
+  50% { background-color: gray; }
+  100% { background-color: yellow; }
+}
+@-webkit-keyframes booking-map-location-animation-selected {
+  0% { background-color: yellow; transform: scale(1); }
+  50% { background-color: red; transform: scale(1.1); }
+  100% { background-color: yellow; transform: scale(1); }
+}
+@keyframes booking-map-location-animation-selected {
+  0% { background-color: yellow; transform: scale(1); }
+  50% { background-color: red; transform: scale(1.1); }
+  100% { background-color: yellow; transform: scale(1); }
+}
+
 
 #Booking-Screen-SelectionPanel-LocationMap-Location1 {
 	top: 10px;
 	left: 50px;
+	
+	animation-delay: 0.3s;
+	-webkit-animation-delay: 0.3s;
 } 
 #Booking-Screen-SelectionPanel-LocationMap-Location2 {
 	top: 20px;
 	left: 70px;
+
+	animation-delay: 0.7s;
+	-webkit-animation-delay: 0.7s;
 } 
 #Booking-Screen-SelectionPanel-LocationMap-Location3 {
 	top: 30px;
@@ -73,12 +134,17 @@
 	position: fixed;
 	bottom: 70px;
 	width: 100%;
-	
-	text-align: right;
+}
+
+#Booking-Screen-ButtonsPanel-Summary {
+	display: inline-block;
+	height: 50px;
+	margin-left: 50px;
 }
 
 #Booking-Screen-ButtonsPanel-NextButton {
 	display: inline-block;
+	float: right;
 	width: 100px;
 	padding: 5px 10px 5px 10px;
 	margin-right: 100px;

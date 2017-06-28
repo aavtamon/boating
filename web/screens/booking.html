@@ -1,126 +1,9 @@
-<link rel="stylesheet" href="screens/booking.css">  
+<link rel="stylesheet" href="screens/booking.css">
+<script src="screens/booking.js"></script>  
 
 <script>
-  function canProceedToNextStep() {
-    var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null && reservationContext.location != null) {
-      $("#Booking-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
-    } else {
-      $("#Booking-Screen-ButtonsPanel-NextButton").attr("disabled", true);
-    }
-  }
-
-
 	$(document).ready(function() {
-	  Backend.resetReservationContext();
-	  canProceedToNextStep();
-	  
-	  
- 	  $("#Booking-Screen-SelectionPanel-Calendar").datepicker({
- 	    beforeShowDay: function(date) {
- 	      var isSelectable = Backend.getAvailableTimes(date).length > 0;
- 	      
- 	      return [isSelectable, "", null];
- 	    },
- 	    
-	    onSelect: function(dateText, instance) {
-	      var newSelectedDate = new Date(dateText);
-	      if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == Backend.getReservationContext().date.getTime()) {
-	        return;
-	      }
-	      Backend.getReservationContext().date = newSelectedDate;
-	      canProceedToNextStep();
-	      
-	      showTimes();
-	      
-        $("#Booking-Screen-SelectionPanel-Calendar").animate({ 
-            marginLeft: "50px",
-        }, 1000, function() {
-          $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
-            opacity: 1,
-  	      }, 1000);
-        });
-	    },
-	    defaultDate: Backend.getCurrentDate(),
- 	    minDate: Backend.getSchedulingBeginDate(),
-	    maxDate: Backend.getSchedulingEndDate()
- 	  });
- 	  
- 	  function showTimes() {
-  	  $("#Booking-Screen-SelectionPanel-Duration").css("opacity", 0);
- 	    $("#Booking-Screen-SelectionPanel-TimeFrame-Times").empty();
- 	    Backend.getReservationContext().interval = null;
- 	    canProceedToNextStep();
- 	   
-      $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
-        marginLeft: "150px",
-      }, 1000);
- 	   
- 	    
- 	    var intervals = Backend.getAvailableTimes(Backend.getReservationContext().date);
- 	    for (var i in intervals) {
- 	      var interval = intervals[i];
- 	      
-        var hours = interval.time.getHours();
-	 	    var minutes = interval.time.getMinutes();
-	 	    var ampm = hours >= 12 ? 'pm' : 'am';
-	 	    hours = hours % 12;
-	 	    hours = hours ? hours : 12;
-	 	    
-	 	    var duration = interval.maxDuration + (interval.maxDuration > 1 ? " hours" : " hour");
- 	      
-	 	    var timeInterval = $("<div class=\"booking-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#Booking-Screen-SelectionPanel-TimeFrame-Times"));
- 	      timeInterval.click(function(interval) {
- 	        Backend.getReservationContext().interval = interval;
- 	        canProceedToNextStep();
- 	        
-          showDurations();
- 	        $("#Booking-Screen-SelectionPanel-TimeFrame").animate({ 
-            marginLeft: "50px",
-          }, 1000);
- 	      }.bind(this, interval));
- 	    }
- 	  }
- 	  
- 	  function showDurations() {
- 	    $("#Booking-Screen-SelectionPanel-Duration-Durations").empty();
- 	    Backend.getReservationContext().duration = null;
- 	    canProceedToNextStep();
-
-      $("#Booking-Screen-SelectionPanel-Duration").animate({ 
-        opacity: 1,
-      }, 1000, function() {
-   	    if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration) {
-   	      Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
-   	      canProceedToNextStep();
-   	      
-   	      showLocationMap();
-   	    }
-      });
- 	    
- 	    for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
- 	      var duration = $("<div class=\"booking-duration\">" + i + "</div>").appendTo($("#Booking-Screen-SelectionPanel-Duration-Durations"));
- 	      duration.click(function(duration) {
- 	       Backend.getReservationContext().duration = i;
- 	        
- 	        showLocationMap();
- 	      }.bind(this, i));
- 	    }
- 	  }
- 	  
- 	  
- 	  function showLocationMap() {
-      $("#Booking-Screen-SelectionPanel-LocationMap").animate({ 
-        marginTop: "50px",
-        opacity: 1
-      }, 1000);
-      
-      $(".booking-map-location").click(function(event) {
-        var locationId = $(event.target).attr("location-id");
-        Backend.getReservationContext().location = locationId;
-        canProceedToNextStep();
-      });
- 	  }
+	  Booking.onLoad();
 	});
 </script>
 
@@ -142,6 +25,7 @@
 		</div>
 	</div>
 	<div id="Booking-Screen-ButtonsPanel">
+	  <div id="Booking-Screen-ButtonsPanel-Summary"></div>
 		<button id="Booking-Screen-ButtonsPanel-NextButton">Next</button>
 	</div>
 </div>
