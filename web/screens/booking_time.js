@@ -20,7 +20,7 @@ BookingTime = {
         this._showTimes();
       }.bind(this),
       
-      defaultDate: Backend.getCurrentDate(),
+      defaultDate: Backend.getReservationContext().date != null ? Backend.getReservationContext().date : Backend.getCurrentDate(),
       minDate: Backend.getSchedulingBeginDate(),
       maxDate: Backend.getSchedulingEndDate()
     });
