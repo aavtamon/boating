@@ -1,9 +1,5 @@
 BookingTime = {
   onLoad: function() {
-    Backend.resetReservationContext();
-    this._canProceedToNextStep();
-    
-    
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = Backend.getAvailableTimes(date).length > 0;
@@ -17,6 +13,8 @@ BookingTime = {
           return;
         }
         Backend.getReservationContext().date = newSelectedDate;
+        Backend.getReservationContext().interval = null;
+        
         this._canProceedToNextStep();
         
         this._showTimes();
@@ -27,20 +25,20 @@ BookingTime = {
       maxDate: Backend.getSchedulingEndDate()
     });
     
+    
     $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
       Main.loadScreen("booking_location");
     });
+    
+
+    if (Backend.getReservationContext().date != null) {
+      this._showTimes();
+    }
   },
   
-  onSelect: function() {
-    
-  },
-    
   _showTimes: function() {
     $("#BookingTime-Screen-SelectionPanel-Duration-Durations").empty();
     $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").empty();
-    Backend.getReservationContext().interval = null;
-    this._canProceedToNextStep();
    
     var intervals = Backend.getAvailableTimes(Backend.getReservationContext().date);
     for (var i in intervals) {
@@ -61,23 +59,26 @@ BookingTime = {
         
         Backend.getReservationContext().interval = interval;
         this._canProceedToNextStep();
+        Backend.getReservationContext().duration = null;
         
         this._showDurations();
       }.bind(this, interval));
       
-      if (intervals.length == 1) {
+      
+      if (intervals.length == 1
+          || (Backend.getReservationContext().interval != null && Backend.getReservationContext().interval.id == interval.id)) {
+        
         $(timeInterval).addClass("selected");
         Backend.getReservationContext().interval = interval;
-        
         this._canProceedToNextStep();
+        
+        this._showDurations();
       }
     }
   },
       
   _showDurations: function() {
     $("#BookingTime-Screen-SelectionPanel-Duration-Durations").empty();
-    Backend.getReservationContext().duration = null;
-    this._canProceedToNextStep();
     
     for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
       var tripLength = i + (i == 1 ? " hour" : " hours"); 
@@ -90,7 +91,10 @@ BookingTime = {
         this._canProceedToNextStep();
       }.bind(this, i));
       
-      if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration) {
+      
+      if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration
+          || Backend.getReservationContext().duration == i) {
+        
         $(duration).addClass("selected");
         Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
         
