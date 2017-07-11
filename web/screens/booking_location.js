@@ -1,6 +1,5 @@
 BookingLocation = {
   onLoad: function() {
-    this._showLocationMap();
     this._canProceedToNextStep();
   },
     
@@ -12,11 +11,17 @@ BookingLocation = {
       center: centerLocation
     });
     
+    
+    $("#BookingLocation-Screen-SelectionPanel-CenterButton").click(function() {
+      map.panTo(centerLocation);
+      map.setZoom(centerLocation.zoom);
+    });
+    
 //    map.addListener('center_changed', function() {
-//      setTimeout(function() {
-//        map.panTo(centerLocation);
-//      }, 3000);
+//      $("#BookingLocation-Screen-SelectionPanel-CenterButton").removeClass(disabled);
 //    });    
+    
+    this._markers = [];
     
     var locations = Backend.getLocations();
     for (var i in locations) {
@@ -26,15 +31,29 @@ BookingLocation = {
         position: location,
         map: map,
         label: location.name,
-        icon: "imgs/boat.png",
-        animation: google.maps.Animation.DROP,
+//        icon: "imgs/boat.png",
         _location: location
       });
       
       marker.addListener('click', function(marker) {
         Backend.getReservationContext().location = marker._location;
         this._canProceedToNextStep();
+        
+        for (var i in this._markers) {
+          if (this._markers[i] != marker) {
+            this._markers[i].setAnimation(null);
+          }
+        }
+        marker.setAnimation(google.maps.Animation.BOUNCE);
       }.bind(this, marker));
+      
+      if (Backend.getReservationContext().location != null
+          && Backend.getReservationContext().location.id == location.id) {
+        
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+      
+      this._markers.push(marker);
     }
   },
   
@@ -56,18 +75,4 @@ BookingLocation = {
       $("#BookingLocation-Screen-ButtonsPanel-Summary").text("");
     }
   },
-
-      
-  _showLocationMap: function() {
-    $(".booking-map-location").click(function(event) {
-      var locationId = $(event.target).attr("location-id");
-      Backend.getReservationContext().location = locationId;
-      
-      $(".booking-map-location").removeClass("selected");
-      $(event.target).addClass("selected");
-      
-      canProceedToNextStep();
-    });
-  }
-    
 }

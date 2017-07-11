@@ -9,16 +9,7 @@ Main = {
       window.location.hash = screen;
     });
     
-    var screen = window.location.hash.substr(1);
-    if (screen == "") {
-      screen = "home";
-    }
-    
-    if (window.location.hash = screen) {
-      this._loadScreen(screen);
-    } else {
-      this.loadScreen(screen);
-    }
+    this.loadScreen("home");
   },
   
   loadScreen: function(screen) {
