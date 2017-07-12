@@ -128,16 +128,22 @@
 
 #BookingLocation-Screen-ButtonsPanel-Summary {
 	display: inline-block;
+	width: calc(100% - 330px);
 	height: 50px;
 	margin-left: 50px;
+	vertical-align: top;
+	
+	text-align: center;
+	
+	font-family: Verdana;
+	font-size: 25px;
 }
 
-#BookingLocation-Screen-ButtonsPanel-NextButton {
+#BookingLocation-Screen-ButtonsPanel-NextButton, #BookingLocation-Screen-ButtonsPanel-BackButton {
 	display: inline-block;
-	float: right;
 	width: 100px;
 	padding: 5px 10px 5px 10px;
-	margin-right: 100px;
+	vertical-align: top;
 	
 	font-size: 20px;
 	
@@ -145,6 +151,10 @@
 	
 	background-color: rgb(65, 117, 22);
 	color: white;
+}
+#BookingLocation-Screen-ButtonsPanel-NextButton {
+	margin-left: 50px;
+	vertical-align: top;
 }
 #BookingLocation-Screen-ButtonsPanel-NextButton:disabled {
 	background-color: gray;

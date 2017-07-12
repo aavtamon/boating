@@ -1,0 +1,51 @@
+#BookingPayment-Screen {
+	height: 100%;
+}
+
+#BookingPayment-Screen-SelectionPanel {
+	height: calc(100% - 90px);
+}
+
+
+
+
+#BookingPayment-Screen-ButtonsPanel {
+	position: fixed;
+	width: 100%;
+	height: 55px;
+	bottom: 70px;
+}
+
+#BookingPayment-Screen-ButtonsPanel-Summary {
+	display: inline-block;
+	width: calc(100% - 330px);
+	height: 50px;
+	margin-left: 50px;
+	vertical-align: top;
+	
+	text-align: center;
+	
+	font-family: Verdana;
+	font-size: 25px;
+}
+
+#BookingPayment-Screen-ButtonsPanel-ConfirmButton, #BookingPayment-Screen-ButtonsPanel-BackButton {
+	display: inline-block;
+	width: 100px;
+	padding: 5px 10px 5px 10px;
+	vertical-align: top;
+	
+	font-size: 20px;
+	
+	text-align: center;
+	
+	background-color: rgb(65, 117, 22);
+	color: white;
+}
+#BookingPayment-Screen-ButtonsPanel-ConfirmButton {
+	margin-left: 50px;
+	vertical-align: top;
+}
+#BookingPayment-Screen-ButtonsPanel-ConfirmButton:disabled {
+	background-color: gray;
+}

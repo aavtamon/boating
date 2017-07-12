@@ -1,41 +1,17 @@
-BookingTime = {
+BookingPayment = {
   onLoad: function() {
-    $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
-      beforeShowDay: function(date) {
-        var isSelectable = Backend.getAvailableTimes(date).length > 0;
-        
-        return [isSelectable, "", null];
-      },
-      
-      onSelect: function(dateText, instance) {
-        var newSelectedDate = new Date(dateText);
-        if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == Backend.getReservationContext().date.getTime()) {
-          return;
-        }
-        Backend.getReservationContext().date = newSelectedDate;
-        Backend.getReservationContext().interval = null;
-        
-        this._canProceedToNextStep();
-        
-        this._showTimes();
-      }.bind(this),
-      
-      defaultDate: Backend.getReservationContext().date != null ? Backend.getReservationContext().date : Backend.getCurrentDate(),
-      minDate: Backend.getSchedulingBeginDate(),
-      maxDate: Backend.getSchedulingEndDate()
-    });
-    
-    
-    $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
+    var reservationContext = Backend.getReservationContext();
+    if (reservationContext.date == null || reservationContext.interval == null || reservationContext.duration == null || reservationContext.location == null) {
+      Main.loadScreen("home");
+    }
+
+    $("#BookingPayment-Screen-ButtonsPanel-BackButton").click(function() {
       Main.loadScreen("booking_location");
     });
     
-    this._canProceedToNextStep();
-    
-
-    if (Backend.getReservationContext().date != null) {
-      this._showTimes();
-    }
+    $("#BookingTime-Screen-ButtonsPanel-ConfirmButton").click(function() {
+      Main.loadScreen("booking_confirmation");
+    });
   },
   
   _showTimes: function() {
@@ -121,9 +97,9 @@ BookingTime = {
       var tripTime = hours + ampm;
       
       var tripDuration = reservationContext.duration + (reservationContext.duration == 1 ? " hour" : " hours");
-      var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b>";
+      var summaryInfo = "You selected " + tripDate + ", " + tripTime + " for " + tripDuration + ".";
       
-      $("#BookingTime-Screen-ButtonsPanel-Summary").html(summaryInfo);
+      $("#BookingTime-Screen-ButtonsPanel-Summary").text(summaryInfo);
     } else {
       $("#BookingTime-Screen-ButtonsPanel-NextButton").attr("disabled", true);
       $("#BookingTime-Screen-ButtonsPanel-Summary").text("");

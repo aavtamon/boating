@@ -51,7 +51,7 @@ html, body {
 	height: -webkit-calc(100% - 110px - 40px - 20px);
 	height: calc(100% - 130px - 40px - 20px);
 	
-	overflow-y: hidden;
+	overflow-y: auto;
 }
 
 #Main-Footer {

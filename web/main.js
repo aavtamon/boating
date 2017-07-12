@@ -6,7 +6,7 @@ Main = {
     
     $(".main-menu-item").click(function(event) {
       var screen = $(event.target).attr("screen");
-      window.location.hash = screen;
+      window.location.hash = screen.split(" ")[0];
     });
     
     this.loadScreen("home");
@@ -26,6 +26,6 @@ Main = {
     
     
     $(".main-menu-item").css("font-weight", "normal");
-    $(".main-menu-item[screen=" + screen + "]").css("font-weight", "bold");
+    $(".main-menu-item[screen~='" + screen + "']").css("font-weight", "bold");
   }
 }

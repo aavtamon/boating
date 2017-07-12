@@ -1,5 +1,9 @@
+#BookingTime-Screen {
+	height: 100%;
+}
+
 #BookingTime-Screen-SelectionPanel {
-	height: 500px;
+	height: calc(100% - 90px);
 }
 
 #BookingTime-Screen-SelectionPanel-Calendar {
@@ -83,19 +87,22 @@
 
 #BookingTime-Screen-ButtonsPanel-Summary {
 	display: inline-block;
+	width: calc(100% - 300px);
+	height: 100%;
 	margin-left: 100px;
+	vertical-align: top;
+	
+	text-align: center;
 	
 	font-family: Verdana;
-	font-weight: bold;
 	font-size: 25px;
 }
 
 #BookingTime-Screen-ButtonsPanel-NextButton {
 	display: inline-block;
-	float: right;
 	width: 100px;
 	padding: 5px 10px 5px 10px;
-	margin-right: 100px;
+	vertical-align: top;
 	
 	font-size: 20px;
 	
