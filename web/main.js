@@ -9,6 +9,8 @@ Main = {
       window.location.hash = screen.split(" ")[0];
     });
     
+    
+    this.loadScreen("");
     this.loadScreen("home");
   },
   

@@ -76,13 +76,7 @@ BookingLocation = {
     if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null && reservationContext.location != null) {
       $("#BookingLocation-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
       
-      var tripDate = reservationContext.date.getMonth() + "/" + reservationContext.date.getDate() + "/" + reservationContext.date.getFullYear();
-      var tripTime = reservationContext.interval.time.getHours() + " " + (reservationContext.interval.time.getHours() >= 12 ? 'pm' : 'am');
-      var tripDuration = reservationContext.duration + (reservationContext.duration == 1 ? " hour" : " hours");
-      var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b>"
-                        + "<br>Pick up at <b>" + reservationContext.location.name + "</b>";
-      
-      $("#BookingLocation-Screen-ButtonsPanel-Summary").html(summaryInfo);
+      $("#BookingLocation-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));
     } else {
       $("#BookingLocation-Screen-ButtonsPanel-NextButton").attr("disabled", true);
       $("#BookingLocation-Screen-ButtonsPanel-Summary").text("");
