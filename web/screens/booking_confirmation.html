@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="screens/booking_confirmation.css">
+<script src="screens/booking_confirmation.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+<script>
+	$(document).ready(function() {
+	  BookingPayment.onLoad();
+	});
+</script>
+
+<div id="BookingConfirmation-Screen">
+	<div id="BookingConfirmation-Screen-ReservationSummary">
+		<div id="BookingConfirmation-Screen-ReservationSummary-Description">Your Reservation:</div>
+		<div id="BookingConfirmation-Screen-ReservationSummary-DateTime">
+			<div id="BookingConfirmation-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
+			<div id="BookingConfirmation-Screen-ReservationSummary-DateTime-Value"></div>
+		</div>
+		<div id="BookingConfirmation-Screen-ReservationSummary-Duration">
+			<div id="BookingConfirmation-Screen-ReservationSummary-Duration-Title">Duration of your trip</div>
+			<div id="BookingConfirmation-Screen-ReservationSummary-Duration-Value"></div>
+		</div>
+		<div id="BookingConfirmation-Screen-ReservationSummary-Capacity">
+			<div id="BookingConfirmation-Screen-ReservationSummary-Capacity-Title">Maximum capacity adults+children (no exceptions!!!):</div>
+			<div id="BookingConfirmation-Screen-ReservationSummary-Capacity-Value"></div>
+		</div>
+		<div id="BookingConfirmation-Screen-ReservationSummary-Location">
+			<div id="BookingConfirmation-Screen-ReservationSummary-Location-Title">Pick up location:</div>
+			<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details">
+				<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName">
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title">Place:</div>
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value"></div>
+				</div>
+				<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress">
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title">Address:</div>
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value"></div>
+				</div>
+				<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee">
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title">Parking fee:</div>
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value"></div>
+				</div>
+				<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions">
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title">Additional instructions:</div>
+					<div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="BookingConfirmation-Screen-AdditionalInformation">
+		<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople">
+			<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
+			<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults">
+				<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Title">Number of adults:</div>
+				<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector"></div> 
+			</div>
+			<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children">
+				<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Title">Number of children:</div>
+				<div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector"></div> 
+			</div>
+		</div>
+		<div id="BookingConfirmation-Screen-AdditionalInformation-Phone">
+			<div id="BookingConfirmation-Screen-AdditionalInformation-Phone-Title">Your mobile phone</div>
+			<div id="BookingConfirmation-Screen-AdditionalInformation-Phone-Value"></div>
+			<div id="BookingConfirmation-Screen-AdditionalInformation-Phone-Note">
+				You don't have to provide the phone number but we suggest that you do.
+				We will send you status updates regarding your trip, you will be able to track location of the boat on the day of pickup, and many more.
+				We will not send any messages after your trip.
+				We will not share your phone number with anybody, and will permanently remove it from our records right after completion of your trip. 
+			</div>
+		</div>
+	</div>
+	<div id="BookingConfirmation-Screen-ButtonsPanel">
+    <button id="BookingConfirmation-Screen-ButtonsPanel-BackButton">Back</button>
+	  <div id="BookingConfirmation-Screen-ButtonsPanel-Summary"></div>
+		<button id="BookingConfirmation-Screen-ButtonsPanel-NextButton">Confirm</button>
+	</div>
+</div>

@@ -1,0 +1,60 @@
+#BookingConfirmation-Screen {
+	height: 100%;
+}
+
+#BookingConfirmation-Screen-ReservationSummary {
+}
+
+#BookingConfirmation-Screen-ReservationSummary-DateTime {
+}
+#BookingConfirmation-Screen-ReservationSummary-DateTime-Title {
+	width: 200px;
+	margin-right: 50px;
+}
+BookingConfirmation-Screen-ReservationSummary-DateTime-Value {
+	width: 400px;
+}
+
+
+
+
+#BookingConfirmation-Screen-ButtonsPanel {
+	position: fixed;
+	width: 100%;
+	height: 55px;
+	bottom: 70px;
+}
+
+#BookingConfirmation-Screen-ButtonsPanel-Summary {
+	display: inline-block;
+	width: calc(100% - 330px);
+	height: 50px;
+	margin-left: 50px;
+	vertical-align: top;
+	
+	text-align: center;
+	
+	font-family: Verdana;
+	font-size: 25px;
+}
+
+#BookingConfirmation-Screen-ButtonsPanel-NextButton, #BookingConfirmation-Screen-ButtonsPanel-BackButton {
+	display: inline-block;
+	width: 100px;
+	padding: 5px 10px 5px 10px;
+	vertical-align: top;
+	
+	font-size: 20px;
+	
+	text-align: center;
+	
+	background-color: rgb(65, 117, 22);
+	color: white;
+}
+#BookingConfirmation-Screen-ButtonsPanel-NextButton {
+	margin-left: 50px;
+	vertical-align: top;
+}
+#BookingPayment-Screen-ButtonsPanel-NextButton:disabled {
+	background-color: gray;
+}

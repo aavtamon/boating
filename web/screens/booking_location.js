@@ -10,7 +10,7 @@ BookingLocation = {
     });
 
     $("#BookingLocation-Screen-ButtonsPanel-NextButton").click(function() {
-      Main.loadScreen("booking_payment");
+      Main.loadScreen("booking_confirmation");
     });
     
     this._canProceedToNextStep();
