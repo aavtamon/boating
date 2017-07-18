@@ -11,7 +11,7 @@ Main = {
     
     
     this.loadScreen("");
-    this.loadScreen("home");
+    this.loadScreen("booking_confirmation");
   },
   
   loadScreen: function(screen) {

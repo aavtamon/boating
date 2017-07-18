@@ -3,16 +3,166 @@
 }
 
 #BookingConfirmation-Screen-ReservationSummary {
+	font-size: 20px;
+}
+
+#BookingConfirmation-Screen-ReservationSummary-Description {
+	margin-left: 100px;
+	
+	font-family: Verdana;
+	font-size: 30px;
 }
 
 #BookingConfirmation-Screen-ReservationSummary-DateTime {
+	margin-left: 50px;
+	margin-top: 20px;
 }
 #BookingConfirmation-Screen-ReservationSummary-DateTime-Title {
+	width: 500px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-DateTime-Value {
+	width: 200px;
+}
+
+#BookingConfirmation-Screen-ReservationSummary-Duration {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Duration-Title {
+	width: 500px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Duration-Value {
+	width: 200px;
+}
+
+#BookingConfirmation-Screen-ReservationSummary-Capacity {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Capacity-Title {
+	width: 500px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Capacity-Value {
+	width: 200px;
+}
+
+#BookingConfirmation-Screen-ReservationSummary-Location {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Title {
+	width: 300px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details {
+	width: 400px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title {
 	width: 200px;
 	margin-right: 50px;
 }
-BookingConfirmation-Screen-ReservationSummary-DateTime-Value {
-	width: 400px;
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value {
+	width: 300px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title {
+	width: 200px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value {
+	width: 300px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title {
+	width: 200px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value {
+	width: 300px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions {
+	margin-left: 50px;
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title {
+	width: 200px;
+	margin-right: 50px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
+	width: 300px;
+}
+
+
+
+
+#BookingConfirmation-Screen-AdditionalInformation {
+	margin-top: 20px;
+	
+	font-size: 20px;
+}
+
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople {
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title {
+	display: inline-block;
+	margin-right: 20px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults {
+	display: inline-block;
+	margin-right: 20px;
+	
+	font-size: 15px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Title {
+	display: inline-block;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector {
+	display: inline-block;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children {
+	display: inline-block;
+	
+	font-size: 15px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Title {
+	display: inline-block;
+}
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector {
+	display: inline-block;
+}
+	
+#BookingConfirmation-Screen-AdditionalInformation-Phone {
+	margin-top: 10px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-Phone-Title {
+	display: inline-block;
+}
+#BookingConfirmation-Screen-AdditionalInformation-Phone-Value {
+	display: inline-block;
+	padding: 5px;
+	
+	font-size: 15px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide {
+	font-size: 15px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox {
+}
+#BookingConfirmation-Screen-AdditionalInformation-Phone-Note {
+	font-size: 15px;
 }
 
 
