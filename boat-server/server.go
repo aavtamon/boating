@@ -3,11 +3,12 @@ package main
 
 import "log"
 import "os"
-import "time"
 import "strings"
 import "io/ioutil"
 import "html/template"
 import "net/http"
+import "math/rand"
+import "time"
 
 
 type TPage struct {
@@ -20,7 +21,7 @@ type TReservation struct {
 
 }
 
-
+const SESSION_ID_COOKIE = "sessionId";
 
 var PathToHtml string = "";
 var ReservationContexts = map[string]TReservation{};
@@ -37,30 +38,44 @@ func loadPage(title string) (*Page, error) {
 */
 
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) {
+func generateSessionId() string {
+  rand.Seed(time.Now().UnixNano());
+  
+  var bytes [30]byte;
+  
+  for i := 0; i < 30; i++ {
+    bytes[i] = 65 + byte(rand.Intn(26));
+  }
+  
+  return string(bytes[:]);
+}
+
+
+func pageHandler(w http.ResponseWriter, r *http.Request) {
   pageReference := r.URL.Path[1:];
   if (pageReference == "") {
     pageReference = "main";
   }
   
+  var sessionId = "";
+  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+  if (sessionCookie == nil) {
+    sessionId = generateSessionId();
+
+    log.Println("New session detected. Assigned id = " + sessionId);
+
+
+    sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionId};
+    http.SetCookie(w, sessionCookie);
+
+    ReservationContexts[sessionId] = TReservation{};
+  } else {
+    sessionId = sessionCookie.Value;
+  }
+
   log.Println("***** Loading page " + pageReference + " *****");
   
-  authCookie, _ := r.Cookie("auth");
-  if (authCookie == nil) {
-    log.Println("No auth context");
-  }
   
-
-  if (authCookie == nil) {
-    authString := "jopca";
-
-    expiration := time.Now().Add(365 * 24 * time.Hour);
-    authCookie = &http.Cookie{Name: "auth", Value: authString, Expires: expiration};
-    http.SetCookie(w, authCookie);
-
-    ReservationContexts[authString] = TReservation{};
-  }
-
 
   pathToFile := PathToHtml + "/" + pageReference;
   _, err := os.Stat(pathToFile);
@@ -78,7 +93,7 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
     if (strings.HasSuffix(pathToFile, ".html")) {
       log.Println("Serving page " + pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
-      htmlTemplate.Execute(w, ReservationContexts[authCookie.Value]);
+      htmlTemplate.Execute(w, ReservationContexts[sessionId]);
     } else {
       log.Println("Serving file " + pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);
@@ -125,10 +140,11 @@ func main() {
 
 
   httpMux := http.NewServeMux();
-  httpMux.HandleFunc("/", defaultHandler);
+  httpMux.HandleFunc("/reservation/", ReservationHandler);
+  httpMux.HandleFunc("/", pageHandler);
   
   httpsMux := http.NewServeMux();
-  //httpsMux.HandleFunc("/", handlers.DefaultHttpsHandler);
+  //httpsMux.HandleFunc("/", ReservationHandler);
   
   
   go func() {

@@ -1,13 +1,72 @@
 Backend = {
+  STATUS_SUCCESS: "success",
+  STATUS_ERROR: "error",
+  
+  
   _reservationContext: {},
-  
-  
-  resetReservationContext: function() {
-    this._reservationContext = {};
-  },
+    
   getReservationContext: function() {
     return this._reservationContext;
   },
+  
+  saveReservationContext: function(callback) {
+    this._communicate("", "put", this._reservationContext, false, [], {
+      success: function() {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      },
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
+  },
+
+  resetReservationContext: function(callback) {
+    if (callback) {
+      callback(Backend.STATUS_SUCCESS);
+    }
+  },
+
+
+  _communicate: function(resource, method, data, isJsonResponse, headers, callback) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+        if (request.status >= 200 && request.status < 300) {
+          var text = request.responseText;
+          if (isJsonResponse) {
+            try {
+              text = JSON.parse(request.responseText);
+            } catch (e) {
+              callback.error(request, request.status, request.responseText);
+            }
+          }
+          callback.success(text, request.status, request);
+        } else {
+          callback.error(request, request.status, request.responseText);
+        }
+      }
+    }
+
+    
+    //var url = window.location.protocol + "//" + window.location.hostname + ":8081/" + resource;
+    var url = "reservation/" + resource;
+    console.debug("Request URL: " + url);
+    
+    request.open(method, url, true);
+    request.setRequestHeader("content-type", "application/json");
+    for (var name in headers) {
+      request.setRequestHeader(name, headers[name]);
+    }
+
+    request.send(data != null ? JSON.stringify(data) : "");  
+  },
+
+
+  
   
   getCurrentDate: function() {
     return new Date("9/10/2002");
