@@ -17,38 +17,16 @@ type TPage struct {
   reservationContext TReservation;
 }
 
-type TReservation struct {
+type TSessionId string;
 
-}
 
 const SESSION_ID_COOKIE = "sessionId";
 
 var PathToHtml string = "";
-var ReservationContexts = map[string]TReservation{};
-
-/*
-func loadPage(title string) (*Page, error) {
-  filename := title + ".txt"
-  body, err := ioutil.ReadFile(filename)
-  if err != nil {
-      return nil, err
-  }
-  return &Page{Title: title, Body: body}, nil
-}
-*/
 
 
-func generateSessionId() string {
-  rand.Seed(time.Now().UnixNano());
-  
-  var bytes [30]byte;
-  
-  for i := 0; i < 30; i++ {
-    bytes[i] = 65 + byte(rand.Intn(26));
-  }
-  
-  return string(bytes[:]);
-}
+var Sessions = map[TSessionId]TReservationId{};
+
 
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +35,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     pageReference = "main";
   }
   
-  var sessionId = "";
+  var sessionId string = "";
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
   if (sessionCookie == nil) {
     sessionId = generateSessionId();
@@ -68,7 +46,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionId};
     http.SetCookie(w, sessionCookie);
 
-    ReservationContexts[sessionId] = TReservation{};
+    Sessions[TSessionId(sessionId)] = "";
   } else {
     sessionId = sessionCookie.Value;
   }
@@ -93,7 +71,14 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     if (strings.HasSuffix(pathToFile, ".html")) {
       log.Println("Serving page " + pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
-      htmlTemplate.Execute(w, ReservationContexts[sessionId]);
+      
+      reservationId := Sessions[TSessionId(sessionId)];
+      
+      if (reservationId != "") {
+        htmlTemplate.Execute(w, Reservations[reservationId]);
+      } else {
+        htmlTemplate.Execute(w, nil);
+      }
     } else {
       log.Println("Serving file " + pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);
@@ -120,14 +105,20 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-/*
 
-func defaultHttpsHandler(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "text/plain")
-  w.Write([]byte("This is an example server.\n"))
+func generateSessionId() string {
+  rand.Seed(time.Now().UnixNano());
+  
+  var bytes [30]byte;
+  
+  for i := 0; i < 30; i++ {
+    bytes[i] = 65 + byte(rand.Intn(26));
+  }
+  
+  return string(bytes[:]);
 }
 
-*/
+
 
 func main() {
   args := os.Args[1:]
