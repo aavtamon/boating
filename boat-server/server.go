@@ -25,7 +25,7 @@ const SESSION_ID_COOKIE = "sessionId";
 var PathToHtml string = "";
 
 
-var Sessions = map[TSessionId]TReservationId{};
+var Sessions = make(map[TSessionId]TReservationId);
 
 
 
@@ -46,7 +46,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionId};
     http.SetCookie(w, sessionCookie);
 
-    Sessions[TSessionId(sessionId)] = "";
+    Sessions[TSessionId(sessionId)] = NO_RESERVATION_ID;
   } else {
     sessionId = sessionCookie.Value;
   }
@@ -74,7 +74,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       
       reservationId := Sessions[TSessionId(sessionId)];
       
-      if (reservationId != "") {
+      if (reservationId != NO_RESERVATION_ID) {
         htmlTemplate.Execute(w, Reservations[reservationId]);
       } else {
         htmlTemplate.Execute(w, nil);
