@@ -1,7 +1,6 @@
 package main
 
 import "log"
-import "fmt"
 import "net/http"
 import "io"
 import "io/ioutil"
@@ -10,17 +9,15 @@ import "math/rand"
 import "time"
 import "strings"
 
-
-
 type TReservation struct {
-  date int64;
-  time int;
-  duration int;
-  locationId int;
+  Date int64 `json:"date"`;
+  Time int `json:"time"`;
+  Duration int `json:"duration"`;
+  LocationId int `json:"location_id"`;
   
-  numOfAdults int;
-  numOfChildren int;
-  mobilePhone string;
+  NumOfAdults int `json:"adults"`;
+  NumOfChildren int `json:"children"`;
+  MobilePhone string `json:"mobile_phone"`;
 }
 
 type TReservationId string;
@@ -69,8 +66,6 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       }
     }
   } else if (r.Method == http.MethodPut) {
-    
-  
     reservationId := Sessions[TSessionId(sessionCookie.Value)];
     if (reservationId == NO_RESERVATION_ID) {
       reservationId = generateReservationId();
@@ -84,14 +79,18 @@ func updateReservation(reservationId TReservationId, body io.ReadCloser) {
   bodyBuffer, _ := ioutil.ReadAll(body);
   body.Close();
   
-  log.Println("Body:");
-  log.Println(string(bodyBuffer));
+  log.Println("Body:", string(bodyBuffer));
+  
+  res := TReservation{};
+  err := json.Unmarshal(bodyBuffer, &res);
+  if (err != nil) {
+    log.Println("Incorrect request from the app: ", err);
+  } else {
+    Reservations[reservationId] = res;
+    log.Println("Received object: ", res);
+  }
   
   log.Println("*****");
-
-  json.Unmarshal(bodyBuffer, Reservations[reservationId]);
-  
-  log.Println(">>>> " + fmt.Sprintf("%d", Reservations[reservationId].date));
 }
 
 

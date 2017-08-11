@@ -1,5 +1,9 @@
 BookingTime = {
   onLoad: function() {
+    if (Backend.getReservationContext().date == null) {
+      Backend.getReservationContext().date = Backend.getCurrentDate();
+    }
+    
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = Backend.getAvailableTimes(date).length > 0;
@@ -20,9 +24,9 @@ BookingTime = {
         this._showTimes();
       }.bind(this),
       
-      defaultDate: Backend.getReservationContext().date != null ? Backend.getReservationContext().date : Backend.getCurrentDate(),
-      minDate: Backend.getSchedulingBeginDate(),
-      maxDate: Backend.getSchedulingEndDate()
+      defaultDate: new Date(Backend.getReservationContext().date),
+      minDate: new Date(Backend.getSchedulingBeginDate()),
+      maxDate: new Date(Backend.getSchedulingEndDate())
     });
     
     
@@ -34,10 +38,7 @@ BookingTime = {
     
     this._canProceedToNextStep();
     
-
-    if (Backend.getReservationContext().date != null) {
-      this._showTimes();
-    }
+    this._showTimes();
   },
   
   _showTimes: function() {
@@ -48,8 +49,8 @@ BookingTime = {
     for (var i in intervals) {
       var interval = intervals[i];
       
-      var hours = interval.time.getHours();
-      var minutes = interval.time.getMinutes();
+      var hours = new Date(interval.time).getHours();
+      var minutes = new Date(interval.time).getMinutes();
       var ampm = hours >= 12 ? 'pm' : 'am';
       hours = hours % 12;
       hours = hours ? hours : 12;

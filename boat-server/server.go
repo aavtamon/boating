@@ -11,12 +11,6 @@ import "math/rand"
 import "time"
 
 
-type TPage struct {
-  css string;
-  html string;
-  reservationContext TReservation;
-}
-
 type TSessionId string;
 
 

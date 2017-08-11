@@ -1,6 +1,7 @@
 ScreenUtils = {
   getBookingDate: function(reservationContext) {
-    return reservationContext.date.getMonth() + "/" + reservationContext.date.getDate() + "/" + reservationContext.date.getFullYear();
+    var bookingDate = new Date(reservationContext.date);
+    return bookingDate.getMonth() + "/" + bookingDate.getDate() + "/" + bookingDate.getFullYear();
   },
 
   getBookingDuration: function(reservationContext) {
@@ -10,7 +11,7 @@ ScreenUtils = {
   getBookingSummary: function(reservationContext) {
     var tripDate = this.getBookingDate(reservationContext);
     
-    var hours = reservationContext.interval.time.getHours();
+    var hours = new Date(reservationContext.interval.time).getHours();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12;
