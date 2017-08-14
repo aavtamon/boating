@@ -69,19 +69,19 @@ Backend = {
   
   
   getCurrentDate: function() {
-    return new Date("9/10/2002").getTime();
+    return new Date("9/10/2002");
   },
   
   getSchedulingBeginDate: function() {
-    return new Date("9/11/2002").getTime();
+    return new Date("9/11/2002");
   },
 
   getSchedulingEndDate: function() {
-    return new Date("11/12/2002").getTime();
+    return new Date("11/12/2002");
   },
   
   getAvailableTimes: function(date) {
-    if (new Date(date).getDate() == 19) {
+    if (date.getDate() == 19) {
       return [];
     }
     
@@ -91,7 +91,7 @@ Backend = {
     var secondTime = new Date(date);
     secondTime.setHours(13, 0);
 
-    return [{time: firstTime.getTime(), minDuration: 2, maxDuration: 2, id: 1}, {time: secondTime.getTime(), minDuration: 1, maxDuration: 2, id: 2}];
+    return [{time: firstTime, minDuration: 2, maxDuration: 2, id: 1}, {time: secondTime, minDuration: 1, maxDuration: 2, id: 2}];
   },
   
   

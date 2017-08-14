@@ -10,8 +10,7 @@ import "time"
 import "strings"
 
 type TReservation struct {
-  Date int64 `json:"date"`;
-  Time int `json:"time"`;
+  DateTime int64 `json:"date_time"`;
   Duration int `json:"duration"`;
   LocationId int `json:"location_id"`;
   

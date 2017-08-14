@@ -13,20 +13,23 @@ BookingTime = {
       
       onSelect: function(dateText, instance) {
         var newSelectedDate = new Date(dateText);
-        if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == Backend.getReservationContext().date.getTime()) {
+        
+        var reservationDate = new Date(Backend.getReservationContext().date);
+        reservationDate.setHours(0);
+        reservationDate.setMinutes(0);
+        if (Backend.getReservationContext().date != null && newSelectedDate.getTime() == reservationDate.getTime()) {
           return;
         }
         Backend.getReservationContext().date = newSelectedDate;
-        Backend.getReservationContext().interval = null;
         
         this._canProceedToNextStep();
         
         this._showTimes();
       }.bind(this),
       
-      defaultDate: new Date(Backend.getReservationContext().date),
-      minDate: new Date(Backend.getSchedulingBeginDate()),
-      maxDate: new Date(Backend.getSchedulingEndDate())
+      defaultDate: Backend.getReservationContext().date,
+      minDate: Backend.getSchedulingBeginDate(),
+      maxDate: Backend.getSchedulingEndDate()
     });
     
     
@@ -49,32 +52,25 @@ BookingTime = {
     for (var i in intervals) {
       var interval = intervals[i];
       
-      var hours = new Date(interval.time).getHours();
-      var minutes = new Date(interval.time).getMinutes();
-      var ampm = hours >= 12 ? 'pm' : 'am';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      
-      var duration = interval.maxDuration + (interval.maxDuration > 1 ? " hours" : " hour") + " max";
-      
-      var timeInterval = $("<div class=\"bookingtime-time-interval\">" + hours + ampm + " (" + duration + ")</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
+      var timeInterval = $("<div class=\"bookingtime-time-interval\">" + ScreenUtils.getBookingTime(interval.time) + " (" + ScreenUtils.getBookingDuration(interval.maxDuration) + " max)</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
       timeInterval.click(function(interval, event) {
         $(".bookingtime-time-interval").removeClass("selected");
         $(event.target).addClass("selected");
         
-        Backend.getReservationContext().interval = interval;
-        this._canProceedToNextStep();
-        Backend.getReservationContext().duration = null;
+        Backend.getReservationContext().date.setHours(interval.time.getHours());
+        Backend.getReservationContext().date.setMinutes(interval.time.getMinutes());
         
+        this._canProceedToNextStep();
+
+        Backend.getReservationContext().duration = null;
         this._showDurations();
       }.bind(this, interval));
       
       
       if (intervals.length == 1
-          || (Backend.getReservationContext().interval != null && Backend.getReservationContext().interval.id == interval.id)) {
+          || (Backend.getReservationContext().date.getTime() == interval.time.getTime())) {
         
         $(timeInterval).addClass("selected");
-        Backend.getReservationContext().interval = interval;
         this._canProceedToNextStep();
         
         this._showDurations();
@@ -85,7 +81,16 @@ BookingTime = {
   _showDurations: function() {
     $("#BookingTime-Screen-SelectionPanel-Duration-Durations").empty();
     
-    for (var i = Backend.getReservationContext().interval.minDuration; i <= Backend.getReservationContext().interval.maxDuration; i++) {
+    var interval = null;
+    var intervals = Backend.getAvailableTimes(Backend.getReservationContext().date);
+    for (var i in intervals) {
+      if (intervals[i].time.getTime() == Backend.getReservationContext().date.getTime()) {
+        interval = intervals[i];
+        break;
+      }
+    }
+    
+    for (var i = interval.minDuration; i <= interval.maxDuration; i++) {
       var tripLength = i + (i == 1 ? " hour" : " hours"); 
       var duration = $("<div class=\"bookingtime-duration\">" + tripLength + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
       duration.click(function(duration, event) {
@@ -97,11 +102,11 @@ BookingTime = {
       }.bind(this, i));
       
       
-      if (Backend.getReservationContext().interval.minDuration == Backend.getReservationContext().interval.maxDuration
+      if (interval.minDuration == interval.maxDuration
           || Backend.getReservationContext().duration == i) {
         
         $(duration).addClass("selected");
-        Backend.getReservationContext().duration = Backend.getReservationContext().interval.minDuration;
+        Backend.getReservationContext().duration = interval.minDuration;
         
         this._canProceedToNextStep();
       }
@@ -112,7 +117,7 @@ BookingTime = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null) {
+    if (reservationContext.date != null && reservationContext.duration != null) {
       $("#BookingTime-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
       
       $("#BookingTime-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));

@@ -1,27 +1,36 @@
 ScreenUtils = {
-  getBookingDate: function(reservationContext) {
-    var bookingDate = new Date(reservationContext.date);
-    return bookingDate.getMonth() + "/" + bookingDate.getDate() + "/" + bookingDate.getFullYear();
+  getBookingDate: function(date) {
+    return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
   },
 
-  getBookingDuration: function(reservationContext) {
-    return reservationContext.duration + (reservationContext.duration == 1 ? " hour" : " hours");
+  getBookingDuration: function(duration) {
+    return duration + (duration == 1 ? " hour" : " hours");
   },
     
-  getBookingSummary: function(reservationContext) {
-    var tripDate = this.getBookingDate(reservationContext);
-    
-    var hours = new Date(reservationContext.interval.time).getHours();
+  getBookingTime: function(time) {
+    var hours = time.getHours();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12;
-    var tripTime = hours + ampm;
     
-    var tripDuration = this.getBookingDuration(reservationContext);
+    var minutes = time.getMinutes();
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    
+    var tripTime = hours + ":" + minutes + " " + ampm;
+    
+    return tripTime;
+  },
+  
+  getBookingSummary: function(reservationContext) {
+    var tripDate = this.getBookingDate(reservationContext.date);
+    var tripTime = this.getBookingTime(reservationContext.date);
+    var tripDuration = this.getBookingDuration(reservationContext.duration);
     var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b>";
     
     if (reservationContext.location != null) {
-      summaryInfo += "<br>Pick up at <b>" + reservationContext.location.name + "</b>";
+      summaryInfo += "<br>Pick up / drop off at <b>" + reservationContext.location.name + "</b>";
     }
     
     return summaryInfo;

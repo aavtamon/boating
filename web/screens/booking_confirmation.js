@@ -1,7 +1,7 @@
 BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date == null || reservationContext.interval == null || reservationContext.duration == null || reservationContext.location == null) {
+    if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location == null) {
       Main.loadScreen("home");
     }
     
@@ -68,8 +68,8 @@ BookingPayment = {
     
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").val(ScreenUtils.formatPhoneNumber(""));
     
-    $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext));
-    $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext));
+    $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.date));
+    $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.duration));
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(reservationContext.location.name);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(reservationContext.location.address);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(reservationContext.location.parking_fee);
