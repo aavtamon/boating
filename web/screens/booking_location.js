@@ -10,7 +10,9 @@ BookingLocation = {
     });
 
     $("#BookingLocation-Screen-ButtonsPanel-NextButton").click(function() {
-      Main.loadScreen("booking_confirmation");
+      Backend.saveReservationContext(function(status) {
+        Main.loadScreen("booking_confirmation");
+      });
     });
     
     this._canProceedToNextStep();
@@ -49,7 +51,7 @@ BookingLocation = {
       });
       
       marker.addListener('click', function(marker) {
-        Backend.getReservationContext().location = marker._location;
+        Backend.getReservationContext().location_id = marker._location.id;
         this._canProceedToNextStep();
         
         for (var i in this._markers) {
@@ -60,9 +62,7 @@ BookingLocation = {
         marker.setAnimation(google.maps.Animation.BOUNCE);
       }.bind(this, marker));
       
-      if (Backend.getReservationContext().location != null
-          && Backend.getReservationContext().location.id == location.id) {
-        
+      if (Backend.getReservationContext().location_id == location.id) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
       }
       
@@ -73,7 +73,7 @@ BookingLocation = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location != null) {
+    if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location_id != null) {
       $("#BookingLocation-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
       
       $("#BookingLocation-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));

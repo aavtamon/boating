@@ -10,7 +10,17 @@ Backend = {
   },
   
   saveReservationContext: function(callback) {
-    this._communicate("", "put", this._reservationContext, false, [], {
+    var persistentContext = {
+      date_time: this._reservationContext.date.getTime(),
+      duration: this._reservationContext.duration,
+      location_id: this._reservationContext.location_id,
+      
+      adult_count: this._reservationContext.adult_count,
+      children_count: this._reservationContext.children_count,
+      mobile_phone: this._reservationContext.phone
+    };
+    
+    this._communicate("", "put", persistentContext, false, [], {
       success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -23,8 +33,33 @@ Backend = {
       }
     });
   },
+  
+  restoreReservationContext: function(callback) {
+    this._communicate("", "get", null, false, [], {
+      success: function(persistentContext) {
+        this._reservationContext = {
+          date: new Date(persistentContext.date_time),
+          duration: persistentContext.duration,
+          location_id: persistentContext.location_id,
+          adults: persistentContext.adults,
+          children: persistentContext.children,
+          phone: persistentContext.mobile_phone
+        };
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
+  },
 
   resetReservationContext: function(callback) {
+    this._reservationContext = {};
     if (callback) {
       callback(Backend.STATUS_SUCCESS);
     }

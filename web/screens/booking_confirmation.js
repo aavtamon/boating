@@ -1,7 +1,7 @@
 BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location == null) {
+    if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location_id == null) {
       Main.loadScreen("home");
     }
     
@@ -17,7 +17,9 @@ BookingPayment = {
     });
     
     $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").click(function() {
-      Main.loadScreen("booking_payment");
+      Backend.saveReservationContext(function(status) {
+        Main.loadScreen("booking_payment");
+      });
     });
 
     
@@ -68,12 +70,22 @@ BookingPayment = {
     
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").val(ScreenUtils.formatPhoneNumber(""));
     
+    
+    var location = null;
+    var locations = Backend.getLocations();
+    for (var i in locations) {
+      location = locations[i];
+      if (location.id == reservationContext.location_id) {
+        break;
+      }
+    }
+    
     $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.date));
     $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.duration));
-    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(reservationContext.location.name);
-    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(reservationContext.location.address);
-    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(reservationContext.location.parking_fee);
-    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(reservationContext.location.instructions);
+    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
+    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
+    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
+    $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
     
     
     this._canProceedToNextStep();
@@ -114,8 +126,8 @@ BookingPayment = {
     }
     
     
-    reservationContext.adultsCount = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val());
-    reservationContext.childrenCount = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
+    reservationContext.adult_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val());
+    reservationContext.children_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
     
     
     $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").prop("disabled", !reservationComplete);

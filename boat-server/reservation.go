@@ -14,8 +14,8 @@ type TReservation struct {
   Duration int `json:"duration"`;
   LocationId int `json:"location_id"`;
   
-  NumOfAdults int `json:"adults"`;
-  NumOfChildren int `json:"children"`;
+  NumOfAdults int `json:"adult_count"`;
+  NumOfChildren int `json:"children_count"`;
   MobilePhone string `json:"mobile_phone"`;
 }
 
