@@ -1,0 +1,11 @@
+#ReservationUpdate-Screen {
+}
+
+#ReservationUpdate-Screen-ReservationInfo {
+	font-size: 15px;
+	margin-top: 10px;
+	
+	border-width: 2px;
+	border-style: groove;
+	padding: 5px;
+}
