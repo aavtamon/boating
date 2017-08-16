@@ -9,7 +9,12 @@ import "math/rand"
 import "time"
 import "strings"
 
+
+type TReservationId string;
+
 type TReservation struct {
+  Id TReservationId `json:"id"`;
+
   DateTime int64 `json:"date_time"`;
   Duration int `json:"duration"`;
   LocationId int `json:"location_id"`;
@@ -18,8 +23,6 @@ type TReservation struct {
   NumOfChildren int `json:"children_count"`;
   MobilePhone string `json:"mobile_phone"`;
 }
-
-type TReservationId string;
 
 const NO_RESERVATION_ID = TReservationId("");
 
@@ -46,6 +49,18 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
         if (hasReservation) {
           w.WriteHeader(http.StatusOK);
           Reservations[reservationId] = reservation;
+
+          storedReservation, err := json.Marshal(reservation);
+          if (err != nil) {
+            w.WriteHeader(http.StatusInternalServerError);
+            w.Write([]byte(err.Error()));
+          } else {
+            w.WriteHeader(http.StatusOK);
+            w.Write(storedReservation);
+            
+            sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+            Sessions[TSessionId(sessionCookie.Value)] = reservation.Id;
+          }
         } else {
           w.WriteHeader(http.StatusNotFound);
           w.Write([]byte("No such reservation\n"))
@@ -70,11 +85,19 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       reservationId = generateReservationId();
     }
   
-    updateReservation(reservationId, r.Body);
+    res := updateReservation(reservationId, r.Body);
+    storedReservation, err := json.Marshal(res);
+    if (err != nil) {
+      w.WriteHeader(http.StatusInternalServerError);
+      w.Write([]byte(err.Error()));
+    } else {
+      w.WriteHeader(http.StatusOK);
+      w.Write(storedReservation);
+    }
   }
 }
 
-func updateReservation(reservationId TReservationId, body io.ReadCloser) {
+func updateReservation(reservationId TReservationId, body io.ReadCloser) TReservation {
   bodyBuffer, _ := ioutil.ReadAll(body);
   body.Close();
   
@@ -85,11 +108,14 @@ func updateReservation(reservationId TReservationId, body io.ReadCloser) {
   if (err != nil) {
     log.Println("Incorrect request from the app: ", err);
   } else {
+    res.Id = reservationId;
     Reservations[reservationId] = res;
     log.Println("Received object: ", res);
   }
   
   log.Println("*****");
+  
+  return res;
 }
 
 

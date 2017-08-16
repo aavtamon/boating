@@ -3,13 +3,18 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-	$(document).ready(function() {
-	  ReservationUpdate.onLoad();
-	});
+  $(document).ready(function() {
+    ReservationUpdate.onLoad();
+  });
 </script>
 
 <div id="ReservationUpdate-Screen">
-	<div id="ReservationUpdate-Screen-ReservationInfo">
-      Retrieval of the reservation
-	</div>
+  <div id="ReservationUpdate-Screen-ReservationInfo">
+    Retrieval of the reservation
+  </div>
+  <div id="ReservationUpdate-Screen-ReservationNumber">
+    <input type="text" id="ReservationUpdate-Screen-ReservationNumber-Input">
+    <button id="ReservationUpdate-Screen-ReservationNumber-RestoreButton">Next</button>
+    <div id="ReservationUpdate-Screen-ReservationNumber-Status"></div>
+  </div>
 </div>

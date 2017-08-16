@@ -15,4 +15,13 @@ Utils = {
     
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   },
+  
+  getCookie: function(name) {
+    var cookies = document.cookie.split(";");
+    for (var i in cookies) {
+      var cookie = cookies[i];
+      var keyValuePair = cookie.split("=");
+      return keyValuePair.length > 1 ? keyValuePair[1] : "";
+    }
+  }
 }

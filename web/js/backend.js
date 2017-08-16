@@ -10,22 +10,16 @@ Backend = {
   },
   
   saveReservationContext: function(callback) {
-    var persistentContext = {
-      date_time: this._reservationContext.date.getTime(),
-      duration: this._reservationContext.duration,
-      location_id: this._reservationContext.location_id,
-      
-      adult_count: this._reservationContext.adult_count,
-      children_count: this._reservationContext.children_count,
-      mobile_phone: this._reservationContext.phone
-    };
+    var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
     
-    this._communicate("", "put", persistentContext, false, [], {
-      success: function() {
+    this._communicate("", "put", persistentContext, true, [], {
+      success: function(reportedContext) {
+        this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
+        
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
         }
-      },
+      }.bind(this),
       error: function() {
         if (callback) {
           callback(Backend.STATUS_ERROR);
@@ -35,16 +29,9 @@ Backend = {
   },
   
   restoreReservationContext: function(callback) {
-    this._communicate("", "get", null, false, [], {
+    this._communicate("", "get", null, true, [], {
       success: function(persistentContext) {
-        this._reservationContext = {
-          date: new Date(persistentContext.date_time),
-          duration: persistentContext.duration,
-          location_id: persistentContext.location_id,
-          adults: persistentContext.adults,
-          children: persistentContext.children,
-          phone: persistentContext.mobile_phone
-        };
+        this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -62,6 +49,29 @@ Backend = {
     this._reservationContext = {};
     if (callback) {
       callback(Backend.STATUS_SUCCESS);
+    }
+  },
+  
+  _convertPersistentToReservationContext: function(persistentContext) {
+    return {
+      id: Utils.getCookie("sessionId"),
+      date: new Date(persistentContext.date_time),
+      duration: persistentContext.duration,
+      location_id: persistentContext.location_id,
+      adult_count: persistentContext.adult_count,
+      children_count: persistentContext.children_count,
+      mobile_phone: persistentContext.mobile_phone
+    }
+  },
+  
+  _convertReservationToPersistentContext: function(reservationContext) {
+    return {
+      date_time: reservationContext.date.getTime(),
+      duration: reservationContext.duration,
+      location_id: reservationContext.location_id,
+      adult_count: reservationContext.adult_count,
+      children_count: reservationContext.children_count,
+      mobile_phone: reservationContext.mobile_phone
     }
   },
 
