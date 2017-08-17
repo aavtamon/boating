@@ -24,7 +24,7 @@ BookingPayment = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date != null && reservationContext.interval != null && reservationContext.duration != null) {
+    if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location_id != null) {
       $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").removeAttr("disabled");
     } else {
       $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").attr("disabled", true);

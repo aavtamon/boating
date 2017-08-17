@@ -71,17 +71,10 @@ BookingPayment = {
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").val(ScreenUtils.formatPhoneNumber(""));
     
     
-    var location = null;
-    var locations = Backend.getLocations();
-    for (var i in locations) {
-      location = locations[i];
-      if (location.id == reservationContext.location_id) {
-        break;
-      }
-    }
-    
     $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.date));
     $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.duration));
+    
+    var location = ScreenUtils.getLocation(reservationContext.location_id);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);

@@ -23,14 +23,29 @@ ScreenUtils = {
     return tripTime;
   },
   
+  getLocation: function(locationId) {
+    var locations = Backend.getLocations();
+    for (var i in locations) {
+      var location = locations[i];
+      if (location.id == locationId) {
+        return location;
+      }
+    }
+    
+    return null;
+  },
+  
   getBookingSummary: function(reservationContext) {
     var tripDate = this.getBookingDate(reservationContext.date);
     var tripTime = this.getBookingTime(reservationContext.date);
     var tripDuration = this.getBookingDuration(reservationContext.duration);
     var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b>";
     
-    if (reservationContext.location != null) {
-      summaryInfo += "<br>Pick up / drop off at <b>" + reservationContext.location.name + "</b>";
+    if (reservationContext.location_id != null) {
+      var location = this.getLocation(reservationContext.location_id);
+      if (location != null) {
+        summaryInfo += "<br>Pick up / drop off at <b>" + location.name + "</b>";
+      }
     }
     
     return summaryInfo;
