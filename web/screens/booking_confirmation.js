@@ -5,12 +5,10 @@ BookingPayment = {
       Main.loadScreen("home");
     }
     
-    this._phoneNumber = reservationContext.phone || "";      
+    this._phoneNumber = reservationContext.mobile_phone || "";      
     
-
+    
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").checkboxradio();
-    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").selectmenu({width: "100px"});
-    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").selectmenu({width: "100px"});
     
     $("#BookingConfirmation-Screen-ButtonsPanel-BackButton").click(function() {
       Main.loadScreen("booking_location");
@@ -23,7 +21,7 @@ BookingPayment = {
     });
 
     
-    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").on("selectmenuchange", function() {
+    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").change(function() {
       var value = $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val();
       var remainder = capacity - parseInt(value);
       
@@ -81,6 +79,11 @@ BookingPayment = {
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
     
     
+    $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").val(ScreenUtils.formatPhoneNumber(this._phoneNumber));
+    if (reservationContext.no_mobile_phone) {
+      $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").attr("checked", true).change();
+    }
+    
     this._canProceedToNextStep();
   },
   
@@ -101,8 +104,6 @@ BookingPayment = {
     } else {
       $(selector).val(currentValue);
     }
-    
-    $(selector).selectmenu("refresh");
   },
   
   
@@ -111,9 +112,11 @@ BookingPayment = {
     
     var reservationComplete = true;
     if ($("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked')) {
-      reservationContext.phone = "";
+      reservationContext.mobile_phone = null;
+      reservationContext.no_mobile_phone = true;
     } else if (this._phoneNumber.length == 10) {
-      reservationContext.phone = this._phoneNumber;
+      reservationContext.mobile_phone = this._phoneNumber;
+      reservationContext.no_mobile_phone = false;
     } else {
       reservationComplete = false;
     }

@@ -60,7 +60,8 @@ Backend = {
       location_id: persistentContext.location_id,
       adult_count: persistentContext.adult_count,
       children_count: persistentContext.children_count,
-      mobile_phone: persistentContext.mobile_phone
+      mobile_phone: persistentContext.mobile_phone,
+      no_mobile_phone: persistentContext.no_mobile_phone
     }
   },
   
@@ -71,7 +72,8 @@ Backend = {
       location_id: reservationContext.location_id,
       adult_count: reservationContext.adult_count,
       children_count: reservationContext.children_count,
-      mobile_phone: reservationContext.mobile_phone
+      mobile_phone: reservationContext.mobile_phone,
+      no_mobile_phone: reservationContext.no_mobile_phone
     }
   },
 

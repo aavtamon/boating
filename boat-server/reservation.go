@@ -22,6 +22,7 @@ type TReservation struct {
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;
   MobilePhone string `json:"mobile_phone"`;
+  NoMobilePhone bool `json:"no_mobile_phone"`;
 }
 
 const NO_RESERVATION_ID = TReservationId("");

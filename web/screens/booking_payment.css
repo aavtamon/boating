@@ -2,9 +2,236 @@
 	height: 100%;
 }
 
-#BookingPayment-Screen-SelectionPanel {
-	height: calc(100% - 90px);
+#BookingPayment-Screen-ReservationSummary {
+  margin-top: 10px;
+  margin-left: 200px;
+  font-size: 20px;
 }
+#BookingPayment-Screen-ReservationSummary-Label {
+  display: inline-block;
+  margin-right: 50px;
+  vertical-align: middle;
+  font-size: 30px;
+}
+#BookingPayment-Screen-ReservationSummary-Details {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+#BookingPayment-Screen-PaymentInfo {
+  margin-top: 20px;
+  margin-left: 150px;
+  font-family: monospace;
+  font-size: 15px;
+}
+
+#BookingPayment-Screen-PaymentInfo-Name {
+}
+
+#BookingPayment-Screen-PaymentInfo-Name-FirstName {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-Name-FirstName-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Name-FirstName-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-Name-LastName {
+  display: inline-block;
+  width: 200px;
+}
+#BookingPayment-Screen-PaymentInfo-Name-LastName-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Name-LastName-Input {
+  width: 100%;
+  font: inherit;
+}
+
+
+#BookingPayment-Screen-PaymentInfo-ContactInfo {
+  margin-top: 20px;
+}
+
+#BookingPayment-Screen-PaymentInfo-ContactInfo-Email {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-Email-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-Email-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone {
+  display: inline-block;
+  width: 200px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone-Input {
+  width: 100%;
+  font: inherit;
+}
+
+
+#BookingPayment-Screen-PaymentInfo-Address {
+  margin-top: 30px;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Street {
+  display: inline-block;
+  width: 300px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Street-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Street-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Additional {
+  display: inline-block;
+  width: 300px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Additional-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Additional-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Area {
+  margin-top: 10px;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Area-City {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-City-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-City-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Area-State {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-State-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-State-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-Address-Area-Zip {
+  display: inline-block;
+  width: 200px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-Zip-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-Address-Area-Zip-Input {
+  width: 100%;
+  font: inherit;
+}
+
+
+#BookingPayment-Screen-PaymentInfo-CreditCard {
+  margin-top: 30px;
+}
+
+#BookingPayment-Screen-PaymentInfo-CreditCard-Number {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-Number-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-Number-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-CreditCard-CVC {
+  display: inline-block;
+  width: 200px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-CVC-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-CVC-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration {
+  display: inline-block;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Month {
+  display: inline-block;
+  width: 100px;
+  margin-right: 20px;
+  font: inherit;
+}
+#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Year {
+  display: inline-block;
+  width: 100px;
+  font: inherit;
+}
+
+
 
 
 

@@ -6,7 +6,7 @@ BookingPayment = {
     }
 
     $("#BookingPayment-Screen-ButtonsPanel-BackButton").click(function() {
-      Main.loadScreen("booking_location");
+      Main.loadScreen("booking_confirmation");
     });
     
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
@@ -15,7 +15,7 @@ BookingPayment = {
       });
     });
     
-    $("#BookingPayment-Screen-ReservationSummary").html(ScreenUtils.getBookingSummary(Backend.getReservationContext()));
+    $("#BookingPayment-Screen-ReservationSummary-Details").html(ScreenUtils.getBookingSummary(Backend.getReservationContext()));
     
     this._canProceedToNextStep();
   },
