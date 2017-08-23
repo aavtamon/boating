@@ -2,26 +2,10 @@
 }
 
 #BookingConfirmation-Screen-ReservationSummary {
-  font-size: 15px;
   margin-top: 10px;
-
-  border-width: 2px;
-  border-style: groove;
-  padding: 5px;
 }
 
-#BookingConfirmation-Screen-ReservationSummary-Description {
-  display: inline-block;
-  margin-left: 50px;
-  margin-top: -35px;
-  padding: 5px;
-  vertical-align: middle;
-
-  font-family: Verdana;
-  font-size: 20px;
-  font-weight: bold;
-
-  background-color: rgb(255, 234, 191);
+#BookingConfirmation-Screen-ReservationSummary-Title {
 }
 
 #BookingConfirmation-Screen-ReservationSummary-DateTime {

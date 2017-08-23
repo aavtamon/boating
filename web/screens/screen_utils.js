@@ -65,5 +65,48 @@ ScreenUtils = {
     }
 
     return result.join("");
+  },
+  
+  
+  // changeCallback(phoneNumber, completelyEntered)
+  phoneInput: function(phoneElement, initialPhone, changeCallback) {
+    $(phoneElement).keydown(function(event) {
+      event.preventDefault();
+      
+      if (event.which >= 48 && event.which <= 57) {
+        if (phoneElement._phoneNumber.length < 10) {
+          phoneElement.setPhone(phoneElement._phoneNumber + (event.which - 48));
+          
+          if (phoneElement._phoneNumber.length == 10) {
+            if (changeCallback) {
+              changeCallback(phoneElement._phoneNumber, true);
+            }
+          }
+        }
+      } else if (event.which == 8) {
+        if (phoneElement._phoneNumber.length > 0) {
+          phoneElement.setPhone(phoneElement._phoneNumber.substring(0, phoneElement._phoneNumber.length - 1));
+        }
+        if (phoneElement._phoneNumber.length == 9) {
+          if (changeCallback) {
+            changeCallback(phoneElement._phoneNumber, false);
+          }
+        }
+      } else {
+        return false;
+      }
+    });
+    
+    phoneElement.setPhone = function(phone) {
+      this._phoneNumber = phone;
+      this.value = ScreenUtils.formatPhoneNumber(phone);
+    }
+    
+    phoneElement.getPhone = function() {
+      return this._phoneNumber;
+    }
+    
+    
+    phoneElement.setPhone(initialPhone || "");
   }
 }

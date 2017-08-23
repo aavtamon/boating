@@ -4,8 +4,8 @@
 
 #BookingPayment-Screen-ReservationSummary {
   margin-top: 10px;
-  margin-left: 200px;
-  font-size: 20px;
+  margin-right: 30px;
+  text-align: right;
 }
 #BookingPayment-Screen-ReservationSummary-Label {
   display: inline-block;
@@ -16,216 +16,228 @@
 #BookingPayment-Screen-ReservationSummary-Details {
   display: inline-block;
   vertical-align: middle;
+  font-size: 15px;
+  
+  text-align: left;
 }
 
 
-#BookingPayment-Screen-PaymentInfo {
-  margin-top: 20px;
-  margin-left: 150px;
-  font-family: monospace;
+#BookingPayment-Screen-ContactInformation {
   font-size: 15px;
 }
-
-#BookingPayment-Screen-PaymentInfo-Name {
+BookingPayment-Screen-ContactInformation-Title {
 }
 
-#BookingPayment-Screen-PaymentInfo-Name-FirstName {
+#BookingPayment-Screen-ContactInformation-Name {
+  margin-left: 20px;
+}
+
+#BookingPayment-Screen-ContactInformation-Name-FirstName {
   display: inline-block;
-  width: 200px;
   margin-right: 50px;
-}
-#BookingPayment-Screen-PaymentInfo-Name-FirstName-Label {
-  margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Name-FirstName-Input {
-  width: 100%;
-  font: inherit;
-}
-
-#BookingPayment-Screen-PaymentInfo-Name-LastName {
+#BookingPayment-Screen-ContactInformation-Name-FirstName-Label {
   display: inline-block;
-  width: 200px;
+  margin-right: 10px;
 }
-#BookingPayment-Screen-PaymentInfo-Name-LastName-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
+#BookingPayment-Screen-ContactInformation-Name-FirstName-Input {
+  width: 300px;
+  font: inherit;
 }
-#BookingPayment-Screen-PaymentInfo-Name-LastName-Input {
-  width: 100%;
+
+#BookingPayment-Screen-ContactInformation-Name-LastName {
+  display: inline-block;
+}
+#BookingPayment-Screen-ContactInformation-Name-LastName-Label {
+  display: inline-block;
+  margin-right: 10px;
+}
+#BookingPayment-Screen-ContactInformation-Name-LastName-Input {
+  width: 300px;
   font: inherit;
 }
 
 
-#BookingPayment-Screen-PaymentInfo-ContactInfo {
+#BookingPayment-Screen-ContactInformation-Contact {
   margin-top: 20px;
+  margin-left: 20px;
 }
 
-#BookingPayment-Screen-PaymentInfo-ContactInfo-Email {
-  display: inline-block;
-  width: 200px;
-  margin-right: 50px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-Email-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-Email-Input {
-  width: 100%;
-  font: inherit;
-}
-
-#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone {
-  display: inline-block;
-  width: 200px;
-  margin-right: 50px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-CellPhone-Input {
-  width: 100%;
-  font: inherit;
-}
-
-#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone {
-  display: inline-block;
-  width: 200px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInfo-ContactInfo-AlternativePhone-Input {
-  width: 100%;
-  font: inherit;
-}
-
-
-#BookingPayment-Screen-PaymentInfo-Address {
-  margin-top: 30px;
-}
-
-#BookingPayment-Screen-PaymentInfo-Address-Street {
+#BookingPayment-Screen-ContactInformation-Contact-Email {
   display: inline-block;
   width: 300px;
   margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Street-Label {
+#BookingPayment-Screen-ContactInformation-Contact-Email-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Street-Input {
+#BookingPayment-Screen-ContactInformation-Contact-Email-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-Address-Additional {
+#BookingPayment-Screen-ContactInformation-Contact-CellPhone {
   display: inline-block;
-  width: 300px;
+  width: 200px;
+  margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Additional-Label {
+#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Additional-Input {
+#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-Address-Area {
+#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone {
+  display: inline-block;
+  width: 200px;
+}
+#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input {
+  width: 100%;
+  font: inherit;
+}
+
+
+#BookingPayment-Screen-PaymentInformation {
+  margin-top: 20px;
+  font-size: 15px;
+}
+#BookingPayment-Screen-PaymentInformation-Title {
+}
+
+#BookingPayment-Screen-PaymentInformation-Address {
+  margin-left: 20px;
+}
+
+#BookingPayment-Screen-PaymentInformation-Address-Street {
+  display: inline-block;
+  width: 350px;
+  margin-right: 50px;
+}
+#BookingPayment-Screen-PaymentInformation-Address-Street-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInformation-Address-Street-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInformation-Address-Additional {
+  display: inline-block;
+  width: 350px;
+}
+#BookingPayment-Screen-PaymentInformation-Address-Additional-Label {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+#BookingPayment-Screen-PaymentInformation-Address-Additional-Input {
+  width: 100%;
+  font: inherit;
+}
+
+#BookingPayment-Screen-PaymentInformation-Area {
   margin-top: 10px;
+  margin-left: 20px;
 }
 
-#BookingPayment-Screen-PaymentInfo-Address-Area-City {
+#BookingPayment-Screen-PaymentInformation-Area-City {
   display: inline-block;
   width: 200px;
   margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-City-Label {
+#BookingPayment-Screen-PaymentInformation-Area-City-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-City-Input {
+#BookingPayment-Screen-PaymentInformation-Area-City-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-Address-Area-State {
+#BookingPayment-Screen-PaymentInformation-Area-State {
   display: inline-block;
   width: 200px;
   margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-State-Label {
+#BookingPayment-Screen-PaymentInformation-Area-State-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-State-Input {
+#BookingPayment-Screen-PaymentInformation-Area-State-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-Address-Area-Zip {
+#BookingPayment-Screen-PaymentInformation-Area-Zip {
   display: inline-block;
   width: 200px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-Zip-Label {
+#BookingPayment-Screen-PaymentInformation-Area-Zip-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-Address-Area-Zip-Input {
+#BookingPayment-Screen-PaymentInformation-Area-Zip-Input {
   width: 100%;
   font: inherit;
 }
 
 
-#BookingPayment-Screen-PaymentInfo-CreditCard {
+#BookingPayment-Screen-PaymentInformation-CreditCard {
   margin-top: 30px;
+  margin-left: 20px;
 }
 
-#BookingPayment-Screen-PaymentInfo-CreditCard-Number {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Number {
   display: inline-block;
   width: 200px;
   margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-Number-Label {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Number-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-Number-Input {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Number-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-CreditCard-CVC {
+#BookingPayment-Screen-PaymentInformation-CreditCard-CVC {
   display: inline-block;
   width: 200px;
   margin-right: 50px;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-CVC-Label {
+#BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-CVC-Input {
+#BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Input {
   width: 100%;
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration {
   display: inline-block;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Label {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Label {
   margin-bottom: 5px;
   margin-left: 5px;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Month {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Month {
   display: inline-block;
   width: 100px;
   margin-right: 20px;
   font: inherit;
 }
-#BookingPayment-Screen-PaymentInfo-CreditCard-Expiration-Year {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Year {
   display: inline-block;
   width: 100px;
   font: inherit;

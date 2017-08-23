@@ -1,0 +1,23 @@
+.titled-box {
+  font-size: 15px;
+  margin-top: 20px;
+
+  border-width: 2px;
+  border-style: groove;
+  padding: 10px;
+}
+
+.titled-box .title {
+  display: inline-block;
+  margin-left: 50px;
+  margin-top: -45px;
+  padding: 5px;
+  vertical-align: middle;
+
+  font-family: Verdana;
+  font-size: 20px;
+  font-weight: bold;
+
+  background-color: rgb(255, 234, 191);
+}
+
