@@ -11,7 +11,7 @@ Backend = {
   
   saveReservationContext: function(callback) {
     var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
-    
+
     this._communicate("", "put", persistentContext, true, [], {
       success: function(reportedContext) {
         this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
@@ -70,8 +70,8 @@ Backend = {
       date_time: reservationContext.date.getTime(),
       duration: reservationContext.duration,
       location_id: reservationContext.location_id,
-      adult_count: reservationContext.adult_count,
-      children_count: reservationContext.children_count,
+      adult_count: parseInt(reservationContext.adult_count),
+      children_count: parseInt(reservationContext.children_count),
       mobile_phone: reservationContext.mobile_phone,
       no_mobile_phone: reservationContext.no_mobile_phone
     }

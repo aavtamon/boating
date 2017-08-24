@@ -1,6 +1,7 @@
 BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
+    
     if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location_id == null) {
       Main.loadScreen("home");
     }
@@ -18,21 +19,25 @@ BookingPayment = {
     });
 
     
-    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").change(function() {
-      var value = $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val();
-      var remainder = capacity - parseInt(value);
-      
-      this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
-    }.bind(this));
-    
     var capacity = Backend.getMaximumCapacity();
     this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, capacity);
     this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, capacity - 1);
     
+    
+    reservationContext.adult_count = reservationContext.adult_count || 1;
+    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
+      var remainder = capacity - parseInt(value);
+      
+      this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
+    }.bind(this));
+        
+    reservationContext.children_count = reservationContext.children_count || 0;
+    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector")[0], reservationContext, "children_count");
+    
     $("#BookingConfirmation-Screen-ReservationSummary-Capacity-Value").html(capacity);
     
     
-    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext.mobile_phone, function() {
+    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", function() {
       this._canProceedToNextStep();
     }.bind(this));
     
@@ -84,20 +89,17 @@ BookingPayment = {
     
     var reservationComplete = true;
 
-    var phoneNumber = $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0].getPhone();
     if ($("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked')) {
-      reservationContext.mobile_phone = null;
       reservationContext.no_mobile_phone = true;
-    } else if (phoneNumber.length == 10) {
-      reservationContext.mobile_phone = phoneNumber;
+    } else if (reservationContext.mobile_phone.length == 10) {
       reservationContext.no_mobile_phone = false;
     } else {
       reservationComplete = false;
     }
     
     
-    reservationContext.adult_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val());
-    reservationContext.children_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
+//    reservationContext.adult_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val());
+//    reservationContext.children_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
     
     
     $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").prop("disabled", !reservationComplete);

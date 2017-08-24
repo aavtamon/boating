@@ -69,27 +69,27 @@ ScreenUtils = {
   
   
   // changeCallback(phoneNumber, completelyEntered)
-  phoneInput: function(phoneElement, initialPhone, changeCallback) {
+  phoneInput: function(phoneElement, dataModel, dataModelProperty, changeCallback) {
     $(phoneElement).keydown(function(event) {
       event.preventDefault();
       
       if (event.which >= 48 && event.which <= 57) {
-        if (phoneElement._phoneNumber.length < 10) {
-          phoneElement.setPhone(phoneElement._phoneNumber + (event.which - 48));
+        if (dataModel[dataModelProperty].length < 10) {
+          phoneElement.setPhone(dataModel[dataModelProperty] + (event.which - 48));
           
-          if (phoneElement._phoneNumber.length == 10) {
+          if (dataModel[dataModelProperty].length == 10) {
             if (changeCallback) {
-              changeCallback(phoneElement._phoneNumber, true);
+              changeCallback(dataModel[dataModelProperty], true);
             }
           }
         }
       } else if (event.which == 8) {
-        if (phoneElement._phoneNumber.length > 0) {
-          phoneElement.setPhone(phoneElement._phoneNumber.substring(0, phoneElement._phoneNumber.length - 1));
+        if (dataModel[dataModelProperty].length > 0) {
+          phoneElement.setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
         }
-        if (phoneElement._phoneNumber.length == 9) {
+        if (dataModel[dataModelProperty].length == 9) {
           if (changeCallback) {
-            changeCallback(phoneElement._phoneNumber, false);
+            changeCallback(dataModel[dataModelProperty], false);
           }
         }
       } else {
@@ -98,15 +98,26 @@ ScreenUtils = {
     });
     
     phoneElement.setPhone = function(phone) {
-      this._phoneNumber = phone;
+      dataModel[dataModelProperty] = phone;
       this.value = ScreenUtils.formatPhoneNumber(phone);
     }
     
     phoneElement.getPhone = function() {
-      return this._phoneNumber;
+      return dataModel[dataModelProperty];
     }
     
     
-    phoneElement.setPhone(initialPhone || "");
-  }
+    phoneElement.setPhone(dataModel[dataModelProperty] || "");
+  },
+  
+  dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback) {
+    inputElement.value = dataModel[dataModelProperty];
+
+    $(inputElement).change(function() {
+      dataModel[dataModelProperty] = inputElement.value;
+      if (changeCallback) {
+        changeCallback(inputElement.value);
+      }      
+    });
+  }  
 }
