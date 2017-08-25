@@ -14,7 +14,7 @@ Backend = {
 
     this._communicate("", "put", persistentContext, true, [], {
       success: function(reportedContext) {
-        this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
+        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -31,7 +31,7 @@ Backend = {
   restoreReservationContext: function(callback) {
     this._communicate("", "get", null, true, [], {
       success: function(persistentContext) {
-        this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
+        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -52,6 +52,7 @@ Backend = {
     }
   },
   
+  
   _convertPersistentToReservationContext: function(persistentContext) {
     return {
       id: Utils.getCookie("sessionId"),
@@ -61,7 +62,20 @@ Backend = {
       adult_count: persistentContext.adult_count,
       children_count: persistentContext.children_count,
       mobile_phone: persistentContext.mobile_phone,
-      no_mobile_phone: persistentContext.no_mobile_phone
+      no_mobile_phone: persistentContext.no_mobile_phone,
+      first_name: persistentContext.first_name,
+      last_name: persistentContext.last_name,
+      email: persistentContext.email,
+      alternative_phone: persistentContext.alternative_phone,
+      street_address: persistentContext.street_address,
+      additional_address: persistentContext.additional_address,
+      city: persistentContext.city,
+      state: persistentContext.state,
+      zip: persistentContext.zip,
+      credit_card: persistentContext.credit_card,
+      credit_card_cvc: persistentContext.credit_card_cvc,
+      credit_card_expiration_month: persistentContext.credit_card_expiration_month,
+      credit_card_expiration_year: persistentContext.credit_card_expiration_year      
     }
   },
   
@@ -73,7 +87,20 @@ Backend = {
       adult_count: parseInt(reservationContext.adult_count),
       children_count: parseInt(reservationContext.children_count),
       mobile_phone: reservationContext.mobile_phone,
-      no_mobile_phone: reservationContext.no_mobile_phone
+      no_mobile_phone: reservationContext.no_mobile_phone,
+      first_name: reservationContext.first_name,
+      last_name: reservationContext.last_name,
+      email: reservationContext.email,
+      alternative_phone: reservationContext.alternative_phone,
+      street_address: reservationContext.street_address,
+      additional_address: reservationContext.additional_address,
+      city: reservationContext.city,
+      state: reservationContext.state,
+      zip: reservationContext.zip,
+      credit_card: reservationContext.credit_card,
+      credit_card_cvc: reservationContext.credit_card_cvc,
+      credit_card_expiration_month: reservationContext.credit_card_expiration_month,
+      credit_card_expiration_year: reservationContext.credit_card_expiration_year      
     }
   },
 

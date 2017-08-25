@@ -17,12 +17,26 @@ type TReservation struct {
 
   DateTime int64 `json:"date_time,omitempty"`;
   Duration int `json:"duration,omitempty"`;
-  LocationId int `json:"location_id,omitempty"`;
+  LocationId int `json:"location_id"`;
   
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;
-  MobilePhone string `json:"mobile_phone"`;
+  MobilePhone string `json:"mobile_phone,omitempty"`;
   NoMobilePhone bool `json:"no_mobile_phone"`;
+  
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
+  AlternativePhone string `json:"alternative_phone,omitempty"`;
+  StreetAddress string `json:"street_address,omitempty"`;
+  AdditionalAddress string `json:"additional_address,omitempty"`;
+  City string `json:"city,omitempty"`;
+  State string `json:"state,omitempty"`;
+  Zip string `json:"zip,omitempty"`;
+  CreditCard string `json:"credit_card,omitempty"`;
+  CreditCardCVC string `json:"credit_card_cvc,omitempty"`;
+  CreditCardExpirationMonth int `json:"credit_card_expiration_month,omitempty"`;
+  CreditCardExpirationYear int `json:"credit_card_expiration_year,omitempty"`;
 }
 
 const NO_RESERVATION_ID = TReservationId("");

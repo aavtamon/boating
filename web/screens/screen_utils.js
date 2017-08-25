@@ -111,7 +111,11 @@ ScreenUtils = {
   },
   
   dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback) {
-    inputElement.value = dataModel[dataModelProperty];
+    if (dataModel[dataModelProperty] != null) {
+      inputElement.value = dataModel[dataModelProperty];
+    } else if (inputElement.value != null) {
+      dataModel[dataModelProperty] = inputElement.value;
+    }
 
     $(inputElement).change(function() {
       dataModel[dataModelProperty] = inputElement.value;
@@ -119,5 +123,26 @@ ScreenUtils = {
         changeCallback(inputElement.value);
       }      
     });
-  }  
+  },
+  
+  
+  isValid: function(value) {
+    return value != null && value != "";
+  },
+  
+  isValidEmail: function(value) {
+    return value != null && value != "";
+  },
+  
+  isValidPhone: function(value) {
+    return value != null && value != "";
+  },
+  
+  isValidCardNumber: function(value) {
+    return value != null && value != "";
+  },
+  
+  isValidCardCVC: function(value) {
+    return value != null && value != "";
+  },
 }
