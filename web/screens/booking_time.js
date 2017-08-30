@@ -4,6 +4,7 @@ BookingTime = {
       Backend.getReservationContext().date = Backend.getCurrentDate();
     }
     
+    
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = Backend.getAvailableTimes(date).length > 0;

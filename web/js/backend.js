@@ -128,7 +128,6 @@ Backend = {
     
     //var url = window.location.protocol + "//" + window.location.hostname + ":8081/" + resource;
     var url = "reservation/" + resource;
-    console.debug("Request URL: " + url);
     
     request.open(method, url, true);
     request.setRequestHeader("content-type", "application/json");

@@ -37,12 +37,19 @@ BookingPayment = {
     $("#BookingConfirmation-Screen-ReservationSummary-Capacity-Value").html(capacity);
     
     
-    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", function() {
-      this._canProceedToNextStep();
-    }.bind(this));
+    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", 
+      this._canProceedToNextStep.bind(this), function(value) {
+        return $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled") == true
+               || ScreenUtils.isValidPhone(value);
+      });
     
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").change(function(event) {
-      $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled", $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked'));
+      var isDisabled = $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked');
+      $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled", isDisabled);
+      
+      if (isDisabled) {
+        $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0].setPhone("");
+      }
       
       this._canProceedToNextStep();
     }.bind(this));
@@ -91,7 +98,7 @@ BookingPayment = {
 
     if ($("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked')) {
       reservationContext.no_mobile_phone = true;
-    } else if (reservationContext.mobile_phone.length == 10) {
+    } else if (ScreenUtils.isValidPhone(reservationContext.mobile_phone)) {
       reservationContext.no_mobile_phone = false;
     } else {
       reservationComplete = false;

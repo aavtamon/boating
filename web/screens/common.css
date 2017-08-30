@@ -21,3 +21,7 @@
   background-color: rgb(255, 234, 191);
 }
 
+
+.invalid {
+  border-color: red;
+}
