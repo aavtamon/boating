@@ -11,7 +11,9 @@ BookingPayment = {
     
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
       Backend.saveReservationContext(function(status) {
-        Main.loadScreen("booking_complete");
+        Backend.pay(function(status) {
+          Main.loadScreen("booking_complete");
+        });
       });
     });
     
@@ -27,7 +29,7 @@ BookingPayment = {
     ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input")[0], reservationContext, "mobile_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
 
     ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input")[0], reservationContext, "alternative_phone", this._canProceedToNextStep.bind(this), function(value) {
-      value == null || value.length == 0 || valueScreenUtils.isValidPhone(value);
+      return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
     });
     
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Street-Input")[0], reservationContext, "street_address", this._canProceedToNextStep.bind(this));

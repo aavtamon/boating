@@ -71,12 +71,12 @@ ScreenUtils = {
   
   
   phoneInput: function(phoneElement, dataModel, dataModelProperty, changeCallback, validationMethod) {
-    _setPhone = function(phone) {
+    phoneElement._setPhone = function(phone) {
       dataModel[dataModelProperty] = phone;
-      phoneElement.value = ScreenUtils.formatPhoneNumber(phone);
+      this.value = ScreenUtils.formatPhoneNumber(phone);
     }
     
-    _onValueChange = function() {
+    phoneElement._onValueChange = function() {
       if (validationMethod) {
         if (validationMethod(dataModel[dataModelProperty])) {
           $(phoneElement).removeClass("invalid");
@@ -95,11 +95,11 @@ ScreenUtils = {
       
       if (event.which >= 48 && event.which <= 57) {
         if (dataModel[dataModelProperty].length < 10) {
-          _setPhone(dataModel[dataModelProperty] + (event.which - 48));
+          phoneElement._setPhone(dataModel[dataModelProperty] + (event.which - 48));
         }
       } else if (event.which == 8) {
         if (dataModel[dataModelProperty].length > 0) {
-          _setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
+          phoneElement._setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
         }
       } else {
         return false;
@@ -108,14 +108,14 @@ ScreenUtils = {
     
     
     $(phoneElement).focusout(function() {
-      _onValueChange();
+      phoneElement._onValueChange();
     });
     
     
     phoneElement.setPhone = function(phone) {
-      _setPhone(phone);
+      phoneElement._setPhone(phone);
       
-      _onValueChange();
+      phoneElement._onValueChange();
     }
     
     phoneElement.getPhone = function() {
@@ -123,7 +123,7 @@ ScreenUtils = {
     }
     
 
-    _setPhone(dataModel[dataModelProperty] || "");
+    phoneElement._setPhone(dataModel[dataModelProperty] || "");
   },
   
   dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback, validationMethod) {

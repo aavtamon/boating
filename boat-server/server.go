@@ -125,6 +125,7 @@ func main() {
 
 
   httpMux := http.NewServeMux();
+  httpMux.HandleFunc("/reservation/payment", PaymentHandler);
   httpMux.HandleFunc("/reservation/", ReservationHandler);
   httpMux.HandleFunc("/", pageHandler);
   

@@ -53,6 +53,27 @@ Backend = {
   },
   
   
+  pay: function(callback) {
+    var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
+    
+    this._communicate("payment", "put", persistentContext, true, [], {
+      success: function(reportedContext) {
+        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);        
+        this._reservationContext.payed = true;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
+  },
+  
+  
   _convertPersistentToReservationContext: function(persistentContext) {
     return {
       id: Utils.getCookie("sessionId"),
@@ -75,7 +96,8 @@ Backend = {
       credit_card: persistentContext.credit_card,
       credit_card_cvc: persistentContext.credit_card_cvc,
       credit_card_expiration_month: persistentContext.credit_card_expiration_month,
-      credit_card_expiration_year: persistentContext.credit_card_expiration_year      
+      credit_card_expiration_year: persistentContext.credit_card_expiration_year,
+      payed: persistentContext.payed
     }
   },
   
