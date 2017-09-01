@@ -91,8 +91,6 @@ ScreenUtils = {
     
     
     $(phoneElement).keydown(function(event) {
-      event.preventDefault();
-      
       if (event.which >= 48 && event.which <= 57) {
         if (dataModel[dataModelProperty].length < 10) {
           phoneElement._setPhone(dataModel[dataModelProperty] + (event.which - 48));
@@ -101,9 +99,11 @@ ScreenUtils = {
         if (dataModel[dataModelProperty].length > 0) {
           phoneElement._setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
         }
-      } else {
-        return false;
+      } else if (event.which == 9) {
+        return true;
       }
+      
+      return false;
     });
     
     

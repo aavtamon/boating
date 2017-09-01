@@ -26,7 +26,11 @@ BookingPayment = {
 
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Contact-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this));
     
-    ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input")[0], reservationContext, "mobile_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
+    
+    if (reservationContext.cell_phone == null && reservationContext.mobile_phone != null) {
+      reservationContext.cell_phone = reservationContext.mobile_phone;
+    }
+    ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input")[0], reservationContext, "cell_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
 
     ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input")[0], reservationContext, "alternative_phone", this._canProceedToNextStep.bind(this), function(value) {
       return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
@@ -62,7 +66,7 @@ BookingPayment = {
     if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location_id != null
         && reservationContext.adult_count != null && reservationContext.children_count != null
         && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name) && ScreenUtils.isValidEmail(reservationContext.email)
-        && (ScreenUtils.isValidPhone(reservationContext.mobile_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
+        && (ScreenUtils.isValidPhone(reservationContext.cell_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
         && ScreenUtils.isValid(reservationContext.street_address) && ScreenUtils.isValid(reservationContext.city) && ScreenUtils.isValidZip(reservationContext.zip)
         && ScreenUtils.isValidCardNumber(reservationContext.credit_card) && ScreenUtils.isValidCardCVC(reservationContext.credit_card_cvc)) {
          
