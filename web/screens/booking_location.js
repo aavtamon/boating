@@ -20,8 +20,13 @@ BookingLocation = {
     
   
   initMap: function() {
+    var mapElement = document.getElementById("BookingLocation-Screen-SelectionPanel-LocationMap");
+    if (mapElement == null) {
+      return;
+    }
+    
     var centerLocation = Backend.getCenterLocation();
-    var map = new google.maps.Map(document.getElementById("BookingLocation-Screen-SelectionPanel-LocationMap"), {
+    var map = new google.maps.Map(mapElement, {
       zoom: centerLocation.zoom,
       center: centerLocation
     });

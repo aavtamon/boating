@@ -28,10 +28,10 @@ Backend = {
     });
   },
   
-  restoreReservationContext: function(callback) {
-    this._communicate("", "get", null, true, [], {
+  restoreReservationContext: function(reservationId, lastName, callback) {
+    this._communicate("?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
       success: function(persistentContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
+        this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);

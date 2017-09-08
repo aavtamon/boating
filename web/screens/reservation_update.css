@@ -9,3 +9,23 @@
 	border-style: groove;
 	padding: 5px;
 }
+
+#ReservationUpdate-Screen-ReservationId {
+}
+#ReservationUpdate-Screen-ReservationId-Number-Label {
+  margin-right: 20px;
+}
+#ReservationUpdate-Screen-ReservationId-Number-Input {
+  margin-right: 50px;
+}
+#ReservationUpdate-Screen-ReservationId-LastName-Label {
+  margin-right: 20px;
+}
+#ReservationUpdate-Screen-ReservationId-LastName-Input {
+}
+
+#ReservationUpdate-Screen-RestoreButton {
+}
+
+#ReservationUpdate-Screen-Status {
+}

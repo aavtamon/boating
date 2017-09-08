@@ -58,7 +58,7 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       queryParams := parseQuery(r);
       
       queryReservationId, hasReservationId := queryParams["reservation_id"];
-      queryLastName, hasLastName := queryParams["lastname"];
+      queryLastName, hasLastName := queryParams["last_name"];
       if (hasReservationId && hasLastName) {
         reservationId := TReservationId(queryReservationId);
       
