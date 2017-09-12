@@ -100,9 +100,14 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
     reservationId := Sessions[TSessionId(sessionCookie.Value)];
     if (reservationId == NO_RESERVATION_ID) {
       reservationId = generateReservationId();
+      
+      sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+      Sessions[TSessionId(sessionCookie.Value)] = reservationId;
     }
   
     res := updateReservation(reservationId, r.Body);
+    SaveReservation(res);
+    
     storedReservation, err := json.Marshal(res);
     if (err != nil) {
       w.WriteHeader(http.StatusInternalServerError);

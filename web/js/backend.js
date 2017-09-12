@@ -76,7 +76,7 @@ Backend = {
   
   _convertPersistentToReservationContext: function(persistentContext) {
     return {
-      id: Utils.getCookie("sessionId"),
+      id: persistentContext.id,
       date: new Date(persistentContext.date_time),
       duration: persistentContext.duration,
       location_id: persistentContext.location_id,
@@ -104,6 +104,7 @@ Backend = {
   
   _convertReservationToPersistentContext: function(reservationContext) {
     return {
+      id: reservationContext.id,
       date_time: reservationContext.date.getTime(),
       duration: reservationContext.duration,
       location_id: reservationContext.location_id,
