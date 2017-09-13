@@ -12,7 +12,7 @@ Backend = {
   saveReservationContext: function(callback) {
     var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
 
-    this._communicate("", "put", persistentContext, true, [], {
+    this._communicate("booking", "put", persistentContext, true, [], {
       success: function(reportedContext) {
         //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
         
@@ -29,7 +29,7 @@ Backend = {
   },
   
   restoreReservationContext: function(reservationId, lastName, callback) {
-    this._communicate("?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+    this._communicate("booking?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         

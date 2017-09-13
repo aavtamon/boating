@@ -71,7 +71,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       if (reservationId != NO_RESERVATION_ID) {
         htmlTemplate.Execute(w, Reservations[reservationId]);
       } else {
-        htmlTemplate.Execute(w, nil);
+        htmlTemplate.Execute(w, GetBookingSettings());
       }
     } else {
       log.Println("Serving file " + pathToFile);
@@ -126,7 +126,7 @@ func main() {
 
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment", PaymentHandler);
-  httpMux.HandleFunc("/reservation/", ReservationHandler);
+  httpMux.HandleFunc("/reservation/booking", ReservationHandler);
   httpMux.HandleFunc("/", pageHandler);
   
   httpsMux := http.NewServeMux();
