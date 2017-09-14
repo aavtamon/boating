@@ -64,7 +64,6 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       
         reservation, hasReservation := GetReservation(reservationId, queryLastName);
         if (hasReservation) {
-          w.WriteHeader(http.StatusOK);
           Reservations[reservationId] = reservation;
 
           storedReservation, err := json.Marshal(reservation);

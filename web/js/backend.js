@@ -1,6 +1,6 @@
 Backend = {
   STATUS_SUCCESS: "success",
-  STATUS_ERROR: "error",
+  STATUS_SUCCESS: "error",
   
   
   _reservationContext: {},
@@ -12,7 +12,7 @@ Backend = {
   saveReservationContext: function(callback) {
     var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
 
-    this._communicate("booking", "put", persistentContext, true, [], {
+    this._communicate("reservation/booking", "put", persistentContext, true, [], {
       success: function(reportedContext) {
         //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
         
@@ -29,7 +29,7 @@ Backend = {
   },
   
   restoreReservationContext: function(reservationId, lastName, callback) {
-    this._communicate("booking?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+    this._communicate("reservation/booking?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         
@@ -56,7 +56,7 @@ Backend = {
   pay: function(callback) {
     var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
     
-    this._communicate("payment", "put", persistentContext, true, [], {
+    this._communicate("reservation/payment", "put", persistentContext, true, [], {
       success: function(reportedContext) {
         //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);        
         this._reservationContext.payed = true;
@@ -152,7 +152,7 @@ Backend = {
 
     
     //var url = window.location.protocol + "//" + window.location.hostname + ":8081/" + resource;
-    var url = "reservation/" + resource;
+    var url = resource;
     
     request.open(method, url, true);
     request.setRequestHeader("content-type", "application/json");
@@ -178,20 +178,20 @@ Backend = {
     return new Date("11/12/2002");
   },
   
-  getAvailableTimes: function(date) {
-    if (date.getDate() == 19) {
-      return [];
-    }
-    
-    var firstTime = new Date(date);
-    firstTime.setHours(10, 0);
-    
-    var secondTime = new Date(date);
-    secondTime.setHours(13, 0);
-
-    return [{time: firstTime, minDuration: 2, maxDuration: 2, id: 1}, {time: secondTime, minDuration: 1, maxDuration: 2, id: 2}];
+  getAvailableSlots: function(date, callback) {
+    this._communicate("bookings/available_slots?date=" + date.getTime(), "get", null, true, [], {
+      success: function(slots) {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS, slots);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
   },
-  
   
   getMaximumCapacity: function() {
     return 10;

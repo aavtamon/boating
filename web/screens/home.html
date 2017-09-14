@@ -1,14 +1,15 @@
 <script>
 	$(document).ready(function() {
 	  $("#Home-Screen-Book").click(function() {
-        console.debug(">>> " + !true);
 	    Main.loadScreen("booking");
 	  });
 	});
 </script>
 
 <div id="Home-Screen">
-	Home sweat home {{(index .AvailableLocations 0).Id}}!
-	
+	Home sweat home {{(.AvailableDates)}}!
+
+  
+  
 	<div id="Home-Screen-Book">Reservation</div>
 </div>
