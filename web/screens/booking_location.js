@@ -1,4 +1,6 @@
 BookingLocation = {
+  centerLocation: null,
+  
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.date == null || reservationContext.duration == null) {
@@ -25,7 +27,6 @@ BookingLocation = {
       return;
     }
     
-    var centerLocation = Backend.getCenterLocation();
     var map = new google.maps.Map(mapElement, {
       zoom: centerLocation.zoom,
       center: centerLocation
@@ -43,9 +44,8 @@ BookingLocation = {
     
     this._markers = [];
     
-    var locations = Backend.getLocations();
-    for (var i in locations) {
-      var location = locations[i];
+    for (var i in Backend.availableLocations) {
+      var location = Backend.availableLocations[i];
 
       var marker = new google.maps.Marker({
         position: location,

@@ -11,6 +11,11 @@ import "math/rand"
 import "time"
 
 
+type THtmlObject struct {
+  Reservation TReservation;
+  BookingSettings TBookingSettings;
+}
+
 type TSessionId string;
 
 
@@ -68,11 +73,12 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       
       reservationId := Sessions[TSessionId(sessionId)];
       
-      if (reservationId != NO_RESERVATION_ID) {
-        htmlTemplate.Execute(w, Reservations[reservationId]);
-      } else {
-        htmlTemplate.Execute(w, GetBookingSettings());
+      htmlObject := THtmlObject {
+        Reservation: Reservations[reservationId],
+        BookingSettings: GetBookingSettings(),
       }
+      
+      htmlTemplate.Execute(w, htmlObject);
     } else {
       log.Println("Serving file " + pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);

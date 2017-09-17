@@ -24,7 +24,7 @@ ScreenUtils = {
   },
   
   getLocation: function(locationId) {
-    var locations = Backend.getLocations();
+    var locations = Backend.getAvailableLocations();
     for (var i in locations) {
       var location = locations[i];
       if (location.id == locationId) {

@@ -3,6 +3,7 @@ Backend = {
   STATUS_SUCCESS: "error",
   
   
+  // Current reservation management
   _reservationContext: {},
     
   getReservationContext: function() {
@@ -129,6 +130,30 @@ Backend = {
     }
   },
 
+  
+  // Bookings mansgement
+  availableLocations: [],
+
+  getAvailableLocations: function() {
+    return this.availableLocations;
+  },
+  
+  
+  getAvailableSlots: function(date, callback) {
+    this._communicate("bookings/available_slots?date=" + date.getTime(), "get", null, true, [], {
+      success: function(slots) {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS, slots);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
+  },
+  
 
   _communicate: function(resource, method, data, isJsonResponse, headers, callback) {
     var request = new XMLHttpRequest();
@@ -166,6 +191,9 @@ Backend = {
 
   
   
+  
+  
+  
   getCurrentDate: function() {
     return new Date("9/10/2002");
   },
@@ -178,35 +206,8 @@ Backend = {
     return new Date("11/12/2002");
   },
   
-  getAvailableSlots: function(date, callback) {
-    this._communicate("bookings/available_slots?date=" + date.getTime(), "get", null, true, [], {
-      success: function(slots) {
-        if (callback) {
-          callback(Backend.STATUS_SUCCESS, slots);
-        }
-      }.bind(this),
-      error: function() {
-        if (callback) {
-          callback(Backend.STATUS_ERROR);
-        }
-      }
-    });
-  },
-  
   getMaximumCapacity: function() {
     return 10;
   },
-  
-  
-  getCenterLocation: function() {
-    return {lat: 34.2288159, lng: -83.9592255, zoom: 11};
-  },
-  
-  getLocations: function() {
-    return [
-      {id: 1, lat: 34.2169323, lng: -83.9452699, name: "Great Marina", address: "1745 Lanier Islands Parkway, Suwanee 30024", parking_fee: "free", instructions: "none"},
-      {id: 2, lat: 34.2305583, lng: -83.9294771, name: "Parking lot at the beach", address: "1111 Lanier Islands Parkway, Suwanee 30024", parking_fee: "$4 per car (cach only)", instructions: "proceed to the boat ramp"},
-      {id: 3, lat: 34.2700139, lng: -83.8967458, name: "Dam parking", address: "2222 Buford Highway, Cumming 30519", parking_fee: "$3 per person (credit card accepted)", instructions: "follow 'boat ramp' signs"}
-    ];
-  }
+    
 }
