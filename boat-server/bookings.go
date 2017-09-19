@@ -5,6 +5,7 @@ import "strings"
 import "encoding/json"
 import "net/http"
 import "strconv"
+import "time"
 
 
 type TMapLocation struct {
@@ -45,17 +46,7 @@ type TBookingSettings struct {
 
 var bookingSettings *TBookingSettings = nil;
 
-
-var availableSlots = map[int64][]TBookingSlot {
-    1032926400000: []TBookingSlot {
-             TBookingSlot {DateTime: 1032926400000, MinDuration: 2, MaxDuration: 2},
-             TBookingSlot {DateTime: 1032926410000, MinDuration: 1, MaxDuration: 2},
-           },
-    1033185600000: []TBookingSlot {
-             TBookingSlot {DateTime: 1033185600000, MinDuration: 2, MaxDuration: 2},
-             TBookingSlot {DateTime: 1033185610000, MinDuration: 1, MaxDuration: 2},
-           },
-};
+var availableSlots map[int64][]TBookingSlot = nil;
 
 
 func GetBookingSettings() TBookingSettings {
@@ -154,11 +145,46 @@ func getAvailableBookingSlots(date int64) []TBookingSlot {
 func initBookingSettings() {
   log.Println("Initializing bookign settings");
   
+  
+  currentTime := time.Now();
+  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
+
+  day1 := currentDate;
+  day1Ms := day1.UnixNano() / int64(time.Millisecond);
+  day1Slot1 := day1.Add(time.Hour * 10);
+  day1Slot1Ms := day1Slot1.UnixNano() / int64(time.Millisecond);
+  day1Slot2 := day1.Add(time.Hour * 14);
+  day1Slot2Ms := day1Slot2.UnixNano() / int64(time.Millisecond);
+
+
+  day2 := currentDate.AddDate(0, 0, 3);
+  day2Ms := day2.UnixNano() / int64(time.Millisecond);
+  day2Slot1 := day1.Add(time.Hour * 10);
+  day2Slot1Ms := day2Slot1.UnixNano() / int64(time.Millisecond);
+  day2Slot2 := day1.Add(time.Hour * 16);
+  day2Slot2Ms := day2Slot2.UnixNano() / int64(time.Millisecond);
+
+
+  availableSlots = map[int64][]TBookingSlot {
+    day1Ms: []TBookingSlot {
+             TBookingSlot {DateTime: day1Slot1Ms, MinDuration: 2, MaxDuration: 2},
+             TBookingSlot {DateTime: day1Slot2Ms, MinDuration: 1, MaxDuration: 2},
+           },
+    day2Ms: []TBookingSlot {
+             TBookingSlot {DateTime: day2Slot1Ms, MinDuration: 2, MaxDuration: 2},
+             TBookingSlot {DateTime: day2Slot2Ms, MinDuration: 1, MaxDuration: 2},
+           },
+  };
+
+  
+  
+  
+  
   bookingSettings = new(TBookingSettings);
   
-  (*bookingSettings).CurrentDate = 23295924;
-  (*bookingSettings).SchedulingBeginDate = 23295924;
-  (*bookingSettings).SchedulingEndDate = 23296924;
+  (*bookingSettings).CurrentDate = currentDate.UnixNano() / int64(time.Millisecond);
+  (*bookingSettings).SchedulingBeginDate = currentDate.UnixNano() / int64(time.Millisecond);
+  (*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 2, 0).UnixNano() / int64(time.Millisecond);
   (*bookingSettings).MaximumCapacity = 10;
   
   (*bookingSettings).CenterLocation = TMapLocation {Latitude:  34.2288159, Longitude: -83.9592255, Zoom: 11};

@@ -16,7 +16,10 @@
       id: {{.Id}},
       name: {{.Name}},
       lat: {{.Location.Latitude}},
-      lng: {{.Location.Longitude}}
+      lng: {{.Location.Longitude}},
+      address: {{.Address}},
+      parking_fee: {{.ParkingFee}},
+      instructions: {{.Instructions}}
     }
     Backend.availableLocations.push(loc);
   {{end}}

@@ -187,27 +187,4 @@ Backend = {
 
     request.send(data != null ? JSON.stringify(data) : "");  
   },
-
-
-  
-  
-  
-  
-  
-  getCurrentDate: function() {
-    return new Date("9/10/2002");
-  },
-  
-  getSchedulingBeginDate: function() {
-    return new Date("9/11/2002");
-  },
-
-  getSchedulingEndDate: function() {
-    return new Date("11/12/2002");
-  },
-  
-  getMaximumCapacity: function() {
-    return 10;
-  },
-    
 }

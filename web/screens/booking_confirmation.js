@@ -1,11 +1,15 @@
-BookingPayment = {
+BookingConfirmation = {
+  maximumCapacity: null,
+  
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    
+
     if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location_id == null) {
       Main.loadScreen("home");
     }
     
+    
+
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").checkboxradio();
     
     $("#BookingConfirmation-Screen-ButtonsPanel-BackButton").click(function() {
@@ -17,26 +21,24 @@ BookingPayment = {
         Main.loadScreen("booking_payment");
       });
     });
+    
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, this.maximumCapacity);
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, this.maximumCapacity - 1);
+    
 
-    
-    var capacity = Backend.getMaximumCapacity();
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, capacity);
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, capacity - 1);
-    
-    
     reservationContext.adult_count = reservationContext.adult_count || 1;
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
-      var remainder = capacity - parseInt(value);
+      var remainder = this.maximumCapacity - parseInt(value);
       
       this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
     }.bind(this));
         
     reservationContext.children_count = reservationContext.children_count || 0;
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector")[0], reservationContext, "children_count");
+
+    $("#BookingConfirmation-Screen-ReservationSummary-Capacity-Value").html(this.maximumCapacity);
     
-    $("#BookingConfirmation-Screen-ReservationSummary-Capacity-Value").html(capacity);
-    
-    
+      
     ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", 
       this._canProceedToNextStep.bind(this), function(value) {
         return $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled") == true

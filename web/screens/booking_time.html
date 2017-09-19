@@ -7,6 +7,10 @@
     BookingTime.availableSlots[{{$date}}] = {{$numOfSlots}};
   {{end}}
   
+  BookingTime.currentDate = new Date({{.BookingSettings.CurrentDate}});
+  BookingTime.schedulingBeginDate = new Date({{.BookingSettings.SchedulingBeginDate}});
+  BookingTime.schedulingEndDate = new Date({{.BookingSettings.SchedulingEndDate}});
+  
   $(document).ready(function() {
     BookingTime.onLoad();
   });

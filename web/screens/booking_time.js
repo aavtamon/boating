@@ -1,16 +1,19 @@
 BookingTime = {
   availableSlots: {},
+  currentDate: null,
+  schedulingBeginDate: null,
+  schedulingEndDate: null,
   
   onLoad: function() {
     if (Backend.getReservationContext().date == null) {
-      Backend.getReservationContext().date = Backend.getCurrentDate();
+      Backend.getReservationContext().date = this.currentDate;
     }
     
     
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = BookingTime.availableSlots[date.getTime()] > 0;
-        
+
         return [isSelectable, "", null];
       },
       
@@ -31,8 +34,8 @@ BookingTime = {
       }.bind(this),
       
       defaultDate: Backend.getReservationContext().date,
-      minDate: Backend.getSchedulingBeginDate(),
-      maxDate: Backend.getSchedulingEndDate()
+      minDate: BookingTime.schedulingBeginDate,
+      maxDate: BookingTime.schedulingEndDate
     });
     
     
