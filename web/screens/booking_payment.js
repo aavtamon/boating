@@ -1,7 +1,7 @@
 BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
+    if (reservationContext.slot == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
       Main.loadScreen("home");
     }
 
@@ -63,9 +63,7 @@ BookingPayment = {
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
     
-    if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location_id != null
-        && reservationContext.adult_count != null && reservationContext.children_count != null
-        && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name) && ScreenUtils.isValidEmail(reservationContext.email)
+    if (ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name) && ScreenUtils.isValidEmail(reservationContext.email)
         && (ScreenUtils.isValidPhone(reservationContext.cell_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
         && ScreenUtils.isValid(reservationContext.street_address) && ScreenUtils.isValid(reservationContext.city) && ScreenUtils.isValidZip(reservationContext.zip)
         && ScreenUtils.isValidCardNumber(reservationContext.credit_card) && ScreenUtils.isValidCardCVC(reservationContext.credit_card_cvc)) {

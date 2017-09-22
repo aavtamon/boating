@@ -26,8 +26,8 @@ type TPickupLocation struct {
 
 type TBookingSlot struct {
   DateTime int64 `json:"time"`;
-  MinDuration int `json:"min_duration"`;
-  MaxDuration int `json:"max_duration"`;
+  Duration int `json:"duration"`;
+  Price int `json:"price"`;
 }
 
 
@@ -167,12 +167,15 @@ func initBookingSettings() {
 
   availableSlots = map[int64][]TBookingSlot {
     day1Ms: []TBookingSlot {
-             TBookingSlot {DateTime: day1Slot1Ms, MinDuration: 2, MaxDuration: 2},
-             TBookingSlot {DateTime: day1Slot2Ms, MinDuration: 1, MaxDuration: 2},
+             TBookingSlot {DateTime: day1Slot1Ms, Duration: 2, Price: 150},
+             TBookingSlot {DateTime: day1Slot2Ms, Duration: 1, Price: 100},
+             TBookingSlot {DateTime: day1Slot2Ms, Duration: 2, Price: 150},
            },
     day2Ms: []TBookingSlot {
-             TBookingSlot {DateTime: day2Slot1Ms, MinDuration: 2, MaxDuration: 2},
-             TBookingSlot {DateTime: day2Slot2Ms, MinDuration: 1, MaxDuration: 2},
+             TBookingSlot {DateTime: day2Slot1Ms, Duration: 2, Price: 150},
+             TBookingSlot {DateTime: day2Slot1Ms, Duration: 4, Price: 200},
+             TBookingSlot {DateTime: day2Slot2Ms, Duration: 1, Price: 100},
+             TBookingSlot {DateTime: day2Slot2Ms, Duration: 2, Price: 150},
            },
   };
 

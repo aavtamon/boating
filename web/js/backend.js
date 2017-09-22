@@ -11,7 +11,8 @@ Backend = {
   },
   
   saveReservationContext: function(callback) {
-    var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
+    //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
+    var persistentContext = this._reservationContext;
 
     this._communicate("reservation/booking", "put", persistentContext, true, [], {
       success: function(reportedContext) {
@@ -32,7 +33,8 @@ Backend = {
   restoreReservationContext: function(reservationId, lastName, callback) {
     this._communicate("reservation/booking?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
       success: function(persistentContext) {
-        this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
+        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
+        this._reservationContext = persistentContext;
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -55,7 +57,8 @@ Backend = {
   
   
   pay: function(callback) {
-    var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
+    //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
+    var persistentContext = this._reservationContext;
     
     this._communicate("reservation/payment", "put", persistentContext, true, [], {
       success: function(reportedContext) {
@@ -75,60 +78,57 @@ Backend = {
   },
   
   
-  _convertPersistentToReservationContext: function(persistentContext) {
-    return {
-      id: persistentContext.id,
-      date: new Date(persistentContext.date_time),
-      duration: persistentContext.duration,
-      location_id: persistentContext.location_id,
-      adult_count: persistentContext.adult_count,
-      children_count: persistentContext.children_count,
-      mobile_phone: persistentContext.mobile_phone,
-      no_mobile_phone: persistentContext.no_mobile_phone,
-      first_name: persistentContext.first_name,
-      last_name: persistentContext.last_name,
-      email: persistentContext.email,
-      cell_phone: persistentContext.cell_phone,
-      alternative_phone: persistentContext.alternative_phone,
-      street_address: persistentContext.street_address,
-      additional_address: persistentContext.additional_address,
-      city: persistentContext.city,
-      state: persistentContext.state,
-      zip: persistentContext.zip,
-      credit_card: persistentContext.credit_card,
-      credit_card_cvc: persistentContext.credit_card_cvc,
-      credit_card_expiration_month: persistentContext.credit_card_expiration_month,
-      credit_card_expiration_year: persistentContext.credit_card_expiration_year,
-      payed: persistentContext.payed
-    }
-  },
-  
-  _convertReservationToPersistentContext: function(reservationContext) {
-    return {
-      id: reservationContext.id,
-      date_time: reservationContext.date.getTime(),
-      duration: reservationContext.duration,
-      location_id: reservationContext.location_id,
-      adult_count: parseInt(reservationContext.adult_count),
-      children_count: parseInt(reservationContext.children_count),
-      mobile_phone: reservationContext.mobile_phone,
-      no_mobile_phone: reservationContext.no_mobile_phone,
-      first_name: reservationContext.first_name,
-      last_name: reservationContext.last_name,
-      email: reservationContext.email,
-      cell_phone: reservationContext.cell_phone,
-      alternative_phone: reservationContext.alternative_phone,
-      street_address: reservationContext.street_address,
-      additional_address: reservationContext.additional_address,
-      city: reservationContext.city,
-      state: reservationContext.state,
-      zip: reservationContext.zip,
-      credit_card: reservationContext.credit_card,
-      credit_card_cvc: reservationContext.credit_card_cvc,
-      credit_card_expiration_month: reservationContext.credit_card_expiration_month,
-      credit_card_expiration_year: reservationContext.credit_card_expiration_year      
-    }
-  },
+//  _convertPersistentToReservationContext: function(persistentContext) {
+//    return {
+//      id: persistentContext.id,
+//      slot: persistentContext.slot,
+//      location_id: persistentContext.location_id,
+//      adult_count: persistentContext.adult_count,
+//      children_count: persistentContext.children_count,
+//      mobile_phone: persistentContext.mobile_phone,
+//      no_mobile_phone: persistentContext.no_mobile_phone,
+//      first_name: persistentContext.first_name,
+//      last_name: persistentContext.last_name,
+//      email: persistentContext.email,
+//      cell_phone: persistentContext.cell_phone,
+//      alternative_phone: persistentContext.alternative_phone,
+//      street_address: persistentContext.street_address,
+//      additional_address: persistentContext.additional_address,
+//      city: persistentContext.city,
+//      state: persistentContext.state,
+//      zip: persistentContext.zip,
+//      credit_card: persistentContext.credit_card,
+//      credit_card_cvc: persistentContext.credit_card_cvc,
+//      credit_card_expiration_month: persistentContext.credit_card_expiration_month,
+//      credit_card_expiration_year: persistentContext.credit_card_expiration_year,
+//      payed: persistentContext.payed
+//    }
+//  },
+//  
+//  _convertReservationToPersistentContext: function(reservationContext) {
+//    return {
+//      slot: reservationContext.slot,
+//      location_id: reservationContext.location_id,
+//      adult_count: parseInt(reservationContext.adult_count),
+//      children_count: parseInt(reservationContext.children_count),
+//      mobile_phone: reservationContext.mobile_phone,
+//      no_mobile_phone: reservationContext.no_mobile_phone,
+//      first_name: reservationContext.first_name,
+//      last_name: reservationContext.last_name,
+//      email: reservationContext.email,
+//      cell_phone: reservationContext.cell_phone,
+//      alternative_phone: reservationContext.alternative_phone,
+//      street_address: reservationContext.street_address,
+//      additional_address: reservationContext.additional_address,
+//      city: reservationContext.city,
+//      state: reservationContext.state,
+//      zip: reservationContext.zip,
+//      credit_card: reservationContext.credit_card,
+//      credit_card_cvc: reservationContext.credit_card_cvc,
+//      credit_card_expiration_month: reservationContext.credit_card_expiration_month,
+//      credit_card_expiration_year: reservationContext.credit_card_expiration_year      
+//    }
+//  },
 
   
   // Bookings mansgement

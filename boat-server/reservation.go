@@ -15,8 +15,7 @@ type TReservationId string;
 type TReservation struct {
   Id TReservationId `json:"id"`;
 
-  DateTime int64 `json:"date_time,omitempty"`;
-  Duration int `json:"duration,omitempty"`;
+  Slot TBookingSlot `json:"slot,omitempty"`;
   LocationId int `json:"location_id"`;
   
   NumOfAdults int `json:"adult_count"`;

@@ -3,7 +3,7 @@ BookingLocation = {
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date == null || reservationContext.duration == null) {
+    if (reservationContext.slot == null) {
       Main.loadScreen("home");
     }
     
@@ -78,7 +78,7 @@ BookingLocation = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.date != null && reservationContext.duration != null && reservationContext.location_id != null) {
+    if (reservationContext.location_id != null) {
       $("#BookingLocation-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
       
       $("#BookingLocation-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));

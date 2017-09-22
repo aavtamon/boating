@@ -4,7 +4,7 @@ BookingConfirmation = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
 
-    if (reservationContext.date == null || reservationContext.duration == null || reservationContext.location_id == null) {
+    if (reservationContext.slot == null || reservationContext.location_id == null) {
       Main.loadScreen("home");
     }
     
@@ -56,8 +56,8 @@ BookingConfirmation = {
       this._canProceedToNextStep();
     }.bind(this));
     
-    $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.date));
-    $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.duration));
+    $("#BookingConfirmation-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot));
+    $("#BookingConfirmation-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot));
     
     var location = ScreenUtils.getLocation(reservationContext.location_id);
     $("#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
