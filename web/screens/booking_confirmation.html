@@ -4,7 +4,7 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-  BookingConfirmation.maximumCapacity = new Date({{.BookingSettings.MaximumCapacity}});
+  BookingConfirmation.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
 
   $(document).ready(function() {
     BookingConfirmation.onLoad();
@@ -46,6 +46,10 @@
           <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
         </div>
       </div>
+    </div>
+    <div id="BookingConfirmation-Screen-ReservationSummary-Price">
+      <div id="BookingConfirmation-Screen-ReservationSummary-Price-Title">Your Total:</div>
+      <div id="BookingConfirmation-Screen-ReservationSummary-Price-Value"></div>
     </div>
   </div>
   <div id="BookingConfirmation-Screen-AdditionalInformation">

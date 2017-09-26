@@ -123,6 +123,23 @@
 
   font-weight: bold;
 }
+#BookingConfirmation-Screen-ReservationSummary-Price {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Price-Title {
+  display: inline-block;
+  width: 350px;
+  margin-right: 20px;
+  
+  font-weight: bold;
+}
+#BookingConfirmation-Screen-ReservationSummary-Price-Value {
+  display: inline-block;
+  width: 200px;
+
+  font-weight: bold;
+}
 
 
 
