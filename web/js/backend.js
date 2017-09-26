@@ -62,8 +62,8 @@ Backend = {
     
     this._communicate("reservation/payment", "put", persistentContext, true, [], {
       success: function(reportedContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);        
-        this._reservationContext.payed = true;
+        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);  
+        this._reservationContext = persistentContext;
         
         if (callback) {
           callback(Backend.STATUS_SUCCESS);

@@ -37,7 +37,7 @@ type TReservation struct {
   CreditCardCVC string `json:"credit_card_cvc,omitempty"`;
   CreditCardExpirationMonth string `json:"credit_card_expiration_month,omitempty"`;
   CreditCardExpirationYear string `json:"credit_card_expiration_year,omitempty"`;
-  Payed bool `json:"payed,omitempty"`;
+  PaymentStatus string `json:"payment_status,omitempty"`;
 }
 
 const NO_RESERVATION_ID = TReservationId("");

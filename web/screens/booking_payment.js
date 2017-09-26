@@ -12,7 +12,15 @@ BookingPayment = {
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
       Backend.saveReservationContext(function(status) {
         Backend.pay(function(status) {
-          Main.loadScreen("booking_complete");
+          if (status == Backend.STATUS_SUCCESS) {
+            if (Backend.getReservationContext().payment_status == "payed") {
+              Main.loadScreen("booking_complete");
+            } else {
+              ScreenUtils.showDialog("Your payment did not get thru. Please check your payment details.");
+            }
+          } else {
+            ScreenUtils.showDialog("Something went wrong. Please try again");
+          }
         });
       });
     });
