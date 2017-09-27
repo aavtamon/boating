@@ -13,7 +13,7 @@ BookingPayment = {
       Backend.saveReservationContext(function(status) {
         Backend.pay(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
-            if (Backend.getReservationContext().payment_status == "payed") {
+            if (Backend.getReservationContext().payment_status == Backend.PAYMENT_STATUS_PAYED) {
               Main.loadScreen("booking_complete");
             } else {
               ScreenUtils.showDialog("Your payment did not get thru. Please check your payment details.");

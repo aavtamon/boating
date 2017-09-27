@@ -12,12 +12,12 @@ func GetReservation(reservationId TReservationId, lastName string) (TReservation
   return TReservation{}, true;
 }
 
-func SaveReservation(reservation TReservation) {
+func SaveReservation(reservation *TReservation) {
   if (reservationMap == nil) {
     readReservationDatabase();
   }
 
-  reservationMap[reservation.Id] = reservation;
+  reservationMap[reservation.Id] = *reservation;
 
   saveReservationDatabase();
 }

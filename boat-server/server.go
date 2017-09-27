@@ -27,6 +27,23 @@ var PathToHtml string = "";
 var Sessions = make(map[TSessionId]TReservationId);
 
 
+func parseQuery(r *http.Request) map[string]string {
+  result := make(map[string]string);
+  
+  if (r.URL.RawQuery != "") {
+    queryParts := strings.Split(r.URL.RawQuery, "&");
+    for _, queryPart := range queryParts {
+      queryNameValue := strings.Split(queryPart, "=");
+      if (len(queryNameValue) != 2) {
+        log.Println("Malformed query component: " + queryPart);
+      }
+      result[queryNameValue[0]] = queryNameValue[1];
+    }
+  }
+
+  return result;
+}
+
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
   pageReference := r.URL.Path[1:];
@@ -71,10 +88,9 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       log.Println("Serving page " + pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
       
-      reservationId := Sessions[TSessionId(sessionId)];
+      //reservationId := Sessions[TSessionId(sessionId)];
       
       htmlObject := THtmlObject {
-        Reservation: Reservations[reservationId],
         BookingSettings: GetBookingSettings(),
       }
       
@@ -131,8 +147,8 @@ func main() {
 
 
   httpMux := http.NewServeMux();
-  httpMux.HandleFunc("/reservation/payment", PaymentHandler);
-  httpMux.HandleFunc("/reservation/booking", ReservationHandler);
+  httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
+  httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
   httpMux.HandleFunc("/bookings/", BookingsHandler);
   httpMux.HandleFunc("/", pageHandler);
   

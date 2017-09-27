@@ -7,7 +7,6 @@ import "io/ioutil"
 import "encoding/json"
 import "math/rand"
 import "time"
-import "strings"
 
 
 type TReservationId string;
@@ -16,7 +15,7 @@ type TReservation struct {
   Id TReservationId `json:"id"`;
 
   Slot TBookingSlot `json:"slot,omitempty"`;
-  LocationId int `json:"location_id"`;
+  LocationId string `json:"location_id"`;
   
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;
@@ -42,7 +41,7 @@ type TReservation struct {
 
 const NO_RESERVATION_ID = TReservationId("");
 
-var Reservations = make(map[TReservationId]TReservation);
+var Reservations = make(map[TReservationId]*TReservation);
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +62,7 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       
         reservation, hasReservation := GetReservation(reservationId, queryLastName);
         if (hasReservation) {
-          Reservations[reservationId] = reservation;
+          Reservations[reservationId] = &reservation;
 
           storedReservation, err := json.Marshal(reservation);
           if (err != nil) {
@@ -117,20 +116,20 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func updateReservation(reservationId TReservationId, body io.ReadCloser) TReservation {
+func updateReservation(reservationId TReservationId, body io.ReadCloser) *TReservation {
   bodyBuffer, _ := ioutil.ReadAll(body);
   body.Close();
   
   log.Println("Body:", string(bodyBuffer));
   
-  res := TReservation{};
-  err := json.Unmarshal(bodyBuffer, &res);
+  res := &TReservation{};
+  err := json.Unmarshal(bodyBuffer, res);
   if (err != nil) {
     log.Println("Incorrect request from the app: ", err);
   } else {
-    res.Id = reservationId;
+    (*res).Id = reservationId;
     Reservations[reservationId] = res;
-    log.Println("Received object: ", res);
+    log.Println("Received object: ", (*res));
   }
   
   log.Println("*****");
@@ -153,17 +152,3 @@ func generateReservationId() TReservationId {
 }
 
 
-func parseQuery(r *http.Request) map[string]string {
-  result := make(map[string]string);
-
-  queryParts := strings.Split(r.URL.RawQuery, "&");
-  for _, queryPart := range queryParts {
-    queryNameValue := strings.Split(queryPart, "=");
-    if (len(queryNameValue) != 2) {
-      log.Println("Malformed query component: " + queryPart);
-    }
-    result[queryNameValue[0]] = queryNameValue[1];
-  }
-
-  return result;
-}

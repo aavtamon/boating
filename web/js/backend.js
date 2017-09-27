@@ -3,6 +3,9 @@ Backend = {
   STATUS_SUCCESS: "error",
   
   
+  PAYMENT_STATUS_PAYED: "payed",
+  
+  
   // Current reservation management
   _reservationContext: {},
     
@@ -61,8 +64,8 @@ Backend = {
     var persistentContext = this._reservationContext;
     
     this._communicate("reservation/payment", "put", persistentContext, true, [], {
-      success: function(reportedContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);  
+      success: function(persistentContext) {
+        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);  
         this._reservationContext = persistentContext;
         
         if (callback) {
