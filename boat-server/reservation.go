@@ -9,6 +9,8 @@ import "math/rand"
 import "time"
 
 
+const NO_RESERVATION_ID = TReservationId("");
+
 type TReservationId string;
 
 type TReservation struct {
@@ -37,11 +39,13 @@ type TReservation struct {
   CreditCardExpirationMonth string `json:"credit_card_expiration_month,omitempty"`;
   CreditCardExpirationYear string `json:"credit_card_expiration_year,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;
+  
+  Timestamp int64;
 }
 
-const NO_RESERVATION_ID = TReservationId("");
+type TReservationMap map[TReservationId]*TReservation;
 
-var Reservations = make(map[TReservationId]*TReservation);
+var Reservations = make(TReservationMap);
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
@@ -60,9 +64,9 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       if (hasReservationId && hasLastName) {
         reservationId := TReservationId(queryReservationId);
       
-        reservation, hasReservation := GetReservation(reservationId, queryLastName);
-        if (hasReservation) {
-          Reservations[reservationId] = &reservation;
+        reservation := GetReservation(reservationId, queryLastName);
+        if (reservation != nil) {
+          Reservations[reservationId] = reservation;
 
           storedReservation, err := json.Marshal(reservation);
           if (err != nil) {
@@ -73,7 +77,7 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
             w.Write(storedReservation);
             
             sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-            Sessions[TSessionId(sessionCookie.Value)] = reservation.Id;
+            Sessions[TSessionId(sessionCookie.Value)] = (*reservation).Id;
           }
         } else {
           w.WriteHeader(http.StatusNotFound);

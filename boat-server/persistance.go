@@ -3,13 +3,27 @@ package main
 import "log"
 import "io/ioutil"
 import "encoding/json"
+import "time"
+
 
 const DATABASE_FILE_NAME = "/Users/aavtamonov/project/boat/reservation_db.json";
 
-var reservationMap map[TReservationId]TReservation = nil;
+const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
-func GetReservation(reservationId TReservationId, lastName string) (TReservation, bool) {
-  return TReservation{}, true;
+var reservationMap TReservationMap;
+
+func GetReservation(reservationId TReservationId, lastName string) *TReservation {
+  if (reservationMap == nil) {
+    readReservationDatabase();
+  }
+
+  for resId, reservation := range reservationMap {
+    if (reservationId == resId && (*reservation).LastName == lastName) {
+      return reservation;
+    }
+  }
+
+  return nil;
 }
 
 func SaveReservation(reservation *TReservation) {
@@ -17,7 +31,12 @@ func SaveReservation(reservation *TReservation) {
     readReservationDatabase();
   }
 
-  reservationMap[reservation.Id] = *reservation;
+  log.Println("Persistance: saving reservation " + (*reservation).Id);
+
+  reservationMap[(*reservation).Id] = reservation;
+  (*reservation).Timestamp = time.Now().Unix();
+  
+  cleanObsoleteReservations();
 
   saveReservationDatabase();
 }
@@ -35,8 +54,12 @@ func readReservationDatabase() {
   }
   
   if (reservationMap == nil) {
-    reservationMap = make(map[TReservationId]TReservation);
+    reservationMap = make(map[TReservationId]*TReservation);
+  } else {
+    cleanObsoleteReservations();
   }
+  
+  log.Println("Persistance: reservation database is read");
 }
 
 func saveReservationDatabase() {
@@ -48,5 +71,19 @@ func saveReservationDatabase() {
     }
   } else {
     log.Println("Persistance: failed to serialize reservation database", err);
+  }
+  
+  log.Println("Persistance: saving database");
+}
+
+func cleanObsoleteReservations() {
+  currentMoment := time.Now().Unix();
+
+  for reservationId, reservation := range reservationMap {
+    if ((*reservation).PaymentStatus != PAYMENT_STATUS_PAYED) {
+      if ((*reservation).Timestamp + EXPIRATION_TIMEOUT < currentMoment) {
+        delete(reservationMap, reservationId);
+      }
+    }
   }
 }

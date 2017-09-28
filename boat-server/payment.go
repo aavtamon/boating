@@ -7,6 +7,11 @@ import "strings"
 import "sync"
 
 
+
+const PAYMENT_STATUS_PAYED = "payed";
+
+
+
 var waitLocks = make(map[TReservationId]*sync.WaitGroup);
 
 
@@ -66,6 +71,7 @@ func payReservation(reservationId TReservationId) *TReservation {
   log.Println("Payment: leaving payment confirmation block for reservation: " + reservationId);
   
   res := Reservations[reservationId];
+  SaveReservation(res);
   
   log.Println("Payment: payment status = " + (*res).PaymentStatus);
   
