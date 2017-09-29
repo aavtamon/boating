@@ -158,7 +158,6 @@ ScreenUtils = {
   
   
   
-  
   isValid: function(value) {
     return value != null && value != "";
   },
@@ -187,9 +186,4 @@ ScreenUtils = {
     var cvcRE = /^[0-9]{3,4}$/;
     return value != null && cvcRE.test(value);
   },
-  
-  
-  showDialog: function(message) {
-    alert(message);
-  }
 }

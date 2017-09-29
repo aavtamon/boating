@@ -88,11 +88,15 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       log.Println("Serving page " + pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
       
-      //reservationId := Sessions[TSessionId(sessionId)];
-      
       htmlObject := THtmlObject {
         BookingSettings: GetBookingSettings(),
       }
+      
+      reservationId, hasReservation := Sessions[TSessionId(sessionId)];
+      if (hasReservation) {
+        htmlObject.Reservation = *Reservations[reservationId];
+      }
+      
       
       htmlTemplate.Execute(w, htmlObject);
     } else {

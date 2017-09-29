@@ -9,18 +9,17 @@ import "time"
 
 
 type TMapLocation struct {
-  Latitude float64;
-  Longitude float64;
-  Zoom int;
+  Latitude float64 `json:"latitude"`;
+  Longitude float64 `json:"longitude"`;
+  Zoom int `json:"zoom"`;
 }
 
 type TPickupLocation struct {
-  Id string;
-  Location TMapLocation;
-  Name string;
-  Address string;
-  ParkingFee string;
-  Instructions string;
+  Location TMapLocation `json:"location"`;
+  Name string `json:"name"`;
+  Address string `json:"address"`;
+  ParkingFee string `json:"parking_fee"`;
+  Instructions string `json:"instructions"`;
 }
 
 
@@ -31,6 +30,30 @@ type TBookingSlot struct {
 }
 
 
+type TBoat struct {
+  Name string `json:"name"`;
+  Type string `json:"type"`;
+  MaximumCapacity int `json:"maximum_capacity"`;
+}
+
+
+type TRentalLocation struct {
+  Name string `json:"name"`;
+  CenterLocation TMapLocation `json:"center_location"`;
+  PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
+}
+
+
+type TSystemConfiguration struct {
+  SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
+  SchedulingEndOffset int `json:"scheduling_end_offset"`;  
+  Boats map[string]TBoat `json:"boats"`;
+  Locations map[string]TRentalLocation `json:"locations"`;
+  
+  
+}
+
+
 type TBookingSettings struct {
   CurrentDate int64;
   SchedulingBeginDate int64;
@@ -38,7 +61,7 @@ type TBookingSettings struct {
   MaximumCapacity int;
   
   CenterLocation TMapLocation;
-  AvailableLocations []TPickupLocation;
+  AvailableLocations map[string]TPickupLocation;
   
   AvailableDates map[int64]int;
 }
@@ -82,8 +105,8 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
       settings := GetBookingSettings();
 
       var pickupLocation *TPickupLocation = nil;
-      for _, location := range settings.AvailableLocations {
-        if (location.Id == locationId) {
+      for id, location := range settings.AvailableLocations {
+        if (id == locationId) {
           pickupLocation = &location;
         }
         break;
@@ -192,10 +215,10 @@ func initBookingSettings() {
   
   (*bookingSettings).CenterLocation = TMapLocation {Latitude:  34.2288159, Longitude: -83.9592255, Zoom: 11};
   
-  (*bookingSettings).AvailableLocations = []TPickupLocation {
-    TPickupLocation {Id: "1", Location: TMapLocation{Latitude: 34.2169323, Longitude: -83.9452699, Zoom: 0}, Name: "Great Marina", Address: "1745 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "free", Instructions: "none"},
-    TPickupLocation {Id: "2", Location: TMapLocation{Latitude: 34.2305583, Longitude: -83.9294771, Zoom: 0}, Name: "Parking lot at the beach", Address: "1111 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "$4 per car (cach only)", Instructions: "proceed to the boat ramp"},
-    TPickupLocation {Id: "3", Location: TMapLocation{Latitude: 34.2700139, Longitude: -83.8967458, Zoom: 0}, Name: "Dam parking", Address: "2222 Buford Highway, Cumming 30519", ParkingFee: "$3 per person (credit card accepted)", Instructions: "follow 'boat ramp' signs"},
+  (*bookingSettings).AvailableLocations = map[string]TPickupLocation {
+  "1": TPickupLocation {Location: TMapLocation{Latitude: 34.2169323, Longitude: -83.9452699, Zoom: 0}, Name: "Great Marina", Address: "1745 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "free", Instructions: "none"},
+  "2": TPickupLocation {Location: TMapLocation{Latitude: 34.2305583, Longitude: -83.9294771, Zoom: 0}, Name: "Parking lot at the beach", Address: "1111 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "$4 per car (cach only)", Instructions: "proceed to the boat ramp"},
+  "3": TPickupLocation {Location: TMapLocation{Latitude: 34.2700139, Longitude: -83.8967458, Zoom: 0}, Name: "Dam parking", Address: "2222 Buford Highway, Cumming 30519", ParkingFee: "$3 per person (credit card accepted)", Instructions: "follow 'boat ramp' signs"},
   };
   
   (*bookingSettings).AvailableDates = make(map[int64]int);

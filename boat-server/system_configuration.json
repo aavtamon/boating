@@ -1,0 +1,58 @@
+{
+  "scheduling_begin_offset": 1,
+  "scheduling_end_offset": 60,
+  
+  "boats": {
+    "pantoon16": {
+      "name": "Pantton boat 16 feet",
+      "type": "pantoon16",
+      "maximum_capacity": 10,
+    }
+  },
+  
+  "locations": {
+    "lanier": {
+      "name": "Lake Lanier",
+      "center_location": {
+        "latitude": 34.2288159,
+        "longitude": -83.9592255,
+        "zoom": 11
+      },
+      "pickup_locations": {
+        "1": {
+          "location": {
+            "latitude": 34.2169323,
+            "longitude": -83.9452699,
+            "zoom": 0
+          },
+          "name": "Great Marina",
+          "address": "1745 Lanier Islands Parkway, Suwanee 30024",
+          "parking_fee": "free",
+          "instructions": "none"
+        },
+        "2": {
+          "location": {
+            "latitude": 34.2305583,
+            "longitude": -83.9294771,
+            "zoom": 0
+          },
+          "name": "Parking lot at the beach",
+          "address": "1111 Lanier Islands Parkway, Suwanee 30024",
+          "parking_fee": "$4 per car (cach only)",
+          "instructions": "proceed to the boat ramp"
+        },
+        "3": {
+          "location": {
+            "latitude": 34.2700139,
+            "longitude": -83.8967458,
+            "zoom": 0
+          },
+          "name": "Dam parking",
+          "address": "2222 Buford Highway, Cumming 30519",
+          "parking_fee": "$3 per person (credit card accepted)",
+          "instructions": "follow 'boat ramp' signs"
+        }
+      }
+    }
+  }
+}

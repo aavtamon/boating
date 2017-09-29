@@ -11,15 +11,17 @@ BookingPayment = {
     
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
       Backend.saveReservationContext(function(status) {
+        Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
         Backend.pay(function(status) {
+          Main.hidePopup();
           if (status == Backend.STATUS_SUCCESS) {
             if (Backend.getReservationContext().payment_status == Backend.PAYMENT_STATUS_PAYED) {
               Main.loadScreen("booking_complete");
             } else {
-              ScreenUtils.showDialog("Your payment did not get thru. Please check your payment details.");
+              Main.showDialog("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
             }
           } else {
-            ScreenUtils.showDialog("Something went wrong. Please try again");
+            Main.showDialog("Payment Not Successful", "Something went wrong. Please try again");
           }
         });
       });

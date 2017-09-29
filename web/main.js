@@ -18,6 +18,29 @@ Main = {
     window.location.hash = screen;
   },
   
+  showPopup: function(title, message) {
+    $("#Main-Popup-Title").html(title);
+    $("#Main-Popup-Message").html(message);
+    $("#Main-Popup-Buttons").hide();
+    $("#Main-Popup").show();
+  },
+  
+  hidePopup: function() {
+    $("#Main-Popup").hide();
+  },
+  
+  showMessage: function(title, message) {
+    $("#Main-Popup-Title").html(title);
+    $("#Main-Popup-Message").html(message);
+    $("#Main-Popup-Buttons").show();
+    $("#Main-Popup").show();
+  },
+  
+  hideMessage: function() {
+    $("#Main-Popup").hide();
+  },
+  
+  
   _loadScreen: function(screen) {
     if (this._currentScreen == screen) {
       return;

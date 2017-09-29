@@ -5,7 +5,7 @@ import "net/http"
 import "encoding/json"
 import "strings"
 import "sync"
-
+import "time"
 
 
 const PAYMENT_STATUS_PAYED = "payed";
@@ -64,6 +64,9 @@ func payReservation(reservationId TReservationId) *TReservation {
   waitLocks[reservationId] = &wg;
   wg.Add(1);
   
+  
+  // Temporary
+  go offlinePayment(reservationId);
   log.Println("Payment: entering payment confirmation block for reservation: " + reservationId);
   
   wg.Wait();
@@ -93,4 +96,9 @@ func handlePaymentConfirmation(reservationId TReservationId) {
   } else {
     log.Println("Error in payment handler - unknown reservation: " + reservationId);
   }
+}
+
+func offlinePayment(reservationId TReservationId) {
+  time.Sleep(10 * time.Second);
+  handlePaymentConfirmation(reservationId);
 }

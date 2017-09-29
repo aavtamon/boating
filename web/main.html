@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Worry-Free Boating On Lanier</title>
+  <meta charset="UTF-8">
+  <title>Worry-Free Boating On Lanier</title>
 	
   <!-- script src="lib/jquery-1.11.2.min.js"></script>
   <script src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
@@ -19,20 +19,28 @@
   <script src="main.js"></script>
 </head>
 <body onload="Main.onLoad()">
-	<div id="Main-Header">
-		<div id="Main-Header-Title">Worry-Free Boating On Lanier</div>
-		<div id="Main-Header-Menu">
-			<div class="main-menu-item" id="Main-Header-Menu-Home" screen="home">Home</div>
-			<div class="main-menu-item" id="Main-Header-Menu-Booking" screen="booking_time booking_location booking_confirmation booking_payment">Book Your Ride</div>
-            <div class="main-menu-item" id="Main-Header-Menu-Reservation" screen="reservation_update">My Reservation</div>
-			<div class="main-menu-item" id="Main-Header-Menu-Contacts" screen="contacts">Contact Us</div>
-		</div>
-	</div>
+  <div id="Main-Header">
+    <div id="Main-Header-Title">Worry-Free Boating On Lanier</div>
+    <div id="Main-Header-Menu">
+      <div class="main-menu-item" id="Main-Header-Menu-Home" screen="home">Home</div>
+      <div class="main-menu-item" id="Main-Header-Menu-Booking" screen="booking_time booking_location booking_confirmation booking_payment">Book Your Ride</div>
+      <div class="main-menu-item" id="Main-Header-Menu-Reservation" screen="reservation_update">My Reservation</div>
+      <div class="main-menu-item" id="Main-Header-Menu-Contacts" screen="contacts">Contact Us</div>
+    </div>
+  </div>
 
-	<div id="Main-ScreenContainer"></div>
+  <div id="Main-ScreenContainer"></div>
 
-	<div id="Main-Footer">
-		PizTec Corporation, 2017.&nbsp;&nbsp;&nbsp;All Rights Reserved. 
-	</div>
+  <div id="Main-Footer">
+      PizTec Corporation, 2017.&nbsp;&nbsp;&nbsp;All Rights Reserved. 
+  </div>
+  
+  <div id="Main-Popup">
+    <div id="Main-Popup-Title"></div>
+    <div id="Main-Popup-Message"></div>
+    <div id="Main-Popup-Buttons">
+      <button onclick="$('#Main-Popup').hide()">OK</button>
+    </div>
+  </div>
 </body>
 </html>

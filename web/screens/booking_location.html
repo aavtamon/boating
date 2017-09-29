@@ -11,15 +11,15 @@
   }
   BookingLocation.centerLocation = centerLocation;
   
-  {{range .BookingSettings.AvailableLocations}}
+  {{range $id, $location := .BookingSettings.AvailableLocations}}
     var loc = {
-      id: {{.Id}},
-      name: {{.Name}},
-      lat: {{.Location.Latitude}},
-      lng: {{.Location.Longitude}},
-      address: {{.Address}},
-      parking_fee: {{.ParkingFee}},
-      instructions: {{.Instructions}}
+      id: {{$id}},
+      name: {{$location.Name}},
+      lat: {{$location.Location.Latitude}},
+      lng: {{$location.Location.Longitude}},
+      address: {{$location.Address}},
+      parking_fee: {{$location.ParkingFee}},
+      instructions: {{$location.Instructions}}
     }
     Backend.availableLocations.push(loc);
   {{end}}
