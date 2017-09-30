@@ -209,14 +209,14 @@ func initBookingSettings() {
 
   if (bookingSettings.CurrentDate != currentDateAsInt) {
     (*bookingSettings).CurrentDate = currentDateAsInt;
-    (*bookingSettings).SchedulingBeginDate = currentDateAsInt + int64(time.Hour) * 24 * int64((*systemSettings).SchedulingBeginOffset);
-    //(*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
-    (*bookingSettings).SchedulingEndDate = (*bookingSettings).SchedulingBeginDate + int64(time.Hour) * 24 * int64((*systemSettings).SchedulingEndOffset);
+    (*bookingSettings).SchedulingBeginDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
+    (*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
   }
   
   if (refreshSlotAvailability) {
     (*bookingSettings).AvailableDates = make(map[int64]int);
-    for date := (*bookingSettings).SchedulingBeginDate; date < (*bookingSettings).SchedulingEndDate; date += int64(time.Hour) * 24 {
+    for counter := 1; counter < (*systemSettings).SchedulingEndOffset; counter++ {
+      date := currentDate.AddDate(0, 0, counter).UnixNano() / int64(time.Millisecond);
       (*bookingSettings).AvailableDates[date] = 1;
     }
   

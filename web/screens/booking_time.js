@@ -13,7 +13,6 @@ BookingTime = {
       this.selectedDate = new Date(Backend.getReservationContext().slot.time);
     }
     
-    
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var isSelectable = BookingTime.availableSlots[date.getTime()] > 0;
