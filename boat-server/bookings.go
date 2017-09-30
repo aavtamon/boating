@@ -44,16 +44,6 @@ type TRentalLocation struct {
 }
 
 
-type TSystemConfiguration struct {
-  SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
-  SchedulingEndOffset int `json:"scheduling_end_offset"`;  
-  Boats map[string]TBoat `json:"boats"`;
-  Locations map[string]TRentalLocation `json:"locations"`;
-  
-  
-}
-
-
 type TBookingSettings struct {
   CurrentDate int64;
   SchedulingBeginDate int64;
@@ -70,6 +60,8 @@ type TBookingSettings struct {
 var bookingSettings *TBookingSettings = nil;
 
 var availableSlots map[int64][]TBookingSlot = nil;
+
+var refreshSlotAvailability bool = true;
 
 
 func GetBookingSettings() TBookingSettings {
@@ -157,18 +149,6 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
-  return availableSlots[date];
-}
-
-
-
-
-
-
-func initBookingSettings() {
-  log.Println("Initializing bookign settings");
-  
-  
   currentTime := time.Now();
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
 
@@ -202,6 +182,56 @@ func initBookingSettings() {
            },
   };
 
+  return availableSlots[date];
+}
+
+
+
+
+
+func initBookingSettings() {
+  if (bookingSettings == nil) {
+    bookingSettings = new(TBookingSettings);
+  }
+  
+  systemSettings := GetSystemSettings();
+  
+  boat := "pantoon16";
+  location := "lanier";
+  
+  (*bookingSettings).MaximumCapacity = (*systemSettings).Boats[boat].MaximumCapacity;
+  (*bookingSettings).CenterLocation = (*systemSettings).Locations[location].CenterLocation;
+  (*bookingSettings).AvailableLocations = (*systemSettings).Locations[location].PickupLocations;
+  
+  currentTime := time.Now();
+  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
+  currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
+
+  if (bookingSettings.CurrentDate != currentDateAsInt) {
+    (*bookingSettings).CurrentDate = currentDateAsInt;
+    (*bookingSettings).SchedulingBeginDate = currentDateAsInt + int64(time.Hour) * 24 * int64((*systemSettings).SchedulingBeginOffset);
+    //(*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
+    (*bookingSettings).SchedulingEndDate = (*bookingSettings).SchedulingBeginDate + int64(time.Hour) * 24 * int64((*systemSettings).SchedulingEndOffset);
+  }
+  
+  if (refreshSlotAvailability) {
+    (*bookingSettings).AvailableDates = make(map[int64]int);
+    for date := (*bookingSettings).SchedulingBeginDate; date < (*bookingSettings).SchedulingEndDate; date += int64(time.Hour) * 24 {
+      (*bookingSettings).AvailableDates[date] = 1;
+    }
+  
+    refreshSlotAvailability = false;
+  }
+}
+
+
+
+/*
+func initBookingSettings() {
+  log.Println("Initializing bookign settings");
+  
+  
+
   
   
   
@@ -226,3 +256,4 @@ func initBookingSettings() {
     (*bookingSettings).AvailableDates[date] = len(bookingSlots);
   }
 }
+*/

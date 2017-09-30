@@ -7,10 +7,22 @@ import "time"
 
 
 const DATABASE_FILE_NAME = "/Users/aavtamonov/project/boat/reservation_db.json";
+const SYSTEM_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/boat-server/system_configuration.json";
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
+
+type TSystemConfiguration struct {
+  SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
+  SchedulingEndOffset int `json:"scheduling_end_offset"`;  
+  Boats map[string]TBoat `json:"boats"`;
+  Locations map[string]TRentalLocation `json:"locations"`;
+}
+
+
 var reservationMap TReservationMap;
+var systemSettings *TSystemConfiguration;
+
 
 func GetReservation(reservationId TReservationId, lastName string) *TReservation {
   if (reservationMap == nil) {
@@ -41,13 +53,37 @@ func SaveReservation(reservation *TReservation) {
   saveReservationDatabase();
 }
 
+func GetSystemSettings() *TSystemConfiguration {
+  if (systemSettings == nil) {
+    readSystemConfiguration();
+  }
+  
+  return systemSettings;
+}
+
+
+func readSystemConfiguration() {
+  configurationByteArray, err := ioutil.ReadFile(SYSTEM_CONFIG_FILE_NAME);
+  if (err == nil) {
+    systemSettings = new (TSystemConfiguration);
+    err := json.Unmarshal(configurationByteArray, systemSettings);
+    if (err != nil) {
+      log.Println("Persistance: failed to parse config file", err);
+    } else {
+      log.Println("Persistance: system config is read");
+    }
+  } else {
+    log.Println("Persistance: failed to read system config", err);
+  }
+}
+
 
 func readReservationDatabase() {
   databaseByteArray, err := ioutil.ReadFile(DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &reservationMap);
     if (err != nil) {
-      log.Println("Persistance: failed to dersereialize the datavase - initializing", err);
+      log.Println("Persistance: failed to dersereialize the database - initializing", err);
     }
   } else {
     log.Println("Persistance: failed to read reservation database - initializing", err);
