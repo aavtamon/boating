@@ -6,6 +6,7 @@ import "encoding/json"
 import "net/http"
 import "strconv"
 import "time"
+import "fmt"
 
 
 type TMapLocation struct {
@@ -34,11 +35,18 @@ type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
   MaximumCapacity int `json:"maximum_capacity"`;
+  Rate map[int]int `json:"rate"`;
 }
 
 
 type TRentalLocation struct {
   Name string `json:"name"`;
+  StartHour int `json:"start_hour"`;
+  EndHour int `json:"end_hour"`;
+  Duration int `json:"duration"`;
+  ServiceInterval int `json:"service_interval"`;
+  
+  Boats map[string]TBoat `json:"boats"`;
   CenterLocation TMapLocation `json:"center_location"`;
   PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
 }
@@ -60,8 +68,6 @@ type TBookingSettings struct {
 var bookingSettings *TBookingSettings = nil;
 
 var availableSlots map[int64][]TBookingSlot = nil;
-
-var refreshSlotAvailability bool = true;
 
 
 func GetBookingSettings() TBookingSettings {
@@ -146,46 +152,10 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 
 
 
-
-
 func getAvailableBookingSlots(date int64) []TBookingSlot {
-  currentTime := time.Now();
-  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
-
-  day1 := currentDate;
-  day1Ms := day1.UnixNano() / int64(time.Millisecond);
-  day1Slot1 := day1.Add(time.Hour * 10);
-  day1Slot1Ms := day1Slot1.UnixNano() / int64(time.Millisecond);
-  day1Slot2 := day1.Add(time.Hour * 14);
-  day1Slot2Ms := day1Slot2.UnixNano() / int64(time.Millisecond);
-
-
-  day2 := currentDate.AddDate(0, 0, 3);
-  day2Ms := day2.UnixNano() / int64(time.Millisecond);
-  day2Slot1 := day1.Add(time.Hour * 10);
-  day2Slot1Ms := day2Slot1.UnixNano() / int64(time.Millisecond);
-  day2Slot2 := day1.Add(time.Hour * 16);
-  day2Slot2Ms := day2Slot2.UnixNano() / int64(time.Millisecond);
-
-
-  availableSlots = map[int64][]TBookingSlot {
-    day1Ms: []TBookingSlot {
-             TBookingSlot {DateTime: day1Slot1Ms, Duration: 2, Price: 150},
-             TBookingSlot {DateTime: day1Slot2Ms, Duration: 1, Price: 100},
-             TBookingSlot {DateTime: day1Slot2Ms, Duration: 2, Price: 150},
-           },
-    day2Ms: []TBookingSlot {
-             TBookingSlot {DateTime: day2Slot1Ms, Duration: 2, Price: 150},
-             TBookingSlot {DateTime: day2Slot1Ms, Duration: 4, Price: 200},
-             TBookingSlot {DateTime: day2Slot2Ms, Duration: 1, Price: 100},
-             TBookingSlot {DateTime: day2Slot2Ms, Duration: 2, Price: 150},
-           },
-  };
-
+fmt.Println("Requested slots for ", date, len(availableSlots[date]))
   return availableSlots[date];
 }
-
-
 
 
 
@@ -196,10 +166,10 @@ func initBookingSettings() {
   
   systemSettings := GetSystemSettings();
   
-  boat := "pantoon16";
   location := "lanier";
+  boat := "pantoon16";
   
-  (*bookingSettings).MaximumCapacity = (*systemSettings).Boats[boat].MaximumCapacity;
+  (*bookingSettings).MaximumCapacity = (*systemSettings).Locations[location].Boats[boat].MaximumCapacity;
   (*bookingSettings).CenterLocation = (*systemSettings).Locations[location].CenterLocation;
   (*bookingSettings).AvailableLocations = (*systemSettings).Locations[location].PickupLocations;
   
@@ -207,53 +177,60 @@ func initBookingSettings() {
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
 
-  if (bookingSettings.CurrentDate != currentDateAsInt) {
+  if ((*bookingSettings).CurrentDate != currentDateAsInt) {
     (*bookingSettings).CurrentDate = currentDateAsInt;
     (*bookingSettings).SchedulingBeginDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
     (*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 0, (*systemSettings).SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
   }
   
-  if (refreshSlotAvailability) {
-    (*bookingSettings).AvailableDates = make(map[int64]int);
-    for counter := 1; counter < (*systemSettings).SchedulingEndOffset; counter++ {
-      date := currentDate.AddDate(0, 0, counter).UnixNano() / int64(time.Millisecond);
-      (*bookingSettings).AvailableDates[date] = 1;
-    }
-  
-    refreshSlotAvailability = false;
-  }
+  reclalculateAvailableSlots((*systemSettings).Locations[location], (*systemSettings).Locations[location].Boats[boat]);
 }
 
 
 
-/*
-func initBookingSettings() {
-  log.Println("Initializing bookign settings");
-  
-  
+func reclalculateAvailableSlots(location TRentalLocation, boat TBoat) {
+  fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", location.Name, boat.Name);
 
-  
-  
-  
-  
-  bookingSettings = new(TBookingSettings);
-  
-  (*bookingSettings).CurrentDate = currentDate.UnixNano() / int64(time.Millisecond);
-  (*bookingSettings).SchedulingBeginDate = currentDate.UnixNano() / int64(time.Millisecond);
-  (*bookingSettings).SchedulingEndDate = currentDate.AddDate(0, 2, 0).UnixNano() / int64(time.Millisecond);
-  (*bookingSettings).MaximumCapacity = 10;
-  
-  (*bookingSettings).CenterLocation = TMapLocation {Latitude:  34.2288159, Longitude: -83.9592255, Zoom: 11};
-  
-  (*bookingSettings).AvailableLocations = map[string]TPickupLocation {
-  "1": TPickupLocation {Location: TMapLocation{Latitude: 34.2169323, Longitude: -83.9452699, Zoom: 0}, Name: "Great Marina", Address: "1745 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "free", Instructions: "none"},
-  "2": TPickupLocation {Location: TMapLocation{Latitude: 34.2305583, Longitude: -83.9294771, Zoom: 0}, Name: "Parking lot at the beach", Address: "1111 Lanier Islands Parkway, Suwanee 30024", ParkingFee: "$4 per car (cach only)", Instructions: "proceed to the boat ramp"},
-  "3": TPickupLocation {Location: TMapLocation{Latitude: 34.2700139, Longitude: -83.8967458, Zoom: 0}, Name: "Dam parking", Address: "2222 Buford Highway, Cumming 30519", ParkingFee: "$3 per person (credit card accepted)", Instructions: "follow 'boat ramp' signs"},
-  };
-  
   (*bookingSettings).AvailableDates = make(map[int64]int);
-  for date, bookingSlots := range availableSlots {
-    (*bookingSettings).AvailableDates[date] = len(bookingSlots);
+  availableSlots = make(map[int64][]TBookingSlot);
+
+  beginDate := time.Unix(0, (*bookingSettings).CurrentDate * int64(time.Millisecond));
+  for counter := (*systemSettings).SchedulingBeginOffset; counter <= (*systemSettings).SchedulingEndOffset; counter++ {
+    slotDate := beginDate.AddDate(0, 0, counter);
+    addSlotsForDate(location, boat, slotDate);
   }
+  
+    
+  fmt.Println("Recalculation complete");
 }
-*/
+
+func addSlotsForDate(location TRentalLocation, boat TBoat, date time.Time) {
+  dateMs := date.UnixNano() / int64(time.Millisecond);
+  
+  fmt.Printf("Recalculating slots for location %s and boat %s. Date=%d\n", location.Name, boat.Name, dateMs);
+
+  result := []TBookingSlot{};
+  
+  for hour := location.StartHour; hour <= location.EndHour; hour += (location.Duration + location.ServiceInterval) {
+    slotTime := date.Add(time.Hour * time.Duration(hour)).UnixNano() / int64(time.Millisecond);
+    
+    for dur := location.Duration; hour + dur <= location.EndHour; dur += location.Duration {
+      slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: boat.Rate[dur]};
+      if (!isBooked(slot)) {
+        result = append(result, slot);
+      }
+    }
+  }
+  
+  availableSlots[dateMs] = result;
+
+  (*bookingSettings).AvailableDates[dateMs] = len(result);
+  
+  fmt.Println("******");
+}
+
+func isBooked(TBookingSlot) bool {
+  return false;
+}
+
+

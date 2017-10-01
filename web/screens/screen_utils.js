@@ -1,19 +1,19 @@
 ScreenUtils = {
-  getBookingDate: function(slot) {
-    var date = new Date(slot.time);
+  getBookingDate: function(dateMs) {
+    var date = new Date(dateMs);
     return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
   },
 
-  getBookingDuration: function(slot) {
-    return slot.duration + (slot.duration == 1 ? " hour" : " hours");
+  getBookingDuration: function(duration) {
+    return duration + (duration == 1 ? " hour" : " hours");
   },
 
-  getBookingPrice: function(slot) {
-    return "$" + slot.price;
+  getBookingPrice: function(price) {
+    return "$" + price;
   },
     
-  getBookingTime: function(slot) {
-    var time = new Date(slot.time);
+  getBookingTime: function(timeMs) {
+    var time = new Date(timeMs);
     var hours = time.getHours();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
@@ -42,10 +42,10 @@ ScreenUtils = {
   },
   
   getBookingSummary: function(reservationContext) {
-    var tripDate = this.getBookingDate(reservationContext.slot);
-    var tripTime = this.getBookingTime(reservationContext.slot);
-    var tripDuration = this.getBookingDuration(reservationContext.slot);
-    var bookingPrice = this.getBookingPrice(reservationContext.slot);
+    var tripDate = this.getBookingDate(reservationContext.slot.time);
+    var tripTime = this.getBookingTime(reservationContext.slot.time);
+    var tripDuration = this.getBookingDuration(reservationContext.slot.duration);
+    var bookingPrice = this.getBookingPrice(reservationContext.slot.price);
     var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b><br>Price: " + bookingPrice;
     
     if (reservationContext.location_id != null) {

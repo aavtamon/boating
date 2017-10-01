@@ -1,18 +1,27 @@
 {
   "scheduling_begin_offset": 1,
-  "scheduling_end_offset": 60,
-  
-  "boats": {
-    "pantoon16": {
-      "name": "Pantton boat 16 feet",
-      "type": "pantoon16",
-      "maximum_capacity": 10
-    }
-  },
+  "scheduling_end_offset": 2,
   
   "locations": {
     "lanier": {
       "name": "Lake Lanier",
+      "start_hour": 10,
+      "end_hour": 18,
+      "duration": 2,
+      "service_interval": 1,
+      "boats": {
+        "pantoon16": {
+          "name": "Pantoon boat 16 feet",
+          "type": "pantoon16",
+          "maximum_capacity": 10,
+          "rate": {
+            "2": 150,
+            "4": 250,
+            "6": 350,
+            "8": 400
+          }
+        }
+      },
       "center_location": {
         "latitude": 34.2288159,
         "longitude": -83.9592255,

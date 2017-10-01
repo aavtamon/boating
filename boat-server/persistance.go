@@ -15,7 +15,6 @@ const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 type TSystemConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;  
-  Boats map[string]TBoat `json:"boats"`;
   Locations map[string]TRentalLocation `json:"locations"`;
 }
 
