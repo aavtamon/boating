@@ -114,7 +114,7 @@ BookingTime = {
     
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
-      var durationElement = $("<div class=\"bookingtime-duration\">" + ScreenUtils.getBookingDuration(slot.duration) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
+      var durationElement = $("<div class=\"bookingtime-duration\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
       durationElement[0]._slot = slot;
       
       durationElement.click(function(event) {

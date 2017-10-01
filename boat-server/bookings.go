@@ -153,7 +153,6 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
-fmt.Println("Requested slots for ", date, len(availableSlots[date]))
   return availableSlots[date];
 }
 
