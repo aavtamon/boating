@@ -93,6 +93,8 @@ func SaveReservation(reservation *TReservation) {
 
   reservationMap[(*reservation).Id] = reservation;
   (*reservation).Timestamp = time.Now().Unix();
+  
+  notifyReservationUpdated((*reservation).Id);
 
   saveReservationDatabase();
 }
@@ -101,6 +103,8 @@ func RemoveReservation(reservationId TReservationId) {
   log.Println("Persistance: removing reservation " + reservationId);
 
   delete(reservationMap, reservationId);
+  
+  notifyReservationRemoved(reservationId);
   
   saveReservationDatabase();
 }

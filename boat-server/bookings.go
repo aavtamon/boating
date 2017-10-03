@@ -245,13 +245,17 @@ func addSlotsForDate(location TRentalLocation, boat TBoat, date time.Time) {
 
 func isBooked(slot TBookingSlot) bool {
   for _, reservation := range GetAllReservations() {
+  
+fmt.Printf("Comparing reserved slot %v with potential slot %v\n", reservation.Slot, slot);
     if (reservation.Slot.DateTime <= slot.DateTime && reservation.Slot.DateTime + int64(time.Duration(reservation.Slot.Duration) * time.Hour / time.Millisecond) > slot.DateTime) {
       return true;
     }
     
     if (reservation.Slot.DateTime >= slot.DateTime && reservation.Slot.DateTime < slot.DateTime + int64(time.Duration(slot.Duration) * time.Hour / time.Millisecond)) {
       return true;
-    }  
+    }
+    
+fmt.Printf("   passed\n");    
   }
   
   return false;
