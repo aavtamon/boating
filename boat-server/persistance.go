@@ -19,15 +19,62 @@ type TSystemConfiguration struct {
 }
 
 
+type TReservationId string;
+
+type TReservation struct {
+  Id TReservationId `json:"id"`;
+
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  LocationId string `json:"location_id"`;
+  
+  NumOfAdults int `json:"adult_count"`;
+  NumOfChildren int `json:"children_count"`;
+  MobilePhone string `json:"mobile_phone,omitempty"`;
+  NoMobilePhone bool `json:"no_mobile_phone"`;
+  
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
+  CellPhone string `json:"cell_phone,omitempty"`;
+  AlternativePhone string `json:"alternative_phone,omitempty"`;
+  StreetAddress string `json:"street_address,omitempty"`;
+  AdditionalAddress string `json:"additional_address,omitempty"`;
+  City string `json:"city,omitempty"`;
+  State string `json:"state,omitempty"`;
+  Zip string `json:"zip,omitempty"`;
+  CreditCard string `json:"credit_card,omitempty"`;
+  CreditCardCVC string `json:"credit_card_cvc,omitempty"`;
+  CreditCardExpirationMonth string `json:"credit_card_expiration_month,omitempty"`;
+  CreditCardExpirationYear string `json:"credit_card_expiration_year,omitempty"`;
+  PaymentStatus string `json:"payment_status,omitempty"`;
+  
+  Timestamp int64;
+}
+
+type TReservationMap map[TReservationId]*TReservation;
+
+
+type TChangeListener interface {
+  OnReservationChanged(reservationId TReservationId);
+  OnReservationRemoved(reservationId TReservationId);
+}
+
+
 var reservationMap TReservationMap;
 var systemSettings *TSystemConfiguration;
+var listeners []TChangeListener;
 
 
-func GetReservation(reservationId TReservationId, lastName string) *TReservation {
-  if (reservationMap == nil) {
-    readReservationDatabase();
-  }
+func InitializePersistance() {
+  readReservationDatabase();
+}
 
+
+func GetReservation(reservationId TReservationId) *TReservation {
+  return reservationMap[reservationId];
+}
+
+func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range reservationMap {
     if (reservationId == resId && (*reservation).LastName == lastName) {
       return reservation;
@@ -37,18 +84,24 @@ func GetReservation(reservationId TReservationId, lastName string) *TReservation
   return nil;
 }
 
-func SaveReservation(reservation *TReservation) {
-  if (reservationMap == nil) {
-    readReservationDatabase();
-  }
+func GetAllReservations() TReservationMap {
+  return reservationMap
+}
 
+func SaveReservation(reservation *TReservation) {
   log.Println("Persistance: saving reservation " + (*reservation).Id);
 
   reservationMap[(*reservation).Id] = reservation;
   (*reservation).Timestamp = time.Now().Unix();
-  
-  cleanObsoleteReservations();
 
+  saveReservationDatabase();
+}
+
+func RemoveReservation(reservationId TReservationId) {
+  log.Println("Persistance: removing reservation " + reservationId);
+
+  delete(reservationMap, reservationId);
+  
   saveReservationDatabase();
 }
 
@@ -58,6 +111,24 @@ func GetSystemSettings() *TSystemConfiguration {
   }
   
   return systemSettings;
+}
+
+func AddReservationListener(listener TChangeListener) {
+  listeners = append(listeners, listener);
+}
+
+
+
+func notifyReservationUpdated(reservationId TReservationId) {
+  for _, listener := range listeners {
+      listener.OnReservationChanged(reservationId);
+  }
+}
+
+func notifyReservationRemoved(reservationId TReservationId) {
+  for _, listener := range listeners {
+      listener.OnReservationRemoved(reservationId);
+  }
 }
 
 
@@ -98,6 +169,8 @@ func readReservationDatabase() {
 }
 
 func saveReservationDatabase() {
+  cleanObsoleteReservations();
+
   databaseByteArray, err := json.MarshalIndent(reservationMap, "", "  ");
   if (err == nil) {
     err = ioutil.WriteFile(DATABASE_FILE_NAME, databaseByteArray, 0644);

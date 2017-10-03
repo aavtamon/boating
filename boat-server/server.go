@@ -94,7 +94,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       
       reservationId, hasReservation := Sessions[TSessionId(sessionId)];
       if (hasReservation) {
-        htmlObject.Reservation = *Reservations[reservationId];
+        htmlObject.Reservation = *GetReservation(reservationId);
       }
       
       
@@ -149,6 +149,7 @@ func main() {
     return;
   }
 
+  InitializePersistance();
 
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);

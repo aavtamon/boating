@@ -73,21 +73,17 @@ func payReservation(reservationId TReservationId) *TReservation {
   
   log.Println("Payment: leaving payment confirmation block for reservation: " + reservationId);
   
-  res := Reservations[reservationId];
-  SaveReservation(res);
-  
-  log.Println("Payment: payment status = " + (*res).PaymentStatus);
-  
   EmailReservationConfirmation(reservationId);
   
-  return res;
+  return GetReservation(reservationId);
 }
 
 func handlePaymentConfirmation(reservationId TReservationId) {
   wg, hasReservation := waitLocks[reservationId];
   if (hasReservation) {
-    res := Reservations[reservationId];
+    res := GetReservation(reservationId);
     (*res).PaymentStatus = "payed";
+    SaveReservation(res);
     
     log.Println("Payment: confirming payment for reservation: " + reservationId);
     

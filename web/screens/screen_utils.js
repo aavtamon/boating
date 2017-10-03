@@ -76,6 +76,14 @@ ScreenUtils = {
     return result.join("");
   },
   
+  getDateForTime: function(time) {
+    var date = new Date(time);
+    date.setHours(0);
+    date.setMinutes(0);
+
+    return date;
+  },
+  
   
   phoneInput: function(phoneElement, dataModel, dataModelProperty, changeCallback, validationMethod) {
     phoneElement._setPhone = function(phone) {
