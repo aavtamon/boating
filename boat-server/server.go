@@ -12,8 +12,9 @@ import "time"
 
 
 type THtmlObject struct {
-  Reservation TReservation;
+  Reservation *TReservation;
   BookingSettings TBookingSettings;
+  AvailableDates TAvailableDates;
 }
 
 type TSessionId string;
@@ -92,10 +93,10 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         BookingSettings: GetBookingSettings(),
       }
       
-      reservationId, hasReservation := Sessions[TSessionId(sessionId)];
-      if (hasReservation) {
-        htmlObject.Reservation = *GetReservation(reservationId);
-      }
+      reservationId, _ := Sessions[TSessionId(sessionId)];
+      
+      htmlObject.Reservation := GetReservation(reservationId);
+      htmlObject.AvailableDates = GetAvailableDates(reservationId);
       
       
       htmlTemplate.Execute(w, htmlObject);
