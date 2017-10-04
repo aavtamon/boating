@@ -10,20 +10,18 @@ BookingPayment = {
     });
     
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
-      Backend.saveReservationContext(function(status) {
-        Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
-        Backend.pay(function(status) {
-          Main.hidePopup();
-          if (status == Backend.STATUS_SUCCESS) {
-            if (Backend.getReservationContext().payment_status == Backend.PAYMENT_STATUS_PAYED) {
-              Main.loadScreen("booking_complete");
-            } else {
-              Main.showDialog("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
-            }
-          } else {
-            Main.showDialog("Payment Not Successful", "Something went wrong. Please try again");
-          }
-        });
+      Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
+      Backend.pay(function(status) {
+        Main.hidePopup();
+        if (status == Backend.STATUS_SUCCESS) {
+          Main.loadScreen("booking_complete");
+        } else if (status == Backend.STATUS_CONFLICT) {
+          Main.showDialog("Payment Not Successful", "We are sorry, but it looks like your slot was just booked. Please choose another one");
+        } else if (status == Backend.STATUS_BAD_REQUEST) {
+          Main.showDialog("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+        } else {
+          Main.showDialog("Payment Not Successful", "Something went wrong. Please try again");
+        }
       });
     });
     

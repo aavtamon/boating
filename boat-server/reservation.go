@@ -5,11 +5,9 @@ import "net/http"
 import "io"
 import "io/ioutil"
 import "encoding/json"
-import "math/rand"
-import "time"
 
 
-const NO_RESERVATION_ID = TReservationId("");
+var temporaryReservations TReservationMap;
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
@@ -62,22 +60,22 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
   } else if (r.Method == http.MethodPut) {
     reservationId := Sessions[TSessionId(sessionCookie.Value)];
     if (reservationId == NO_RESERVATION_ID) {
-      reservationId = generateReservationId();
+      w.WriteHeader(http.StatusNotFound);
+      w.Write([]byte("No reservation id"));
       
-      sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-      Sessions[TSessionId(sessionCookie.Value)] = reservationId;
+      return;
     }
   
-    res := updateReservation(reservationId, r.Body);
-    SaveReservation(res);
-    
-    storedReservation, err := json.Marshal(res);
-    if (err != nil) {
-      w.WriteHeader(http.StatusInternalServerError);
-      w.Write([]byte(err.Error()));
-    } else {
+    res := parseReservation(r.Body);
+    if (res != nil) {
+      SaveReservation(res);
+      
+      storedReservation, _ := json.Marshal(res);
       w.WriteHeader(http.StatusOK);
       w.Write(storedReservation);
+    } else {
+      w.WriteHeader(http.StatusInternalServerError);
+      w.Write([]byte("Incorrect reservation format"));
     }
   } else if (r.Method == http.MethodDelete) {
     reservationId := Sessions[TSessionId(sessionCookie.Value)];
@@ -94,38 +92,17 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func updateReservation(reservationId TReservationId, body io.ReadCloser) *TReservation {
+func parseReservation(body io.ReadCloser) *TReservation {
   bodyBuffer, _ := ioutil.ReadAll(body);
   body.Close();
-  
-  log.Println("Body:", string(bodyBuffer));
   
   res := &TReservation{};
   err := json.Unmarshal(bodyBuffer, res);
   if (err != nil) {
     log.Println("Incorrect request from the app: ", err);
-  } else {
-    (*res).Id = reservationId;
-    log.Println("Received object: ", (*res));
+    return nil;
   }
-  
-  log.Println("*****");
   
   return res;
 }
-
-
-
-func generateReservationId() TReservationId {
-  rand.Seed(time.Now().UnixNano());
-  
-  var bytes [10]byte;
-  
-  for i := 0; i < 10; i++ {
-    bytes[i] = 65 + byte(rand.Intn(26));
-  }
-  
-  return TReservationId(bytes[:]);
-}
-
 

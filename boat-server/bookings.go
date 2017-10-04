@@ -90,29 +90,6 @@ func GetBookingSettings() TBookingSettings {
   return *bookingSettings;
 }
 
-func GetAvailableDates(reservationId TReservationId) TAvailableDates {
-  if (reservationId == NO_RESERVATION_ID) {
-    return availableDates;
-  } else {
-    availableDatesForReservation := make(TAvailableDates);
-    
-    reservation := GetReservation(reservationId);
-    reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
-    reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, reservationTime.Location()).UnixNano() / int64(time.Millisecond);
-    
-    for date, numOfSlots := range availableDates {
-      if (reservationDate == date) {
-        availableDatesForReservation[date] = numOfSlots + 1;
-      } else {
-        availableDatesForReservation[date] = numOfSlots;
-      }
-    }
-  
-    return availableDatesForReservation;
-  }
-}
-
-
 
 func BookingsHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Bookings Handler");
@@ -184,6 +161,9 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
+func GetAvailableDates() TAvailableDates {
+    return availableDates;
+}
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
   return availableSlots[date];
@@ -217,12 +197,18 @@ func initBookingSettings() {
   AddReservationListener(reservationObserver);
 }
 
-func (observer TReservationObserver) OnReservationChanged(reservationId TReservationId) {
-  recalculateAllAvailableSlots();
+func (observer TReservationObserver) OnReservationChanged(reservation *TReservation) {
+  location := (*systemSettings).Locations[LOCATION];
+  boat := (*systemSettings).Locations[LOCATION].Boats[BOAT];
+
+  reservationTime := time.Unix(0, (*reservation).Slot.DateTime * int64(time.Millisecond));
+  reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, reservationTime.Location());
+
+  calculateSlotsForDate(location, boat, reservationDate);
 }
 
-func (observer TReservationObserver) OnReservationRemoved(reservationId TReservationId) {
-  recalculateAllAvailableSlots();
+func (observer TReservationObserver) OnReservationRemoved(reservation *TReservation) {
+  observer.OnReservationChanged(reservation);
 }
 
 
@@ -273,8 +259,6 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
 
 func isBooked(slot TBookingSlot) bool {
   for _, reservation := range GetAllReservations() {
-  
-fmt.Printf("Comparing reserved slot %v with potential slot %v\n", reservation.Slot, slot);
     if (reservation.Slot.DateTime <= slot.DateTime && reservation.Slot.DateTime + int64(time.Duration(reservation.Slot.Duration) * time.Hour / time.Millisecond) > slot.DateTime) {
       return true;
     }
@@ -282,8 +266,6 @@ fmt.Printf("Comparing reserved slot %v with potential slot %v\n", reservation.Sl
     if (reservation.Slot.DateTime >= slot.DateTime && reservation.Slot.DateTime < slot.DateTime + int64(time.Duration(slot.Duration) * time.Hour / time.Millisecond)) {
       return true;
     }
-    
-fmt.Printf("   passed\n");    
   }
   
   return false;

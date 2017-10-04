@@ -12,9 +12,7 @@ BookingLocation = {
     });
 
     $("#BookingLocation-Screen-ButtonsPanel-NextButton").click(function() {
-      Backend.saveReservationContext(function(status) {
-        Main.loadScreen("booking_confirmation");
-      });
+      Main.loadScreen("booking_confirmation");
     });
     
     this._canProceedToNextStep();

@@ -4,6 +4,8 @@ import "log"
 import "io/ioutil"
 import "encoding/json"
 import "time"
+import "math/rand"
+
 
 
 const DATABASE_FILE_NAME = "/Users/aavtamonov/project/boat/reservation_db.json";
@@ -55,9 +57,14 @@ type TReservationMap map[TReservationId]*TReservation;
 
 
 type TChangeListener interface {
-  OnReservationChanged(reservationId TReservationId);
-  OnReservationRemoved(reservationId TReservationId);
+  OnReservationChanged(reservation *TReservation);
+  OnReservationRemoved(reservation *TReservation);
 }
+
+
+
+const NO_RESERVATION_ID = TReservationId("");
+
 
 
 var reservationMap TReservationMap;
@@ -88,23 +95,30 @@ func GetAllReservations() TReservationMap {
   return reservationMap
 }
 
-func SaveReservation(reservation *TReservation) {
+func SaveReservation(reservation *TReservation) TReservationId {
   log.Println("Persistance: saving reservation " + (*reservation).Id);
+  
+  if ((*reservation).Id == NO_RESERVATION_ID) {
+    (*reservation).Id = generateReservationId();
+  }
 
   reservationMap[(*reservation).Id] = reservation;
   (*reservation).Timestamp = time.Now().Unix();
   
-  notifyReservationUpdated((*reservation).Id);
+  notifyReservationUpdated(reservation);
 
   saveReservationDatabase();
+  
+  return (*reservation).Id;
 }
 
 func RemoveReservation(reservationId TReservationId) {
   log.Println("Persistance: removing reservation " + reservationId);
 
+  reservation := reservationMap[reservationId];
   delete(reservationMap, reservationId);
   
-  notifyReservationRemoved(reservationId);
+  notifyReservationRemoved(reservation);
   
   saveReservationDatabase();
 }
@@ -123,15 +137,15 @@ func AddReservationListener(listener TChangeListener) {
 
 
 
-func notifyReservationUpdated(reservationId TReservationId) {
+func notifyReservationUpdated(reservation *TReservation) {
   for _, listener := range listeners {
-      listener.OnReservationChanged(reservationId);
+      listener.OnReservationChanged(reservation);
   }
 }
 
-func notifyReservationRemoved(reservationId TReservationId) {
+func notifyReservationRemoved(reservation *TReservation) {
   for _, listener := range listeners {
-      listener.OnReservationRemoved(reservationId);
+      listener.OnReservationRemoved(reservation);
   }
 }
 
@@ -199,3 +213,17 @@ func cleanObsoleteReservations() {
     }
   }
 }
+
+
+func generateReservationId() TReservationId {
+  rand.Seed(time.Now().UnixNano());
+  
+  var bytes [10]byte;
+  
+  for i := 0; i < 10; i++ {
+    bytes[i] = 65 + byte(rand.Intn(26));
+  }
+  
+  return TReservationId(bytes[:]);
+}
+

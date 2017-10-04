@@ -17,9 +17,7 @@ BookingConfirmation = {
     });
     
     $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").click(function() {
-      Backend.saveReservationContext(function(status) {
-        Main.loadScreen("booking_payment");
-      });
+      Main.loadScreen("booking_payment");
     });
     
     this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, this.maximumCapacity);

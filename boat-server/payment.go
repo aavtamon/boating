@@ -18,27 +18,44 @@ var waitLocks = make(map[TReservationId]*sync.WaitGroup);
 func PaymentHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Payment Handler: request method=" + r.Method);
   
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  
   if (r.Method == http.MethodPut) {
     if (strings.HasSuffix(r.URL.Path, "confirmation")) {
       handlePaymentConfirmation(NO_RESERVATION_ID);
+      
+      w.WriteHeader(http.StatusOK);
     } else {
-      reservationId := Sessions[TSessionId(sessionCookie.Value)];
-      if (reservationId == NO_RESERVATION_ID) {
+      res := parseReservation(r.Body);
+      if (res == nil) {
         w.WriteHeader(http.StatusInternalServerError);
-        w.Write([]byte("Unknown reservation"));
+        w.Write([]byte("Incorrect reservation format"));
+        
         return;
       }
 
-      res := payReservation(reservationId);
-      storedReservation, err := json.Marshal(res);
-      if (err != nil) {
-        w.WriteHeader(http.StatusInternalServerError);
-        w.Write([]byte(err.Error()));
-      } else {
+
+      if (isBooked(res.Slot)) {
+        w.WriteHeader(http.StatusConflict);
+        return;
+      }
+
+      reservationId := SaveReservation(res);
+      payReservation(reservationId);
+      
+      reservation := GetReservation(reservationId);
+      
+      if ((*reservation).PaymentStatus == "payed") {
+        sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+        Sessions[TSessionId(sessionCookie.Value)] = reservationId;
+        
+        
+        storedReservation, _ := json.Marshal(res);
         w.WriteHeader(http.StatusOK);
         w.Write(storedReservation);
+        
+        EmailReservationConfirmation(reservationId);
+      } else if ((*reservation).PaymentStatus == "declined") {
+        RemoveReservation(reservationId);
+        w.WriteHeader(http.StatusBadRequest);
       }
     }
   } else if (r.Method == http.MethodGet) {
@@ -59,11 +76,10 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func payReservation(reservationId TReservationId) *TReservation {
+func payReservation(reservationId TReservationId) {
   wg := sync.WaitGroup{};
   waitLocks[reservationId] = &wg;
   wg.Add(1);
-  
   
   // Temporary
   go offlinePayment(reservationId);
@@ -72,10 +88,6 @@ func payReservation(reservationId TReservationId) *TReservation {
   wg.Wait();
   
   log.Println("Payment: leaving payment confirmation block for reservation: " + reservationId);
-  
-  EmailReservationConfirmation(reservationId);
-  
-  return GetReservation(reservationId);
 }
 
 func handlePaymentConfirmation(reservationId TReservationId) {

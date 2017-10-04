@@ -1,6 +1,8 @@
 Backend = {
   STATUS_SUCCESS: "success",
-  STATUS_SUCCESS: "error",
+  STATUS_ERROR: "error",
+  STATUS_CONFLICT: "conflict",
+  STATUS_BAD_REQUEST: "bad_request",
   
   
   PAYMENT_STATUS_PAYED: "payed",
@@ -13,7 +15,7 @@ Backend = {
     return this._reservationContext;
   },
   
-  saveReservationContext: function(callback) {
+  updateReservationContext: function(callback) {
     //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
     var persistentContext = this._reservationContext;
 
@@ -72,9 +74,15 @@ Backend = {
           callback(Backend.STATUS_SUCCESS);
         }
       }.bind(this),
-      error: function() {
+      error: function(request, status) {
         if (callback) {
-          callback(Backend.STATUS_ERROR);
+          if (status == 409) {
+            callback(Backend.STATUS_CONFLICT);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
         }
       }
     });

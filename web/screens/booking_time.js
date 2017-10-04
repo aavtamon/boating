@@ -45,9 +45,7 @@ BookingTime = {
     
     
     $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
-      Backend.saveReservationContext(function(status) {
-        Main.loadScreen("booking_location");
-      });
+      Main.loadScreen("booking_location");
     });
     
     this._canProceedToNextStep();
