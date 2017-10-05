@@ -7,6 +7,12 @@
 </script>
 
 <div id="Home-Screen">
-	Home sweat home!
-	<button id="Home-Screen-Book">Reservation</button>
+  Home sweat home!
+  <br>
+  {{if not .Reservation}}
+    Welcome to our web site.
+    Click this button <button id="Home-Screen-Book">Reservation</button> to place a reservation.
+  {{else}}
+Welcome back! You seem to have a reservation with us, confirmation number <b>{{.Reservation.Id}}</b>    
+  {{end}}
 </div>

@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="screens/reservation_retrieval.css">
+<script src="screens/reservation_retrieval.js"></script>
+
+<script>
+  $(document).ready(function() {
+    ReservationRetrieval.onLoad();
+  });
+</script>
+
+<div id="ReservationRetrieval-Screen">
+  <div id="ReservationRetrieval-Screen-ReservationInfo">
+    Retrieval of the reservation
+  </div>
+  {{if .Reservation}}
+    You seem to have a reservation <a href="javascript:Main.loadScreen('reservation_update')">{{.Reservation.Id}}</a>. Click on its number if you want to modify this one.
+  
+    <br>
+  
+    If you want to pull a different one, please enter the confirmation number and the last name:
+  {{end}}
+  
+  <div id="ReservationRetrieval-Screen-ReservationId">
+    <div id="ReservationRetrieval-Screen-ReservationId-Number-Label">Reservation Number:</div>
+    <input type="text" id="ReservationRetrieval-Screen-ReservationId-Number-Input">
+    <div id="ReservationRetrieval-Screen-ReservationId-LastName-Label">Last name on the reservation:</div>
+    <input type="text" id="ReservationRetrieval-Screen-ReservationId-LastName-Input">
+  </div>
+  <div id="ReservationRetrieval-Screen-Status"></div>
+  <button id="ReservationRetrieval-Screen-RestoreButton">Next</button>
+  
+</div>

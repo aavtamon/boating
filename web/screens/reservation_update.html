@@ -5,19 +5,18 @@
 <script>
   $(document).ready(function() {
     ReservationUpdate.onLoad();
+    
+    $("#ReservationUpdate-Screen-Reservation-Date").val(ScreenUtils.getBookingDate({{.Reservation.Slot.DateTime}}));
   });
 </script>
 
 <div id="ReservationUpdate-Screen">
-  <div id="ReservationUpdate-Screen-ReservationInfo">
-    Retrieval of the reservation
+  <div id="ReservationUpdate-Screen-Reservation">
+    Your reservation: {{.Reservation.Id}}
+    Date: <div id="ReservationUpdate-Screen-Reservation-Date"></div>
+    Name: {{.Reservation.FirstName}}, {{.Reservation.LastName}}
   </div>
-  <div id="ReservationUpdate-Screen-ReservationId">
-    <div id="ReservationUpdate-Screen-ReservationId-Number-Label">Reservation Number:</div>
-    <input type="text" id="ReservationUpdate-Screen-ReservationId-Number-Input">
-    <div id="ReservationUpdate-Screen-ReservationId-LastName-Label">Last name on the reservation:</div>
-    <input type="text" id="ReservationUpdate-Screen-ReservationId-LastName-Input">
+  <div>
+    <button id="ReservationUpdate-Screen-CancelButton">Cancel</button>
   </div>
-  <button id="ReservationUpdate-Screen-RestoreButton">Next</button>
-  <div id="ReservationUpdate-Screen-Status"></div>
 </div>

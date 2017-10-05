@@ -10,8 +10,8 @@
 
 <div id="BookingComplete-Screen">
 	<div id="BookingComplete-Screen-ReservationSummary">
-      Your reservation is placed, confirmation numbver is <b>{{.Reservation.Id}}</b>. You should receive an email soon with the confirmation number and the details.
+      Your reservation is placed, confirmation number is <b>{{.Reservation.Id}}</b>. You should receive an email at {{.Reservation.Email}} soon with the confirmation number and the details.
       <br>
-      You can change or cancel 2 days before the planned date free of charge
+      You can cancel 2 days before the planned date free of charge. If you need to modify your reservation, go to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a>, and use this confirmation number to access your reservation. You can also use the link in the email to get there.
 	</div>
 </div>

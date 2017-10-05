@@ -88,6 +88,9 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
     
     RemoveReservation(reservationId);
     
+    sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+    Sessions[TSessionId(sessionCookie.Value)] = NO_RESERVATION_ID;
+    
     w.WriteHeader(http.StatusOK);
   }
 }
