@@ -9,7 +9,7 @@
 
 <div id="ReservationRetrieval-Screen">
   <div id="ReservationRetrieval-Screen-ReservationInfo">
-    Retrieval of the reservation
+    Retrieval of the reservation:
   </div>
   {{if .Reservation}}
     You seem to have a reservation <a href="javascript:Main.loadScreen('reservation_update')">{{.Reservation.Id}}</a>. Click on its number if you want to modify this one.
@@ -20,12 +20,18 @@
   {{end}}
   
   <div id="ReservationRetrieval-Screen-ReservationId">
-    <div id="ReservationRetrieval-Screen-ReservationId-Number-Label">Reservation Number:</div>
-    <input type="text" id="ReservationRetrieval-Screen-ReservationId-Number-Input">
+    <div id="ReservationRetrieval-Screen-ReservationId-Number-Label">Confirmation Number:</div>
+    <input type="text" id="ReservationRetrieval-Screen-ReservationId-Number-Input" class="standard-input">
     <div id="ReservationRetrieval-Screen-ReservationId-LastName-Label">Last name on the reservation:</div>
-    <input type="text" id="ReservationRetrieval-Screen-ReservationId-LastName-Input">
+    <input type="text" id="ReservationRetrieval-Screen-ReservationId-LastName-Input" class="standard-input">
+    <div id="ReservationRetrieval-Screen-ReservationId-Status">
+      Failed to retieve reservation.<br>Please correct your confirmation number and last name, and try again.
+      If you cannot retrieve your reservation, please give us a call.
+    </div>
+    <div id="ReservationRetrieval-Screen-ReservationId-ButtonPanel">
+      <button id="ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton" class="standard-button">Retrieve</button>
+    </div>
   </div>
-  <div id="ReservationRetrieval-Screen-Status"></div>
-  <button id="ReservationRetrieval-Screen-RestoreButton">Next</button>
+
   
 </div>

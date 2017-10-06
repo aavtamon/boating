@@ -6,7 +6,11 @@
   $(document).ready(function() {
     ReservationUpdate.onLoad();
     
-    $("#ReservationUpdate-Screen-Reservation-Date").val(ScreenUtils.getBookingDate({{.Reservation.Slot.DateTime}}));
+    {{if .Reservation}}
+      $("#ReservationUpdate-Screen-Reservation-Date").val(ScreenUtils.getBookingDate({{.Reservation.Slot.DateTime}}));
+    {{else}}
+      Main.loadScreen("home");
+    {{end}}
   });
 </script>
 

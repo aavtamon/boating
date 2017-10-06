@@ -36,7 +36,7 @@ Backend = {
   },
   
   restoreReservationContext: function(reservationId, lastName, callback) {
-    this._communicate("reservation/booking?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+    this._communicate("reservation/booking/?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
       success: function(persistentContext) {
         //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         this._reservationContext = persistentContext;

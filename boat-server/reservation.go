@@ -5,6 +5,7 @@ import "net/http"
 import "io"
 import "io/ioutil"
 import "encoding/json"
+import "fmt"
 
 
 var temporaryReservations TReservationMap;
@@ -23,6 +24,9 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       
       queryReservationId, hasReservationId := queryParams["reservation_id"];
       queryLastName, hasLastName := queryParams["last_name"];
+      
+      fmt.Printf("Restoring reservation for %s and %s\n", queryParams["reservation_id"], queryParams["last_name"]);
+      
       if (hasReservationId && hasLastName) {
         reservationId := TReservationId(queryReservationId);
       
