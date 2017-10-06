@@ -23,7 +23,7 @@
 
 .standard-button {
   display: inline-block;
-  width: 100px;
+  min-width: 100px;
   padding: 5px 10px 5px 10px;
   vertical-align: top;
 

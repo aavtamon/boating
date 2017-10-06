@@ -15,7 +15,26 @@ Backend = {
     return this._reservationContext;
   },
   
-  updateReservationContext: function(callback) {
+  restoreReservationContext: function(reservationId, lastName, callback) {
+    this._communicate("reservation/booking/?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+      success: function(persistentContext) {
+        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
+        this._reservationContext = persistentContext;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }
+    });
+  },
+  
+  
+  saveReservation: function(callback) {
     //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
     var persistentContext = this._reservationContext;
 
@@ -35,8 +54,9 @@ Backend = {
     });
   },
   
-  restoreReservationContext: function(reservationId, lastName, callback) {
-    this._communicate("reservation/booking/?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+
+  removeReservation: function(reservationId, callback) {
+    this._communicate("reservation/booking/?reservation_id=" + reservationId, "delete", null, true, [], {
       success: function(persistentContext) {
         //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         this._reservationContext = persistentContext;
@@ -52,6 +72,7 @@ Backend = {
       }
     });
   },
+  
 
   resetReservationContext: function(callback) {
     this._reservationContext = {};

@@ -46,12 +46,14 @@ html, body {
   color: white;
 }
 
+
 #Main-ScreenContainer {
-	padding: 10px;	
-	height: -webkit-calc(100% - 110px - 40px - 20px);
-	height: calc(100% - 130px - 40px - 20px);
-	
-	overflow-y: auto;
+  position: relative;
+  padding: 10px;	
+  height: -webkit-calc(100% - 110px - 40px - 20px);
+  height: calc(100% - 130px - 40px - 20px);
+
+  overflow-y: auto;
 }
 
 #Main-Footer {
@@ -68,10 +70,18 @@ html, body {
 	color: white;
 }
 
-
 #Main-Popup {
-  position: fixed;
+  position: absolute;
   display: none;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  
+  background-color: rgba(100, 100, 100, 0.5);
+}
+#Main-Popup-Frame {
+  position: absolute;
   width: 50%;
   top: 40%;
   left: 25%;
@@ -80,7 +90,7 @@ html, body {
   
   background-color: azure;
 }
-#Main-Popup-Title {
+#Main-Popup-Frame-Title {
   text-align: center;
   padding: 1px;
 
@@ -92,11 +102,17 @@ html, body {
   
   font-size: 20px;
 }
-#Main-Popup-Message {
+#Main-Popup-Frame-Message {
   padding: 5px;
 }
-#Main-Popup-Buttons {
+#Main-Popup-Frame-Buttons {
   margin-top: 10px;
+  margin-bottom: 10px;
   
   text-align: center;
+}
+#Main-Popup-Frame-Buttons-OK, #Main-Popup-Frame-Buttons-Cancel {
+  margin-right: 20px;
+  
+  font-size: 15px;
 }

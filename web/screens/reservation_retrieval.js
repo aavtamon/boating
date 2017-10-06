@@ -37,5 +37,8 @@ ReservationRetrieval = {
         }
       });
     });
+    
+    
+    $("#ReservationRetrieval-Screen-ReservationId-Number-Input").focus();
   },
 }

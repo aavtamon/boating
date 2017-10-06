@@ -83,6 +83,18 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
     }
   } else if (r.Method == http.MethodDelete) {
     reservationId := Sessions[TSessionId(sessionCookie.Value)];
+    
+    if (r.URL.RawQuery != "") {
+      queryParams := parseQuery(r);
+      
+      queryReservationId, hasReservationId := queryParams["reservation_id"];
+      if (hasReservationId) {
+        reservationId = TReservationId(queryReservationId);
+      }
+    }
+      
+    fmt.Printf("Removing reservation %s\n", reservationId);
+  
     if (reservationId == NO_RESERVATION_ID) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("No reservation selected"));

@@ -115,10 +115,11 @@ func SaveReservation(reservation *TReservation) TReservationId {
 func RemoveReservation(reservationId TReservationId) {
   log.Println("Persistance: removing reservation " + reservationId);
 
-  reservation := reservationMap[reservationId];
+  reservation := *(reservationMap[reservationId]);
+  
   delete(reservationMap, reservationId);
   
-  notifyReservationRemoved(reservation);
+  notifyReservationRemoved(&reservation);
   
   saveReservationDatabase();
 }

@@ -17,10 +17,12 @@
 <div id="ReservationUpdate-Screen">
   <div id="ReservationUpdate-Screen-Reservation">
     Your reservation: {{.Reservation.Id}}
+    <br>
     Date: <div id="ReservationUpdate-Screen-Reservation-Date"></div>
+    <br>
     Name: {{.Reservation.FirstName}}, {{.Reservation.LastName}}
   </div>
-  <div>
-    <button id="ReservationUpdate-Screen-CancelButton">Cancel</button>
+  <div id="ReservationUpdate-Screen-ButtonsPanel">
+    <button id="ReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>
   </div>
 </div>
