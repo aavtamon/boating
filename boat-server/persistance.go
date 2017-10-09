@@ -51,6 +51,7 @@ type TReservation struct {
   PaymentStatus string `json:"payment_status,omitempty"`;
   
   Timestamp int64;
+  PaymentId string;
 }
 
 type TReservationMap map[TReservationId]*TReservation;

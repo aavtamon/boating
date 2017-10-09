@@ -27,7 +27,7 @@ type TPickupLocation struct {
 type TBookingSlot struct {
   DateTime int64 `json:"time"`;
   Duration int `json:"duration"`;
-  Price int `json:"price"`;
+  Price uint64 `json:"price"`;
 }
 
 
@@ -35,7 +35,7 @@ type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
   MaximumCapacity int `json:"maximum_capacity"`;
-  Rate map[int]int `json:"rate"`;
+  Rate map[int]uint64 `json:"rate"`;
 }
 
 
