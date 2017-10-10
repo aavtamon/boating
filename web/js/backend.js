@@ -10,10 +10,17 @@ Backend = {
   
   // Current reservation management
   _reservationContext: {},
+  
+  _temporaryData: {},
     
   getReservationContext: function() {
     return this._reservationContext;
   },
+  
+  getTemporaryData: function() {
+    return this._temporaryData;
+  },
+  
   
   restoreReservationContext: function(reservationId, lastName, callback) {
     this._communicate("reservation/booking/?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {

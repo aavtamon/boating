@@ -3,6 +3,8 @@
 <script src="screens/booking_payment.js"></script>
 <script src="screens/screen_utils.js"></script>
 
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
   $(document).ready(function() {
     BookingPayment.onLoad();
@@ -43,6 +45,10 @@
 </div>
 <div id="BookingPayment-Screen-PaymentInformation" class="titled-box">
 <div id="BookingPayment-Screen-PaymentInformation-Title" class="title">Payment Information:</div>
+  <div id="BookingPayment-Screen-PaymentInformation-Name">
+    <div id="BookingPayment-Screen-PaymentInformation-Name-Label">Name on the card:</div>
+    <input type="text" id="BookingPayment-Screen-PaymentInformation-Name-Input"></input>
+  </div>
   <div id="BookingPayment-Screen-PaymentInformation-Address">
     <div id="BookingPayment-Screen-PaymentInformation-Address-Street">
       <div id="BookingPayment-Screen-PaymentInformation-Address-Street-Label">Street address:</div>
@@ -113,49 +119,11 @@
         <option value="WV">WV</option>
       </select>
     </div>
-    <div id="BookingPayment-Screen-PaymentInformation-Area-Zip">
-      <div id="BookingPayment-Screen-PaymentInformation-Area-Zip-Label">Zip</div>
-      <input maxLength="5" id="BookingPayment-Screen-PaymentInformation-Area-Zip-Input"></input>
-    </div>
   </div>
   <div id="BookingPayment-Screen-PaymentInformation-CreditCard">
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Number">
-      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Number-Label">Credit Card:</div>
-      <input maxLength="16" id="BookingPayment-Screen-PaymentInformation-CreditCard-Number-Input"></input>
-    </div>
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-CVC">
-      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Label">CVC:</div>
-      <input maxLength="4" id="BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Input"></input>
-    </div>
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Expiration">
-      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Label">Expiration:</div>
-      <select id="BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Month">
-        <option value="1">01</option>
-        <option value="2">02</option>
-        <option value="3">03</option>
-        <option value="4">04</option>
-        <option value="5">05</option>
-        <option value="6">06</option>
-        <option value="7">07</option>
-        <option value="8">08</option>
-        <option value="9">09</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-      </select>
-      <select id="BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Year">
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-      </select>
-    </div>
+    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Label">Credit card information:</div>
+    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Input"></div>
+    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Status"></div>
   </div>
 </div>
 

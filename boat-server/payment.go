@@ -15,7 +15,7 @@ import "github.com/stripe/stripe-go/charge"
 const PAYMENT_STATUS_PAYED = "payed";
 const PAYMENT_STATUS_FAILED = "failed";
 
-
+const PAYMENT_SECRET_KEY = "sk_test_7Fr3JQHkcFnbcTcYB17BizNM";
 
 var waitLocks = make(map[TReservationId]*sync.WaitGroup);
 
@@ -24,14 +24,6 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Payment Handler: request method=" + r.Method);
   
   if (r.Method == http.MethodPut) {
-    /*
-    if (strings.HasSuffix(r.URL.Path, "confirmation")) {
-      handlePaymentConfirmation(NO_RESERVATION_ID);
-      
-      w.WriteHeader(http.StatusOK);
-    } else {
-    */
-    
     res := parseReservation(r.Body);
     if (res == nil) {
       w.WriteHeader(http.StatusInternalServerError);
@@ -51,7 +43,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 
     reservation := GetReservation(reservationId);
 
-    if ((*reservation).PaymentStatus == "payed") {
+    if ((*reservation).PaymentStatus == PAYMENT_STATUS_PAYED) {
       sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
       Sessions[TSessionId(sessionCookie.Value)] = reservationId;
 
@@ -61,59 +53,29 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.Write(storedReservation);
 
       EmailReservationConfirmation(reservationId);
-    } else if ((*reservation).PaymentStatus == "declined") {
+    } else if ((*reservation).PaymentStatus == PAYMENT_STATUS_FAILED) {
       RemoveReservation(reservationId);
       w.WriteHeader(http.StatusBadRequest);
     }
   }
-  /*
-  else if (r.Method == http.MethodGet) {
-    // This is a temporary code
-    if (strings.HasSuffix(r.URL.Path, "confirmation")) {
-      queryParams := parseQuery(r);
-      
-      queryReservationId, hasReservationId := queryParams["reservation_id"];
-      if (!hasReservationId) {
-        w.WriteHeader(http.StatusBadRequest);
-        w.Write([]byte("Reservation id is not provided"));
-        
-        return;
-      }
-      
-      handlePaymentConfirmation(TReservationId(queryReservationId));
-    }
-  }
-  */
 }
 
 
 func payReservation(reservationId TReservationId) {
   fmt.Printf("Starting payment processing for reservation %s\n", reservationId);
 
-  stripe.Key = "sk_test_7Fr3JQHkcFnbcTcYB17BizNM";
+  stripe.Key = PAYMENT_SECRET_KEY;
   
   reservation := GetReservation(reservationId);
 
   params := &stripe.ChargeParams{
-    Amount: reservation.Slot.Price,
+    Amount: reservation.Slot.Price * 100,
     Currency: "usd",
-    Desc: "Boat reservation",
+    Desc: "Boat reservation #" + string(reservationId),
   }
-  params.AddMeta("reservation_id", string(reservationId));
   
-  params.SetSource(&stripe.CardParams {
-    Address1: reservation.StreetAddress,
-    Address2: reservation.AdditionalAddress,
-    CVC: reservation.CreditCardCVC,
-    City: reservation.City,
-    Country: "USA",
-    Month: reservation.CreditCardExpirationMonth,
-    Name: reservation.FirstName + " " + reservation.LastName,
-    Number: reservation.CreditCard,
-    State: reservation.State,
-    Year: reservation.CreditCardExpirationYear,
-    Zip: reservation.Zip,
-  });
+  params.SetSource(reservation.PaymentToken);
+  params.AddMeta("reservation_id", string(reservationId));
   
   charge, err := charge.New(params);
   
@@ -153,7 +115,7 @@ func handlePaymentConfirmation(reservationId TReservationId) {
   wg, hasReservation := waitLocks[reservationId];
   if (hasReservation) {
     res := GetReservation(reservationId);
-    (*res).PaymentStatus = "payed";
+    (*res).PaymentStatus = PAYMENT_STATUS_PAYED;
     SaveReservation(res);
     
     log.Println("Payment: confirming payment for reservation: " + reservationId);

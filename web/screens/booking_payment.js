@@ -9,18 +9,82 @@ BookingPayment = {
       Main.loadScreen("booking_confirmation");
     });
     
+    
+    if (Backend.getTemporaryData().paymentInfo == null) {
+      Backend.getTemporaryData().paymentInfo = {card_ready: false};
+    }
+    var paymentInfo = Backend.getTemporaryData().paymentInfo;
+    
+    
+    var stripe = Stripe('pk_test_39gZjXaJ3YlMgPhFcISoz2MC');    
+    var elements = stripe.elements();
+    
+    var style = {
+      base: {
+        color: '#32325d',
+        lineHeight: '24px',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4'
+        }
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a'
+      }
+    };
+    
+    var card = elements.create('card', {style: style});
+    card.mount('#BookingPayment-Screen-PaymentInformation-CreditCard-Input');
+    
+    card.addEventListener('change', function(event) {
+      $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("");
+      
+      if (event.error) {
+        $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html(event.error.message);
+      }
+      
+      paymentInfo.card_ready = event.complete;
+      this._canProceedToNextStep();
+    }.bind(this));
+    
+    
+    
     $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
       Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
-      Backend.pay(function(status) {
-        Main.hidePopup();
-        if (status == Backend.STATUS_SUCCESS) {
-          Main.loadScreen("booking_complete");
-        } else if (status == Backend.STATUS_CONFLICT) {
-          Main.showDialog("Payment Not Successful", "We are sorry, but it looks like your slot was just booked. Please choose another one");
-        } else if (status == Backend.STATUS_BAD_REQUEST) {
-          Main.showDialog("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+      
+      var cardData = {
+        name: paymentInfo.name,
+        address_line1: paymentInfo.street_address,
+        address_line2: paymentInfo.additional_address,
+        address_city: paymentInfo.city,
+        address_state: paymentInfo.state,
+        address_country: "US",
+        currency: "usd"
+      }
+
+      stripe.createToken(card, cardData).then(function(result) {
+        if (result.error) {
+          Main.showMessage("Payment Not Successful", result.error.message);
         } else {
-          Main.showDialog("Payment Not Successful", "Something went wrong. Please try again");
+          Backend.getReservationContext().payment_token = result.token.id;
+          
+          Backend.pay(function(status) {
+            Main.hidePopup();
+            if (status == Backend.STATUS_SUCCESS) {
+              Backend.getTemporaryData().paymentInfo = null;
+              
+              Main.loadScreen("booking_complete");
+            } else if (status == Backend.STATUS_CONFLICT) {
+              Main.showMessage("Payment Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
+            } else if (status == Backend.STATUS_BAD_REQUEST) {
+              Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+            } else {
+              Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
+            }
+          });
         }
       });
     });
@@ -28,11 +92,24 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Details").html(ScreenUtils.getBookingSummary(reservationContext));
     
     
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name", this._canProceedToNextStep.bind(this));
     
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-LastName-Input")[0], reservationContext, "last_name", this._canProceedToNextStep.bind(this));
+    function updateName() {
+      $("#BookingPayment-Screen-PaymentInformation-Name-Input").val($("#BookingPayment-Screen-ContactInformation-Name-FirstName-Input").val() + " " + $("#BookingPayment-Screen-ContactInformation-Name-LastName-Input").val()).trigger("change");
+    }
+    
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name", function() {
+      updateName();
+      
+      this._canProceedToNextStep();
+    }.bind(this));
+    
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-LastName-Input")[0], reservationContext, "last_name", function() {
+      updateName();
+      
+      this._canProceedToNextStep();
+    }.bind(this));
 
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Contact-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Contact-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this), ScreenUtils.isValidEmail);
     
     
     if (reservationContext.cell_phone == null && reservationContext.mobile_phone != null) {
@@ -44,24 +121,16 @@ BookingPayment = {
       return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
     });
     
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Street-Input")[0], reservationContext, "street_address", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));
+    updateName();
 
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Additional-Input")[0], reservationContext, "additional_address", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Street-Input")[0], paymentInfo, "street_address", this._canProceedToNextStep.bind(this));
+
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Additional-Input")[0], paymentInfo, "additional_address", this._canProceedToNextStep.bind(this));
     
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-City-Input")[0], reservationContext, "city", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-City-Input")[0], paymentInfo, "city", this._canProceedToNextStep.bind(this));
 
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], reservationContext, "state", this._canProceedToNextStep.bind(this));
-    
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-Zip-Input")[0], reservationContext, "zip", this._canProceedToNextStep.bind(this), ScreenUtils.isValidZip);
-    
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-CreditCard-Number-Input")[0], reservationContext, "credit_card", this._canProceedToNextStep.bind(this), ScreenUtils.isValidCardNumber);
-
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Input")[0], reservationContext, "credit_card_cvc", this._canProceedToNextStep.bind(this), ScreenUtils.isValidCardCVC);
-
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Month")[0], reservationContext, "credit_card_expiration_month", this._canProceedToNextStep.bind(this));
-
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Year")[0], reservationContext, "credit_card_expiration_year", this._canProceedToNextStep.bind(this));
-    
+    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
     
     this._canProceedToNextStep();
   },
@@ -70,11 +139,12 @@ BookingPayment = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    
+    var paymentInfo = Backend.getTemporaryData().paymentInfo;
+        
     if (ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name) && ScreenUtils.isValidEmail(reservationContext.email)
         && (ScreenUtils.isValidPhone(reservationContext.cell_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
-        && ScreenUtils.isValid(reservationContext.street_address) && ScreenUtils.isValid(reservationContext.city) && ScreenUtils.isValidZip(reservationContext.zip)
-        && ScreenUtils.isValidCardNumber(reservationContext.credit_card) && ScreenUtils.isValidCardCVC(reservationContext.credit_card_cvc)) {
+        && ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city)
+        && paymentInfo.card_ready == true) {
          
       $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").removeAttr("disabled");
     } else {

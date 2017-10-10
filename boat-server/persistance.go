@@ -39,16 +39,8 @@ type TReservation struct {
   Email string `json:"email,omitempty"`;
   CellPhone string `json:"cell_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
-  StreetAddress string `json:"street_address,omitempty"`;
-  AdditionalAddress string `json:"additional_address,omitempty"`;
-  City string `json:"city,omitempty"`;
-  State string `json:"state,omitempty"`;
-  Zip string `json:"zip,omitempty"`;
-  CreditCard string `json:"credit_card,omitempty"`;
-  CreditCardCVC string `json:"credit_card_cvc,omitempty"`;
-  CreditCardExpirationMonth string `json:"credit_card_expiration_month,omitempty"`;
-  CreditCardExpirationYear string `json:"credit_card_expiration_year,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;
+  PaymentToken string `json:"payment_token,omitempty"`;
   
   Timestamp int64;
   PaymentId string;

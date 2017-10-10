@@ -113,7 +113,23 @@ BookingPayment-Screen-ContactInformation-Title {
 #BookingPayment-Screen-PaymentInformation-Title {
 }
 
+#BookingPayment-Screen-PaymentInformation-Name {
+  margin-left: 20px;
+}
+#BookingPayment-Screen-PaymentInformation-Name-Label {
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 20px;
+}
+#BookingPayment-Screen-PaymentInformation-Name-Input {
+  display: inline-block;
+  width: 400px;
+  font: inherit;
+}
+
 #BookingPayment-Screen-PaymentInformation-Address {
+  margin-top: 10px;
   margin-left: 20px;
 }
 
@@ -177,73 +193,43 @@ BookingPayment-Screen-ContactInformation-Title {
   font: inherit;
 }
 
-#BookingPayment-Screen-PaymentInformation-Area-Zip {
-  display: inline-block;
-  width: 200px;
-}
-#BookingPayment-Screen-PaymentInformation-Area-Zip-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInformation-Area-Zip-Input {
-  width: 100%;
-  font: inherit;
-}
-
-
 #BookingPayment-Screen-PaymentInformation-CreditCard {
-  margin-top: 30px;
+  margin-top: 20px;
   margin-left: 20px;
 }
 
-#BookingPayment-Screen-PaymentInformation-CreditCard-Number {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Label {
   display: inline-block;
-  width: 200px;
-  margin-right: 50px;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-Number-Label {
   margin-bottom: 5px;
   margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-Number-Input {
-  width: 100%;
-  font: inherit;
-}
-
-#BookingPayment-Screen-PaymentInformation-CreditCard-CVC {
-  display: inline-block;
-  width: 200px;
-  margin-right: 50px;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-CVC-Input {
-  width: 100%;
-  font: inherit;
-}
-
-#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration {
-  display: inline-block;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Label {
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Month {
-  display: inline-block;
-  width: 100px;
   margin-right: 20px;
-  font: inherit;
+  
+  vertical-align: middle;
 }
-#BookingPayment-Screen-PaymentInformation-CreditCard-Expiration-Year {
+#BookingPayment-Screen-PaymentInformation-CreditCard-Input {
   display: inline-block;
-  width: 100px;
+  width: 400px;
+  padding-left: 5px;
+  margin-right: 10px;
+  
+  vertical-align: middle;
+  
   font: inherit;
+  
+  background-color: white;
+  border-width: 1px;
+  border-style: inset;
 }
-
-
+#BookingPayment-Screen-PaymentInformation-CreditCard-Status {
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 20px;
+  
+  vertical-align: middle;
+  
+  color: red;
+}
 
 
 
