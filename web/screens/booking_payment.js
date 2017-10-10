@@ -22,10 +22,6 @@ BookingPayment = {
     var style = {
       base: {
         color: '#32325d',
-        lineHeight: '24px',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        fontSize: '16px',
         '::placeholder': {
           color: '#aab7c4'
         }
@@ -36,10 +32,10 @@ BookingPayment = {
       }
     };
     
-    var card = elements.create('card', {style: style});
-    card.mount('#BookingPayment-Screen-PaymentInformation-CreditCard-Input');
+    var card = elements.create("card", {style: style});
+    card.mount("#BookingPayment-Screen-PaymentInformation-CreditCard-Input");
     
-    card.addEventListener('change', function(event) {
+    card.addEventListener("change", function(event) {
       $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("");
       
       if (event.error) {
