@@ -1,7 +1,8 @@
 BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.slot == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
+    
+    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
       Main.loadScreen("home");
       
       return;

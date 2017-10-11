@@ -9,6 +9,12 @@ BookingTime = {
   selectedDuration: null,
   
   onLoad: function() {
+    if (Backend.isPayedReservation()) {
+      Main.loadScreen("home");
+      return;
+    }
+    
+    
     if (Backend.getReservationContext().slot == null) {
       this.selectedDate = BookingTime.schedulingBeginDate;
       this.selectedTime = null;

@@ -151,6 +151,11 @@ Backend = {
   },
   
   
+  isPayedReservation: function() {
+    return this._reservationContext.payment_status == Backend.PAYMENT_STATUS_PAYED;
+  },
+  
+  
 //  _convertPersistentToReservationContext: function(persistentContext) {
 //    return {
 //      id: persistentContext.id,

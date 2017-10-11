@@ -3,7 +3,7 @@ BookingLocation = {
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.slot == null) {
+    if (Backend.isPayedReservation() || reservationContext.slot == null) {
       Main.loadScreen("home");
       return;
     }
