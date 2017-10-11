@@ -26,6 +26,8 @@ type TReservationId string;
 type TReservation struct {
   Id TReservationId `json:"id"`;
 
+  Timestamp int64 `json:"creation_timestamp,omitempty"`;
+
   Slot TBookingSlot `json:"slot,omitempty"`;
   LocationId string `json:"location_id"`;
   
@@ -41,9 +43,7 @@ type TReservation struct {
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;
   PaymentToken string `json:"payment_token,omitempty"`;
-  
-  Timestamp int64;
-  PaymentId string;
+  ChargeId string `json:"charge_id,omitempty"`;
 }
 
 type TReservationMap map[TReservationId]*TReservation;
@@ -76,7 +76,7 @@ func GetReservation(reservationId TReservationId) *TReservation {
 
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range reservationMap {
-    if (reservationId == resId && (*reservation).LastName == lastName) {
+    if (reservationId == resId && reservation.LastName == lastName) {
       return reservation;
     }
   }
@@ -89,20 +89,20 @@ func GetAllReservations() TReservationMap {
 }
 
 func SaveReservation(reservation *TReservation) TReservationId {
-  log.Println("Persistance: saving reservation " + (*reservation).Id);
+  log.Println("Persistance: saving reservation " + reservation.Id);
   
-  if ((*reservation).Id == NO_RESERVATION_ID) {
-    (*reservation).Id = generateReservationId();
+  if (reservation.Id == NO_RESERVATION_ID) {
+    reservation.Id = generateReservationId();
   }
 
-  reservationMap[(*reservation).Id] = reservation;
-  (*reservation).Timestamp = time.Now().Unix();
+  reservationMap[reservation.Id] = reservation;
+  reservation.Timestamp = time.Now().Unix();
   
   notifyReservationUpdated(reservation);
 
   saveReservationDatabase();
   
-  return (*reservation).Id;
+  return reservation.Id;
 }
 
 func RemoveReservation(reservationId TReservationId) {
@@ -172,7 +172,7 @@ func readReservationDatabase() {
   }
   
   if (reservationMap == nil) {
-    reservationMap = make(map[TReservationId]*TReservation);
+    reservationMap = make(TReservationMap);
   } else {
     cleanObsoleteReservations();
   }
@@ -200,8 +200,8 @@ func cleanObsoleteReservations() {
   currentMoment := time.Now().Unix();
 
   for reservationId, reservation := range reservationMap {
-    if ((*reservation).PaymentStatus != PAYMENT_STATUS_PAYED) {
-      if ((*reservation).Timestamp + EXPIRATION_TIMEOUT < currentMoment) {
+    if (reservation.PaymentStatus != PAYMENT_STATUS_PAYED) {
+      if (reservation.Timestamp + EXPIRATION_TIMEOUT < currentMoment) {
         delete(reservationMap, reservationId);
       }
     }

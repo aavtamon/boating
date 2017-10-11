@@ -41,7 +41,7 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
             w.Write(storedReservation);
             
             sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-            Sessions[TSessionId(sessionCookie.Value)] = (*reservation).Id;
+            Sessions[TSessionId(sessionCookie.Value)] = reservation.Id;
           }
         } else {
           w.WriteHeader(http.StatusNotFound);
