@@ -4,9 +4,13 @@ import "log"
 import "net/http"
 import "encoding/json"
 import "fmt"
+import "io"
+import "io/ioutil"
+
 
 import "github.com/stripe/stripe-go"
 import "github.com/stripe/stripe-go/charge"
+import "github.com/stripe/stripe-go/refund"
 
 
 const PAYMENT_STATUS_PAYED = "payed";
@@ -14,72 +18,150 @@ const PAYMENT_STATUS_FAILED = "failed";
 
 const PAYMENT_SECRET_KEY = "sk_test_7Fr3JQHkcFnbcTcYB17BizNM";
 
+
+type TPaymentRequest struct {
+  ReservationId TReservationId `json:"reservation_id"`;
+  PaymentToken string `json:"payment_token"`;
+}
+
+
+
 func PaymentHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Payment Handler: request method=" + r.Method);
   
   if (r.Method == http.MethodPut) {
-    res := parseReservation(r.Body);
-    if (res == nil) {
+    request := parsePaymentRequest(r.Body);
+    if (request == nil) {
       w.WriteHeader(http.StatusInternalServerError);
-      w.Write([]byte("Incorrect reservation format"));
+      w.Write([]byte("Incorrect payment request format"));
 
       return;
     }
 
-
-    if (isBooked(res.Slot)) {
-      w.WriteHeader(http.StatusConflict);
+    reservation := GetReservation(request.ReservationId);
+    if (reservation == nil) {
+      w.WriteHeader(http.StatusNotFound);
       return;
     }
 
-    reservationId := SaveReservation(res);
-    payReservation(reservationId);
-
-    reservation := GetReservation(reservationId);
-
-    if (reservation.PaymentStatus == PAYMENT_STATUS_PAYED) {
-      sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-      Sessions[TSessionId(sessionCookie.Value)] = reservationId;
-
-
-      storedReservation, _ := json.Marshal(res);
+    if (payReservation(reservation, request)) {
+      storedReservation, _ := json.Marshal(reservation);
       w.WriteHeader(http.StatusOK);
       w.Write(storedReservation);
 
-      EmailReservationConfirmation(reservationId);
-    } else if (reservation.PaymentStatus == PAYMENT_STATUS_FAILED) {
-      RemoveReservation(reservationId);
+      EmailPaymentConfirmation(request.ReservationId);
+    } else {
       w.WriteHeader(http.StatusBadRequest);
+    }
+  } else if (r.Method == http.MethodDelete) {
+    if (r.URL.RawQuery != "") {
+      queryParams := parseQuery(r);
+      
+      queryReservationId, hasReservationId := queryParams["reservation_id"];
+      if (hasReservationId) {
+        reservation := GetReservation(TReservationId(queryReservationId));
+        if (reservation == nil) {
+          w.WriteHeader(http.StatusNotFound);
+        } else {
+          if (refundReservation(reservation)) {
+            storedReservation, _ := json.Marshal(reservation);
+            w.WriteHeader(http.StatusOK);
+            w.Write(storedReservation);
+
+            EmailRefundConfirmation(reservation.Id);
+          } else {
+            w.WriteHeader(http.StatusBadRequest);
+          }
+        }
+      } else {
+        w.WriteHeader(http.StatusBadRequest);
+        w.Write([]byte("Resevration id is not provided"));
+      }
+    } else {
+      w.WriteHeader(http.StatusBadRequest);
+      w.Write([]byte("Resevration id is not provided"));
     }
   }
 }
 
 
-func payReservation(reservationId TReservationId) {
-  fmt.Printf("Starting payment processing for reservation %s\n", reservationId);
+
+func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
+  fmt.Printf("Starting payment processing for reservation %s\n", request.ReservationId);
 
   stripe.Key = PAYMENT_SECRET_KEY;
   
-  reservation := GetReservation(reservationId);
-
-  params := &stripe.ChargeParams{
+  params := &stripe.ChargeParams {
     Amount: reservation.Slot.Price * 100,
     Currency: "usd",
-    Desc: "Boat reservation #" + string(reservationId),
+    Desc: "Boat reservation #" + string(request.ReservationId),
   }
   
-  params.SetSource(reservation.PaymentToken);
-  params.AddMeta("reservation_id", string(reservationId));
+  params.SetSource(request.PaymentToken);
+  params.AddMeta("reservation_id", string(request.ReservationId));
   
   charge, err := charge.New(params);
   
   if (err != nil) {
-    fmt.Printf("Payment for reservation %s failed with error %s\n", reservationId, err.Error());
+    fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
     reservation.PaymentStatus = PAYMENT_STATUS_FAILED;
+    SaveReservation(reservation);
+    
+    fmt.Printf("Payment processing for reservation %s failed\n", reservation.Id);
+    
+    return false;
   } else {
     reservation.ChargeId = charge.ID;
     reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
+    SaveReservation(reservation);
+    
+    fmt.Printf("Payment processing for reservation %s is complete successfully\n", reservation.Id);
+    
+    return true;
+  }
+}
+
+func refundReservation(reservation *TReservation) bool {
+  fmt.Printf("Starting refund processing for reservation %s\n", reservation.Id);
+
+  stripe.Key = PAYMENT_SECRET_KEY;
+  
+  params := &stripe.RefundParams {
+    Charge: reservation.ChargeId,
   }
   
-  SaveReservation(reservation);
+  refund, err := refund.New(params);
+  
+  if (err != nil) {
+    fmt.Printf("Refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
+    SaveReservation(reservation);
+    
+    fmt.Printf("Refund processing for reservation %s failed\n", reservation.Id);
+    
+    return false;
+  } else {
+    reservation.RefundId = refund.ID;
+    reservation.PaymentStatus = "";
+    SaveReservation(reservation);
+    
+    fmt.Printf("Refund processing for reservation %s is complete successfully\n", reservation.Id);
+    
+    return true;
+  }
 }
+
+
+func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
+  bodyBuffer, _ := ioutil.ReadAll(body);
+  body.Close();
+  
+  request := &TPaymentRequest{};
+  err := json.Unmarshal(bodyBuffer, request);
+  if (err != nil) {
+    log.Println("Incorrect payment request from the app: ", err);
+    return nil;
+  }
+  
+  return request;
+}
+

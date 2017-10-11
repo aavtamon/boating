@@ -8,10 +8,16 @@ const SOURCE_EMAIL_ADDRESS = "anton.avtamonov@mail.ru";
 const SOURCE_EMAIL_PASSWORD = "xxxxxxx";
 
 
-func EmailReservationConfirmation(reservationId TReservationId) {
+func EmailPaymentConfirmation(reservationId TReservationId) {
   log.Println("Sending confirmation email for reservation %s", reservationId);
   
-  sendEmail("anton.avtamonov@gmail.com", "Reservation " + string(reservationId) + " confirmed", "Your reservation is confirned");
+  sendEmail("anton.avtamonov@gmail.com", "Reservation " + string(reservationId) + " confirmed", "Your reservation is confirmed");
+}
+
+func EmailRefundConfirmation(reservationId TReservationId) {
+  log.Println("Sending confirmation email for reservation %s", reservationId);
+  
+  sendEmail("anton.avtamonov@gmail.com", "Reservation " + string(reservationId) + " refunded", "Your reservation is cancelled/refunded");
 }
 
 

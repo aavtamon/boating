@@ -3,7 +3,8 @@ Backend = {
   STATUS_ERROR: "error",
   STATUS_CONFLICT: "conflict",
   STATUS_BAD_REQUEST: "bad_request",
-  
+  STATUS_NOT_FOUND: "not_found",
+    
   
   PAYMENT_STATUS_PAYED: "payed",
   
@@ -45,27 +46,8 @@ Backend = {
     //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
     var persistentContext = this._reservationContext;
 
-    this._communicate("reservation/booking", "put", persistentContext, true, [], {
-      success: function(reportedContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(reportedContext);
-        
-        if (callback) {
-          callback(Backend.STATUS_SUCCESS);
-        }
-      }.bind(this),
-      error: function() {
-        if (callback) {
-          callback(Backend.STATUS_ERROR);
-        }
-      }
-    });
-  },
-  
-
-  removeReservation: function(reservationId, callback) {
-    this._communicate("reservation/booking/?reservation_id=" + reservationId, "delete", null, true, [], {
+    this._communicate("reservation/booking/", "put", persistentContext, true, [], {
       success: function(persistentContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);
         this._reservationContext = persistentContext;
         
         if (callback) {
@@ -74,28 +56,54 @@ Backend = {
       }.bind(this),
       error: function() {
         if (callback) {
-          callback(Backend.STATUS_ERROR);
+          if (status == 409) {
+            callback(Backend.STATUS_CONFLICT);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
         }
       }
     });
   },
   
 
-  resetReservationContext: function(callback) {
+  removeReservation: function(reservationId, callback) {
+    this._communicate("reservation/booking/?reservation_id=" + reservationId, "delete", null, false, [], {
+      success: function() {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function() {
+        if (callback) {
+          if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
+  },
+  
+
+  resetReservationContext: function() {
     this._reservationContext = {};
-    if (callback) {
-      callback(Backend.STATUS_SUCCESS);
-    }
   },
   
   
-  pay: function(callback) {
-    //var persistentContext = this._convertReservationToPersistentContext(this._reservationContext);
-    var persistentContext = this._reservationContext;
+  pay: function(paymentToken, callback) {
+    var paymentRequest = {
+      reservation_id: this._reservationContext.id,
+      payment_token: paymentToken
+    }
     
-    this._communicate("reservation/payment", "put", persistentContext, true, [], {
+    this._communicate("reservation/payment/", "put", paymentRequest, true, [], {
       success: function(persistentContext) {
-        //this._reservationContext = this._convertPersistentToReservationContext(persistentContext);  
         this._reservationContext = persistentContext;
         
         if (callback) {
@@ -106,6 +114,32 @@ Backend = {
         if (callback) {
           if (status == 409) {
             callback(Backend.STATUS_CONFLICT);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
+  },
+  
+
+  cancelPayment: function(callback) {
+    this._communicate("reservation/payment/?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
+      success: function(persistentContext) {
+        this._reservationContext = persistentContext;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status) {
+        if (callback) {
+          if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
           } else if (status == 400) {
             callback(Backend.STATUS_BAD_REQUEST);
           } else {

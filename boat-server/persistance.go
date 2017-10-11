@@ -42,8 +42,8 @@ type TReservation struct {
   CellPhone string `json:"cell_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;
-  PaymentToken string `json:"payment_token,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
+  RefundId string `json:"refund_id,omitempty"`;
 }
 
 type TReservationMap map[TReservationId]*TReservation;

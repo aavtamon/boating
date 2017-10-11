@@ -62,21 +62,34 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
       }
     }
   } else if (r.Method == http.MethodPut) {
-    reservationId := Sessions[TSessionId(sessionCookie.Value)];
-    if (reservationId == NO_RESERVATION_ID) {
-      w.WriteHeader(http.StatusNotFound);
-      w.Write([]byte("No reservation id"));
+    reservation := parseReservation(r.Body);
+    reservationId := reservation.Id;
+    
+    if (reservation != nil) {
+      existingReservation := GetReservation(reservationId);
+      if (existingReservation == nil) {
+        if (isBooked(reservation.Slot)) {
+          w.WriteHeader(http.StatusConflict);
+          return;
+        }
+        
+        reservationId = SaveReservation(reservation);
+      } else {
+        //TODO: validate changed fields - reject those that cannot be changed
+      }
+
       
-      return;
-    }
-  
-    res := parseReservation(r.Body);
-    if (res != nil) {
-      SaveReservation(res);
-      
-      storedReservation, _ := json.Marshal(res);
-      w.WriteHeader(http.StatusOK);
-      w.Write(storedReservation);
+      reservation = GetReservation(reservationId);
+      if (reservation != nil) {
+        storedReservation, _ := json.Marshal(reservation);
+        w.WriteHeader(http.StatusOK);
+        w.Write(storedReservation);
+       
+        Sessions[TSessionId(sessionCookie.Value)] = reservationId;
+      } else {
+        w.WriteHeader(http.StatusInternalServerError);
+        w.Write([]byte("Failed to store reservation"));
+      }
     } else {
       w.WriteHeader(http.StatusInternalServerError);
       w.Write([]byte("Incorrect reservation format"));

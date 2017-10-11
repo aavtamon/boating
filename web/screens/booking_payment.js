@@ -3,8 +3,10 @@ BookingPayment = {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.slot == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
       Main.loadScreen("home");
+      
+      return;
     }
-
+    
     $("#BookingPayment-Screen-ButtonsPanel-BackButton").click(function() {
       Main.loadScreen("booking_confirmation");
     });
@@ -65,21 +67,29 @@ BookingPayment = {
         if (result.error) {
           Main.showMessage("Payment Not Successful", result.error.message);
         } else {
-          Backend.getReservationContext().payment_token = result.token.id;
-          
-          Backend.pay(function(status) {
-            Main.hidePopup();
+          Backend.saveReservation(function(status) {
             if (status == Backend.STATUS_SUCCESS) {
-              Backend.getTemporaryData().paymentInfo = null;
-              
-              Main.loadScreen("booking_complete");
+              Backend.pay(result.token.id, function(status) {
+                Main.hidePopup();
+                if (status == Backend.STATUS_SUCCESS) {
+                  Backend.getTemporaryData().paymentInfo = null;
+
+                  Main.loadScreen("booking_complete");
+                } else if (status == Backend.STATUS_BAD_REQUEST) {
+                  Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+                } else {
+                  Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
+                }
+              });
+            } else if (status == Backend.STATUS_NOT_FOUND) {
+              Main.showMessage("Not Successful", "We cannot save your reservation. Try again later");
             } else if (status == Backend.STATUS_CONFLICT) {
-              Main.showMessage("Payment Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
-            } else if (status == Backend.STATUS_BAD_REQUEST) {
-              Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+              Main.showMessage("Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
             } else {
-              Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
+              Main.showMessage("Not Successful", "An error occured. Please try again");
             }
+            
+            //TODO: Consider removing of the previous;y saved reservation
           });
         }
       });

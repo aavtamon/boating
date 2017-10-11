@@ -6,6 +6,7 @@ BookingConfirmation = {
 
     if (reservationContext.slot == null || reservationContext.location_id == null) {
       Main.loadScreen("home");
+      return;
     }
     
     

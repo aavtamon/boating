@@ -5,6 +5,7 @@ BookingLocation = {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.slot == null) {
       Main.loadScreen("home");
+      return;
     }
     
     $("#BookingLocation-Screen-ButtonsPanel-BackButton").click(function() {
