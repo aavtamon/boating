@@ -2,6 +2,12 @@
   "scheduling_begin_offset": 1,
   "scheduling_end_offset": 2,
   
+  "cancellation_fees": {
+    "48": 100,
+    "24": 100,
+    "4": 200
+  },
+  
   "locations": {
     "lanier": {
       "name": "Lake Lanier",

@@ -130,6 +130,12 @@ func refundReservation(reservation *TReservation) bool {
     Charge: reservation.ChargeId,
   }
   
+  cancellationFee := getNonRefundableFee(reservation);
+  fmt.Printf("Non refundable fees = %d\n", cancellationFee);
+  if (cancellationFee > 0) {
+    params.Amount = (reservation.Slot.Price - cancellationFee) * 100;
+  }
+  
   refund, err := refund.New(params);
   
   if (err != nil) {
@@ -165,3 +171,23 @@ func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
   return request;
 }
 
+
+func getNonRefundableFee(reservation *TReservation) uint64 {
+  bookingSettings := GetBookingSettings();
+  
+  timeLeftToTrip := (reservation.Slot.DateTime - bookingSettings.CurrentDate) / 1000 / 60 / 60;
+  matchingHours := int64(-1);
+  for hours, _ := range bookingSettings.CancellationFees {
+    if (hours > timeLeftToTrip) {
+      if (matchingHours == -1 || matchingHours > hours) {
+        matchingHours = hours;
+      }
+    }
+  }
+  
+  if (matchingHours == -1) {
+    return 0
+  } else {
+    return bookingSettings.CancellationFees[matchingHours];
+  }
+}

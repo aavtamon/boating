@@ -51,12 +51,12 @@ type TRentalLocation struct {
   PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
 }
 
-
 type TBookingSettings struct {
   CurrentDate int64;
   SchedulingBeginDate int64;
   SchedulingEndDate int64;  
   MaximumCapacity int;
+  CancellationFees map[int64]uint64;
   
   CenterLocation TMapLocation;
   AvailableLocations map[string]TPickupLocation;
@@ -85,7 +85,12 @@ var reservationObserver TReservationObserver;
 func GetBookingSettings() TBookingSettings {
   if (bookingSettings == nil) {
     initBookingSettings();
+    
+    recalculateAllAvailableSlots();
+    AddReservationListener(reservationObserver);
   }
+  
+  refreshBookingSettings();
 
   return *bookingSettings;
 }
@@ -175,13 +180,19 @@ func initBookingSettings() {
   if (bookingSettings == nil) {
     bookingSettings = new(TBookingSettings);
   }
-  
+
   systemSettings := GetSystemSettings();
+  
+  bookingSettings.CancellationFees = systemSettings.CancellationFees;
   
   bookingSettings.MaximumCapacity = systemSettings.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
   bookingSettings.CenterLocation = systemSettings.Locations[LOCATION].CenterLocation;
   bookingSettings.AvailableLocations = systemSettings.Locations[LOCATION].PickupLocations;
   
+  refreshBookingSettings();
+}
+
+func refreshBookingSettings() {
   currentTime := time.Now();
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
@@ -191,11 +202,8 @@ func initBookingSettings() {
     bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, systemSettings.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
     bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, systemSettings.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
   }
-  
-  recalculateAllAvailableSlots();
-  
-  AddReservationListener(reservationObserver);
 }
+
 
 func (observer TReservationObserver) OnReservationChanged(reservation *TReservation) {
   location := systemSettings.Locations[LOCATION];

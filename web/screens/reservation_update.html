@@ -8,6 +8,9 @@
     
     {{if .Reservation}}
       $("#ReservationUpdate-Screen-Reservation-Date").val(ScreenUtils.getBookingDate({{.Reservation.Slot.DateTime}}));
+    
+      ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
+      ReservationUpdate.cancellationFees = {{.BookingSettings.CancellationFees}};
     {{else}}
       Main.loadScreen("home");
     {{end}}
