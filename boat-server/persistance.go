@@ -9,16 +9,37 @@ import "math/rand"
 
 
 const DATABASE_FILE_NAME = "/Users/aavtamonov/project/boat/reservation_db.json";
-const SYSTEM_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/boat-server/system_configuration.json";
+const SYSTEM_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/system_configuration.json";
+const BOOKING_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/boat-server/booking_configuration.json";
+
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
 
-type TSystemConfiguration struct {
+type TBookingConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
   CancellationFees map[int64]uint64 `json:"cancellation_fees"`;
   Locations map[string]TRentalLocation `json:"locations"`;
+}
+
+
+type TEmailConfiguration struct {
+  Enabled bool `json:"enabled"`;
+  SourceAddress string `json:"source_address"`;
+  MailServer string `json:"mail_server"`;
+  ServerPort string `json:"server_port"`;
+  ServerPassword string `json:"server_password"`;
+}
+type TSMSConfiguration struct {
+  Enabled bool `json:"enabled"`;
+  AccountSid string `json:"account_sid"`;
+  AuthToken string `json:"auth_token"`;
+  SourcePhone string `json:"source_phone"`;
+}
+type TSystemConfiguration struct {
+  EmailConfiguration TEmailConfiguration `json:"email"`;
+  SMSConfiguration TSMSConfiguration `json:"sms"`;
 }
 
 
@@ -64,11 +85,14 @@ const NO_RESERVATION_ID = TReservationId("");
 
 
 var reservationMap TReservationMap;
-var systemSettings *TSystemConfiguration;
+var bookingConfiguration *TBookingConfiguration;
+var systemConfiguration *TSystemConfiguration;
 var listeners []TChangeListener;
 
 
 func InitializePersistance() {
+  readSystemConfiguration();
+  readBookingConfiguration();
   readReservationDatabase();
 }
 
@@ -120,13 +144,14 @@ func RemoveReservation(reservationId TReservationId) {
   saveReservationDatabase();
 }
 
-func GetSystemSettings() *TSystemConfiguration {
-  if (systemSettings == nil) {
-    readSystemConfiguration();
-  }
-  
-  return systemSettings;
+func GetSystemConfiguration() *TSystemConfiguration {
+  return systemConfiguration;
 }
+
+func GetBookingConfiguration() *TBookingConfiguration {
+  return bookingConfiguration;
+}
+
 
 func AddReservationListener(listener TChangeListener) {
   listeners = append(listeners, listener);
@@ -136,13 +161,13 @@ func AddReservationListener(listener TChangeListener) {
 
 func notifyReservationUpdated(reservation *TReservation) {
   for _, listener := range listeners {
-      listener.OnReservationChanged(reservation);
+    listener.OnReservationChanged(reservation);
   }
 }
 
 func notifyReservationRemoved(reservation *TReservation) {
   for _, listener := range listeners {
-      listener.OnReservationRemoved(reservation);
+    listener.OnReservationRemoved(reservation);
   }
 }
 
@@ -150,15 +175,30 @@ func notifyReservationRemoved(reservation *TReservation) {
 func readSystemConfiguration() {
   configurationByteArray, err := ioutil.ReadFile(SYSTEM_CONFIG_FILE_NAME);
   if (err == nil) {
-    systemSettings = new (TSystemConfiguration);
-    err := json.Unmarshal(configurationByteArray, systemSettings);
+    systemConfiguration = &TSystemConfiguration{};
+    err := json.Unmarshal(configurationByteArray, systemConfiguration);
     if (err != nil) {
-      log.Println("Persistance: failed to parse config file", err);
+      log.Println("Persistance: failed to parse system config file", err);
     } else {
       log.Println("Persistance: system config is read");
     }
   } else {
-    log.Println("Persistance: failed to read system config", err);
+    log.Println("Persistance: failed to read booking config", err);
+  }
+}
+
+func readBookingConfiguration() {
+  configurationByteArray, err := ioutil.ReadFile(BOOKING_CONFIG_FILE_NAME);
+  if (err == nil) {
+    bookingConfiguration = &TBookingConfiguration{};
+    err := json.Unmarshal(configurationByteArray, bookingConfiguration);
+    if (err != nil) {
+      log.Println("Persistance: failed to parse booking config file", err);
+    } else {
+      log.Println("Persistance: booking config is read");
+    }
+  } else {
+    log.Println("Persistance: failed to read booking config", err);
   }
 }
 

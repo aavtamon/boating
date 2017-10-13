@@ -181,13 +181,13 @@ func initBookingSettings() {
     bookingSettings = new(TBookingSettings);
   }
 
-  systemSettings := GetSystemSettings();
+  bookingConfiguration := GetBookingConfiguration();
   
-  bookingSettings.CancellationFees = systemSettings.CancellationFees;
+  bookingSettings.CancellationFees = bookingConfiguration.CancellationFees;
   
-  bookingSettings.MaximumCapacity = systemSettings.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
-  bookingSettings.CenterLocation = systemSettings.Locations[LOCATION].CenterLocation;
-  bookingSettings.AvailableLocations = systemSettings.Locations[LOCATION].PickupLocations;
+  bookingSettings.MaximumCapacity = bookingConfiguration.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
+  bookingSettings.CenterLocation = bookingConfiguration.Locations[LOCATION].CenterLocation;
+  bookingSettings.AvailableLocations = bookingConfiguration.Locations[LOCATION].PickupLocations;
   
   refreshBookingSettings();
 }
@@ -199,15 +199,15 @@ func refreshBookingSettings() {
 
   if (bookingSettings.CurrentDate != currentDateAsInt) {
     bookingSettings.CurrentDate = currentDateAsInt;
-    bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, systemSettings.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
-    bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, systemSettings.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
+    bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
+    bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
   }
 }
 
 
 func (observer TReservationObserver) OnReservationChanged(reservation *TReservation) {
-  location := systemSettings.Locations[LOCATION];
-  boat := systemSettings.Locations[LOCATION].Boats[BOAT];
+  location := bookingConfiguration.Locations[LOCATION];
+  boat := bookingConfiguration.Locations[LOCATION].Boats[BOAT];
 
   reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
   reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, reservationTime.Location());
@@ -222,8 +222,8 @@ func (observer TReservationObserver) OnReservationRemoved(reservation *TReservat
 
 func recalculateAllAvailableSlots() {
   //TODO: to be iterated
-  location := systemSettings.Locations[LOCATION];
-  boat := systemSettings.Locations[LOCATION].Boats[BOAT];
+  location := bookingConfiguration.Locations[LOCATION];
+  boat := bookingConfiguration.Locations[LOCATION].Boats[BOAT];
 
   fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", location.Name, boat.Name);
 
@@ -231,7 +231,7 @@ func recalculateAllAvailableSlots() {
   availableSlots = make(map[int64][]TBookingSlot);
 
   beginDate := time.Unix(0, bookingSettings.CurrentDate * int64(time.Millisecond));
-  for counter := systemSettings.SchedulingBeginOffset; counter <= systemSettings.SchedulingEndOffset; counter++ {
+  for counter := bookingConfiguration.SchedulingBeginOffset; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
     slotDate := beginDate.AddDate(0, 0, counter);
     calculateSlotsForDate(location, boat, slotDate);
   }

@@ -7,15 +7,7 @@ import "strings";
 import "fmt"
 
 
-const EMAIL_NOTIFICATIONS_ENABLED = false;
-const SOURCE_EMAIL_ADDRESS = "anton.avtamonov@mail.ru";
-const SOURCE_EMAIL_PASSWORD = "xxxxxxx";
-
-const SMS_NOTIFICATIONS_ENABLED = false;
-const SMS_BRIDGE_ACCOUNT_SID = "";
-const SMS_BRIDGE_AUTH_TOKEN = "";
-const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/" + SMS_BRIDGE_ACCOUNT_SID + "/Messages.json";
-const SMS_BRIDGE_PHONE_NUMBER = "+17707668219";
+const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json";
 
 
 func EmailPaymentConfirmation(reservationId TReservationId) {
@@ -66,21 +58,21 @@ func TextRefundConfirmation(reservationId TReservationId) {
 
 
 func sendEmail(destinationAddress string, emailSubject string, emailBody string) {
-  if (!EMAIL_NOTIFICATIONS_ENABLED) {
+  if (!GetSystemConfiguration().EmailConfiguration.Enabled) {
     fmt.Println("Email notifications are turned off - no email sent");
     return;
   }
 
-  auth := smtp.PlainAuth("", SOURCE_EMAIL_ADDRESS, SOURCE_EMAIL_PASSWORD, "smtp.mail.ru");
+  auth := smtp.PlainAuth("", GetSystemConfiguration().EmailConfiguration.SourceAddress, GetSystemConfiguration().EmailConfiguration.ServerPassword, GetSystemConfiguration().EmailConfiguration.MailServer);
 
   // and send the email all in one step.
-  body := "From: " + SOURCE_EMAIL_ADDRESS + "\n";
+  body := "From: " + GetSystemConfiguration().EmailConfiguration.SourceAddress + "\n";
   body += "To: " + destinationAddress + "\n";
   body += "Subject: " + emailSubject + "\n";
   body += emailBody;
   
   
-  err := smtp.SendMail("smtp.mail.ru:587", auth, "anton.avtamonov@mail.ru", []string{destinationAddress}, []byte(body));
+  err := smtp.SendMail(GetSystemConfiguration().EmailConfiguration.MailServer + ":" + GetSystemConfiguration().EmailConfiguration.ServerPort, auth, GetSystemConfiguration().EmailConfiguration.SourceAddress, []string{destinationAddress}, []byte(body));
   if (err != nil) {
       fmt.Printf("Failed to send an email %s", err);
   }
@@ -89,28 +81,28 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
 
 
 func sendTextMessage(phoneNumber string, messageText string) {
-  if (!SMS_NOTIFICATIONS_ENABLED) {
+  if (!GetSystemConfiguration().SMSConfiguration.Enabled) {
     fmt.Println("SMS notifications are turned off - no email sent");
     return;
   }
 
   v := url.Values{}
   v.Set("To", phoneNumber);
-  v.Set("From", SMS_BRIDGE_PHONE_NUMBER);
+  v.Set("From", GetSystemConfiguration().SMSConfiguration.SourcePhone);
   v.Set("Body", messageText);
   rb := strings.NewReader(v.Encode());
 
   client := &http.Client{};
 
-  req, _ := http.NewRequest("POST", SMS_BRIDGE_URL, rb);
-  req.SetBasicAuth(SMS_BRIDGE_ACCOUNT_SID, SMS_BRIDGE_AUTH_TOKEN);
+  req, _ := http.NewRequest("POST", fmt.Sprintf(SMS_BRIDGE_URL, GetSystemConfiguration().SMSConfiguration.AccountSid), rb);
+  req.SetBasicAuth(GetSystemConfiguration().SMSConfiguration.AccountSid, GetSystemConfiguration().SMSConfiguration.AuthToken);
   req.Header.Add("Accept", "application/json");
   req.Header.Add("Content-Type", "application/x-www-form-urlencoded");
 
   resp, _ := client.Do(req);
   
   if (resp.StatusCode >= 200 && resp.StatusCode < 300) {
-    fmt.Printf("SMS success. Portal reponse %s\n", resp.Body);
+    fmt.Printf("SMS success. Portal reponse %s\n", resp.Status);
   } else {
     fmt.Printf("SMS send failed with error %s\nFull message: %s", resp.Status, resp.Body);
   }  
