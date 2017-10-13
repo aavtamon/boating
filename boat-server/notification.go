@@ -11,9 +11,9 @@ const EMAIL_NOTIFICATIONS_ENABLED = false;
 const SOURCE_EMAIL_ADDRESS = "anton.avtamonov@mail.ru";
 const SOURCE_EMAIL_PASSWORD = "xxxxxxx";
 
-const SMS_NOTIFICATIONS_ENABLED = true;
-const SMS_BRIDGE_ACCOUNT_SID = "ACaae4695f3e7b6bfb8ff0d29bddb2d9d6";
-const SMS_BRIDGE_AUTH_TOKEN = "18a073e377b885621736318a0e0ca335";
+const SMS_NOTIFICATIONS_ENABLED = false;
+const SMS_BRIDGE_ACCOUNT_SID = "";
+const SMS_BRIDGE_AUTH_TOKEN = "";
 const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/" + SMS_BRIDGE_ACCOUNT_SID + "/Messages.json";
 const SMS_BRIDGE_PHONE_NUMBER = "+17707668219";
 
