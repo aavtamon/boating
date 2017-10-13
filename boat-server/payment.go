@@ -15,6 +15,7 @@ import "github.com/stripe/stripe-go/refund"
 
 const PAYMENT_STATUS_PAYED = "payed";
 const PAYMENT_STATUS_FAILED = "failed";
+const PAYMENT_STATUS_REFUNDED = "refunded";
 
 const PAYMENT_SECRET_KEY = "sk_test_7Fr3JQHkcFnbcTcYB17BizNM";
 
@@ -50,6 +51,9 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.Write(storedReservation);
 
       EmailPaymentConfirmation(request.ReservationId);
+      if (!reservation.NoMobilePhone) {
+        TextPaymentConfirmation(request.ReservationId);
+      }
     } else {
       w.WriteHeader(http.StatusBadRequest);
     }
@@ -69,6 +73,9 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
             w.Write(storedReservation);
 
             EmailRefundConfirmation(reservation.Id);
+            if (!reservation.NoMobilePhone) {
+              TextRefundConfirmation(reservation.Id);
+            }
           } else {
             w.WriteHeader(http.StatusBadRequest);
           }
@@ -89,10 +96,12 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   fmt.Printf("Starting payment processing for reservation %s\n", request.ReservationId);
 
+  paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
+
   stripe.Key = PAYMENT_SECRET_KEY;
   
   params := &stripe.ChargeParams {
-    Amount: reservation.Slot.Price * 100,
+    Amount: paidAmount * 100,
     Currency: "usd",
     Desc: "Boat reservation #" + string(request.ReservationId),
   }
@@ -113,6 +122,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   } else {
     reservation.ChargeId = charge.ID;
     reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
+    reservation.PaymentAmount = paidAmount;
     SaveReservation(reservation);
     
     fmt.Printf("Payment processing for reservation %s is complete successfully\n", reservation.Id);
@@ -132,8 +142,12 @@ func refundReservation(reservation *TReservation) bool {
   
   cancellationFee := getNonRefundableFee(reservation);
   fmt.Printf("Non refundable fees = %d\n", cancellationFee);
+  
+  refundAmount := reservation.PaymentAmount;
+  
   if (cancellationFee > 0) {
-    params.Amount = (reservation.Slot.Price - cancellationFee) * 100;
+    refundAmount = (reservation.Slot.Price - cancellationFee);
+    params.Amount = refundAmount * 100;
   }
   
   refund, err := refund.New(params);
@@ -147,7 +161,8 @@ func refundReservation(reservation *TReservation) bool {
     return false;
   } else {
     reservation.RefundId = refund.ID;
-    reservation.PaymentStatus = "";
+    reservation.PaymentStatus = PAYMENT_STATUS_REFUNDED;
+    reservation.RefundAmount = refundAmount;
     SaveReservation(reservation);
     
     fmt.Printf("Refund processing for reservation %s is complete successfully\n", reservation.Id);

@@ -73,6 +73,8 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
           return;
         }
         
+        //TODO: Verify integrity first - not all fields can be modified by the user
+        
         reservationId = SaveReservation(reservation);
       } else {
         //TODO: validate changed fields - reject those that cannot be changed

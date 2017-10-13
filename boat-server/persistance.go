@@ -43,6 +43,8 @@ type TReservation struct {
   CellPhone string `json:"cell_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;
+  PaymentAmount uint64 `json:"payment_amount,omitempty"`;
+  RefundAmount uint64 `json:"refund_amount,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
   RefundId string `json:"refund_id,omitempty"`;
 }

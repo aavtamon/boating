@@ -152,7 +152,7 @@ Backend = {
   
   
   isPayedReservation: function() {
-    return this._reservationContext.payment_status == Backend.PAYMENT_STATUS_PAYED;
+    return this._reservationContext.payment_status != null && this._reservationContext.payment_status != "";
   },
   
   
