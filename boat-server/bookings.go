@@ -35,7 +35,7 @@ type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
   MaximumCapacity int `json:"maximum_capacity"`;
-  Rate map[int]uint64 `json:"rate"`;
+  Rate map[string]uint64 `json:"rate"`;
 }
 
 
@@ -251,7 +251,7 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
     slotTime := date.Add(time.Hour * time.Duration(hour)).UnixNano() / int64(time.Millisecond);
     
     for dur := location.Duration; hour + dur <= location.EndHour; dur += location.Duration {
-      slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: boat.Rate[dur]};
+      slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: boat.Rate[strconv.Itoa(dur)]};
       if (!isBooked(slot)) {
         result = append(result, slot);
       }
