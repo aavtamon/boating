@@ -22,7 +22,7 @@ type TSessionId string;
 
 const SESSION_ID_COOKIE = "sessionId";
 
-var PathToHtml string = "";
+var RuntimeRoot string = "";
 
 
 var Sessions = make(map[TSessionId]TReservationId);
@@ -72,7 +72,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   
   
 
-  pathToFile := PathToHtml + "/" + pageReference;
+  pathToFile := RuntimeRoot + "/web/" + pageReference;
   _, err := os.Stat(pathToFile);
   if (os.IsNotExist(err)) {
     pathToFile = pathToFile + ".html";
@@ -142,13 +142,13 @@ func generateSessionId() string {
 func main() {
   args := os.Args[1:]
   if (len(args) > 0) {
-    PathToHtml = args[0];
+    RuntimeRoot = args[0];
   } else {
     log.Fatal("Path to HTML templates is not provided");
     return;
   }
 
-  InitializePersistance();
+  InitializePersistance(RuntimeRoot);
 
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);

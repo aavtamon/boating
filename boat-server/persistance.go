@@ -8,9 +8,9 @@ import "math/rand"
 
 
 
-const DATABASE_FILE_NAME = "/Users/aavtamonov/project/boat/reservation_db.json";
-const SYSTEM_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/system_configuration.json";
-const BOOKING_CONFIG_FILE_NAME = "/Users/aavtamonov/project/boat/boat-server/booking_configuration.json";
+const DATABASE_FILE_NAME = "reservation_db.json";
+const SYSTEM_CONFIG_FILE_NAME = "system_configuration.json";
+const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
@@ -90,10 +90,10 @@ var systemConfiguration *TSystemConfiguration;
 var listeners []TChangeListener;
 
 
-func InitializePersistance() {
-  readSystemConfiguration();
-  readBookingConfiguration();
-  readReservationDatabase();
+func InitializePersistance(root string) {
+  readSystemConfiguration(root);
+  readBookingConfiguration(root);
+  readReservationDatabase(root);
 }
 
 
@@ -172,8 +172,8 @@ func notifyReservationRemoved(reservation *TReservation) {
 }
 
 
-func readSystemConfiguration() {
-  configurationByteArray, err := ioutil.ReadFile(SYSTEM_CONFIG_FILE_NAME);
+func readSystemConfiguration(root string) {
+  configurationByteArray, err := ioutil.ReadFile(root + "/" + SYSTEM_CONFIG_FILE_NAME);
   if (err == nil) {
     systemConfiguration = &TSystemConfiguration{};
     err := json.Unmarshal(configurationByteArray, systemConfiguration);
@@ -187,8 +187,8 @@ func readSystemConfiguration() {
   }
 }
 
-func readBookingConfiguration() {
-  configurationByteArray, err := ioutil.ReadFile(BOOKING_CONFIG_FILE_NAME);
+func readBookingConfiguration(root string) {
+  configurationByteArray, err := ioutil.ReadFile(root + "/" + BOOKING_CONFIG_FILE_NAME);
   if (err == nil) {
     bookingConfiguration = &TBookingConfiguration{};
     err := json.Unmarshal(configurationByteArray, bookingConfiguration);
@@ -203,8 +203,8 @@ func readBookingConfiguration() {
 }
 
 
-func readReservationDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(DATABASE_FILE_NAME);
+func readReservationDatabase(root string) {
+  databaseByteArray, err := ioutil.ReadFile(root + "/" + DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &reservationMap);
     if (err != nil) {
