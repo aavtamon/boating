@@ -14,16 +14,11 @@ const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
-type TCancellationFee struct {
-  RangeMin int64 `json:"range_min"`;
-  RangeMax int64 `json:"range_max"`;
-  Fee uint64 `json:"fee"`;
-}
 
 type TBookingConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
-  CancellationFees []TCancellationFee `json:"cancellation_fees"`;
+  CancellationFees []TPricedRange `json:"cancellation_fees"`;
   Locations map[string]TRentalLocation `json:"locations"`;
 }
 

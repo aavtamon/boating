@@ -31,11 +31,17 @@ type TBookingSlot struct {
 }
 
 
+type TPricedRange struct {
+  RangeMin int64 `json:"range_min"`;
+  RangeMax int64 `json:"range_max"`;
+  Price uint64 `json:"price"`;
+}
+
 type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
   MaximumCapacity int `json:"maximum_capacity"`;
-  Rate map[string]uint64 `json:"rate"`;
+  Rate []TPricedRange `json:"rate"`;
 }
 
 
@@ -56,7 +62,7 @@ type TBookingSettings struct {
   SchedulingBeginDate int64;
   SchedulingEndDate int64;  
   MaximumCapacity int;
-  CancellationFees []TCancellationFee;
+  CancellationFees []TPricedRange;
   
   CenterLocation TMapLocation;
   AvailableLocations map[string]TPickupLocation;
@@ -250,10 +256,23 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
   for hour := location.StartHour; hour <= location.EndHour; hour += (location.Duration + location.ServiceInterval) {
     slotTime := date.Add(time.Hour * time.Duration(hour)).UnixNano() / int64(time.Millisecond);
     
+    slotPrice := uint64(0);
     for dur := location.Duration; hour + dur <= location.EndHour; dur += location.Duration {
-      slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: boat.Rate[strconv.Itoa(dur)]};
-      if (!isBooked(slot)) {
-        result = append(result, slot);
+      slotPrice = 0;
+      for _, rate := range boat.Rate {
+        if (rate.RangeMin >= int64(dur) && int64(dur) <= rate.RangeMax) {
+          slotPrice = rate.Price;
+          break;
+        }
+      }
+    
+      if (slotPrice != 0) {
+        slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: slotPrice};
+        if (!isBooked(slot)) {
+          result = append(result, slot);
+        }
+      } else {
+        fmt.Printf("Problem detected while building slots - there is no price range for duration %d\n", dur);
       }
     }
   }

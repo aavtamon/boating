@@ -3,9 +3,9 @@
   "scheduling_end_offset": 2,
   
   "cancellation_fees": [
-    {"range_min": 24, "range_max": 48, "fee": 100},
-    {"range_min": 4, "range_max": 24, "fee": 100},
-    {"range_min": 0, "range_max": 4, "fee": 200}
+    {"range_min": 24, "range_max": 48, "price": 100},
+    {"range_min": 4, "range_max": 24, "price": 100},
+    {"range_min": 0, "range_max": 4, "price": 200}
   ],
   
   "locations": {
@@ -20,12 +20,12 @@
           "name": "Pantoon boat 16 feet",
           "type": "pantoon16",
           "maximum_capacity": 10,
-          "rate": {
-            "2": 150,
-            "4": 250,
-            "6": 350,
-            "8": 400
-          }
+          "rate": [
+            {"range_min": 2, "range_max": 2, "price": 150},
+            {"range_min": 4, "range_max": 4, "price": 250},
+            {"range_min": 6, "range_max": 6, "price": 350},
+            {"range_min": 8, "range_max": 8, "price": 400}
+          ]
         }
       },
       "center_location": {

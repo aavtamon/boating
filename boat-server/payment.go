@@ -197,7 +197,7 @@ func getNonRefundableFee(reservation *TReservation) uint64 {
   
   for _, fee := range bookingSettings.CancellationFees {
     if (fee.RangeMin >= timeLeftToTrip && timeLeftToTrip < fee.RangeMax) {
-      return fee.Fee;
+      return fee.Price;
     }
   }
   
