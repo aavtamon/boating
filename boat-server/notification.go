@@ -15,7 +15,7 @@ func EmailPaymentConfirmation(reservationId TReservationId) {
   
   reservation := GetReservation(reservationId);
   
-  sendEmail("anton.avtamonov@gmail.com", fmt.Sprintf("Reservation %s is confirmed", reservationId), fmt.Sprintf("Your boat reservation %s is placed. You are charged for $%d dollars", reservationId, reservation.PaymentAmount));
+  sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is confirmed", reservationId), fmt.Sprintf("Your boat reservation %s is placed. You are charged for $%d dollars", reservationId, reservation.PaymentAmount));
 }
 
 func EmailRefundConfirmation(reservationId TReservationId) {
@@ -23,7 +23,7 @@ func EmailRefundConfirmation(reservationId TReservationId) {
   
   reservation := GetReservation(reservationId);
   
-  sendEmail("anton.avtamonov@gmail.com", fmt.Sprintf("Reservation %s is refunded", reservationId), fmt.Sprintf("Your boat reservation %s is cancelled. You will be refunded for the amount of $%d dollars within 5 business days", reservationId, reservation.RefundAmount));
+  sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is refunded", reservationId), fmt.Sprintf("Your boat reservation %s is cancelled. You will be refunded for the amount of $%d dollars within 5 business days", reservationId, reservation.RefundAmount));
 }
 
 

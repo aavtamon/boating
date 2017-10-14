@@ -9,22 +9,21 @@ ReservationUpdate = {
       var refund = Backend.getReservationContext().slot.price;
 
       var hoursLeftToTrip = Math.floor((Backend.getReservationContext().slot.time - ReservationUpdate.currentDate) / 1000 / 60 / 60);
-      var matchingHours = null;
-      for (var hours in ReservationUpdate.cancellationFees) {
-        if (hours > hoursLeftToTrip) {
-          if (matchingHours == null || matchingHours > hours) {
-            matchingHours = hours;
+      for (var index in ReservationUpdate.cancellationFees) {
+        var fee = ReservationUpdate.cancellationFees[index];
+        if (fee.range_min >= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
+          cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.fee + " dollars. This non-refundable fee will be deducted from the refund.";
+
+          refund -= fee.fee;
+          if (refund < 0) {
+            refund =   0;
           }
+
+          break;
         }
-      }
-      if (matchingHours != null) {
-        cancellationMessage += "<br>Since you are cancelling within less than " + matchingHours + " hours, according to our policy, you will be imposed a fee of $" + ReservationUpdate.cancellationFees[matchingHours] + " dollars. This non-refundable fee will be deducted from the refund.";
-        
-        refund -= ReservationUpdate.cancellationFees[matchingHours];
       }
       
       cancellationMessage += "<br>A refund in the amount of $" + refund + " dollars will be issued to your original payment method.";
-      
       
       Main.showMessage("Confirm Cancelation", cancellationMessage, function(action) {
         if (action == Main.ACTION_OK) {
@@ -34,6 +33,7 @@ ReservationUpdate = {
             if (status == Backend.STATUS_SUCCESS) {
               Backend.removeReservation(Backend.getReservationContext().id, function(status) {
                 if (status == Backend.STATUS_SUCCESS) {
+                  Backend.resetReservationContext();
                 } else {
                   console.error("Refund issued but the reservation is not removed: " + Backend.getReservationContext().id);
                 }

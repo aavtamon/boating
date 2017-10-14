@@ -147,6 +147,9 @@ func refundReservation(reservation *TReservation) bool {
   
   if (cancellationFee > 0) {
     refundAmount = (reservation.Slot.Price - cancellationFee);
+    if (refundAmount < 0) {
+      refundAmount = 0;
+    }
     params.Amount = refundAmount * 100;
   }
   
@@ -191,18 +194,12 @@ func getNonRefundableFee(reservation *TReservation) uint64 {
   bookingSettings := GetBookingSettings();
   
   timeLeftToTrip := (reservation.Slot.DateTime - bookingSettings.CurrentDate) / 1000 / 60 / 60;
-  matchingHours := int64(-1);
-  for hours, _ := range bookingSettings.CancellationFees {
-    if (hours > timeLeftToTrip) {
-      if (matchingHours == -1 || matchingHours > hours) {
-        matchingHours = hours;
-      }
+  
+  for _, fee := range bookingSettings.CancellationFees {
+    if (fee.RangeMin >= timeLeftToTrip && timeLeftToTrip < fee.RangeMax) {
+      return fee.Fee;
     }
   }
   
-  if (matchingHours == -1) {
-    return 0
-  } else {
-    return bookingSettings.CancellationFees[matchingHours];
-  }
+  return 0;
 }

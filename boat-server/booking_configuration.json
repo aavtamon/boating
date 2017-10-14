@@ -2,11 +2,11 @@
   "scheduling_begin_offset": 1,
   "scheduling_end_offset": 2,
   
-  "cancellation_fees": {
-    "48": 100,
-    "24": 100,
-    "4": 200
-  },
+  "cancellation_fees": [
+    {"range_min": 24, "range_max": 48, "fee": 100},
+    {"range_min": 4, "range_max": 24, "fee": 100},
+    {"range_min": 0, "range_max": 4, "fee": 200}
+  ],
   
   "locations": {
     "lanier": {

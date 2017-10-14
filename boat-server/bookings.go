@@ -56,7 +56,7 @@ type TBookingSettings struct {
   SchedulingBeginDate int64;
   SchedulingEndDate int64;  
   MaximumCapacity int;
-  CancellationFees map[int64]uint64;
+  CancellationFees []TCancellationFee;
   
   CenterLocation TMapLocation;
   AvailableLocations map[string]TPickupLocation;

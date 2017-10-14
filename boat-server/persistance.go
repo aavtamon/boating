@@ -7,7 +7,6 @@ import "time"
 import "math/rand"
 
 
-
 const DATABASE_FILE_NAME = "reservation_db.json";
 const SYSTEM_CONFIG_FILE_NAME = "system_configuration.json";
 const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
@@ -15,11 +14,16 @@ const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
+type TCancellationFee struct {
+  RangeMin int64 `json:"range_min"`;
+  RangeMax int64 `json:"range_max"`;
+  Fee uint64 `json:"fee"`;
+}
 
 type TBookingConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
-  CancellationFees map[int64]uint64 `json:"cancellation_fees"`;
+  CancellationFees []TCancellationFee `json:"cancellation_fees"`;
   Locations map[string]TRentalLocation `json:"locations"`;
 }
 
