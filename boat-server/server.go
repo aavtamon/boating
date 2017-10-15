@@ -156,14 +156,14 @@ func main() {
   httpMux.HandleFunc("/bookings/", BookingsHandler);
   httpMux.HandleFunc("/", pageHandler);
   
-  httpsMux := http.NewServeMux();
+  //httpsMux := http.NewServeMux();
   //httpsMux.HandleFunc("/", ReservationHandler);
   
   
-  go func() {
+  //go func() {
     log.Fatal(http.ListenAndServe(":8080", httpMux));
-  }()
+  //}();
 
-  log.Fatal(http.ListenAndServe(":8081", httpsMux));
+  //log.Fatal(http.ListenAndServe(":8081", httpsMux));
   //log.Fatal(http.ListenAndServeTLS(":8443", "server.crt", "server.key", httpsMux))
 }

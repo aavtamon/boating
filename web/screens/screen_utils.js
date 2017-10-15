@@ -1,7 +1,10 @@
 ScreenUtils = {
+  LOCAL_TZ_OFFSET: new Date().getTimezoneOffset() * 60 * 1000,
+  
+  
   getBookingDate: function(dateMs) {
     var date = new Date(dateMs);
-    return date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+    return date.getUTCMonth() + "/" + date.getUTCDate() + "/" + date.getUTCFullYear();
   },
 
   getBookingDuration: function(duration) {
@@ -14,12 +17,12 @@ ScreenUtils = {
     
   getBookingTime: function(timeMs) {
     var time = new Date(timeMs);
-    var hours = time.getHours();
+    var hours = time.getUTCHours();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12;
     
-    var minutes = time.getMinutes();
+    var minutes = time.getUTCMinutes();
     if (minutes < 10) {
       minutes = "0" + minutes;
     }
@@ -76,10 +79,10 @@ ScreenUtils = {
     return result.join("");
   },
   
-  getDateForTime: function(time) {
-    var date = new Date(time);
-    date.setHours(0);
-    date.setMinutes(0);
+  getDateForTime: function(timeMs) {
+    var date = new Date(timeMs);
+    date.setUTCHours(0);
+    date.setUTCMinutes(0);
 
     return date;
   },
@@ -163,6 +166,16 @@ ScreenUtils = {
     });
   },
   
+  
+  
+
+  getUTCMillis: function(localTime) {
+    return Date.UTC(localTime.getFullYear(), localTime.getMonth(), localTime.getDate(),  localTime.getHours(), localTime.getMinutes(), localTime.getSeconds(), localTime.getMilliseconds());
+  },
+  
+  getLocalTime: function(utcTimeMs) {
+    return new Date(utcTimeMs + ScreenUtils.LOCAL_TZ_OFFSET);
+  },
   
   
   

@@ -1,6 +1,6 @@
 BookingTime = {
   availableSlots: {},
-  currentDate: null,
+
   schedulingBeginDate: null,
   schedulingEndDate: null,
   
@@ -25,20 +25,21 @@ BookingTime = {
       this.selectedDuration = Backend.getReservationContext().slot.duration;
     }
     
+    
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
-        var isSelectable = BookingTime.availableSlots[date.getTime()] > 0;
+        var isSelectable = BookingTime.availableSlots[ScreenUtils.getUTCMillis(date)] > 0;
 
         return [isSelectable, "", null];
       },
       
       onSelect: function(dateText, instance) {
-        var newSelectedDate = new Date(dateText);
+        var newSelectedDate = ScreenUtils.getUTCMillis(new Date(dateText));
         
-        var reservationDate = ScreenUtils.getDateForTime(this.selectedDate);
-        if (newSelectedDate.getTime() == reservationDate.getTime()) {
+        if (newSelectedDate == this.selectedDate) {
           return;
         }
+        
         this.selectedDate = newSelectedDate;
         
         this._canProceedToNextStep();
@@ -46,11 +47,11 @@ BookingTime = {
         this._showTimes();
       }.bind(this),
       
-      defaultDate: this.selectedDate,
-      minDate: BookingTime.schedulingBeginDate,
-      maxDate: BookingTime.schedulingEndDate
+      defaultDate: ScreenUtils.getLocalTime(this.selectedDate),
+      minDate: ScreenUtils.getLocalTime(BookingTime.schedulingBeginDate),
+      maxDate: ScreenUtils.getLocalTime(BookingTime.schedulingEndDate)
     });
-    
+
     
     $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
       Main.loadScreen("booking_location");

@@ -217,8 +217,8 @@ Backend = {
   },
   
   
-  getAvailableSlots: function(date, callback) {
-    this._communicate("bookings/available_slots?date=" + date.getTime(), "get", null, true, [], {
+  getAvailableSlots: function(dateMs, callback) {
+    this._communicate("bookings/available_slots?date=" + dateMs, "get", null, true, [], {
       success: function(slots) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, slots);

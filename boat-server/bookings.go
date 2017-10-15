@@ -199,8 +199,8 @@ func initBookingSettings() {
 }
 
 func refreshBookingSettings() {
-  currentTime := time.Now();
-  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location());
+  currentTime := time.Now().UTC();
+  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
 
   if (bookingSettings.CurrentDate != currentDateAsInt) {
@@ -216,7 +216,7 @@ func (observer TReservationObserver) OnReservationChanged(reservation *TReservat
   boat := bookingConfiguration.Locations[LOCATION].Boats[BOAT];
 
   reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
-  reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, reservationTime.Location());
+  reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, time.UTC);
 
   calculateSlotsForDate(location, boat, reservationDate);
 }
@@ -270,7 +270,7 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
         slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: slotPrice};
         if (!isBooked(slot)) {
           result = append(result, slot);
-        }
+        }        
       } else {
         fmt.Printf("Problem detected while building slots - there is no price range for duration %d\n", dur);
       }
