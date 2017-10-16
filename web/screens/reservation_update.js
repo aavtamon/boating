@@ -9,12 +9,13 @@ ReservationUpdate = {
       var refund = Backend.getReservationContext().slot.price;
 
       var hoursLeftToTrip = Math.floor((Backend.getReservationContext().slot.time - ReservationUpdate.currentDate) / 1000 / 60 / 60);
+      
       for (var index in ReservationUpdate.cancellationFees) {
         var fee = ReservationUpdate.cancellationFees[index];
-        if (fee.range_min >= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
-          cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.fee + " dollars. This non-refundable fee will be deducted from the refund.";
+        if (fee.range_min <= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
+          cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.price + " dollars. This non-refundable fee will be deducted from the refund.";
 
-          refund -= fee.fee;
+          refund -= fee.price;
           if (refund < 0) {
             refund =   0;
           }
