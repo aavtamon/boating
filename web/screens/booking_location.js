@@ -25,21 +25,21 @@ BookingLocation = {
     if (mapElement == null) {
       return;
     }
-    
+        
     var map = new google.maps.Map(mapElement, {
-      zoom: centerLocation.zoom,
-      center: centerLocation
+      zoom: BookingLocation.centerLocation.zoom,
+      center: BookingLocation.centerLocation
     });
     
-    
     $("#BookingLocation-Screen-SelectionPanel-CenterButton").click(function() {
-      map.panTo(centerLocation);
-      map.setZoom(centerLocation.zoom);
+      map.panTo(BookingLocation.centerLocation);
+      map.setZoom(BookingLocation.centerLocation.zoom);
     });
     
 //    map.addListener('center_changed', function() {
 //      $("#BookingLocation-Screen-SelectionPanel-CenterButton").removeClass(disabled);
 //    });    
+    
     
     this._markers = [];
     

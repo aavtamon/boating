@@ -3,6 +3,9 @@
 <script src="screens/screen_utils.js"></script>
 
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2UcaDcq0DXeD8ysCgOAXwr24E_N5vxI0&callback=BookingLocation.initMap"></script>  
+
+
 <script>
   var centerLocation = {
     lat: {{.BookingSettings.CenterLocation.Latitude}},
@@ -29,9 +32,6 @@
     BookingLocation.onLoad();
   });
 </script>
-
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2UcaDcq0DXeD8ysCgOAXwr24E_N5vxI0&callback=BookingLocation.initMap"></script>  
-
 
 <div id="BookingLocation-Screen">
   <div id="BookingLocation-Screen-SelectionPanel">

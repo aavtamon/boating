@@ -20,7 +20,7 @@ BookingTime = {
       this.selectedTime = null;
       this.selectedDuration = null;
     } else {
-      this.selectedDate = ScreenUtils.getDateForTime(Backend.getReservationContext().slot.time);
+      this.selectedDate = ScreenUtils.getDateForTime(Backend.getReservationContext().slot.time).getTime();
       this.selectedTime = Backend.getReservationContext().slot.time;
       this.selectedDuration = Backend.getReservationContext().slot.duration;
     }
