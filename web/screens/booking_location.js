@@ -39,13 +39,8 @@ BookingLocation = {
 //    map.addListener('center_changed', function() {
 //      $("#BookingLocation-Screen-SelectionPanel-CenterButton").removeClass(disabled);
 //    });    
-    
-    if (Backend.xx != null) {
-      rerturn;
-    }
-    Backend.xx = "dad";
-    
-    
+
+
     this._markers = [];
     
     for (var i in Backend.availableLocations) {
