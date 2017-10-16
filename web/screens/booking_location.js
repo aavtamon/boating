@@ -40,6 +40,11 @@ BookingLocation = {
 //      $("#BookingLocation-Screen-SelectionPanel-CenterButton").removeClass(disabled);
 //    });    
     
+    if (Backend.xx != null) {
+      rerturn;
+    }
+    Backend.xx = "dad";
+    
     
     this._markers = [];
     
