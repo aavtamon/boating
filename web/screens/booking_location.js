@@ -1,5 +1,6 @@
 BookingLocation = {
   centerLocation: null,
+  _mapHolder: null,
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
@@ -16,62 +17,75 @@ BookingLocation = {
       Main.loadScreen("booking_confirmation");
     });
     
+    this._initMap();
+    
     this._canProceedToNextStep();
   },
     
   
-  initMap: function() {
+  _initMap: function() {
     var mapElement = document.getElementById("BookingLocation-Screen-SelectionPanel-LocationMap");
     if (mapElement == null) {
       return;
     }
-        
-    var map = new google.maps.Map(mapElement, {
-      zoom: BookingLocation.centerLocation.zoom,
-      center: BookingLocation.centerLocation
-    });
     
+    this._mapHolder = Main.recoverElement("MapHolder");
+    if (this._mapHolder == null) {
+      this._mapHolder = document.createElement("div");
+      this._mapHolder.style.width = "100%";
+      this._mapHolder.style.height = "100%";
+      
+      this._mapHolder._map = new google.maps.Map(this._mapHolder, {
+        zoom: BookingLocation.centerLocation.zoom,
+        center: BookingLocation.centerLocation
+      });
+      
+      Main.storeElement("MapHolder", this._mapHolder);
+      
+      
+      var markers = [];
+      for (var i in Backend.availableLocations) {
+        var location = Backend.availableLocations[i];
+
+        var marker = new google.maps.Marker({
+          position: location,
+          map: this._mapHolder._map,
+          label: location.name,
+  //        icon: "imgs/boat.png",
+          _location: location
+        });
+
+        marker.addListener('click', function(marker) {
+          Backend.getReservationContext().location_id = marker._location.id;
+          this._canProceedToNextStep();
+
+          for (var i in markers) {
+            if (markers[i] != marker) {
+              markers[i].setAnimation(null);
+            }
+          }
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }.bind(this, marker));
+
+        if (Backend.getReservationContext().location_id == location.id) {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        markers.push(marker);
+      }
+    }
+    mapElement.appendChild(this._mapHolder);
+    
+    
+        
     $("#BookingLocation-Screen-SelectionPanel-CenterButton").click(function() {
-      map.panTo(BookingLocation.centerLocation);
-      map.setZoom(BookingLocation.centerLocation.zoom);
-    });
+      this._mapHolder._map.panTo(BookingLocation.centerLocation);
+      this._mapHolder._map.setZoom(BookingLocation.centerLocation.zoom);
+    }.bind(this));
     
 //    map.addListener('center_changed', function() {
 //      $("#BookingLocation-Screen-SelectionPanel-CenterButton").removeClass(disabled);
 //    });    
-
-
-    this._markers = [];
-    
-    for (var i in Backend.availableLocations) {
-      var location = Backend.availableLocations[i];
-
-      var marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        label: location.name,
-//        icon: "imgs/boat.png",
-        _location: location
-      });
-      
-      marker.addListener('click', function(marker) {
-        Backend.getReservationContext().location_id = marker._location.id;
-        this._canProceedToNextStep();
-        
-        for (var i in this._markers) {
-          if (this._markers[i] != marker) {
-            this._markers[i].setAnimation(null);
-          }
-        }
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }.bind(this, marker));
-      
-      if (Backend.getReservationContext().location_id == location.id) {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-      
-      this._markers.push(marker);
-    }
   },
   
   

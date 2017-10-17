@@ -5,6 +5,8 @@ Main = {
   DIALOG_TYPE_CONFIRMATION: "confirmation",
   DIALOG_TYPE_INFORMATION: "information",
   
+  _storeElements: [],
+  
   onLoad: function() {
     window.onhashchange = function() {
       this._loadScreen(window.location.hash.substr(1));
@@ -72,10 +74,31 @@ Main = {
   },
   
   
+  storeElement(tag, element) {
+    element.setAttribute("id", tag);
+    this._storeElements.push(element);
+  },
+  
+  recoverElement(tag) {
+    var element = $("#Main-RecycleBin #" + tag);
+    if (element.length == 1) {
+      return element[0];
+    }
+    
+    return null;
+  },
+  
+  
   _loadScreen: function(screen) {
     if (this._currentScreen == screen) {
       return;
     }
+    
+    for (var index in this._storeElements) {
+      $("#Main-RecycleBin").append(this._storeElements[index]);
+    }
+    
+    this._storeElements = [];
     this._currentScreen = screen;
     
     $("#Main-ScreenContainer").load("screens/" + screen + ".html");

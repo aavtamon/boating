@@ -116,3 +116,8 @@ html, body {
   
   font-size: 15px;
 }
+
+
+#Main-RecycleBin {
+  display: none;
+}
