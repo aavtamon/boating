@@ -53,7 +53,7 @@ BookingTime = {
     });
 
     
-    $("#BookingTime-Screen-ButtonsPanel-NextButton").click(function() {
+    $("#BookingTime-Screen-Description-NextButton").click(function() {
       Main.loadScreen("booking_location");
     });
     
@@ -157,12 +157,12 @@ BookingTime = {
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.slot != null) {
-      $("#BookingTime-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
+      $("#BookingTime-Screen-Description-NextButton").prop("disabled", false);
       
-      $("#BookingTime-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));
+      $("#BookingTime-Screen-ReservationSummary").html(ScreenUtils.getBookingSummary(reservationContext));
     } else {
-      $("#BookingTime-Screen-ButtonsPanel-NextButton").attr("disabled", true);
-      $("#BookingTime-Screen-ButtonsPanel-Summary").text("");
+      $("#BookingTime-Screen-Description-NextButton").prop("disabled", true);
+      $("#BookingTime-Screen-ReservationSummary").text("");
     }
   },
 }

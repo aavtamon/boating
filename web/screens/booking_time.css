@@ -1,116 +1,83 @@
 #BookingTime-Screen {
-	height: 100%;
+  height: 100%;
+  min-width: 1100px;
+}
+
+#BookingTime-Screen-Description {
 }
 
 #BookingTime-Screen-SelectionPanel {
-	height: calc(100% - 90px);
 }
 
 #BookingTime-Screen-SelectionPanel-Calendar {
-	display: inline-block;
-	margin-top: 50px;
-	margin-left: 50px;
-	
-	vertical-align: top;
+  display: inline-block;
+  margin-top: 50px;
+  margin-left: 50px;
+
+  vertical-align: top;
 }
 
 #BookingTime-Screen-SelectionPanel-TimeFrame, #BookingTime-Screen-SelectionPanel-Duration {
-	display: inline-block;
+  display: inline-block;
   height: 230px;
-	margin-top: 50px;
-	margin-left: 50px;
-	
-	padding: 5px;
-	vertical-align: top;
+  margin-top: 50px;
+  margin-left: 50px;
 
-	border-width: 1px;
-	border-radius: 5px;
-	border-style: solid;
-	border-color: #dddddd;
+  padding: 5px;
+  vertical-align: top;
 
-	background: #eeeeee;
-	opacity: 50%;
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #dddddd;
+
+  background: #eeeeee;
+  opacity: 50%;
 }
 #BookingTime-Screen-SelectionPanel-TimeFrame {
-	width: calc(100% - 850px);
+  width: calc(100% - 850px);
 }
 #BookingTime-Screen-SelectionPanel-Duration {
-	width: 280px;
+  width: 280px;
 }
 
 #BookingTime-Screen-SelectionPanel-TimeFrame-Title, #BookingTime-Screen-SelectionPanel-Duration-Title {
-	height: 39px;
-	line-height: 39px;
-	text-align: center;
-	
-	font-family: Trebuchet MS;
-	font-weight: bold;
-	font-size: 1.1em;
-	
-	border-width: 1px;
-	border-style: solid;
-	border-color: #e78f08;
-	border-radius: 5px;
-	
-	color: white;
-	background-color: #f6a828;
+  height: 39px;
+  line-height: 39px;
+  text-align: center;
+
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  font-size: 1.1em;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e78f08;
+  border-radius: 5px;
+
+  color: white;
+  background-color: #f6a828;
 }
 
 #BookingTime-Screen-SelectionPanel-TimeFrame-Times, #BookingTime-Screen-SelectionPanel-Duration-Durations {
-	padding: 10px;
+  padding: 10px;
 }
 
 
 .bookingtime-time-interval, .bookingtime-duration {
-	line-height: 30px;
-	
-	font-family: Trebuchet MS;
-	font-weight: bold;
-	font-size: 1.1em;
+  line-height: 30px;
 
-	color: #1c94c4;
-	
-	cursor: pointer;
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  font-size: 1.1em;
+
+  color: #1c94c4;
+
+  cursor: pointer;
 }
 .bookingtime-time-interval.selected, .bookingtime-duration.selected {
-	color: #eb8f00;
+  color: #eb8f00;
 }
 
-
-
-#BookingTime-Screen-ButtonsPanel {
-	position: fixed;
-	bottom: 70px;
-	width: 100%;
-	height: 50px;
-}
-
-#BookingTime-Screen-ButtonsPanel-Summary {
-	display: inline-block;
-	width: calc(100% - 300px);
-	height: 100%;
-	margin-left: 100px;
-	vertical-align: top;
-	
-	text-align: center;
-	
-	font-family: Verdana;
-	font-size: 25px;
-}
-
-#BookingTime-Screen-ButtonsPanel-NextButton {
-	display: inline-block;
-	width: 100px;
-	padding: 5px 10px 5px 10px;
-	vertical-align: top;
-	
-	font-size: 20px;
-	
-	text-align: center;
-	
-	background-color: rgb(65, 117, 22);
-	color: white;
-}
-#BookingTime-Screen-ButtonsPanel-NextButton:disabled {
-	background-color: gray;
+#BookingTime-Screen-ReservationSummary {
 }

@@ -2,15 +2,20 @@
 	height: 100%;
 }
 
+#BookingLocation-Screen-Description {
+}
+
 #BookingLocation-Screen-SelectionPanel {
-	position: relative;
-	height: calc(100% - 90px);
+  position: relative;
+  width: 100%;
+  height: calc(100% - 200px);
+  margin-top: 10px;
 }
 
 #BookingLocation-Screen-SelectionPanel-LocationMap {
-	display: block;
-	width: 100%;
-	height: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 #BookingLocation-Screen-SelectionPanel-CenterButton {
@@ -36,126 +41,21 @@
 	background-color: rgb(234, 237, 237);
 }
 
-/* 
-.bookinglocation-map-location {
-	position: absolute;
-	display: inline-block;
-	width: 20px;
-	height: 20px;	
-	border-radius: 10px;
-	
-	background-color: brown;
-	
-  -webkit-animation: bookinglocation-map-location-animation 1s infinite;
-  animation: bookinglocation-map-location-animation 1s infinite;
-}
-.bookinglocation-map-location:hover {
-	background-color: yellow;
-	
-  -webkit-animation: bookinglocation-map-location-animation-hovered 1s infinite;
-  animation: bookinglocation-map-location-animation-hovered 1s infinite;
-}
-.bookinglocation-map-location:active {
-	background-color: red;
-	
-	-webkit-animation: none;
-	animation: none;
-}
-.bookinglocation-map-location.selected {
-	background-color: red;
-	
-  -webkit-animation: bookinglocation-map-location-animation-selected 1s infinite;
-  animation: bookinglocation-map-location-animation-selected 1s infinite;
-}
-@-webkit-keyframes bookinglocation-map-location-animation {
-  0% { background-color: brown; }
-  50% { background-color: gray; }
-  100% { background-color: brown; }
-}
-@keyframes bookinglocation-map-location-animation {
-  0% { background-color: brown; }
-  50% { background-color: gray; }
-  100% { background-color: brown; }
-}
-@-webkit-keyframes bookinglocation-map-location-animation-hovered {
-  0% { background-color: yellow; }
-  50% { background-color: gray; }
-  100% { background-color: yellow; }
-}
-@keyframes bookinglocation-map-location-animation-hovered {
-  0% { background-color: yellow; }
-  50% { background-color: gray; }
-  100% { background-color: yellow; }
-}
-@-webkit-keyframes bookinglocation-map-location-animation-selected {
-  0% { background-color: yellow; transform: scale(1); }
-  50% { background-color: red; transform: scale(1.1); }
-  100% { background-color: yellow; transform: scale(1); }
-}
-@keyframes bookinglocation-map-location-animation-selected {
-  0% { background-color: yellow; transform: scale(1); }
-  50% { background-color: red; transform: scale(1.1); }
-  100% { background-color: yellow; transform: scale(1); }
-}
 
-
-#BookingLocation-Screen-SelectionPanel-LocationMap-Location1 {
-	top: 10px;
-	left: 50px;
-	
-	animation-delay: 0.3s;
-	-webkit-animation-delay: 0.3s;
-} 
-#BookingLocation-Screen-SelectionPanel-LocationMap-Location2 {
-	top: 20px;
-	left: 70px;
-
-	animation-delay: 0.7s;
-	-webkit-animation-delay: 0.7s;
-} 
-#BookingLocation-Screen-SelectionPanel-LocationMap-Location3 {
-	top: 30px;
-	left: 100px;
-} 
- */
+#BookingLocation-Screen-ReservationSummary {
+}
 
 #BookingLocation-Screen-ButtonsPanel {
-	position: fixed;
-	width: 100%;
-	height: 55px;
-	bottom: 70px;
+  margin-top: 20px;
+  
+  text-align: left;
 }
 
-#BookingLocation-Screen-ButtonsPanel-Summary {
-	display: inline-block;
-	width: calc(100% - 330px);
-	height: 50px;
-	margin-left: 50px;
-	vertical-align: top;
-	
-	text-align: center;
-	
-	font-family: Verdana;
-	font-size: 25px;
+#BookingLocation-Screen-ButtonsPanel-BackButton {
+  margin-left: 50px;
 }
 
-#BookingLocation-Screen-ButtonsPanel-NextButton, #BookingLocation-Screen-ButtonsPanel-BackButton {
-	display: inline-block;
-	width: 100px;
-	padding: 5px 10px 5px 10px;
-	vertical-align: top;
-	
-	font-size: 20px;
-	
-	text-align: center;
-	
-	background-color: rgb(65, 117, 22);
-	color: white;
-}
 #BookingLocation-Screen-ButtonsPanel-NextButton {
-	margin-left: 50px;
-	vertical-align: top;
-}
-#BookingLocation-Screen-ButtonsPanel-NextButton:disabled {
-	background-color: gray;
+  float: right;
+  margin-right: 50px;
 }

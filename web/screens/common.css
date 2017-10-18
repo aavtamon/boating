@@ -1,3 +1,59 @@
+.screen-description {
+  width: calc(100% - 20px);
+  padding: 10px;
+  text-align: center;
+  
+  font-size: 25px;
+  font-weight: bold;
+  
+  background-color: burlywood;
+  color: yellow;  
+}
+.screen-description-back, .screen-description-next {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  background-color: transparent;
+  
+  border-style: none;
+}
+.screen-description-back {
+  float: left;
+  margin-left: 50px;
+  background-image: url(../imgs/left-arrow.png);
+}
+.screen-description-next {
+  float: right;
+  margin-right: 50px;
+  background-image: url(../imgs/right-arrow.png);
+}
+.screen-description-back:hover, .screen-description-next:hover {
+  background-color: lightcyan;
+}
+.screen-description-back:active, .screen-description-next:active {
+  background-color: darkcyan;
+}
+.screen-description-back:disabled, .screen-description-next:disabled {
+  opacity: 0.5;
+  background-color: transparent;
+}
+
+
+.screen-summary {
+  height: 3em;
+  margin-top: 30px;
+  text-align: center;
+
+  font-family: Verdana;
+  font-size: 25px;
+}
+
+
 .titled-box {
   font-size: 15px;
   margin-top: 20px;

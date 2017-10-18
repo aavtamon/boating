@@ -9,11 +9,11 @@ BookingLocation = {
       return;
     }
     
-    $("#BookingLocation-Screen-ButtonsPanel-BackButton").click(function() {
+    $("#BookingLocation-Screen-Description-BackButton").click(function() {
       Main.loadScreen("booking_time");
     });
 
-    $("#BookingLocation-Screen-ButtonsPanel-NextButton").click(function() {
+    $("#BookingLocation-Screen-Description-NextButton").click(function() {
       Main.loadScreen("booking_confirmation");
     });
     
@@ -39,8 +39,6 @@ BookingLocation = {
         zoom: BookingLocation.centerLocation.zoom,
         center: BookingLocation.centerLocation
       });
-      
-      Main.storeElement("MapHolder", this._mapHolder);
       
       
       var markers = [];
@@ -74,6 +72,8 @@ BookingLocation = {
         markers.push(marker);
       }
     }
+    
+    Main.storeElement("MapHolder", this._mapHolder);
     mapElement.appendChild(this._mapHolder);
     
     
@@ -92,12 +92,12 @@ BookingLocation = {
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
     if (reservationContext.location_id != null) {
-      $("#BookingLocation-Screen-ButtonsPanel-NextButton").removeAttr("disabled");
+      $("#BookingLocation-Screen-Description-NextButton").prop("disabled", false);
       
-      $("#BookingLocation-Screen-ButtonsPanel-Summary").html(ScreenUtils.getBookingSummary(reservationContext));
+      $("#BookingLocation-Screen-ReservationSummary").html(ScreenUtils.getBookingSummary(reservationContext));
     } else {
-      $("#BookingLocation-Screen-ButtonsPanel-NextButton").attr("disabled", true);
-      $("#BookingLocation-Screen-ButtonsPanel-Summary").text("");
+      $("#BookingLocation-Screen-Description-NextButton").prop("disabled", true);
+      $("#BookingLocation-Screen-ReservationSummary").text("");
     }
   },
 }

@@ -49,7 +49,7 @@ ScreenUtils = {
     var tripTime = this.getBookingTime(reservationContext.slot.time);
     var tripDuration = this.getBookingDuration(reservationContext.slot.duration);
     var bookingPrice = this.getBookingPrice(reservationContext.slot.price);
-    var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b><br>Price: " + bookingPrice;
+    var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b> (" + bookingPrice + ")";
     
     if (reservationContext.location_id != null) {
       var location = this.getLocation(reservationContext.location_id);
