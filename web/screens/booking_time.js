@@ -41,6 +41,7 @@ BookingTime = {
         }
         
         this.selectedDate = newSelectedDate;
+        Backend.getReservationContext().slot = null;
         
         this._canProceedToNextStep();
         
@@ -162,7 +163,7 @@ BookingTime = {
       $("#BookingTime-Screen-ReservationSummary").html(ScreenUtils.getBookingSummary(reservationContext));
     } else {
       $("#BookingTime-Screen-Description-NextButton").prop("disabled", true);
-      $("#BookingTime-Screen-ReservationSummary").text("");
+      $("#BookingTime-Screen-ReservationSummary").html("Select date, time, and ride duration.");
     }
   },
 }

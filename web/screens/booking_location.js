@@ -97,7 +97,7 @@ BookingLocation = {
       $("#BookingLocation-Screen-ReservationSummary").html(ScreenUtils.getBookingSummary(reservationContext));
     } else {
       $("#BookingLocation-Screen-Description-NextButton").prop("disabled", true);
-      $("#BookingLocation-Screen-ReservationSummary").text("");
+      $("#BookingLocation-Screen-ReservationSummary").html("Select one of the marked locations.<br>We will bring the boat to the place of your choice.");
     }
   },
 }

@@ -1,30 +1,54 @@
 #BookingTime-Screen {
-  height: 100%;
-  min-width: 1100px;
 }
 
 #BookingTime-Screen-Description {
 }
 
+#BookingTime-Screen-SelectionContainer {
+  text-align: center;
+}
+
 #BookingTime-Screen-SelectionPanel {
+  margin-top: 30px;
+  padding: 20px;
+  white-space: nowrap;
+  overflow: auto;
+  
+  border-radius: 10px;
+  
+  background-color: #efbb5b;
 }
 
 #BookingTime-Screen-SelectionPanel-Calendar {
   display: inline-block;
-  margin-top: 50px;
-  margin-left: 50px;
-
+  width: 280px;
   vertical-align: top;
 }
 
+.ui-datepicker.ui-widget.ui-widget-content {
+  padding: 5px;
+
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #dddddd;
+
+  background-color: #eeeeee;
+}
+
+
+
+
 #BookingTime-Screen-SelectionPanel-TimeFrame, #BookingTime-Screen-SelectionPanel-Duration {
   display: inline-block;
-  height: 230px;
-  margin-top: 50px;
+  height: 211px;
+  width: 270px;
+  padding: 5px;
   margin-left: 50px;
 
-  padding: 5px;
   vertical-align: top;
+  
+  text-align: left;
 
   border-width: 1px;
   border-radius: 5px;
@@ -34,14 +58,8 @@
   background: #eeeeee;
   opacity: 50%;
 }
-#BookingTime-Screen-SelectionPanel-TimeFrame {
-  width: calc(100% - 850px);
-}
-#BookingTime-Screen-SelectionPanel-Duration {
-  width: 280px;
-}
 
-#BookingTime-Screen-SelectionPanel-TimeFrame-Title, #BookingTime-Screen-SelectionPanel-Duration-Title {
+.ui-datepicker .ui-datepicker-header, #BookingTime-Screen-SelectionPanel-TimeFrame-Title, #BookingTime-Screen-SelectionPanel-Duration-Title {
   height: 39px;
   line-height: 39px;
   text-align: center;
@@ -58,6 +76,11 @@
   color: white;
   background-color: #f6a828;
 }
+
+.ui-datepicker .ui-datepicker-header {
+  height: 31px;
+}
+
 
 #BookingTime-Screen-SelectionPanel-TimeFrame-Times, #BookingTime-Screen-SelectionPanel-Duration-Durations {
   padding: 10px;
@@ -80,4 +103,5 @@
 }
 
 #BookingTime-Screen-ReservationSummary {
+  height: 1.5em;
 }
