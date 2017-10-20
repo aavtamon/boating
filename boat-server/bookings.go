@@ -88,20 +88,6 @@ var availableDates TAvailableDates = nil;
 var reservationObserver TReservationObserver;
 
 
-func GetBookingSettings() TBookingSettings {
-  if (bookingSettings == nil) {
-    initBookingSettings();
-    
-    recalculateAllAvailableSlots();
-    AddReservationListener(reservationObserver);
-  }
-  
-  refreshBookingSettings();
-
-  return *bookingSettings;
-}
-
-
 func BookingsHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Bookings Handler");
   
@@ -172,6 +158,21 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
+
+func InitializeBookings() {
+  initBookingSettings();    
+  refresh();
+
+  AddReservationListener(reservationObserver);
+  
+  schedulePeriodicRefresh();  
+}
+
+func GetBookingSettings() TBookingSettings {
+  return *bookingSettings;
+}
+
+
 func GetAvailableDates() TAvailableDates {
     return availableDates;
 }
@@ -194,20 +195,20 @@ func initBookingSettings() {
   bookingSettings.MaximumCapacity = bookingConfiguration.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
   bookingSettings.CenterLocation = bookingConfiguration.Locations[LOCATION].CenterLocation;
   bookingSettings.AvailableLocations = bookingConfiguration.Locations[LOCATION].PickupLocations;
-  
-  refreshBookingSettings();
 }
 
-func refreshBookingSettings() {
+func refresh() {
   currentTime := time.Now().UTC();
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
 
-  if (bookingSettings.CurrentDate != currentDateAsInt) {
-    bookingSettings.CurrentDate = currentDateAsInt;
-    bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
-    bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
-  }
+  bookingSettings.CurrentDate = currentDateAsInt;
+  bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
+  bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
+
+  recalculateAllAvailableSlots();
+  
+  fmt.Println("Database refreshed");
 }
 
 
@@ -224,6 +225,7 @@ func (observer TReservationObserver) OnReservationChanged(reservation *TReservat
 func (observer TReservationObserver) OnReservationRemoved(reservation *TReservation) {
   observer.OnReservationChanged(reservation);
 }
+
 
 
 func recalculateAllAvailableSlots() {
@@ -299,3 +301,15 @@ func isBooked(slot TBookingSlot) bool {
 }
 
 
+
+func schedulePeriodicRefresh() {
+  ticker := time.NewTicker(24 * time.Hour);
+  go func() {
+    for {
+       select {
+         case <- ticker.C:
+           refresh();
+       }
+    }
+  }();
+}

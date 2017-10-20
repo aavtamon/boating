@@ -149,6 +149,7 @@ func main() {
   }
 
   InitializePersistance(RuntimeRoot);
+  InitializeBookings();
 
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
