@@ -9,7 +9,7 @@
 }
 
 #BookingTime-Screen-SelectionPanel {
-  margin-top: 30px;
+  margin-top: 20px;
   padding: 20px;
   white-space: nowrap;
   overflow: auto;
@@ -103,5 +103,4 @@
 }
 
 #BookingTime-Screen-ReservationSummary {
-  height: 1.5em;
 }

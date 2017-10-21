@@ -1,8 +1,18 @@
+input, select, .ui-widget {
+  border-radius: 5px;
+  border-width: 1;
+  border-style: solid;
+  border-color: azure;
+}
+
+
+
 .screen-description {
   position: relative;
   width: calc(100% - 20px);
   padding: 10px;
   text-align: center;
+  white-space: nowrap;
   
   font-size: 25px;
   font-weight: bold;
@@ -111,4 +121,12 @@
 
 .invalid {
   border-color: red;
+}
+
+
+.row-element {
+  border-bottom-style: groove;
+  border-bottom-width: 1px;
+  border-bottom-color: lightblue;
+  
 }

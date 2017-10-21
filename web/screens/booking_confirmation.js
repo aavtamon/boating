@@ -13,11 +13,11 @@ BookingConfirmation = {
 
     $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").checkboxradio();
     
-    $("#BookingConfirmation-Screen-ButtonsPanel-BackButton").click(function() {
+    $("#BookingConfirmation-Screen-Description-BackButton").click(function() {
       Main.loadScreen("booking_location");
     });
     
-    $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").click(function() {
+    $("#BookingConfirmation-Screen-Description-NextButton").click(function() {
       Main.loadScreen("booking_payment");
     });
     
