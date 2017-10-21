@@ -8,7 +8,7 @@ BookingPayment = {
       return;
     }
     
-    $("#BookingPayment-Screen-ButtonsPanel-BackButton").click(function() {
+    $("#BookingPayment-Screen-Description-BackButton").click(function() {
       Main.loadScreen("booking_confirmation");
     });
     
@@ -51,7 +51,7 @@ BookingPayment = {
     
     
     
-    $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").click(function() {
+    $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
       Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
       
       var cardData = {
@@ -96,7 +96,7 @@ BookingPayment = {
       });
     });
     
-    $("#BookingPayment-Screen-ReservationSummary-Details").html(ScreenUtils.getBookingSummary(reservationContext));
+    $("#BookingPayment-Screen-ReservationSummary-Details").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
     
     
     

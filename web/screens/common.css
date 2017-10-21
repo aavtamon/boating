@@ -25,32 +25,43 @@ input, select, .ui-widget {
 .screen-description-back, .screen-description-next {
   position: absolute;
   display: inline-block;
-  width: 50px;
+  min-width: 50px;
   height: 30px;
+  padding: 0px 20px 0px 20px;
   
-  background-position: center;
-  background-size: contain;
+  font-size: 20px;
+  
+  background-size: 30px;
   background-repeat: no-repeat;
   
+  color: darkblue;
   background-color: transparent;
   
-  border-style: none;
+  border-style: groove;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: lightblue;
 }
 .screen-description-back {
-  left: 50px;
-  margin-left: 50px;
+  left: 20px;
+  padding-left: 40px;
+  background-position: left;
+  text-align: right;
   background-image: url(../imgs/left-arrow.png);
 }
 .screen-description-next {
-  right: 50px;
-  margin-right: 50px;
+  right: 20px;
+  padding-right: 40px;
+  background-position: right;
+  text-align: left;
   background-image: url(../imgs/right-arrow.png);
 }
 .screen-description-back:hover, .screen-description-next:hover {
-  background-color: lightcyan;
+  background-color: rgba(201, 222, 242, 0.5);
 }
 .screen-description-back:active, .screen-description-next:active {
-  background-color: darkcyan;
+  border-style: inset;
+  background-color: rgb(201, 222, 242);
 }
 .screen-description-back:disabled, .screen-description-next:disabled {
   opacity: 0.5;

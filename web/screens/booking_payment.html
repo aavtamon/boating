@@ -10,8 +10,14 @@
 </script>
 
 <div id="BookingPayment-Screen">
+  <div id="BookingPayment-Screen-Description" class="screen-description">
+    <button id="BookingPayment-Screen-Description-BackButton" class="screen-description-back">Summary</button>
+    All looks right? Time to pay!
+    <button id="BookingPayment-Screen-Description-ConfirmButton" class="screen-description-next">Confirm Payment</button>
+  </div>
+  
   <div id="BookingPayment-Screen-ReservationSummary">
-    <div id="BookingPayment-Screen-ReservationSummary-Label">Your Reservation:</div>
+    <div id="BookingPayment-Screen-ReservationSummary-Label">Your are paying:</div>
     <div id="BookingPayment-Screen-ReservationSummary-Details"></div>
   </div>
   <div id="BookingPayment-Screen-ContactInformation"  class="titled-box">
@@ -19,116 +25,109 @@
     <div id="BookingPayment-Screen-ContactInformation-Name">
       <div id="BookingPayment-Screen-ContactInformation-Name-FirstName">
         <div id="BookingPayment-Screen-ContactInformation-Name-FirstName-Label">First Name:</div>
-        <input type="text" id="BookingPayment-Screen-ContactInformation-Name-FirstName-Input"></input>
+        <input type="text" id="BookingPayment-Screen-ContactInformation-Name-FirstName-Input">
       </div>
       <div id="BookingPayment-Screen-ContactInformation-Name-LastName">
         <div id="BookingPayment-Screen-ContactInformation-Name-LastName-Label">Last Name:</div>
-        <input type="text" id="BookingPayment-Screen-ContactInformation-Name-LastName-Input"></input>
+        <input type="text" id="BookingPayment-Screen-ContactInformation-Name-LastName-Input">
       </div>
     </div>
     <div id="BookingPayment-Screen-ContactInformation-Contact">
       <div id="BookingPayment-Screen-ContactInformation-Contact-Email">
         <div id="BookingPayment-Screen-ContactInformation-Contact-Email-Label">Email:</div>
-        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-Email-Input"></input>
+        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-Email-Input">
       </div>
       <div id="BookingPayment-Screen-ContactInformation-Contact-CellPhone">
         <div id="BookingPayment-Screen-ContactInformation-Contact-CellPhone-Label">Cell phone:</div>
-        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input"></input>
+        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input">
       </div>
       <div id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone">
         <div id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Label">Alternative phone:</div>
-        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input"></input>
+        <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input">
       </div>
     </div>
-</div>
-<div id="BookingPayment-Screen-PaymentInformation" class="titled-box">
-<div id="BookingPayment-Screen-PaymentInformation-Title" class="title">Payment Information:</div>
-  <div id="BookingPayment-Screen-PaymentInformation-Name">
-    <div id="BookingPayment-Screen-PaymentInformation-Name-Label">Name on the card:</div>
-    <input type="text" id="BookingPayment-Screen-PaymentInformation-Name-Input"></input>
   </div>
-  <div id="BookingPayment-Screen-PaymentInformation-Address">
-    <div id="BookingPayment-Screen-PaymentInformation-Address-Street">
-      <div id="BookingPayment-Screen-PaymentInformation-Address-Street-Label">Street address:</div>
-      <input type="text" id="BookingPayment-Screen-PaymentInformation-Address-Street-Input"></input>
+  <div id="BookingPayment-Screen-PaymentInformation" class="titled-box">
+    <div id="BookingPayment-Screen-PaymentInformation-Title" class="title">Payment Information:</div>
+    <div id="BookingPayment-Screen-PaymentInformation-Name">
+      <div id="BookingPayment-Screen-PaymentInformation-Name-Label">Name on the card:</div>
+      <input type="text" id="BookingPayment-Screen-PaymentInformation-Name-Input">
     </div>
-    <div id="BookingPayment-Screen-PaymentInformation-Address-Additional">
-      <div id="BookingPayment-Screen-PaymentInformation-Address-Additional-Label">Additional address:</div>
-      <input type="text" id="BookingPayment-Screen-PaymentInformation-Address-Additional-Input"></input>
+    <div id="BookingPayment-Screen-PaymentInformation-Address">
+      <div id="BookingPayment-Screen-PaymentInformation-Address-Street">
+        <div id="BookingPayment-Screen-PaymentInformation-Address-Street-Label">Street address:</div>
+        <input type="text" id="BookingPayment-Screen-PaymentInformation-Address-Street-Input">
+      </div>
+      <div id="BookingPayment-Screen-PaymentInformation-Address-Additional">
+        <div id="BookingPayment-Screen-PaymentInformation-Address-Additional-Label">Additional address:</div>
+        <input type="text" id="BookingPayment-Screen-PaymentInformation-Address-Additional-Input">
+      </div>
     </div>
-  </div>
-  <div id="BookingPayment-Screen-PaymentInformation-Area">
-    <div id="BookingPayment-Screen-PaymentInformation-Area-City">
-      <div id="BookingPayment-Screen-PaymentInformation-Area-City-Label">City:</div>
-      <input type="text" id="BookingPayment-Screen-PaymentInformation-Area-City-Input"></input>
+    <div id="BookingPayment-Screen-PaymentInformation-Area">
+      <div id="BookingPayment-Screen-PaymentInformation-Area-City">
+        <div id="BookingPayment-Screen-PaymentInformation-Area-City-Label">City:</div>
+        <input type="text" id="BookingPayment-Screen-PaymentInformation-Area-City-Input">
+      </div>
+      <div id="BookingPayment-Screen-PaymentInformation-Area-State">
+        <div id="BookingPayment-Screen-PaymentInformation-Area-State-Label">State:</div>
+        <select id="BookingPayment-Screen-PaymentInformation-Area-State-Input">
+          <option value="AL">AL</option>
+          <option value="AK">AK</option>
+          <option value="AZ">AZ</option>
+          <option value="AR">AR</option>
+          <option value="CA">CA</option>
+          <option value="CO">CO</option>
+          <option value="CT">CT</option>
+          <option value="DE">DE</option>
+          <option value="DC">DC</option>
+          <option value="FL">FL</option>
+          <option value="GA" selected="selected">GA</option>
+          <option value="HI">HI</option>
+          <option value="ID">ID</option>
+          <option value="IL">IL</option>
+          <option value="IN">IN</option>
+          <option value="IA">IA</option>
+          <option value="KS">KS</option>
+          <option value="KY">KY</option>
+          <option value="LA">LA</option>
+          <option value="ME">ME</option>
+          <option value="MD">MD</option>
+          <option value="MA">MA</option>
+          <option value="MI">MI</option>
+          <option value="MN">MN</option>
+          <option value="MS">MS</option>
+          <option value="MO">MO</option>
+          <option value="MT">MT</option>
+          <option value="NE">NE</option>
+          <option value="NV">NV</option>
+          <option value="NH">NH</option>
+          <option value="NJ">NJ</option>
+          <option value="NM">MN</option>
+          <option value="NY">NY</option>
+          <option value="NC">NC</option>
+          <option value="ND">ND</option>
+          <option value="OH">OH</option>
+          <option value="OK">OK</option>
+          <option value="OR">OR</option>
+          <option value="PA">PA</option>
+          <option value="RI">RI</option>
+          <option value="SC">SC</option>
+          <option value="SD">SD</option>
+          <option value="TN">TN</option>
+          <option value="TX">TX</option>
+          <option value="UT">UT</option>
+          <option value="VT">VT</option>
+          <option value="VA">VA</option>
+          <option value="WA">WA</option>
+          <option value="WI">WI</option>
+          <option value="WV">WV</option>
+        </select>
+      </div>
     </div>
-    <div id="BookingPayment-Screen-PaymentInformation-Area-State">
-      <div id="BookingPayment-Screen-PaymentInformation-Area-State-Label">State:</div>
-      <select id="BookingPayment-Screen-PaymentInformation-Area-State-Input">
-        <option value="AL">AL</option>
-        <option value="AK">AK</option>
-        <option value="AZ">AZ</option>
-        <option value="AR">AR</option>
-        <option value="CA">CA</option>
-        <option value="CO">CO</option>
-        <option value="CT">CT</option>
-        <option value="DE">DE</option>
-        <option value="DC">DC</option>
-        <option value="FL">FL</option>
-        <option value="GA" selected="selected">GA</option>
-        <option value="HI">HI</option>
-        <option value="ID">ID</option>
-        <option value="IL">IL</option>
-        <option value="IN">IN</option>
-        <option value="IA">IA</option>
-        <option value="KS">KS</option>
-        <option value="KY">KY</option>
-        <option value="LA">LA</option>
-        <option value="ME">ME</option>
-        <option value="MD">MD</option>
-        <option value="MA">MA</option>
-        <option value="MI">MI</option>
-        <option value="MN">MN</option>
-        <option value="MS">MS</option>
-        <option value="MO">MO</option>
-        <option value="MT">MT</option>
-        <option value="NE">NE</option>
-        <option value="NV">NV</option>
-        <option value="NH">NH</option>
-        <option value="NJ">NJ</option>
-        <option value="NM">MN</option>
-        <option value="NY">NY</option>
-        <option value="NC">NC</option>
-        <option value="ND">ND</option>
-        <option value="OH">OH</option>
-        <option value="OK">OK</option>
-        <option value="OR">OR</option>
-        <option value="PA">PA</option>
-        <option value="RI">RI</option>
-        <option value="SC">SC</option>
-        <option value="SD">SD</option>
-        <option value="TN">TN</option>
-        <option value="TX">TX</option>
-        <option value="UT">UT</option>
-        <option value="VT">VT</option>
-        <option value="VA">VA</option>
-        <option value="WA">WA</option>
-        <option value="WI">WI</option>
-        <option value="WV">WV</option>
-      </select>
+    <div id="BookingPayment-Screen-PaymentInformation-CreditCard">
+      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Label">Credit card information:</div>
+      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Input"></div>
+      <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Status"></div>
     </div>
-  </div>
-  <div id="BookingPayment-Screen-PaymentInformation-CreditCard">
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Label">Credit card information:</div>
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Input"></div>
-    <div id="BookingPayment-Screen-PaymentInformation-CreditCard-Status"></div>
-  </div>
-</div>
-
-  
-  <div id="BookingPayment-Screen-ButtonsPanel">
-    <button id="BookingPayment-Screen-ButtonsPanel-BackButton">Back</button>
-    <div id="BookingPayment-Screen-ButtonsPanel-Summary"></div>
-    <button id="BookingPayment-Screen-ButtonsPanel-ConfirmButton">Confirm</button>
   </div>
 </div>
