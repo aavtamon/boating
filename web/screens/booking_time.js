@@ -10,8 +10,7 @@ BookingTime = {
   
   onLoad: function() {
     if (Backend.isPayedReservation()) {
-      Main.loadScreen("home");
-      return;
+      Backend.resetReservationContext();
     }
     
     

@@ -112,6 +112,6 @@ BookingConfirmation = {
 //    reservationContext.children_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
     
     
-    $("#BookingConfirmation-Screen-ButtonsPanel-NextButton").prop("disabled", !reservationComplete);
+    $("#BookingConfirmation-Screen-Description-NextButton").prop("disabled", !reservationComplete);
   },
 }

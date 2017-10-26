@@ -111,11 +111,11 @@ ScreenUtils = {
     $(phoneElement).keydown(function(event) {
       if (event.which >= 48 && event.which <= 57) {
         if (dataModel[dataModelProperty].length < 10) {
-          phoneElement._setPhone(dataModel[dataModelProperty] + (event.which - 48));
+          phoneElement.setPhone(dataModel[dataModelProperty] + (event.which - 48));
         }
       } else if (event.which == 8) {
         if (dataModel[dataModelProperty].length > 0) {
-          phoneElement._setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
+          phoneElement.setPhone(dataModel[dataModelProperty].substring(0, dataModel[dataModelProperty].length - 1));
         }
       } else if (event.which == 9) {
         return true;

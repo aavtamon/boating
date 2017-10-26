@@ -12,7 +12,7 @@
     Retrieval of the reservation:
   </div>
   {{if .Reservation}}
-    You seem to have a reservation <a href="javascript:Main.loadScreen('reservation_update')">{{.Reservation.Id}}</a>. Click on its number if you want to modify this one.
+    You seem to have a reservation <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on its number if you want to modify this one.
   
     <br>
   
