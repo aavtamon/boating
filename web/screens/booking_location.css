@@ -2,9 +2,6 @@
 	height: 100%;
 }
 
-#BookingLocation-Screen-Description {
-}
-
 #BookingLocation-Screen-SelectionPanel {
   position: relative;
   width: 100%;
@@ -13,49 +10,29 @@
 }
 
 #BookingLocation-Screen-SelectionPanel-LocationMap {
-  display: block;
   width: 100%;
   height: 100%;
 }
 
 #BookingLocation-Screen-SelectionPanel-CenterButton {
-	position: absolute;
-	display: inline-block;
-	width: 25px;
-	height: 25px;
-	right: 10px;
-	top: 10px;
-	
-	cursor: pointer;
-	
-	border-width: 1px;
-	border-style: solid;
-	border-radius: 3px;
-	border-color: grey;
-	
-	background-color: white;
+  position: absolute;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  right: 10px;
+  top: 10px;
+
+  cursor: pointer;
+
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: grey;
+
+  background-color: white;
   background-image: url(../imgs/center.png);
   background-size: cover;
 }
 #BookingLocation-Screen-SelectionPanel-CenterButton:hover {
 	background-color: rgb(234, 237, 237);
-}
-
-
-#BookingLocation-Screen-ReservationSummary {
-}
-
-#BookingLocation-Screen-ButtonsPanel {
-  margin-top: 20px;
-  
-  text-align: left;
-}
-
-#BookingLocation-Screen-ButtonsPanel-BackButton {
-  margin-left: 50px;
-}
-
-#BookingLocation-Screen-ButtonsPanel-NextButton {
-  float: right;
-  margin-right: 50px;
 }

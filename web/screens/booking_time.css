@@ -1,9 +1,3 @@
-#BookingTime-Screen {
-}
-
-#BookingTime-Screen-Description {
-}
-
 #BookingTime-Screen-SelectionContainer {
   text-align: center;
 }
@@ -11,12 +5,8 @@
 #BookingTime-Screen-SelectionPanel {
   margin-top: 20px;
   padding: 20px;
-  white-space: nowrap;
   overflow: auto;
-  
-  border-radius: 10px;
-  
-  background-color: #efbb5b;
+  white-space: nowrap;
 }
 
 #BookingTime-Screen-SelectionPanel-Calendar {
@@ -39,7 +29,8 @@
 
 
 
-#BookingTime-Screen-SelectionPanel-TimeFrame, #BookingTime-Screen-SelectionPanel-Duration {
+#BookingTime-Screen-SelectionPanel-TimeFrame,
+#BookingTime-Screen-SelectionPanel-Duration {
   display: inline-block;
   height: 211px;
   width: 270px;
@@ -59,7 +50,9 @@
   opacity: 50%;
 }
 
-.ui-datepicker .ui-datepicker-header, #BookingTime-Screen-SelectionPanel-TimeFrame-Title, #BookingTime-Screen-SelectionPanel-Duration-Title {
+.ui-datepicker .ui-datepicker-header,
+#BookingTime-Screen-SelectionPanel-TimeFrame-Title,
+#BookingTime-Screen-SelectionPanel-Duration-Title {
   height: 39px;
   line-height: 39px;
   text-align: center;
@@ -82,15 +75,17 @@
 }
 
 
-#BookingTime-Screen-SelectionPanel-TimeFrame-Times, #BookingTime-Screen-SelectionPanel-Duration-Durations {
+#BookingTime-Screen-SelectionPanel-TimeFrame-Times,
+#BookingTime-Screen-SelectionPanel-Duration-Durations {
   padding: 10px;
 }
 
 
-.bookingtime-time-interval, .bookingtime-duration {
+.bookingtime-time-interval,
+.bookingtime-duration {
   line-height: 30px;
 
-  font-family: Trebuchet MS;
+  font-family: Verdana;
   font-weight: bold;
   font-size: 1.1em;
 
@@ -98,9 +93,7 @@
 
   cursor: pointer;
 }
-.bookingtime-time-interval.selected, .bookingtime-duration.selected {
+.bookingtime-time-interval.selected,
+.bookingtime-duration.selected {
   color: #eb8f00;
-}
-
-#BookingTime-Screen-ReservationSummary {
 }
