@@ -96,7 +96,8 @@ BookingPayment = {
       });
     });
     
-    $("#BookingPayment-Screen-ReservationSummary-Details").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
+    $("#BookingPayment-Screen-ReservationSummary-Payment-Details").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
+    $("#BookingPayment-Screen-ReservationSummary-Booking").html(ScreenUtils.getBookingSummary(reservationContext));
     
     
     
@@ -118,8 +119,7 @@ BookingPayment = {
 
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Contact-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this), ScreenUtils.isValidEmail);
     
-    
-    if (reservationContext.cell_phone == null && reservationContext.mobile_phone != null) {
+    if ((reservationContext.cell_phone == null || reservationContext.cell_phone == "") && reservationContext.mobile_phone != null) {
       reservationContext.cell_phone = reservationContext.mobile_phone;
     }
     ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input")[0], reservationContext, "cell_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
@@ -153,9 +153,9 @@ BookingPayment = {
         && ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city)
         && paymentInfo.card_ready == true) {
          
-      $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").removeAttr("disabled");
+      $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", false);
     } else {
-      $("#BookingPayment-Screen-ButtonsPanel-ConfirmButton").attr("disabled", true);
+      $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", true);
     }
   },
 }

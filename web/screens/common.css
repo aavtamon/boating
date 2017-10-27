@@ -1,11 +1,15 @@
 input, select, .ui-widget {
   border-radius: 5px;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
   border-color: azure;
+  
+  font: inherit;
 }
 
-
+.phone-input {
+  width: 15ch;
+}
 
 .screen-description {
   position: relative;
@@ -86,6 +90,30 @@ input, select, .ui-widget {
 }
 
 
+.info-box {
+  margin-top: 20px;
+  
+  padding: 10px 30px 10px 30px;
+  
+  border-radius: 10px;
+  
+  background-color: #f7b742;
+  color: black;
+}
+
+.info-box-row {
+  white-space: nowrap;
+  margin-top: 10px;
+  
+  padding-bottom: 2px;
+  
+  border-bottom-style: groove;
+  border-bottom-width: 1px;
+  border-bottom-color: lightblue;
+}
+
+
+/*
 .titled-box {
   font-size: 15px;
   margin-top: 20px;
@@ -108,6 +136,7 @@ input, select, .ui-widget {
 
   background-color: rgb(255, 234, 191);
 }
+*/
 
 .standard-button {
   display: inline-block;
@@ -135,9 +164,7 @@ input, select, .ui-widget {
 }
 
 
-.row-element {
-  border-bottom-style: groove;
-  border-bottom-width: 1px;
-  border-bottom-color: lightblue;
-  
-}
+
+
+
+

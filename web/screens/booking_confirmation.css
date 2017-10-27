@@ -1,25 +1,13 @@
-#BookingConfirmation-Screen {
-}
-
-#BookingConfirmation-Screen-Description {
-}
-
-
-
 #BookingConfirmation-Screen-AdditionalInformation {
   margin-top: 20px;
   padding: 10px 30px 10px 30px;
 
   font-size: 20px;
-  
-  border-radius: 10px;
-  
-  color: #062a4c;
-  background-color: #efbb5b;
 }
 
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople {
   white-space: nowrap;
+  padding-bottom: 5px;
 }
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title {
   display: inline-block;
@@ -103,137 +91,23 @@
 
 #BookingConfirmation-Screen-ReservationSummary {
   margin-top: 20px;
-  padding: 10px 50px 10px 50px;
-
-  white-space: nowrap;
-
-  border-radius: 10px;
-  
-  color: #062a4c;
-  background-color: #efbb5b;
 }
 
-#BookingConfirmation-Screen-ReservationSummary-DateTime {
-}
-#BookingConfirmation-Screen-ReservationSummary-DateTime-Title {
-  display: inline-block;
-  width: 450px;
-  margin-right: 20px;
-}
-#BookingConfirmation-Screen-ReservationSummary-DateTime-Value {
-  display: inline-block;
-  width: 200px;
-
-  font-weight: bold;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-Duration {
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Duration-Title {
-  display: inline-block;
-  width: 450px;
-  margin-right: 20px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Duration-Value {
-  display: inline-block;
-  width: 200px;
-
-  font-weight: bold;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-Capacity {
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Capacity-Title {
-  display: inline-block;
-  width: 450px;
-  margin-right: 20px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Capacity-Value {
-  display: inline-block;
-  width: 200px;
-
-  font-weight: bold;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-Location {
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Title {
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details {
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName {
-  margin-left: 20px;
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title {
-  display: inline-block;
-  width: 400px;
-  margin-right: 50px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value {
-  display: inline-block;
-  width: 300px;
-
-  font-weight: bold;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress {
-  margin-left: 20px;
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title {
-  display: inline-block;
-  width: 400px;
-  margin-right: 50px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value {
-  display: inline-block;
-  width: 300px;
-
-  font-weight: bold;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee {
-  margin-left: 20px;
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title {
-  display: inline-block;
-  width: 400px;
-  margin-right: 50px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value {
-  display: inline-block;
-  width: 300px;
-
-  font-weight: bold;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions {
-  margin-left: 20px;
-  margin-top: 10px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title {
-  display: inline-block;
-  width: 400px;
-  margin-right: 50px;
-}
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
-  display: inline-block;
-  width: 300px;
-
-  font-weight: bold;
-}
+#BookingConfirmation-Screen-ReservationSummary-Location,
 #BookingConfirmation-Screen-ReservationSummary-Price {
   margin-top: 10px;
 }
+
+#BookingConfirmation-Screen-ReservationSummary-DateTime-Title,
+#BookingConfirmation-Screen-ReservationSummary-Duration-Title,
+#BookingConfirmation-Screen-ReservationSummary-Capacity-Title,
 #BookingConfirmation-Screen-ReservationSummary-Price-Title {
   display: inline-block;
   width: 450px;
-  margin-right: 20px;
-  
-  font-weight: bold;
 }
+#BookingConfirmation-Screen-ReservationSummary-DateTime-Value,
+#BookingConfirmation-Screen-ReservationSummary-Duration-Value,
+#BookingConfirmation-Screen-ReservationSummary-Capacity-Value,
 #BookingConfirmation-Screen-ReservationSummary-Price-Value {
   display: inline-block;
   width: 200px;
@@ -241,3 +115,21 @@
   font-weight: bold;
 }
 
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title
+{
+  display: inline-block;
+  width: 430px;
+  margin-left: 20px;
+}
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value,
+#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
+  display: inline-block;
+  width: 300px;
+
+  font-weight: bold;
+}
