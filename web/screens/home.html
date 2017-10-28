@@ -1,18 +1,47 @@
-<script>
-	$(document).ready(function() {
-	  $("#Home-Screen-Book").click(function() {
-	    Main.loadScreen("booking");
-	  });
-	});
-</script>
+<link rel="stylesheet" href="screens/home.css">
 
 <div id="Home-Screen">
-  Home sweat home!
-  <br>
-  {{if not .Reservation}}
-    Welcome to our web site.
-    Click this button <button id="Home-Screen-Book">Reservation</button> to place a reservation.
-  {{else}}
-Welcome back! You seem to have a reservation with us, confirmation number <b>{{.Reservation.Id}}</b>    
-  {{end}}
+  <div id="Home-Screen-Welcome">
+    We are glad to see you here on the boat reservation web site!
+    <br>
+    You will definitely have a great time on one of our boats.
+    <br>
+  </div>
+  <div id="Home-Screen-Introduction">
+    We are not just yet another place to rent a boat. We are much better, and this is what makes us unique. Unlike others, we will deliver the boat to one of the pick up locations of your choice. You don't have to drive to a marina, navigate thru its complex layout, deal with parking, etc. It is all much easier with us!
+    <p>
+    Our pick up locations are public ramps around the lake. Those places that you probably already used to come to. Just choose the one that you like most, and we will meet you there. It is super convenient.
+    You will get the detailed instructions in email or a text message with the name of the boat that is your ride as well as the mobile phone of the captain that will deliver you a boat.
+  </div>
+  <img id="Home-Screen-BoatPicture" src="../imgs/boat-picture.jpg">
+  
+  <img id="Home-Screen-TubingPicture" src="../imgs/tubing-picture.jpg">
+  <div id="Home-Screen-ThingsToDo">
+    There is quite a few thigs that you can do on the lake. You can just enjoy yout time on the boat, you can swim in the nice clean warm lake, or you can even do a water tubing!
+    If you want to tube, we will also be happy to provide it for you.
+    <p>
+    
+    {{if .Reservation}}
+      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
+      <br>
+      Click on the reservation if you want to review or cancel it.
+      <p>
+      You can always <a href="#booking_time">book</a> another trip.
+    {{else}}
+      While you are <a href="#booking_time">booking</a> your ride, you will be asked to provide your mobile phone. It is optional but we really advise you to do so. That will let us stay connected, and gives us an oportunity to text you any chabges in your trip if any. We will even text you a reminder, and also the location of the boat so that you know when to expect it.
+    {{end}}
+  </div>
+  
+  <div id="Home-Screen-Reservation">
+    {{if not .Reservation}}
+      Making a reservation is easy. Click <a href="#booking_time">Book Your Ride</a> to begin.
+    {{else}}
+      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
+      <br>
+      Click on the reservation if you want to review or cancel it.
+      <p>
+    
+      You can always <a href="#booking_time">book</a> another trip.
+    {{end}}
+  </div>
 </div>

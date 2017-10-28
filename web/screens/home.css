@@ -1,0 +1,48 @@
+#Home-Screen-Welcome {
+  margin-bottom: 20px;
+  text-align: center;
+  
+  font-size: 25px;
+  
+  color: #062b68;
+}
+
+#Home-Screen-Introduction {
+  display: inline-block;
+  width: calc(100% - 350px);
+  margin-right: 40px;
+  
+  vertical-align: top;
+}
+
+#Home-Screen-BoatPicture {
+  display: inline-block;
+  width: 300px;
+  
+  vertical-align: top;
+}
+
+
+#Home-Screen-TubingPicture {
+  display: inline-block;
+  width: 300px;
+  margin-top: 10px;  
+  margin-right: 40px;
+  
+  vertical-align: top;
+}
+
+#Home-Screen-ThingsToDo {
+  display: inline-block;
+  width: calc(100% - 350px);
+  margin-top: 10px;
+  
+  vertical-align: top;
+}
+
+#Home-Screen-Reservation {
+  margin-top: 20px;
+  text-align: center;
+  
+  font-size: 20px;  
+}
