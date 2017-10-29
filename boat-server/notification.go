@@ -27,6 +27,19 @@ func EmailRefundConfirmation(reservationId TReservationId) {
 }
 
 
+func EmailReservationConfirmation(reservationId TReservationId, emailOverride string) {
+  fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
+  
+  reservation := GetReservation(reservationId);
+  
+  email := reservation.Email;
+  if (emailOverride != "") {
+    email = emailOverride;
+  }
+  
+  sendEmail(email, fmt.Sprintf("Reservation %s is booked", reservationId), fmt.Sprintf("Details of your boat reservation %s", reservationId));
+}
+
 
 func TextPaymentConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
