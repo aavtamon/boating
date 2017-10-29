@@ -7,6 +7,10 @@ input, select, .ui-widget {
   font: inherit;
 }
 
+.ui-widget {
+  padding: 5px;
+}
+
 .phone-input {
   width: 15ch;
 }
@@ -102,10 +106,12 @@ input, select, .ui-widget {
 }
 
 .info-box-row {
-  white-space: nowrap;
   margin-top: 10px;
-  
   padding-bottom: 2px;
+  
+  white-space: nowrap;
+  overflow-x: hidden;
+
   
   border-bottom-style: groove;
   border-bottom-width: 1px;

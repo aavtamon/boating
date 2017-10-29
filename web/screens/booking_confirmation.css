@@ -88,48 +88,45 @@
 }
 
 
-
-#BookingConfirmation-Screen-ReservationSummary {
-  margin-top: 20px;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-Location,
-#BookingConfirmation-Screen-ReservationSummary-Price {
-  margin-top: 10px;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-DateTime-Title,
-#BookingConfirmation-Screen-ReservationSummary-Duration-Title,
-#BookingConfirmation-Screen-ReservationSummary-Capacity-Title,
-#BookingConfirmation-Screen-ReservationSummary-Price-Title {
-  display: inline-block;
-  width: 450px;
-}
-#BookingConfirmation-Screen-ReservationSummary-DateTime-Value,
-#BookingConfirmation-Screen-ReservationSummary-Duration-Value,
-#BookingConfirmation-Screen-ReservationSummary-Capacity-Value,
-#BookingConfirmation-Screen-ReservationSummary-Price-Value {
-  display: inline-block;
-  width: 200px;
-
-  font-weight: bold;
-}
-
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title
+#BookingConfirmation-Screen-ContactInformation-Name-FirstName,
+#BookingConfirmation-Screen-ContactInformation-Name-LastName,
+#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone,
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone
 {
   display: inline-block;
-  width: 430px;
-  margin-left: 20px;
 }
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value,
-#BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
+
+#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Label,
+#BookingConfirmation-Screen-ContactInformation-Name-LastName-Label,
+#BookingConfirmation-Screen-ContactInformation-Email-Label,
+#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label,
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label
+{
+  display: inline-block;
+  margin-right: 20px;
+}
+
+#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input,
+#BookingConfirmation-Screen-ContactInformation-Name-LastName-Input,
+#BookingConfirmation-Screen-ContactInformation-Email-Input
+{
   display: inline-block;
   width: 300px;
+  
+  margin-right: 50px;
+  margin-bottom: 5px;
+}
 
-  font-weight: bold;
+#BookingConfirmation-Screen-ContactInformation-Name-LastName-Input {
+  width: 350px;  
+}
+
+#BookingConfirmation-Screen-ContactInformation-Email-Input {
+  width: 400px;
+}
+
+#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input,
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input {
+  margin-bottom: 5px;
+  margin-right: 50px;
 }

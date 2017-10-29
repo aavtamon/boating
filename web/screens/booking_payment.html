@@ -4,6 +4,8 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
+  BookingPayment.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
+  
   $(document).ready(function() {
     BookingPayment.onLoad();
   });
@@ -17,40 +19,46 @@
   </div>
   
   <div id="BookingPayment-Screen-ReservationSummary" class="info-box">
-    <div id="BookingPayment-Screen-ReservationSummary-Payment">
-      <div id="BookingPayment-Screen-ReservationSummary-Payment-Label">Your are paying:</div>
-      <div id="BookingPayment-Screen-ReservationSummary-Payment-Details"></div>
+    <div id="BookingPayment-Screen-ReservationSummary-DateTime" class="info-box-row">
+      <div id="BookingPayment-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
+      <div id="BookingPayment-Screen-ReservationSummary-DateTime-Value"></div>
     </div>
-    <div id="BookingPayment-Screen-ReservationSummary-Booking"></div>
-  </div>
+    <div id="BookingPayment-Screen-ReservationSummary-Duration" class="info-box-row">
+      <div id="BookingPayment-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
+      <div id="BookingPayment-Screen-ReservationSummary-Duration-Value"></div>
+    </div>
+    <div id="BookingPayment-Screen-ReservationSummary-Capacity" class="info-box-row">
+      <div id="BookingPayment-Screen-ReservationSummary-Capacity-Title">Maximum capacity adults+children (no exceptions!!!):</div>
+      <div id="BookingPayment-Screen-ReservationSummary-Capacity-Value"></div>
+    </div>
+    <div id="BookingPayment-Screen-ReservationSummary-Location">
+      <div id="BookingPayment-Screen-ReservationSummary-Location-Title">Pick up location:</div>
+      <div id="BookingPayment-Screen-ReservationSummary-Location-Details">
+        <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName" class="info-box-row">
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Title">Place:</div>
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value"></div>
+        </div>
+        <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress" class="info-box-row">
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Title">Address:</div>
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value"></div>
+        </div>
+        <div id="BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee" class="info-box-row">
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Title">Parking fee:</div>
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value"></div>
+        </div>
+        <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions" class="info-box-row">
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Title">Additional instructions:</div>
+          <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
+        </div>
+      </div>
+    </div>
+    <div id="BookingPayment-Screen-ReservationSummary-Price">
+      <div id="BookingPayment-Screen-ReservationSummary-Price-Title">Your Total:</div>
+      <div id="BookingPayment-Screen-ReservationSummary-Price-Value"></div>
+    </div>
+  </div>  
   
   <div class="info-box">
-    <div id="BookingPayment-Screen-ContactInformation">
-      <div id="BookingPayment-Screen-ContactInformation-Name" class="info-box-row">
-        <div id="BookingPayment-Screen-ContactInformation-Name-FirstName">
-          <div id="BookingPayment-Screen-ContactInformation-Name-FirstName-Label">First Name:</div>
-          <input type="text" id="BookingPayment-Screen-ContactInformation-Name-FirstName-Input">
-        </div>
-        <div id="BookingPayment-Screen-ContactInformation-Name-LastName">
-          <div id="BookingPayment-Screen-ContactInformation-Name-LastName-Label">Last Name:</div>
-          <input type="text" id="BookingPayment-Screen-ContactInformation-Name-LastName-Input">
-        </div>
-      </div>
-      <div id="BookingPayment-Screen-ContactInformation-Contact" class="info-box-row">
-        <div id="BookingPayment-Screen-ContactInformation-Contact-Email">
-          <div id="BookingPayment-Screen-ContactInformation-Contact-Email-Label">Email:</div>
-          <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-Email-Input">
-        </div>
-        <div id="BookingPayment-Screen-ContactInformation-Contact-CellPhone">
-          <div id="BookingPayment-Screen-ContactInformation-Contact-CellPhone-Label">Cell phone:</div>
-          <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input" class="phone-input">
-        </div>
-        <div id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone">
-          <div id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Label">Alternative phone:</div>
-          <input type="text" id="BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input"  class="phone-input">
-        </div>
-      </div>
-    </div>
     <div id="BookingPayment-Screen-PaymentInformation">
       <div id="BookingPayment-Screen-PaymentInformation-Name" class="info-box-row">
         <div id="BookingPayment-Screen-PaymentInformation-Name-Label">Name on the card:</div>

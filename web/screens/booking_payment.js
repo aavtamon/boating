@@ -1,4 +1,6 @@
 BookingPayment = {
+  maximumCapacity: null,
+  
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
     
@@ -14,9 +16,10 @@ BookingPayment = {
     
     
     if (Backend.getTemporaryData().paymentInfo == null) {
-      Backend.getTemporaryData().paymentInfo = {card_ready: false};
+      Backend.getTemporaryData().paymentInfo = {card_ready: false, name: reservationContext.first_name + " " + reservationContext.last_name};
     }
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
+    paymentInfo.card_ready = false;
     
     
     var stripe = Stripe('pk_test_39gZjXaJ3YlMgPhFcISoz2MC');    
@@ -96,40 +99,21 @@ BookingPayment = {
       });
     });
     
-    $("#BookingPayment-Screen-ReservationSummary-Payment-Details").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
-    $("#BookingPayment-Screen-ReservationSummary-Booking").html(ScreenUtils.getBookingSummary(reservationContext));
-    
-    
-    
-    function updateName() {
-      $("#BookingPayment-Screen-PaymentInformation-Name-Input").val($("#BookingPayment-Screen-ContactInformation-Name-FirstName-Input").val() + " " + $("#BookingPayment-Screen-ContactInformation-Name-LastName-Input").val()).trigger("change");
-    }
-    
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name", function() {
-      updateName();
-      
-      this._canProceedToNextStep();
-    }.bind(this));
-    
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Name-LastName-Input")[0], reservationContext, "last_name", function() {
-      updateName();
-      
-      this._canProceedToNextStep();
-    }.bind(this));
 
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-ContactInformation-Contact-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this), ScreenUtils.isValidEmail);
+    $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
+    $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
     
-    if ((reservationContext.cell_phone == null || reservationContext.cell_phone == "") && reservationContext.mobile_phone != null) {
-      reservationContext.cell_phone = reservationContext.mobile_phone;
-    }
-    ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Input")[0], reservationContext, "cell_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
+    $("#BookingPayment-Screen-ReservationSummary-Capacity-Value").html(this.maximumCapacity);
 
-    ScreenUtils.phoneInput($("#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Input")[0], reservationContext, "alternative_phone", this._canProceedToNextStep.bind(this), function(value) {
-      return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
-    });
+    var location = ScreenUtils.getLocation(reservationContext.location_id);
+    $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
+    $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
+    $("#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
+    $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
+    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
+    
     
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));
-    updateName();
 
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Street-Input")[0], paymentInfo, "street_address", this._canProceedToNextStep.bind(this));
 
@@ -148,14 +132,8 @@ BookingPayment = {
     var reservationContext = Backend.getReservationContext();
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
         
-    if (ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name) && ScreenUtils.isValidEmail(reservationContext.email)
-        && (ScreenUtils.isValidPhone(reservationContext.cell_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
-        && ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city)
-        && paymentInfo.card_ready == true) {
+    var valid = ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city) && (paymentInfo.card_ready == true);
          
-      $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", false);
-    } else {
-      $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", true);
-    }
+    $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", !valid);
   },
 }

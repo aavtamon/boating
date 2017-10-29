@@ -95,15 +95,14 @@ ScreenUtils = {
     }
     
     phoneElement._onValueChange = function() {
-      if (validationMethod) {
-        if (validationMethod(dataModel[dataModelProperty])) {
+      var isValid = this.isValid();
+      if (isValid) {
           $(phoneElement).removeClass("invalid");
-        } else {
-          $(phoneElement).addClass("invalid");
-        }        
-      }
+      } else {
+        $(phoneElement).addClass("invalid");
+      }        
       if (changeCallback) {
-        changeCallback(dataModel[dataModelProperty]);
+        changeCallback(dataModel[dataModelProperty], isValid);
       }      
     }
     
@@ -139,6 +138,12 @@ ScreenUtils = {
     phoneElement.getPhone = function() {
       return dataModel[dataModelProperty];
     }
+    
+    phoneElement.isValid = function() {
+      return validationMethod == null ? true : validationMethod(dataModel[dataModelProperty]);
+    }
+    
+    
     
 
     phoneElement._setPhone(dataModel[dataModelProperty] || "");

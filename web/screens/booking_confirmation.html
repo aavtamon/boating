@@ -5,7 +5,7 @@
 
 <script>
   BookingConfirmation.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
-
+  
   $(document).ready(function() {
     BookingConfirmation.onLoad();
   });
@@ -14,7 +14,7 @@
 <div id="BookingConfirmation-Screen">
   <div id="BookingConfirmation-Screen-Description" class="screen-description">
     <button id="BookingConfirmation-Screen-Description-BackButton" class="screen-description-back">Location</button>
-    How many riders will we have?
+    Provide information about the riders
     <button id="BookingConfirmation-Screen-Description-NextButton" class="screen-description-next">Payment</button>
   </div>
   
@@ -45,44 +45,30 @@
     </div>
   </div>
   
-  <div id="BookingConfirmation-Screen-ReservationSummary" class="info-box">
-    <div id="BookingConfirmation-Screen-ReservationSummary-DateTime" class="info-box-row">
-      <div id="BookingConfirmation-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
-      <div id="BookingConfirmation-Screen-ReservationSummary-DateTime-Value"></div>
-    </div>
-    <div id="BookingConfirmation-Screen-ReservationSummary-Duration" class="info-box-row">
-      <div id="BookingConfirmation-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
-      <div id="BookingConfirmation-Screen-ReservationSummary-Duration-Value"></div>
-    </div>
-    <div id="BookingConfirmation-Screen-ReservationSummary-Capacity" class="info-box-row">
-      <div id="BookingConfirmation-Screen-ReservationSummary-Capacity-Title">Maximum capacity adults+children (no exceptions!!!):</div>
-      <div id="BookingConfirmation-Screen-ReservationSummary-Capacity-Value"></div>
-    </div>
-    <div id="BookingConfirmation-Screen-ReservationSummary-Location">
-      <div id="BookingConfirmation-Screen-ReservationSummary-Location-Title">Pick up location:</div>
-      <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details">
-        <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName" class="info-box-row">
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Title">Place:</div>
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceName-Value"></div>
-        </div>
-        <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress" class="info-box-row">
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Title">Address:</div>
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PlaceAddress-Value"></div>
-        </div>
-        <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee" class="info-box-row">
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Title">Parking fee:</div>
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-ParkingFee-Value"></div>
-        </div>
-        <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions" class="info-box-row">
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Title">Additional instructions:</div>
-          <div id="BookingConfirmation-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
-        </div>
+  <div id="BookingConfirmation-Screen-ContactInformation"  class="info-box">
+    <div id="BookingConfirmation-Screen-ContactInformation-Name" class="info-box-row">
+      <div id="BookingConfirmation-Screen-ContactInformation-Name-FirstName">
+        <div id="BookingConfirmation-Screen-ContactInformation-Name-FirstName-Label">First Name:</div>
+        <input type="text" id="BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input">
+      </div>
+      <div id="BookingConfirmation-Screen-ContactInformation-Name-LastName">
+        <div id="BookingConfirmation-Screen-ContactInformation-Name-LastName-Label">Last Name:</div>
+        <input type="text" id="BookingConfirmation-Screen-ContactInformation-Name-LastName-Input">
       </div>
     </div>
-    <div id="BookingConfirmation-Screen-ReservationSummary-Price">
-      <div id="BookingConfirmation-Screen-ReservationSummary-Price-Title">Your Total:</div>
-      <div id="BookingConfirmation-Screen-ReservationSummary-Price-Value"></div>
+    <div id="BookingConfirmation-Screen-ContactInformation-Email" class="info-box-row">
+      <div id="BookingConfirmation-Screen-ContactInformation-Email-Label">Email:</div>
+      <input type="text" id="BookingConfirmation-Screen-ContactInformation-Email-Input">
+    </div>
+    <div id="BookingConfirmation-Screen-ContactInformation-Phone" class="info-box-row">
+      <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone">
+        <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label">Primary phone:</div>
+        <input type="text" id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input" class="phone-input">
+      </div>
+      <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone">
+        <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label">Alternative phone:</div>
+        <input type="text" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input"  class="phone-input">
+      </div>
     </div>
   </div>
-
 </div>

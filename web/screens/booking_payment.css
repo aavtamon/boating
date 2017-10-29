@@ -1,63 +1,69 @@
-#BookingPayment-Screen-ReservationSummary-Payment {
-  display: inline-block;
-  margin-right: 100px;
-  vertical-align: middle;
+#BookingPayment-Screen-ReservationSummary {
+  margin-top: 20px;
 }
-#BookingPayment-Screen-ReservationSummary-Payment-Label {
-  display: inline-block;
-  margin-right: 30px;
-  vertical-align: middle;
-  font-size: 25px;
+
+#BookingPayment-Screen-ReservationSummary-Location,
+#BookingPayment-Screen-ReservationSummary-Price {
+  margin-top: 10px;
 }
-#BookingPayment-Screen-ReservationSummary-Payment-Details {
+
+#BookingPayment-Screen-ReservationSummary-DateTime-Title,
+#BookingPayment-Screen-ReservationSummary-Duration-Title,
+#BookingPayment-Screen-ReservationSummary-Capacity-Title,
+#BookingPayment-Screen-ReservationSummary-Price-Title {
   display: inline-block;
-  vertical-align: middle;
-  font-size: 25px;
+  width: 450px;
+}
+#BookingPayment-Screen-ReservationSummary-DateTime-Value,
+#BookingPayment-Screen-ReservationSummary-Duration-Value,
+#BookingPayment-Screen-ReservationSummary-Capacity-Value,
+#BookingPayment-Screen-ReservationSummary-Price-Value {
+  display: inline-block;
+  width: 200px;
+
   font-weight: bold;
-  
-  text-align: left;
 }
 
-#BookingPayment-Screen-ReservationSummary-Booking {
+#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Title,
+#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Title,
+#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Title,
+#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Title
+{
   display: inline-block;
-  vertical-align: middle;
+  width: 430px;
+  margin-left: 20px;
+}
+#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value,
+#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value,
+#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value,
+#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
+  display: inline-block;
+  width: 300px;
+
+  font-weight: bold;
 }
 
 
-
-#BookingPayment-Screen-ContactInformation-Name-FirstName,
-#BookingPayment-Screen-ContactInformation-Name-LastName,
-#BookingPayment-Screen-ContactInformation-Contact-Email,
-#BookingPayment-Screen-ContactInformation-Contact-CellPhone,
-#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone,
 #BookingPayment-Screen-PaymentInformation-Address-Street,
 #BookingPayment-Screen-PaymentInformation-Address-Additional,
 #BookingPayment-Screen-PaymentInformation-Area-City,
-#BookingPayment-Screen-PaymentInformation-Area-State,
-#BookingPayment-Screen-PaymentInformation-CreditCard-Status
+#BookingPayment-Screen-PaymentInformation-Area-State
 {
   display: inline-block;
 }
 
-#BookingPayment-Screen-ContactInformation-Name-FirstName-Label,
-#BookingPayment-Screen-ContactInformation-Name-LastName-Label,
-#BookingPayment-Screen-ContactInformation-Contact-Email-Label,
-#BookingPayment-Screen-ContactInformation-Contact-CellPhone-Label,
-#BookingPayment-Screen-ContactInformation-Contact-AlternativePhone-Label,
+
 #BookingPayment-Screen-PaymentInformation-Name-Label,
 #BookingPayment-Screen-PaymentInformation-Address-Street-Label,
 #BookingPayment-Screen-PaymentInformation-Address-Additional-Label,
 #BookingPayment-Screen-PaymentInformation-Area-City-Label,
 #BookingPayment-Screen-PaymentInformation-Area-State-Label,
 #BookingPayment-Screen-PaymentInformation-CreditCard-Label
- {
+{
   display: inline-block;
   margin-right: 20px;
 }
 
-#BookingPayment-Screen-ContactInformation-Name-FirstName-Input,
-#BookingPayment-Screen-ContactInformation-Name-LastName-Input,
-#BookingPayment-Screen-ContactInformation-Contact-Email-Input,
 #BookingPayment-Screen-PaymentInformation-Name-Input,
 #BookingPayment-Screen-PaymentInformation-Address-Street-Input,
 #BookingPayment-Screen-PaymentInformation-Address-Additional-Input,
@@ -71,18 +77,6 @@
   margin-bottom: 5px;
 }
 
-#BookingPayment-Screen-ContactInformation-Name-LastName-Input {
-  width: 350px;  
-}
-
-#BookingPayment-Screen-ContactInformation-Contact-Email-Input {
-  width: 260px;
-}
-
-#BookingPayment-Screen-ContactInformation-Contact-CellPhone {
-  width: 200px;
-  margin-right: 50px;
-}
 
 #BookingPayment-Screen-PaymentInformation-Name-Input {
   width: 400px;
