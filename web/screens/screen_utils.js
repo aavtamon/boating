@@ -169,6 +169,13 @@ ScreenUtils = {
         changeCallback(inputElement.value);
       }      
     });
+    
+    if (changeCallback) {
+      $(inputElement).bind("input", function() {
+          dataModel[dataModelProperty] = inputElement.value;
+          changeCallback(inputElement.value);
+      });
+    }
   },
   
   

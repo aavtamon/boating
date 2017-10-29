@@ -108,7 +108,7 @@ BookingConfirmation = {
         && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
         && ScreenUtils.isValidEmail(reservationContext.email)
         && (ScreenUtils.isValidPhone(reservationContext.primary_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone));
-    
+
     $("#BookingConfirmation-Screen-Description-NextButton").prop("disabled", !valid);
     
     

@@ -1,5 +1,8 @@
 BookingPayment = {
   maximumCapacity: null,
+  cancellationFees: null,
+  _cancellationPolicyAccepted: false,
+  
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
@@ -55,49 +58,17 @@ BookingPayment = {
     
     
     $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
-      Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
-      
-      var cardData = {
-        name: paymentInfo.name,
-        address_line1: paymentInfo.street_address,
-        address_line2: paymentInfo.additional_address,
-        address_city: paymentInfo.city,
-        address_state: paymentInfo.state,
-        address_country: "US",
-        currency: "usd"
+      if (this._cancellationPolicyAccepted) {
+        this._pay();
+      } else {
+        Main.showMessage("Please review our cancellation policy", this._getCancellationPolicy(), function(action) {
+          if (action == Main.ACTION_OK) {
+            this._cancellationPolicyAccepted = true;
+            this._pay();
+          }
+        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
       }
-
-      stripe.createToken(card, cardData).then(function(result) {
-        if (result.error) {
-          Main.showMessage("Payment Not Successful", result.error.message);
-        } else {
-          Backend.saveReservation(function(status) {
-            if (status == Backend.STATUS_SUCCESS) {
-              Backend.pay(result.token.id, function(status) {
-                Main.hidePopup();
-                if (status == Backend.STATUS_SUCCESS) {
-                  Backend.getTemporaryData().paymentInfo = null;
-
-                  Main.loadScreen("booking_complete");
-                } else if (status == Backend.STATUS_BAD_REQUEST) {
-                  Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
-                } else {
-                  Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
-                }
-              });
-            } else if (status == Backend.STATUS_NOT_FOUND) {
-              Main.showMessage("Not Successful", "We cannot save your reservation. Try again later");
-            } else if (status == Backend.STATUS_CONFLICT) {
-              Main.showMessage("Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
-            } else {
-              Main.showMessage("Not Successful", "An error occured. Please try again");
-            }
-            
-            //TODO: Consider removing of the previous;y saved reservation
-          });
-        }
-      });
-    });
+    }.bind(this));
     
 
     $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
@@ -123,10 +94,75 @@ BookingPayment = {
 
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
     
+    
+    $("#BookingPayment-Screen-CancellationPolicy-Link").attr("href", "javascript:BookingPayment._showCancellationPolicy()");
+    
     this._canProceedToNextStep();
   },
   
+  
+  _pay: function() {
+    Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
+
+    var cardData = {
+      name: paymentInfo.name,
+      address_line1: paymentInfo.street_address,
+      address_line2: paymentInfo.additional_address,
+      address_city: paymentInfo.city,
+      address_state: paymentInfo.state,
+      address_country: "US",
+      currency: "usd"
+    }
+
+    stripe.createToken(card, cardData).then(function(result) {
+      if (result.error) {
+        Main.showMessage("Payment Not Successful", result.error.message);
+      } else {
+        Backend.saveReservation(function(status) {
+          if (status == Backend.STATUS_SUCCESS) {
+            Backend.pay(result.token.id, function(status) {
+              Main.hidePopup();
+              if (status == Backend.STATUS_SUCCESS) {
+                Backend.getTemporaryData().paymentInfo = null;
+
+                Main.loadScreen("booking_complete");
+              } else if (status == Backend.STATUS_BAD_REQUEST) {
+                Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
+              } else {
+                Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
+              }
+            });
+          } else if (status == Backend.STATUS_NOT_FOUND) {
+            Main.showMessage("Not Successful", "We cannot save your reservation. Try again later");
+          } else if (status == Backend.STATUS_CONFLICT) {
+            Main.showMessage("Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
+          } else {
+            Main.showMessage("Not Successful", "An error occured. Please try again");
+          }
+
+          //TODO: Consider removing of the previous;y saved reservation
+        });
+      }
+    });    
+  },
  
+  
+  _getCancellationPolicy: function() {
+    var policy = "<center><h1>Cancellation Policy</h1></center><p>We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
+    
+    
+    for (var index in BookingPayment.cancellationFees) {
+      var fee = BookingPayment.cancellationFees[index];
+      policy += "<li>" + fee.range_min + " - " + fee.range_max + " hours: $" + fee.price + " dollars</li>"
+    }
+    
+    return policy;
+  },
+  
+  _showCancellationPolicy: function() {
+    Main.showMessage("Cancellation Policy", this._getCancellationPolicy());
+  },
+  
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();

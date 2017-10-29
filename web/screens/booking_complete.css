@@ -1,11 +1,22 @@
-#BookingComplete-Screen {
+#BookingComplete-Screen-ReservationSummary-Email {
+  margin-top: 20px;
 }
 
-#BookingComplete-Screen-ReservationSummary {
-	font-size: 15px;
-	margin-top: 10px;
-	
-	border-width: 2px;
-	border-style: groove;
-	padding: 5px;
+#BookingComplete-Screen-ReservationSummary-Email-Label {
+  display: inline-block;
+  margin-right: 20px;
+  
+  font-weight: bold;
+  
+  vertical-align: middle;
+}
+#BookingComplete-Screen-ReservationSummary-Email-Input {
+  width: 400px;
+  margin-right: 30px;
+  
+  vertical-align: middle;
+}
+#BookingComplete-Screen-ReservationSummary-Email-SendButton {
+  margin-bottom: 5px;
+  vertical-align: middle;
 }

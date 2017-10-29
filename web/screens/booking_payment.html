@@ -5,6 +5,7 @@
 
 <script>
   BookingPayment.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
+  BookingPayment.cancellationFees = {{.BookingSettings.CancellationFees}};
   
   $(document).ready(function() {
     BookingPayment.onLoad();
@@ -144,5 +145,9 @@
         </div>
       </div>
     </div>
+  </div>
+  
+  <div id="BookingPayment-Screen-CancellationPolicy" class="info-box">
+    Please review our <a id="BookingPayment-Screen-CancellationPolicy-Link">Cancellation Policy</a> before placiung your reservation.
   </div>
 </div>

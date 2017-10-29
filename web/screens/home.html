@@ -26,7 +26,7 @@
       <br>
       Click on the reservation if you want to review or cancel it.
       <p>
-      You can always <a href="#booking_time">book</a> another trip.
+      You can also <a href="#booking_time">book</a> another trip if you would like.
     {{else}}
       While you are <a href="#booking_time">booking</a> your ride, you will be asked to provide your mobile phone. It is optional but we really advise you to do so. That will let us stay connected, and gives us an oportunity to text you any chabges in your trip if any. We will even text you a reminder, and also the location of the boat so that you know when to expect it.
     {{end}}
@@ -35,13 +35,6 @@
   <div id="Home-Screen-Reservation">
     {{if not .Reservation}}
       Making a reservation is easy. Click <a href="#booking_time">Book Your Ride</a> to begin.
-    {{else}}
-      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
-      <br>
-      Click on the reservation if you want to review or cancel it.
-      <p>
-    
-      You can always <a href="#booking_time">book</a> another trip.
     {{end}}
   </div>
 </div>
