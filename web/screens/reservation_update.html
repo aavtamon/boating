@@ -4,27 +4,68 @@
 
 <script>
   $(document).ready(function() {
-    ReservationUpdate.onLoad();
-    
     {{if .Reservation}}
-      $("#ReservationUpdate-Screen-Reservation-Date").val(ScreenUtils.getBookingDate({{.Reservation.Slot.DateTime}}));
-    
+      ReservationUpdate.reservationId = {{.Reservation.Id}};
+      ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+      ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
       ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
       ReservationUpdate.cancellationFees = {{.BookingSettings.CancellationFees}};
-    {{else}}
-      Main.loadScreen("home");
+                    
+      ReservationUpdate.onLoad();
     {{end}}
   });
 </script>
 
 <div id="ReservationUpdate-Screen">
-  <div id="ReservationUpdate-Screen-Reservation">
-    Your reservation: {{.Reservation.Id}}
-    <br>
-    Date: <div id="ReservationUpdate-Screen-Reservation-Date"></div>
-    <br>
-    Name: {{.Reservation.FirstName}}, {{.Reservation.LastName}}
+  <div class="screen-description">
+    Your reservation details
   </div>
+  
+  
+  <div id="ReservationUpdate-Screen-ReservationSummary" class="info-box">
+    <div id="ReservationUpdate-Screen-ReservationSummary-Id" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Id-Title">Confirmation number:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Id-Value">{{.Reservation.Id}}</div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-DateTime" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-DateTime-Value"></div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Duration" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Value">{{.Reservation.Slot.Duration}} hours</div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Group" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Title">Your group:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Value">{{.Reservation.NumOfAdults}} adults and {{.Reservation.NumOfChildren}} children</div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Location">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Location-Title">Pick up location:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details">
+        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName" class="info-box-row">
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Title">Place:</div>
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value"></div>
+        </div>
+        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress" class="info-box-row">
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Title">Address:</div>
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value"></div>
+        </div>
+        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee" class="info-box-row">
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Title">Parking fee:</div>
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value"></div>
+        </div>
+        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions" class="info-box-row">
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Title">Additional instructions:</div>
+          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
+        </div>
+      </div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Price">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{.Reservation.PaymentAmount}} dollars</div>
+    </div>
+  </div>  
+  
   <div id="ReservationUpdate-Screen-ButtonsPanel">
     <button id="ReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>
   </div>

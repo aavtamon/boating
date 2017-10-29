@@ -26,7 +26,22 @@
   
   <script src="https://js.stripe.com/v3/"></script>
   
+  <script>
+    {{range $id, $location := .BookingSettings.AvailableLocations}}
+      var loc = {
+        id: {{$id}},
+        name: {{$location.Name}},
+        lat: {{$location.Location.Latitude}},
+        lng: {{$location.Location.Longitude}},
+        address: {{$location.Address}},
+        parking_fee: {{$location.ParkingFee}},
+        instructions: {{$location.Instructions}}
+      }
+      Backend.availableLocations.push(loc);
+    {{end}}
+  </script>
 </head>
+
 <body onload="Main.onLoad()">
   <div id="Main-Header">
     <div id="Main-Header-Title">Worry-Free Boating On Lanier

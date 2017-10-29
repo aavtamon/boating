@@ -11,20 +11,6 @@
   }
   BookingLocation.centerLocation = centerLocation;
   
-  {{range $id, $location := .BookingSettings.AvailableLocations}}
-    var loc = {
-      id: {{$id}},
-      name: {{$location.Name}},
-      lat: {{$location.Location.Latitude}},
-      lng: {{$location.Location.Longitude}},
-      address: {{$location.Address}},
-      parking_fee: {{$location.ParkingFee}},
-      instructions: {{$location.Instructions}}
-    }
-    Backend.availableLocations.push(loc);
-  {{end}}
-  
-  
   $(document).ready(function() {
     BookingLocation.onLoad();
   });

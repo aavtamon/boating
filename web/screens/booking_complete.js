@@ -3,7 +3,7 @@ BookingComplete = {
   
   onLoad: function() {
     if (!this.reservationId) {
-      //Main.loadScreen("home");
+      Main.loadScreen("home");
     }
     
     var emailData = {};

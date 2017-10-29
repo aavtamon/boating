@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="screens/reservation_retrieval.css">
 <script src="screens/reservation_retrieval.js"></script>
+<script src="screens/screen_utils.js"></script>
 
 <script>
   $(document).ready(function() {
@@ -8,30 +9,31 @@
 </script>
 
 <div id="ReservationRetrieval-Screen">
-  <div id="ReservationRetrieval-Screen-ReservationInfo">
-    Retrieval of the reservation:
+  <div class="screen-description">
+    Retrieve your reservation
   </div>
+  
   {{if .Reservation}}
-    You seem to have a reservation <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on its number if you want to modify this one.
-  
-    <br>
-  
-    If you want to pull a different one, please enter the confirmation number and the last name:
+    <div class="info-box">
+      You seem to have a reservation <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
+
+      <br>
+
+      If you want to pull a different one, please enter the confirmation number and the last name:
+    </div>
   {{end}}
   
-  <div id="ReservationRetrieval-Screen-ReservationId">
-    <div id="ReservationRetrieval-Screen-ReservationId-Number-Label">Confirmation Number:</div>
-    <input type="text" id="ReservationRetrieval-Screen-ReservationId-Number-Input" class="standard-input">
-    <div id="ReservationRetrieval-Screen-ReservationId-LastName-Label">Last name on the reservation:</div>
-    <input type="text" id="ReservationRetrieval-Screen-ReservationId-LastName-Input" class="standard-input">
-    <div id="ReservationRetrieval-Screen-ReservationId-Status">
-      Failed to retieve reservation.<br>Please correct your confirmation number and last name, and try again.
+  <div id="ReservationRetrieval-Screen-Reservation" class="info-box">
+    <div id="ReservationRetrieval-Screen-Reservation-Number-Label">Confirmation Number:</div>
+    <input type="text" id="ReservationRetrieval-Screen-Reservation-Number-Input">
+    <div id="ReservationRetrieval-Screen-Reservation-LastName-Label">Last name on the reservation:</div>
+    <input type="text" id="ReservationRetrieval-Screen-Reservation-LastName-Input">
+    <div id="ReservationRetrieval-Screen-Reservation-Status">
+      Failed to retieve reservation.<br>Please correct your confirmation number and/or last name, and try again.
       If you cannot retrieve your reservation, please give us a call.
     </div>
-    <div id="ReservationRetrieval-Screen-ReservationId-ButtonPanel">
-      <button id="ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton" class="standard-button">Retrieve</button>
+    <div id="ReservationRetrieval-Screen-Reservation-ButtonPanel">
+      <button id="ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton" class="standard-button">Retrieve</button>
     </div>
   </div>
-
-  
 </div>

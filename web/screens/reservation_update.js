@@ -1,8 +1,27 @@
 ReservationUpdate = {
+  reservationId: null,
+  reservationDateTime: null,
+  reservationLocationId: null,
   currentDate: null,
   cancellationFees: null,
   
   onLoad: function() {
+    if (!this.reservationId) {
+      Main.loadScreen("home");
+      
+      return;
+    }
+    
+    $("#ReservationUpdate-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(this.reservationDateTime) + " " + ScreenUtils.getBookingTime(this.reservationDateTime));
+    
+    
+    var location = ScreenUtils.getLocation(this.reservationLocationId);
+    $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
+    $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
+    $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
+    $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
+
+    
     $("#ReservationUpdate-Screen-ButtonsPanel-CancelButton").click(function() {
       var cancellationMessage = "Do you really want to cancel your reservation <b>" + Backend.getReservationContext().id + "</b>";
       

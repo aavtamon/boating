@@ -7,35 +7,35 @@ ReservationRetrieval = {
       this.retrieveReservation(reservationId, lastName);
     }
     
-    $("#ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton").prop("disabled", true);
-    $("#ReservationRetrieval-Screen-ReservationId-Status").hide();
+    $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").prop("disabled", true);
+    $("#ReservationRetrieval-Screen-Reservation-Status").hide();
     
     function reenableNextButton() {
-      var nextButtonEnabled = $("#ReservationRetrieval-Screen-ReservationId-Number-Input").val().length > 0 && $("#ReservationRetrieval-Screen-ReservationId-LastName-Input").val().length > 0;
+      var restoreButtonEnabled = $("#ReservationRetrieval-Screen-Reservation-Number-Input").val().length > 0 && $("#ReservationRetrieval-Screen-Reservation-LastName-Input").val().length > 0;
       
-      $("#ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton").prop("disabled", !nextButtonEnabled);
-      $("#ReservationRetrieval-Screen-ReservationId-Status").hide();
+      $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").prop("disabled", !restoreButtonEnabled);
+      $("#ReservationRetrieval-Screen-Reservation-Status").hide();
     }
     
-    $("#ReservationRetrieval-Screen-ReservationId-Number-Input").bind("input", reenableNextButton);
-    $("#ReservationRetrieval-Screen-ReservationId-LastName-Input").bind("input", reenableNextButton);
     
-    $("#ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton").click(function() {
-      reservationNumber = $("#ReservationRetrieval-Screen-ReservationId-Number-Input").val();
-      lastName = $("#ReservationRetrieval-Screen-ReservationId-LastName-Input").val();
-      
-      $("#ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton").prop("disabled", true);
-      Backend.restoreReservationContext(reservationNumber, lastName, function(status) {
+    var reservationInfo = {};
+    
+    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Number-Input")[0], reservationInfo, "id", reenableNextButton);
+    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-LastName-Input")[0], reservationInfo, "last_name", reenableNextButton);
+    
+    
+    $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").click(function() {
+      Backend.restoreReservationContext(reservationInfo.id, reservationInfo.last_name, function(status) {
         if (status == Backend.STATUS_SUCCESS) {
           Main.loadScreen("reservation_update");
         } else {
-          $("#ReservationRetrieval-Screen-ReservationId-Status").show();
+          $("#ReservationRetrieval-Screen-Reservation-Status").show();
         }
       });
     });
     
     
-    $("#ReservationRetrieval-Screen-ReservationId-Number-Input").focus();
+    $("#ReservationRetrieval-Screen-Reservation-Number-Input").focus();
   },
   
   

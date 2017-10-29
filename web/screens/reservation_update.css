@@ -1,5 +1,46 @@
-#ReservationUpdate-Screen {
+#ReservationUpdate-Screen-ReservationSummary-Location,
+#ReservationUpdate-Screen-ReservationSummary-Price {
+  margin-top: 10px;
 }
+
+#ReservationUpdate-Screen-ReservationSummary-Id-Title,
+#ReservationUpdate-Screen-ReservationSummary-DateTime-Title,
+#ReservationUpdate-Screen-ReservationSummary-Duration-Title,
+#ReservationUpdate-Screen-ReservationSummary-Group-Title,
+#ReservationUpdate-Screen-ReservationSummary-Price-Title {
+  display: inline-block;
+  width: 450px;
+}
+#ReservationUpdate-Screen-ReservationSummary-Id-Value,
+#ReservationUpdate-Screen-ReservationSummary-DateTime-Value,
+#ReservationUpdate-Screen-ReservationSummary-Duration-Value,
+#ReservationUpdate-Screen-ReservationSummary-Group-Value,
+#ReservationUpdate-Screen-ReservationSummary-Price-Value {
+  display: inline-block;
+  width: 200px;
+
+  font-weight: bold;
+}
+
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Title,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Title,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Title,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Title
+{
+  display: inline-block;
+  width: 430px;
+  margin-left: 20px;
+}
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value,
+#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value {
+  display: inline-block;
+  width: 300px;
+
+  font-weight: bold;
+}
+
 
 #ReservationUpdate-Screen-ButtonsPanel {
   margin-top: 20px;

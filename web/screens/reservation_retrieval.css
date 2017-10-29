@@ -1,45 +1,18 @@
-#ReservationRetrieval-Screen {
-  padding: 10px;
-  background-color: aqua;
-}
-
-#ReservationRetrieval-Screen-ReservationInfo {
-  font-size: 25px;
-  margin-left: 20px;
-  margin-top: 10px;
-
-}
-
-#ReservationRetrieval-Screen-ReservationId {
+#ReservationRetrieval-Screen-Reservation {
   position: relative;
-  font-size: 20px;
-  margin-left: 20px;
-  margin-top: 20px;
-  
-  padding: 10px;
-  background-color: rgb(122, 151, 239);
 }
-#ReservationRetrieval-Screen-ReservationId-Number-Label {
-  display: block;
-  margin-left: 2px;
-}
-#ReservationRetrieval-Screen-ReservationId-Number-Input {
-  display: block;
+
+#ReservationRetrieval-Screen-Reservation-Number-Input {
   width: 200px;
-  margin-top: 5px;
 }
-#ReservationRetrieval-Screen-ReservationId-LastName-Label {
-  display: block;
-  margin-left: 2px;
+#ReservationRetrieval-Screen-Reservation-LastName-Label {
   margin-top: 15px;
 }
-#ReservationRetrieval-Screen-ReservationId-LastName-Input {
-  display: block;
+#ReservationRetrieval-Screen-Reservation-LastName-Input {
   width: 200px;
-  margin-top: 5px;
 }
 
-#ReservationRetrieval-Screen-ReservationId-Status {
+#ReservationRetrieval-Screen-Reservation-Status {
   position: absolute;
   max-width: 300px;
   top: 30px;
@@ -48,11 +21,7 @@
   color: red;
 }
 
-#ReservationRetrieval-Screen-ReservationId-ButtonPanel {
+#ReservationRetrieval-Screen-Reservation-ButtonPanel {
   margin-top: 20px;
   text-align: center;
 }
-
-#ReservationRetrieval-Screen-ReservationId-ButtonPanel-RestoreButton {
-}
-
