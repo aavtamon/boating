@@ -42,6 +42,32 @@
 }
 
 
+#ReservationUpdate-Screen-ReservationSummary-Email {
+  margin-top: 30px;
+}
+#ReservationUpdate-Screen-ReservationSummary-Email-Description {
+  margin-bottom: 5px;
+}
+#ReservationUpdate-Screen-ReservationSummary-Email-Label {
+  display: inline-block;
+  margin-right: 20px;
+  
+  font-weight: bold;
+  
+  vertical-align: middle;
+}
+#ReservationUpdate-Screen-ReservationSummary-Email-Input {
+  width: 400px;
+  margin-right: 30px;
+  
+  vertical-align: middle;
+}
+#ReservationUpdate-Screen-ReservationSummary-Email-SendButton {
+  margin-bottom: 5px;
+  vertical-align: middle;
+}
+
+
 #ReservationUpdate-Screen-ButtonsPanel {
   margin-top: 20px;
   text-align: center;

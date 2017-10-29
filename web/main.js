@@ -19,7 +19,20 @@ Main = {
     
     
     this.loadScreen("");
-    this.loadScreen("home");
+    
+    var requestedScreen = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.substr(1) : null;
+    if (requestedScreen) {
+      if (requestedScreen != "reservation_retrieval") {
+        requestedScreen = null;
+      }
+    }
+    
+    console.debug("here with " + requestedScreen)
+    if (requestedScreen == null) {
+      this.loadScreen("home");
+    } else {
+      this.loadScreen(requestedScreen);
+    }
   },
   
   loadScreen: function(screen) {

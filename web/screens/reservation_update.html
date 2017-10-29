@@ -8,6 +8,9 @@
       ReservationUpdate.reservationId = {{.Reservation.Id}};
       ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
       ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+      ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
+      ReservationUpdate.reservationEmail = {{.Reservation.Email}};
+                    
       ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
       ReservationUpdate.cancellationFees = {{.BookingSettings.CancellationFees}};
                     
@@ -60,9 +63,17 @@
         </div>
       </div>
     </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Price">
+    <div id="ReservationUpdate-Screen-ReservationSummary-Price" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{.Reservation.PaymentAmount}} dollars</div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Email-Description">
+        You can email this information if you lost or did not receive the original confirmation email.
+      </div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Email-Label">Email:</div>
+      <input type="text" id="ReservationUpdate-Screen-ReservationSummary-Email-Input">
+      <button id="ReservationUpdate-Screen-ReservationSummary-Email-SendButton" class="standard-button">Send</button>
     </div>
   </div>  
   

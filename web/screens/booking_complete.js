@@ -24,7 +24,5 @@ BookingComplete = {
     ScreenUtils.dataModelInput($("#BookingComplete-Screen-ReservationSummary-Email-Input")[0], emailData, "email", function(value) {
       $("#BookingComplete-Screen-ReservationSummary-Email-SendButton").prop("disabled", !ScreenUtils.isValidEmail(value));
     }, ScreenUtils.isValidEmail);
-    
-    
   },
 }
