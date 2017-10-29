@@ -18,16 +18,16 @@ Main = {
     });
     
     
-    this.loadScreen("");
     
-    var requestedScreen = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.substr(1) : null;
+    // Special handling
+    var requestedScreen = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.split('?')[0].substr(1) : null;
     if (requestedScreen) {
       if (requestedScreen != "reservation_retrieval") {
         requestedScreen = null;
       }
     }
     
-    console.debug("here with " + requestedScreen)
+    this.loadScreen("");
     if (requestedScreen == null) {
       this.loadScreen("home");
     } else {
