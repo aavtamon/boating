@@ -51,7 +51,7 @@ BookingPayment = {
         $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html(event.error.message);
       }
       
-      paymentInfo.card_ready = event.complete;
+      Backend.getTemporaryData().paymentInfo.card_ready = event.complete;
       this._canProceedToNextStep();
     }.bind(this));
     
@@ -59,12 +59,12 @@ BookingPayment = {
     
     $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
       if (this._cancellationPolicyAccepted) {
-        this._pay();
+        this._pay(stripe, card);
       } else {
         Main.showMessage("Please review our cancellation policy", this._getCancellationPolicy(), function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
-            this._pay();
+            this._pay(stripe, card);
           }
         }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
       }
@@ -101,9 +101,11 @@ BookingPayment = {
   },
   
   
-  _pay: function() {
+  _pay: function(stripe, card) {
     Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
 
+    var paymentInfo = Backend.getTemporaryData().paymentInfo;
+    
     var cardData = {
       name: paymentInfo.name,
       address_line1: paymentInfo.street_address,

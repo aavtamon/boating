@@ -88,6 +88,14 @@
 }
 
 
+#BookingConfirmation-Screen-ContactInformation-Description {
+  margin-bottom: 20px;
+  
+  text-align: center;
+  
+  font-size: 20px;
+}
+
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone,
