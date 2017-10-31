@@ -20,19 +20,25 @@ BookingConfirmation = {
       Main.loadScreen("booking_payment");
     });
     
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, this.maximumCapacity);
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, this.maximumCapacity - 1);
-    
 
     reservationContext.adult_count = reservationContext.adult_count || 1;
+    reservationContext.children_count = reservationContext.children_count || 0;
+    
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, this.maximumCapacity);
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, this.maximumCapacity - reservationContext.adult_count);
+        
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
-      var remainder = this.maximumCapacity - parseInt(value);
+      var remainder = this.maximumCapacity - value;
       
       this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
-    }.bind(this));
+    }.bind(this), null, function(value) {
+      return parseInt(value);
+    });
         
-    reservationContext.children_count = reservationContext.children_count || 0;
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector")[0], reservationContext, "children_count");
+    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector")[0], reservationContext, "children_count", null, null, function(value) {
+      return parseInt(value);
+    });
+    
 
     ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", function(value, isValid) {
       if (isValid && (reservationContext.primary_phone == null || reservationContext.primary_phone == "")) {
@@ -96,6 +102,8 @@ BookingConfirmation = {
     } else {
       $(selector).val(currentValue);
     }
+    
+    $(selector).trigger("change");
   },
   
   

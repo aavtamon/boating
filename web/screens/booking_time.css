@@ -11,11 +11,12 @@
 
 #BookingTime-Screen-SelectionPanel-Calendar {
   display: inline-block;
-  width: 280px;
   vertical-align: top;
 }
 
 .ui-datepicker.ui-widget.ui-widget-content {
+  width: 270px;
+  height: 220px;
   padding: 5px;
 
   border-width: 1px;

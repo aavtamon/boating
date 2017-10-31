@@ -149,17 +149,26 @@ ScreenUtils = {
     phoneElement._setPhone(dataModel[dataModelProperty] || "");
   },
   
-  dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback, validationMethod) {
+  dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback, validationMethod, valueConverter) {
+    function _assingValue() {
+      if (valueConverter) {
+        dataModel[dataModelProperty] = valueConverter(inputElement.value);
+      } else {
+        dataModel[dataModelProperty] = inputElement.value;
+      }
+    }
+    
     if (dataModel[dataModelProperty] != null) {
       inputElement.value = dataModel[dataModelProperty];
     } else if (inputElement.value != null) {
-      dataModel[dataModelProperty] = inputElement.value;
+      _assingValue();
     }
 
     $(inputElement).change(function() {
-      dataModel[dataModelProperty] = inputElement.value;
+      _assingValue();
+      
       if (validationMethod) {
-        if (validationMethod(inputElement.value)) {
+        if (validationMethod(dataModel[dataModelProperty])) {
           $(inputElement).removeClass("invalid");
         } else {
           $(inputElement).addClass("invalid");
@@ -172,10 +181,10 @@ ScreenUtils = {
     
     if (changeCallback) {
       $(inputElement).bind("input", function() {
-          dataModel[dataModelProperty] = inputElement.value;
-          changeCallback(inputElement.value);
+          _assingValue();
+          changeCallback(dataModel[dataModelProperty]);
       });
-    }
+    }    
   },
   
   
