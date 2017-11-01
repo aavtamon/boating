@@ -18,6 +18,10 @@
   </div>
   
   <div id="BookingConfirmation-Screen-AdditionalInformation" class="info-box">
+    <p>
+      Please note that the maximum capacity for this boat is {{.BookingSettings.MaximumCapacity}}. No exceptions are allowed
+    </p>
+    
     <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults">
@@ -48,6 +52,20 @@
     <div id="BookingConfirmation-Screen-ContactInformation-Description">
       Please provide information about the primary renter:
     </div>
+    <p>
+      Please note that the primary renter must be 25 years old or more, and possess a valid state issues drivers licence.
+    </p>
+    <div id="BookingConfirmation-Screen-ContactInformation-DL" class="info-box-row">
+      <div id="BookingConfirmation-Screen-ContactInformation-DL-Age">
+        <input type="checkbox" id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">
+        <label for="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">I certify that the primary renter is 25 or older</label>
+      </div>
+      
+      <div id="BookingConfirmation-Screen-ContactInformation-DL-License">
+        <div id="BookingConfirmation-Screen-ContactInformation-DL-License-Label">DL#:</div>
+        <input type="text" id="BookingConfirmation-Screen-ContactInformation-DL-License-Input">
+      </div>
+    </div>
     <div id="BookingConfirmation-Screen-ContactInformation-Name" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-Name-FirstName">
         <div id="BookingConfirmation-Screen-ContactInformation-Name-FirstName-Label">First Name:</div>
@@ -72,5 +90,9 @@
         <input type="text" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input"  class="phone-input">
       </div>
     </div>
+  </div>
+  
+  <div id="BookingConfirmation-Screen-Agreement"  class="info-box">
+    Please review our <a href="files/rental-agreement.html" target="_blank">Renter's Agreement</a>
   </div>
 </div>

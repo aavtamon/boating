@@ -114,6 +114,7 @@ Backend = {
 
   resetReservationContext: function() {
     this._reservationContext = {};
+    this._temporaryData = {};
   },
   
   

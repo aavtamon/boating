@@ -57,6 +57,7 @@ type TReservation struct {
   MobilePhone string `json:"mobile_phone,omitempty"`;
   NoMobilePhone bool `json:"no_mobile_phone"`;
   
+  DriversLicense string `json:"dl,omitempty"`;
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   Email string `json:"email,omitempty"`;

@@ -21,6 +21,11 @@ BookingConfirmation = {
     });
     
 
+    if (Backend.getTemporaryData().ageCertification == null) {
+      Backend.getTemporaryData().ageCertification = false;
+    }
+    
+  
     reservationContext.adult_count = reservationContext.adult_count || 1;
     reservationContext.children_count = reservationContext.children_count || 0;
     
@@ -68,6 +73,15 @@ BookingConfirmation = {
       $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").attr("checked", true).change();
     }
     
+
+    $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").prop("checked", Backend.getTemporaryData().ageCertification);
+    
+    $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").change(function() {
+      Backend.getTemporaryData().ageCertification = $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").is(':checked');
+      this._canProceedToNextStep();
+    }.bind(this));
+    
+    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-DL-License-Input")[0], reservationContext, "dl", this._canProceedToNextStep.bind(this));
     
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name", this._canProceedToNextStep.bind(this));
     
@@ -113,6 +127,7 @@ BookingConfirmation = {
     var reservationComplete = true;
 
     var valid = (reservationContext.no_mobile_phone || ScreenUtils.isValidPhone(reservationContext.mobile_phone)) 
+        && Backend.getTemporaryData().ageCertification && ScreenUtils.isValid(reservationContext.dl)
         && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
         && ScreenUtils.isValidEmail(reservationContext.email)
         && (ScreenUtils.isValidPhone(reservationContext.primary_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone));

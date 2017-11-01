@@ -155,7 +155,9 @@ func main() {
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
   httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
   httpMux.HandleFunc("/bookings/", BookingsHandler);
+  httpMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot)));
   httpMux.HandleFunc("/", pageHandler);
+  
   
   //httpsMux := http.NewServeMux();
   //httpsMux.HandleFunc("/", ReservationHandler);
