@@ -1,6 +1,6 @@
 {
   "scheduling_begin_offset": 1,
-  "scheduling_end_offset": 2,
+  "scheduling_end_offset": 60,
   
   "cancellation_fees": [
     {"range_min": 24, "range_max": 48, "price": 100},
