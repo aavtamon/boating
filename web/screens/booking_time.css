@@ -16,7 +16,7 @@
 
 .ui-datepicker.ui-widget.ui-widget-content {
   width: 270px;
-  height: 220px;
+  height: 240px;
   padding: 5px;
 
   border-width: 1px;
@@ -33,7 +33,7 @@
 #BookingTime-Screen-SelectionPanel-TimeFrame,
 #BookingTime-Screen-SelectionPanel-Duration {
   display: inline-block;
-  height: 220px;
+  height: 240px;
   width: 270px;
   padding: 5px;
   margin-left: 50px;
