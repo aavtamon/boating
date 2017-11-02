@@ -9,7 +9,8 @@
   </div>
   <div id="Home-Screen-Introduction">
     We are not just yet another place to rent a boat. We are much better, and this is what makes us unique. Unlike others, we will deliver the boat to one of the pick up locations of your choice. You don't have to drive to a marina, navigate thru its complex layout, deal with parking, etc. It is all much easier with us!
-    <p>
+    <br>
+    <br>
     Our pick up locations are public ramps around the lake. Those places that you probably already used to come to. Just choose the one that you like most, and we will meet you there. It is super convenient.
     You will get the detailed instructions in email or a text message with the name of the boat that is your ride as well as the mobile phone of the captain that will deliver you a boat.
   </div>
@@ -19,13 +20,15 @@
   <div id="Home-Screen-ThingsToDo">
     There is quite a few thigs that you can do on the lake. You can just enjoy yout time on the boat, you can swim in the nice clean warm lake, or you can even do a water tubing!
     If you want to tube, we will also be happy to provide it for you.
-    <p>
+    <br>
+    <br>
     
     {{if .Reservation}}
-      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
+      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}">{{.Reservation.Id}}</a>. 
       <br>
       Click on the reservation if you want to review or cancel it.
-      <p>
+      <br>
+      <br>
       You can also <a href="#booking_time">book</a> another trip if you would like.
     {{else}}
       While you are <a href="#booking_time">booking</a> your ride, you will be asked to provide your mobile phone. It is optional but we really advise you to do so. That will let us stay connected, and gives us an oportunity to text you any chabges in your trip if any. We will even text you a reminder, and also the location of the boat so that you know when to expect it.

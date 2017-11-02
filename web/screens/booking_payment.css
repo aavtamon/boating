@@ -9,14 +9,14 @@
 
 #BookingPayment-Screen-ReservationSummary-DateTime-Title,
 #BookingPayment-Screen-ReservationSummary-Duration-Title,
-#BookingPayment-Screen-ReservationSummary-Capacity-Title,
+#BookingPayment-Screen-ReservationSummary-Group-Title,
 #BookingPayment-Screen-ReservationSummary-Price-Title {
   display: inline-block;
   width: 450px;
 }
 #BookingPayment-Screen-ReservationSummary-DateTime-Value,
 #BookingPayment-Screen-ReservationSummary-Duration-Value,
-#BookingPayment-Screen-ReservationSummary-Capacity-Value,
+#BookingPayment-Screen-ReservationSummary-Group-Value,
 #BookingPayment-Screen-ReservationSummary-Price-Value {
   display: inline-block;
   width: 200px;
@@ -104,6 +104,9 @@
   padding: 3px 3px 3px 5px;
   margin-right: 10px;
   
+  border-style: solid;
+  border-color: azure;
+  border-width: 2px;
   border-radius: 5px;
 
   vertical-align: middle;

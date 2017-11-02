@@ -4,7 +4,7 @@
   
   "cancellation_fees": [
     {"range_min": 24, "range_max": 48, "price": 100},
-    {"range_min": 4, "range_max": 24, "price": 100},
+    {"range_min": 4, "range_max": 24, "price": 150},
     {"range_min": 0, "range_max": 4, "price": 200}
   ],
   

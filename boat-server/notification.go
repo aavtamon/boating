@@ -44,7 +44,7 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
 func TextPaymentConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
 
-  if (reservation.NoMobilePhone) {
+  if (reservation.MobilePhone == "") {
     return;
   }
 
@@ -56,7 +56,7 @@ func TextPaymentConfirmation(reservationId TReservationId) {
 func TextRefundConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
 
-  if (reservation.NoMobilePhone) {
+  if (reservation.MobilePhone == "") {
     return;
   }
 

@@ -54,13 +54,12 @@ type TReservation struct {
   
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;
-  MobilePhone string `json:"mobile_phone,omitempty"`;
-  NoMobilePhone bool `json:"no_mobile_phone"`;
-  
+
   DriversLicense string `json:"dl,omitempty"`;
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   Email string `json:"email,omitempty"`;
+  MobilePhone string `json:"mobile_phone,omitempty"`;
   PrimaryPhone string `json:"primary_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;

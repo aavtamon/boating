@@ -9,9 +9,13 @@
   white-space: nowrap;
   padding-bottom: 5px;
 }
+#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title {
   display: inline-block;
-  width: 200px;
+  width: 150px;
   margin-right: 20px;
 
   vertical-align: middle;
@@ -58,35 +62,6 @@
   font: inherit;
 }
 
-#BookingConfirmation-Screen-AdditionalInformation-Phone {
-  margin-top: 20px;
-  white-space: nowrap;
-}
-#BookingConfirmation-Screen-AdditionalInformation-Phone-Title {
-  display: inline-block;
-  width: 200px;
-  margin-right: 20px;
-}
-#BookingConfirmation-Screen-AdditionalInformation-Phone-Value {
-  display: inline-block;
-  padding: 5px;
-
-  font-family: monospace;
-  font-size: 15px;
-}
-#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide {
-  font-size: 15px;
-}
-#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox {
-}
-
-#BookingConfirmation-Screen-AdditionalInformation-Note {
-  margin-top: 10px;
-  margin-left: 10px;
-
-  font-size: 12px;
-}
-
 
 #BookingConfirmation-Screen-ContactInformation-Description {
   margin-bottom: 20px;
@@ -100,6 +75,7 @@
 #BookingConfirmation-Screen-ContactInformation-DL-License,
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName,
+#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone,
 #BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone
 {
@@ -116,6 +92,7 @@
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName-Label,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName-Label,
 #BookingConfirmation-Screen-ContactInformation-Email-Label,
+#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Label,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label,
 #BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label
 {
@@ -148,10 +125,27 @@
   width: 400px;
 }
 
+#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Input,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input,
 #BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input {
   margin-bottom: 5px;
   margin-right: 50px;
+}
+
+#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone {
+  width: 300px;
+  vertical-align: middle;
+}
+
+#BookingConfirmation-Screen-ContactInformation-MobilePhone-Note {
+  display: inline-block;
+  width: calc(100% - 350px);
+  
+  vertical-align: middle;
+  
+  white-space: normal;
+
+  font-size: 12px;
 }
 
 #BookingConfirmation-Screen-Agreement {

@@ -74,7 +74,7 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
     $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
     
-    $("#BookingPayment-Screen-ReservationSummary-Capacity-Value").html(this.maximumCapacity);
+    $("#BookingPayment-Screen-ReservationSummary-Group-Value").html(reservationContext.adult_count + " adults and " + reservationContext.children_count + " children (allowed maximum - " + this.maximumCapacity + ")");
 
     var location = ScreenUtils.getLocation(reservationContext.location_id);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
@@ -150,7 +150,7 @@ BookingPayment = {
  
   
   _getCancellationPolicy: function() {
-    var policy = "<center><h1>Cancellation Policy</h1></center><p>We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
+    var policy = "<center><h1>Cancellation Policy</h1></center>We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
     
     
     for (var index in BookingPayment.cancellationFees) {

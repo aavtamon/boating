@@ -19,10 +19,11 @@
   
   <div id="BookingComplete-Screen-ReservationSummary" class="info-box">
     <div>
-      Your reservation is placed, confirmation number is <b>{{.Reservation.Id}}</b>.
+      Your reservation is placed, confirmation number is <a href="#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}">{{.Reservation.Id}}</a>.
       <br>
       You should receive an email at <b>{{.Reservation.Email}}</b> soon with this confirmation number and all the details.
-      <p>
+      <br>
+      <br>
       If you do not see an email, or want to copy your reservation details to another email, please enter another email in the box below, and hit <b>Send</b> button.
     </div>
     <div id="BookingComplete-Screen-ReservationSummary-Email" class="info-box-row">
@@ -33,7 +34,16 @@
   </div>  
   <div class="info-box">
     If you decide to cancel your reservation, go to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a>, and use this confirmation number to access your reservation. You can also use the link in the email to get there.
-    <p>
+    <br>
+    <br>
     You can cancel 48 hours before the planned date free of charge. After that, cancellation fees apply.
+  </div>
+  <div class="info-box">
+    State law requires you to take a safety training and pass the test in order to be allowed to operate a motor boat.
+    <br>
+    You have to re-take the test if you took it more than 6 months ago. Use this <a href="#safety_test">link</a> to take the test.
+    You can access this link later by going to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a> and pulling your reservation.
+    <br>
+    The link is also sent to the email address that you provided in your reservation.
   </div>
 </div>

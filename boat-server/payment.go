@@ -51,9 +51,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.Write(storedReservation);
 
       EmailPaymentConfirmation(request.ReservationId);
-      if (!reservation.NoMobilePhone) {
-        TextPaymentConfirmation(request.ReservationId);
-      }
+      TextPaymentConfirmation(request.ReservationId);
     } else {
       w.WriteHeader(http.StatusBadRequest);
     }
@@ -73,9 +71,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
             w.Write(storedReservation);
 
             EmailRefundConfirmation(reservation.Id);
-            if (!reservation.NoMobilePhone) {
-              TextRefundConfirmation(reservation.Id);
-            }
+            TextRefundConfirmation(reservation.Id);
           } else {
             w.WriteHeader(http.StatusBadRequest);
           }

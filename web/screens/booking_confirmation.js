@@ -10,14 +10,21 @@ BookingConfirmation = {
     }
     
 
-    $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").checkboxradio();
-    
     $("#BookingConfirmation-Screen-Description-BackButton").click(function() {
       Main.loadScreen("booking_location");
     });
     
     $("#BookingConfirmation-Screen-Description-NextButton").click(function() {
-      Main.loadScreen("booking_payment");
+      if (Backend.getReservationContext().mobile_phone == "" && !Backend.getTemporaryData().mobilePhoneDeclined) {
+        Main.showMessage("Please provide the mobile phone", "Even though it is not required, we very much recommend that you provide the mobile phone.<br>You will really appreciate a few notifications that we will send as it will help you meet the boat in the right place. Would you like to proceed to payment anyway?", function(action) {
+          if (action == Main.ACTION_OK) {
+            Backend.getTemporaryData().mobilePhoneDeclined = true;
+            Main.loadScreen("booking_payment");
+          }
+        }.bind(this), Main.DIALOG_TYPE_YESNO);
+      } else {
+        Main.loadScreen("booking_payment");
+      }
     });
     
 
@@ -45,35 +52,6 @@ BookingConfirmation = {
     });
     
 
-    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0], reservationContext, "mobile_phone", function(value, isValid) {
-      if (isValid && (reservationContext.primary_phone == null || reservationContext.primary_phone == "")) {
-        $("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0].setPhone(value);
-      }
-      
-      this._canProceedToNextStep();
-    }.bind(this), function(value) {
-        return $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled") == true
-               || ScreenUtils.isValidPhone(value);
-    });
-    
-    $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").change(function(event) {
-      var isDisabled = $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").is(':checked');
-      $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value").prop("disabled", isDisabled);
-      
-      reservationContext.no_mobile_phone = isDisabled;
-      
-      if (isDisabled) {
-        $("#BookingConfirmation-Screen-AdditionalInformation-Phone-Value")[0].setPhone("");
-      }
-      
-      this._canProceedToNextStep();
-    }.bind(this));
-    
-    if (reservationContext.no_mobile_phone) {
-      $("#BookingConfirmation-Screen-AdditionalInformation-Phone-DoNotProvide-Checkbox").attr("checked", true).change();
-    }
-    
-
     $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").prop("checked", Backend.getTemporaryData().ageCertification);
     
     $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").change(function() {
@@ -88,6 +66,16 @@ BookingConfirmation = {
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Name-LastName-Input")[0], reservationContext, "last_name", this._canProceedToNextStep.bind(this));
 
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this), ScreenUtils.isValidEmail);
+    
+    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Input")[0], reservationContext, "mobile_phone", function(value, isValid) {
+      if (isValid && (reservationContext.primary_phone == null || reservationContext.primary_phone == "")) {
+        $("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0].setPhone(value);
+      }
+      
+      this._canProceedToNextStep();
+    }.bind(this), function(value) {
+      return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
+    });
     
     ScreenUtils.phoneInput($("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0], reservationContext, "primary_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
 
@@ -126,19 +114,13 @@ BookingConfirmation = {
     
     var reservationComplete = true;
 
-    var valid = (reservationContext.no_mobile_phone || ScreenUtils.isValidPhone(reservationContext.mobile_phone)) 
-        && Backend.getTemporaryData().ageCertification && ScreenUtils.isValid(reservationContext.dl)
-        && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
-        && ScreenUtils.isValidEmail(reservationContext.email)
-        && (ScreenUtils.isValidPhone(reservationContext.primary_phone) || ScreenUtils.isValidPhone(reservationContext.alternative_phone));
+    var valid = Backend.getTemporaryData().ageCertification && ScreenUtils.isValid(reservationContext.dl)
+                && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
+                && ScreenUtils.isValidEmail(reservationContext.email)
+                && ScreenUtils.isValidPhone(reservationContext.primary_phone)
+                && (reservationContext.alternative_phone == "" || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
+                && (reservationContext.mobile_phone == "" || ScreenUtils.isValidPhone(reservationContext.mobile_phone));
 
     $("#BookingConfirmation-Screen-Description-NextButton").prop("disabled", !valid);
-    
-    
-//    reservationContext.adult_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector").val());
-//    reservationContext.children_count = parseInt($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector").val());
-    
-    
-    
   }
 }

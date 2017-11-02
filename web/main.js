@@ -3,6 +3,7 @@ Main = {
   ACTION_CANCEL: "cancel",
   
   DIALOG_TYPE_CONFIRMATION: "confirmation",
+  DIALOG_TYPE_YESNO: "yesno",
   DIALOG_TYPE_INFORMATION: "information",
   
   _storeElements: [],
@@ -67,6 +68,14 @@ Main = {
     
     $("#Main-Popup").show();
     
+    if (dialogType == Main.DIALOG_TYPE_YESNO) {
+      $("#Main-Popup-Frame-Buttons-OK").html("Yes");
+      $("#Main-Popup-Frame-Buttons-Cancel").html("No");
+    } else {
+      $("#Main-Popup-Frame-Buttons-OK").html("OK");
+      $("#Main-Popup-Frame-Buttons-Cancel").html("Cancel");
+    }
+    
     $("#Main-Popup-Frame-Buttons-OK").show();
     $("#Main-Popup-Frame-Buttons-OK").unbind("click");
     $("#Main-Popup-Frame-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
@@ -74,7 +83,7 @@ Main = {
     if (dialogType == Main.DIALOG_TYPE_INFORMATION) {
       $("#Main-Popup-Frame-Buttons-Cancel").hide();
       $("#Main-Popup-Frame-Buttons-OK").focus();
-    } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
+    } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION || dialogType == Main.DIALOG_TYPE_YESNO) {
       $("#Main-Popup-Frame-Buttons-Cancel").show();
       $("#Main-Popup-Frame-Buttons-Cancel").unbind("click");
       $("#Main-Popup-Frame-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
