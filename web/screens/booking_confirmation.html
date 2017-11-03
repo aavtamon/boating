@@ -4,6 +4,7 @@
 
 <script>
   BookingConfirmation.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
+  BookingConfirmation.extras = {{.BookingSettings.Extras}};
   
   $(document).ready(function() {
     BookingConfirmation.onLoad();
@@ -31,6 +32,10 @@
         <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Title">Number of children (under 50"):</div>
         <select id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector"></select> 
       </div>
+    </div>
+    <div id="BookingConfirmation-Screen-AdditionalInformation-Equipment" class="info-box-row">
+      <div id="BookingConfirmation-Screen-AdditionalInformation-Equipment-Title">Addtional Equipment:</div>
+      <div id="BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras"></div>
     </div>
   </div>
   

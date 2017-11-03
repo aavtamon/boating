@@ -54,6 +54,8 @@ type TReservation struct {
   
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;
+  
+  Extras map[string]bool `json:"extras"`;
 
   DriversLicense string `json:"dl,omitempty"`;
   FirstName string `json:"first_name,omitempty"`;

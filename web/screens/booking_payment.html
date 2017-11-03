@@ -5,6 +5,7 @@
 <script>
   BookingPayment.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
   BookingPayment.cancellationFees = {{.BookingSettings.CancellationFees}};
+  BookingPayment.extras = {{.BookingSettings.Extras}};
   
   $(document).ready(function() {
     BookingPayment.onLoad();
@@ -51,6 +52,10 @@
           <div id="BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
         </div>
       </div>
+    </div>
+    <div id="BookingPayment-Screen-ReservationSummary-Extras" class="info-box-row">
+      <div id="BookingPayment-Screen-ReservationSummary-Extras-Title">Additional equipment:</div>
+      <div id="BookingPayment-Screen-ReservationSummary-Extras-Value"></div>
     </div>
     <div id="BookingPayment-Screen-ReservationSummary-Price" class="info-box-row">
       <div id="BookingPayment-Screen-ReservationSummary-Price-Title">Your Total:</div>

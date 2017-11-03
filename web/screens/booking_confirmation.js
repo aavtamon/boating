@@ -1,5 +1,7 @@
 BookingConfirmation = {
   maximumCapacity: null,
+  extras: null,
+  
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
@@ -51,7 +53,26 @@ BookingConfirmation = {
       return parseInt(value);
     });
     
+    
+    if (reservationContext.extras == null) {
+      reservationContext.extras = {};
+    }
+    
+    for (var name in this.extras) {
+      var extra = this.extras[name];
+      var extraId = "BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras-" + name;
+      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<input type="checkbox" id="' + extraId + '">');
+      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+$' + extra.price + ')</label>');
+      
+      $("#" + extraId).prop("checked", reservationContext.extras[name]);
+      
+      $("#" + extraId).change(function(name) {
+        reservationContext.extras[name] = this.is(':checked');
+      }.bind($("#" + extraId), name));
+    }
 
+    
+    
     $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").prop("checked", Backend.getTemporaryData().ageCertification);
     
     $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").change(function() {

@@ -28,6 +28,12 @@
           ]
         }
       },
+      "extras": {
+        "tube": {
+          "name": "Water Tube",
+          "price": 25 
+        }
+      },
       "center_location": {
         "latitude": 34.2288159,
         "longitude": -83.9592255,

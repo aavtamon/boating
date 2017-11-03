@@ -62,6 +62,15 @@
   font: inherit;
 }
 
+#BookingConfirmation-Screen-AdditionalInformation-Equipment-Title {
+  display: inline-block;
+  margin-right: 100px;
+  margin-bottom: 5px;
+}
+#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras {
+  display: inline-block;
+}
+
 
 #BookingConfirmation-Screen-ContactInformation-Description {
   margin-bottom: 20px;

@@ -92,7 +92,17 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   fmt.Printf("Starting payment processing for reservation %s\n", request.ReservationId);
 
+  
+
   paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
+  
+  bookingSettings := GetBookingSettings();
+  for extraId, included := range reservation.Extras {
+    if (included) {
+      paidAmount += bookingSettings.Extras[extraId].Price;
+    }
+  }
+
 
   stripe.Key = PAYMENT_SECRET_KEY;
   
@@ -142,7 +152,7 @@ func refundReservation(reservation *TReservation) bool {
   refundAmount := reservation.PaymentAmount;
   
   if (cancellationFee > 0) {
-    refundAmount = (reservation.Slot.Price - cancellationFee);
+    refundAmount = (reservation.PaymentAmount - cancellationFee);
     if (refundAmount < 0) {
       refundAmount = 0;
     }

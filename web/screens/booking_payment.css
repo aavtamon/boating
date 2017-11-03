@@ -10,6 +10,7 @@
 #BookingPayment-Screen-ReservationSummary-DateTime-Title,
 #BookingPayment-Screen-ReservationSummary-Duration-Title,
 #BookingPayment-Screen-ReservationSummary-Group-Title,
+#BookingPayment-Screen-ReservationSummary-Extras-Title,
 #BookingPayment-Screen-ReservationSummary-Price-Title {
   display: inline-block;
   width: 450px;
@@ -17,6 +18,7 @@
 #BookingPayment-Screen-ReservationSummary-DateTime-Value,
 #BookingPayment-Screen-ReservationSummary-Duration-Value,
 #BookingPayment-Screen-ReservationSummary-Group-Value,
+#BookingPayment-Screen-ReservationSummary-Extras-Value,
 #BookingPayment-Screen-ReservationSummary-Price-Value {
   display: inline-block;
   width: 200px;

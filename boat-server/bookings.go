@@ -44,6 +44,11 @@ type TBoat struct {
   Rate []TPricedRange `json:"rate"`;
 }
 
+type TExtraEquipment struct {
+  Name string `json:"name"`;
+  Price uint64 `json:"price"`;
+}
+
 
 type TRentalLocation struct {
   Name string `json:"name"`;
@@ -53,6 +58,7 @@ type TRentalLocation struct {
   ServiceInterval int `json:"service_interval"`;
   
   Boats map[string]TBoat `json:"boats"`;
+  Extras map[string]TExtraEquipment `json:"extras"`;
   CenterLocation TMapLocation `json:"center_location"`;
   PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
 }
@@ -63,6 +69,7 @@ type TBookingSettings struct {
   SchedulingEndDate int64;  
   MaximumCapacity int;
   CancellationFees []TPricedRange;
+  Extras map[string]TExtraEquipment;
   
   CenterLocation TMapLocation;
   AvailableLocations map[string]TPickupLocation;
@@ -195,6 +202,7 @@ func initBookingSettings() {
   bookingSettings.MaximumCapacity = bookingConfiguration.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
   bookingSettings.CenterLocation = bookingConfiguration.Locations[LOCATION].CenterLocation;
   bookingSettings.AvailableLocations = bookingConfiguration.Locations[LOCATION].PickupLocations;
+  bookingSettings.Extras = bookingConfiguration.Locations[LOCATION].Extras;
 }
 
 func refresh() {

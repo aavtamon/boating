@@ -1,6 +1,7 @@
 BookingPayment = {
   maximumCapacity: null,
   cancellationFees: null,
+  extras: null,
   _cancellationPolicyAccepted: false,
   
   
@@ -75,13 +76,30 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
     
     $("#BookingPayment-Screen-ReservationSummary-Group-Value").html(reservationContext.adult_count + " adults and " + reservationContext.children_count + " children (allowed maximum - " + this.maximumCapacity + ")");
-
+    
     var location = ScreenUtils.getLocation(reservationContext.location_id);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
-    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price));
+    
+    
+    var extraPrice = 0;
+    var includedExtras = "";
+    for (var name in reservationContext.extras) {
+      if (reservationContext.extras[name]) {
+        var extra = this.extras[name];
+        
+        if (includedExtras != "") {
+          includedExtras += ", ";
+        }
+        includedExtras = extra.name + " (+$" + extra.price + ")";
+        extraPrice += extra.price;
+      }
+    }
+    $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(includedExtras == "" ? "none" : includedExtras);
+
+    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + extraPrice));
     
     
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));
