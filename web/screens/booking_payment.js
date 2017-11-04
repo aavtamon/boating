@@ -156,13 +156,16 @@ BookingPayment = {
  
   
   _getCancellationPolicy: function() {
-    var policy = "<center><h1>Cancellation Policy</h1></center>We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
+    var policy = "<center><h1>Cancellation Policy</h1></center>&nbsp;&nbsp;We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
     
     
     for (var index in BookingPayment.cancellationFees) {
       var fee = BookingPayment.cancellationFees[index];
       policy += "<li>" + fee.range_min + " - " + fee.range_max + " hours: $" + fee.price + " dollars</li>"
     }
+    
+    policy += "</ul><br>&nbsp;&nbsp;Please also note, that we can cancel your trip due to inclement weather.<br>In this case you will be refunded in full."
+    + "<br>We hope though, that the weather will be great and you will enjoy your trip."
     
     return policy;
   },

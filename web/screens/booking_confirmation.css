@@ -17,7 +17,7 @@
   display: inline-block;
   width: 150px;
   margin-right: 20px;
-
+  
   vertical-align: middle;
 }
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults {
@@ -32,6 +32,8 @@
   display: inline-block;
   margin-right: 10px;
   vertical-align: middle;
+  
+  font-weight: bold;
 
   font-size: 17px;
 }
@@ -52,6 +54,8 @@
   display: inline-block;
   margin-right: 10px;
   vertical-align: middle;
+  
+  font-weight: bold;
 
   font-size: 17px;
 }
@@ -84,13 +88,10 @@
 #BookingConfirmation-Screen-ContactInformation-DL-License,
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName,
-#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone,
-#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone
-{
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone {
   display: inline-block;
 }
-
 
 #BookingConfirmation-Screen-ContactInformation-DL-Age {
   margin-right: 100px;
@@ -101,20 +102,22 @@
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName-Label,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName-Label,
 #BookingConfirmation-Screen-ContactInformation-Email-Label,
-#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Label,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label,
-#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label
-{
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label {
   display: inline-block;
   margin-right: 20px;
+  
+  font-weight: bold;
+}
+#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label {
+  font-weight: normal;
 }
 
 
 #BookingConfirmation-Screen-ContactInformation-DL-License-Input,
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName-Input,
-#BookingConfirmation-Screen-ContactInformation-Email-Input
-{
+#BookingConfirmation-Screen-ContactInformation-Email-Input {
   display: inline-block;
   width: 300px;
   
@@ -134,27 +137,17 @@
   width: 400px;
 }
 
-#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Input,
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input,
 #BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input {
   margin-bottom: 5px;
   margin-right: 50px;
 }
 
-#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone {
-  width: 300px;
-  vertical-align: middle;
-}
-
-#BookingConfirmation-Screen-ContactInformation-MobilePhone-Note {
-  display: inline-block;
-  width: calc(100% - 350px);
-  
-  vertical-align: middle;
+#BookingConfirmation-Screen-ContactInformation-Phone-Note {
+  margin-top: 10px;
+  font-size: 15px;
   
   white-space: normal;
-
-  font-size: 12px;
 }
 
 #BookingConfirmation-Screen-Agreement {

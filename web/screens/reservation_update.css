@@ -1,11 +1,11 @@
-#ReservationUpdate-Screen-ReservationSummary-Location,
-#ReservationUpdate-Screen-ReservationSummary-Price {
+#ReservationUpdate-Screen-ReservationSummary-Location {
   margin-top: 10px;
 }
 
 #ReservationUpdate-Screen-ReservationSummary-Id-Title,
 #ReservationUpdate-Screen-ReservationSummary-DateTime-Title,
 #ReservationUpdate-Screen-ReservationSummary-Duration-Title,
+#ReservationUpdate-Screen-ReservationSummary-Renter-Title,
 #ReservationUpdate-Screen-ReservationSummary-Group-Title,
 #ReservationUpdate-Screen-ReservationSummary-Extras-Title,
 #ReservationUpdate-Screen-ReservationSummary-Price-Title {
@@ -15,6 +15,7 @@
 #ReservationUpdate-Screen-ReservationSummary-Id-Value,
 #ReservationUpdate-Screen-ReservationSummary-DateTime-Value,
 #ReservationUpdate-Screen-ReservationSummary-Duration-Value,
+#ReservationUpdate-Screen-ReservationSummary-Renter-Value,
 #ReservationUpdate-Screen-ReservationSummary-Group-Value,
 #ReservationUpdate-Screen-ReservationSummary-Extras-Value,
 #ReservationUpdate-Screen-ReservationSummary-Price-Value {

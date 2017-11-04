@@ -10,6 +10,8 @@ Main = {
   
   onLoad: function() {
     window.onhashchange = function() {
+      this.hidePopup();
+
       this._loadScreen(window.location.hash.substr(1));
     }.bind(this);
     

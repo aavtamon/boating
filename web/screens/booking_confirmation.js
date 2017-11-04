@@ -17,16 +17,7 @@ BookingConfirmation = {
     });
     
     $("#BookingConfirmation-Screen-Description-NextButton").click(function() {
-      if (Backend.getReservationContext().mobile_phone == "" && !Backend.getTemporaryData().mobilePhoneDeclined) {
-        Main.showMessage("Please provide the mobile phone", "Even though it is not required, we very much recommend that you provide the mobile phone.<br>You will really appreciate a few notifications that we will send as it will help you meet the boat in the right place. Would you like to proceed to payment anyway?", function(action) {
-          if (action == Main.ACTION_OK) {
-            Backend.getTemporaryData().mobilePhoneDeclined = true;
-            Main.loadScreen("booking_payment");
-          }
-        }.bind(this), Main.DIALOG_TYPE_YESNO);
-      } else {
-        Main.loadScreen("booking_payment");
-      }
+      Main.loadScreen("booking_payment");
     });
     
 
@@ -92,16 +83,6 @@ BookingConfirmation = {
 
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Email-Input")[0], reservationContext, "email", this._canProceedToNextStep.bind(this), ScreenUtils.isValidEmail);
     
-    ScreenUtils.phoneInput($("#BookingConfirmation-Screen-ContactInformation-MobilePhone-Phone-Input")[0], reservationContext, "mobile_phone", function(value, isValid) {
-      if (isValid && (reservationContext.primary_phone == null || reservationContext.primary_phone == "")) {
-        $("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0].setPhone(value);
-      }
-      
-      this._canProceedToNextStep();
-    }.bind(this), function(value) {
-      return value == null || value.length == 0 || ScreenUtils.isValidPhone(value);
-    });
-    
     ScreenUtils.phoneInput($("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0], reservationContext, "primary_phone", this._canProceedToNextStep.bind(this), ScreenUtils.isValidPhone);
 
     ScreenUtils.phoneInput($("#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input")[0], reservationContext, "alternative_phone", this._canProceedToNextStep.bind(this), function(value) {
@@ -143,8 +124,7 @@ BookingConfirmation = {
                 && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
                 && ScreenUtils.isValidEmail(reservationContext.email)
                 && ScreenUtils.isValidPhone(reservationContext.primary_phone)
-                && (reservationContext.alternative_phone == "" || ScreenUtils.isValidPhone(reservationContext.alternative_phone))
-                && (reservationContext.mobile_phone == "" || ScreenUtils.isValidPhone(reservationContext.mobile_phone));
+                && (reservationContext.alternative_phone == "" || ScreenUtils.isValidPhone(reservationContext.alternative_phone));
 
     $("#BookingConfirmation-Screen-Description-NextButton").prop("disabled", !valid);
   }

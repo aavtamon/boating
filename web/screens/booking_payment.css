@@ -64,6 +64,11 @@
 {
   display: inline-block;
   margin-right: 20px;
+  
+  font-weight: bold;
+}
+#BookingPayment-Screen-PaymentInformation-Address-Additional-Label {
+  font-weight: normal;
 }
 
 #BookingPayment-Screen-PaymentInformation-Name-Input,

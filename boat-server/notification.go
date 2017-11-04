@@ -44,25 +44,25 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
 func TextPaymentConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
 
-  if (reservation.MobilePhone == "") {
+  if (reservation.PrimaryPhone == "") {
     return;
   }
 
   fmt.Printf("Texting payment confirmation for reservation %s\n", reservationId);
   
-  sendTextMessage(reservation.MobilePhone, fmt.Sprintf("Your boat reservation is confirmed, your card is charged for the amount of $%d  dollars. Confirmation number is %s", reservation.PaymentAmount, reservationId));
+  sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation is confirmed, your card is charged for the amount of $%d  dollars. Confirmation number is %s", reservation.PaymentAmount, reservationId));
 }
 
 func TextRefundConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
 
-  if (reservation.MobilePhone == "") {
+  if (reservation.PrimaryPhone == "") {
     return;
   }
 
   fmt.Printf("Texting refund confirmation for reservation %s\n", reservationId);
   
-  sendTextMessage(reservation.MobilePhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservationId, reservation.RefundAmount));
+  sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservationId, reservation.RefundAmount));
 }
 
 

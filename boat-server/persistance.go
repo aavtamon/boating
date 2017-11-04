@@ -61,7 +61,6 @@ type TReservation struct {
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   Email string `json:"email,omitempty"`;
-  MobilePhone string `json:"mobile_phone,omitempty"`;
   PrimaryPhone string `json:"primary_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus string `json:"payment_status,omitempty"`;

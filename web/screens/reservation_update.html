@@ -40,9 +40,13 @@
       <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
       <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Value">{{.Reservation.Slot.Duration}} hours</div>
     </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Renter" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Renter-Title">Primary Renter:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Renter-Value">{{.Reservation.FirstName}} {{.Reservation.LastName}} (phone: {{.Reservation.PrimaryPhone}})</div>
+    </div>
     <div id="ReservationUpdate-Screen-ReservationSummary-Group" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Group-Title">Your party:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Value">{{.Reservation.NumOfAdults}} adults and {{.Reservation.NumOfChildren}} children</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Value">{{.Reservation.NumOfAdults}} adult(s) and {{.Reservation.NumOfChildren}} children</div>
     </div>
     <div id="ReservationUpdate-Screen-ReservationSummary-Location">
       <div id="ReservationUpdate-Screen-ReservationSummary-Location-Title">Pick up location:</div>
