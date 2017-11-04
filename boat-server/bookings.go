@@ -248,7 +248,7 @@ func recalculateAllAvailableSlots() {
 
   beginDate := time.Unix(0, bookingSettings.CurrentDate * int64(time.Millisecond));
   for counter := bookingConfiguration.SchedulingBeginOffset; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
-    slotDate := beginDate.AddDate(0, 0, counter);
+    slotDate := beginDate.Add(time.Duration(counter * 24) * time.Hour);
     calculateSlotsForDate(location, boat, slotDate);
   }
   
