@@ -44,6 +44,25 @@ ScreenUtils = {
     return null;
   },
   
+  getBookingExtrasAndPrice: function(extras, allExtras) {
+    var extraPrice = 0;
+    var includedExtras = "";
+    for (var name in extras) {
+      if (extras[name] == true) {
+        var extra = allExtras[name];
+        
+        if (includedExtras != "") {
+          includedExtras += ", ";
+        }
+        includedExtras = extra.name + " (+$" + extra.price + ")";
+        extraPrice += extra.price;
+      }
+    }
+    
+    return [includedExtras, extraPrice];
+  },
+  
+  
   getBookingSummary: function(reservationContext) {
     var tripDate = this.getBookingDate(reservationContext.slot.time);
     var tripTime = this.getBookingTime(reservationContext.slot.time);
@@ -60,6 +79,7 @@ ScreenUtils = {
     
     return summaryInfo;
   },
+  
   
   formatPhoneNumber: function(value) {
     var result = ["(", "_", "_", "_", ")", " ", "_", "_", "_", "-", "_", "_", "_", "_"];

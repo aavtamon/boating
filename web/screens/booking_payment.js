@@ -84,22 +84,10 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
     
     
-    var extraPrice = 0;
-    var includedExtras = "";
-    for (var name in reservationContext.extras) {
-      if (reservationContext.extras[name]) {
-        var extra = this.extras[name];
-        
-        if (includedExtras != "") {
-          includedExtras += ", ";
-        }
-        includedExtras = extra.name + " (+$" + extra.price + ")";
-        extraPrice += extra.price;
-      }
-    }
-    $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(includedExtras == "" ? "none" : includedExtras);
+    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, this.extras);
+    $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
 
-    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + extraPrice));
+    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + encludedExtrasAndPrice[1]));
     
     
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));

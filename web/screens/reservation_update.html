@@ -10,9 +10,11 @@
       ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
       ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
       ReservationUpdate.reservationEmail = {{.Reservation.Email}};
+      ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
                     
       ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
       ReservationUpdate.cancellationFees = {{.BookingSettings.CancellationFees}};
+      ReservationUpdate.extras = {{.BookingSettings.Extras}};
                     
       ReservationUpdate.onLoad();
     {{end}}
@@ -62,6 +64,10 @@
           <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
         </div>
       </div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Extras" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Extras-Title">Additional equipment:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Extras-Value"></div>
     </div>
     <div id="ReservationUpdate-Screen-ReservationSummary-Price" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>

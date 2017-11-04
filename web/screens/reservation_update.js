@@ -4,8 +4,10 @@ ReservationUpdate = {
   reservationLocationId: null,
   reservationCost: null,
   reservationEmail: null,
+  reservationExtras: null,
   currentDate: null,
   cancellationFees: null,
+  extras: null,
   
   onLoad: function() {
     if (!this.reservationId) {
@@ -23,6 +25,10 @@ ReservationUpdate = {
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
 
+    
+    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(this.reservationExtras, this.extras);
+    $("#ReservationUpdate-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
+    
     
     var emailData = {email: this.reservationEmail};
     

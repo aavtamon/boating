@@ -64,6 +64,10 @@ BookingConfirmation = {
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<input type="checkbox" id="' + extraId + '">');
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+$' + extra.price + ')</label>');
       
+      if (reservationContext.extras[name] == null) {
+        reservationContext.extras[name] = false;
+      }
+      
       $("#" + extraId).prop("checked", reservationContext.extras[name]);
       
       $("#" + extraId).change(function(name) {
