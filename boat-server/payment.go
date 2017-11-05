@@ -92,8 +92,6 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   fmt.Printf("Starting payment processing for reservation %s\n", request.ReservationId);
 
-  
-
   paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
   
   bookingSettings := GetBookingSettings();

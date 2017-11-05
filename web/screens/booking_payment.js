@@ -62,7 +62,7 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Please review our cancellation policy", this._getCancellationPolicy(), function(action) {
+        Main.showMessage("Please review our cancellation policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Please press OK if you are good to proceed.", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);

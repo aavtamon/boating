@@ -5,6 +5,7 @@ import "io/ioutil"
 import "encoding/json"
 import "time"
 import "math/rand"
+import "sync"
 
 
 const DATABASE_FILE_NAME = "reservation_db.json";
@@ -89,6 +90,8 @@ var bookingConfiguration *TBookingConfiguration;
 var systemConfiguration *TSystemConfiguration;
 var listeners []TChangeListener;
 
+var accessLock sync.Mutex;
+
 
 func InitializePersistance(root string) {
   readSystemConfiguration(root);
@@ -112,7 +115,7 @@ func RecoverReservation(reservationId TReservationId, lastName string) *TReserva
 }
 
 func GetAllReservations() TReservationMap {
-  return reservationMap
+  return reservationMap;
 }
 
 func SaveReservation(reservation *TReservation) TReservationId {
@@ -122,26 +125,33 @@ func SaveReservation(reservation *TReservation) TReservationId {
     reservation.Id = generateReservationId();
   }
 
-  reservationMap[reservation.Id] = reservation;
   reservation.Timestamp = time.Now().Unix();
+
+  accessLock.Lock();
+  reservationMap[reservation.Id] = reservation;
+  saveReservationDatabase();
+  accessLock.Unlock();
   
   notifyReservationUpdated(reservation);
 
-  saveReservationDatabase();
-  
   return reservation.Id;
 }
 
 func RemoveReservation(reservationId TReservationId) {
   log.Println("Persistance: removing reservation " + reservationId);
-
-  reservation := *(reservationMap[reservationId]);
   
+  if (reservationMap[reservationId] == nil) {
+    return;
+  }
+
+  accessLock.Lock();
+  reservation := *(reservationMap[reservationId]);
+
   delete(reservationMap, reservationId);
+  saveReservationDatabase();
+  accessLock.Unlock();
   
   notifyReservationRemoved(&reservation);
-  
-  saveReservationDatabase();
 }
 
 func GetSystemConfiguration() *TSystemConfiguration {
