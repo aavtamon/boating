@@ -80,11 +80,6 @@ type TReservationObserver struct {
 }
 
 
-// TODO: Change it to be configurable
-const LOCATION = "lanier";
-const BOAT = "pantoon16";
-
-
 var bookingSettings *TBookingSettings = nil;
 var availableSlots map[int64][]TBookingSlot = nil;
 var availableDates TAvailableDates = nil;
@@ -201,15 +196,19 @@ func refresh() {
   bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
   bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
 
-  recalculateAllAvailableSlots();
+  for locationId := range bookingConfiguration.Locations {
+    for boatId := range bookingConfiguration.Locations[locationId].Boats {
+      recalculateAllAvailableSlots(locationId, boatId);
+    }
+  }  
   
   fmt.Println("Database refreshed");
 }
 
 
 func (observer TReservationObserver) OnReservationChanged(reservation *TReservation) {
-  location := bookingConfiguration.Locations[LOCATION];
-  boat := bookingConfiguration.Locations[LOCATION].Boats[BOAT];
+  location := bookingConfiguration.Locations[reservation.LocationId];
+  boat := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId];
 
   reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
   reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, time.UTC);
@@ -223,10 +222,9 @@ func (observer TReservationObserver) OnReservationRemoved(reservation *TReservat
 
 
 
-func recalculateAllAvailableSlots() {
-  //TODO: to be iterated
-  location := bookingConfiguration.Locations[LOCATION];
-  boat := bookingConfiguration.Locations[LOCATION].Boats[BOAT];
+func recalculateAllAvailableSlots(locationId string, boatId string) {
+  location := bookingConfiguration.Locations[locationId];
+  boat := bookingConfiguration.Locations[locationId].Boats[boatId];
 
   fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", location.Name, boat.Name);
 
