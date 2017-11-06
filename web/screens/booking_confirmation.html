@@ -3,9 +3,6 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-  BookingConfirmation.maximumCapacity = {{.BookingSettings.MaximumCapacity}};
-  BookingConfirmation.extras = {{.BookingSettings.Extras}};
-  
   $(document).ready(function() {
     BookingConfirmation.onLoad();
   });
@@ -21,7 +18,7 @@
   <div id="BookingConfirmation-Screen-AdditionalInformation" class="info-box">
     <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note">
-        Please note that the maximum capacity of your boat is <b>{{.BookingSettings.MaximumCapacity}}</b> (driver included). It is against the law to exceed the allowed limit.
+        Please note that the maximum capacity of your boat is <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b> (driver included). It is against the law to exceed the allowed limit.
       </div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults">

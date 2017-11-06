@@ -3,13 +3,8 @@
 <script src="screens/screen_utils.js"></script>  
 
 <script>
-  {{range $date, $numOfSlots := .AvailableDates}}
-    BookingTime.availableSlots[{{$date}}] = {{$numOfSlots}};
-  {{end}}
-  
-  BookingTime.schedulingBeginDate = {{.BookingSettings.SchedulingBeginDate}};
-  BookingTime.schedulingEndDate = {{.BookingSettings.SchedulingEndDate}};
-  
+  BookingTime.availableSlots = {{.AvailableDates}};
+  BookingTime.bookingSettings = {{.BookingSettings}};
   
   $(document).ready(function() {
     BookingTime.onLoad();
@@ -18,6 +13,7 @@
 
 <div id="BookingTime-Screen">
   <div id="BookingTime-Screen-Description" class="screen-description">
+    <button id="BookingTime-Screen-Description-BackButton" class="screen-description-back">Boats</button>
     Choose a day and time of your ride
     <button id="BookingTime-Screen-Description-NextButton" class="screen-description-next">Location</button>
   </div>

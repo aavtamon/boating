@@ -32,18 +32,6 @@ ScreenUtils = {
     return tripTime;
   },
   
-  getLocation: function(locationId) {
-    var locations = Backend.getAvailableLocations();
-    for (var i in locations) {
-      var location = locations[i];
-      if (location.id == locationId) {
-        return location;
-      }
-    }
-    
-    return null;
-  },
-  
   getBookingExtrasAndPrice: function(extras, allExtras) {
     var extraPrice = 0;
     var includedExtras = "";
@@ -70,8 +58,8 @@ ScreenUtils = {
     var bookingPrice = this.getBookingPrice(reservationContext.slot.price);
     var summaryInfo = "You selected <b>" + tripDate + "</b>, <b>" + tripTime + "</b> for <b>" + tripDuration + "</b> (" + bookingPrice + ")";
     
-    if (reservationContext.location_id != null) {
-      var location = this.getLocation(reservationContext.location_id);
+    if (reservationContext.pickup_location_id != null) {
+      var location = Backend.getBookingConfiguration().locations[reservationContext.location_id].pickup_locations[reservationContext.pickup_location_id];
       if (location != null) {
         summaryInfo += "<br>Pick up / drop off at <b>" + location.name + "</b>";
       }

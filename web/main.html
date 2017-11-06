@@ -27,18 +27,7 @@
   <script src="https://js.stripe.com/v3/"></script>
   
   <script>
-    {{range $id, $location := .BookingSettings.AvailableLocations}}
-      var loc = {
-        id: {{$id}},
-        name: {{$location.Name}},
-        lat: {{$location.Location.Latitude}},
-        lng: {{$location.Location.Longitude}},
-        address: {{$location.Address}},
-        parking_fee: {{$location.ParkingFee}},
-        instructions: {{$location.Instructions}}
-      }
-      Backend.availableLocations.push(loc);
-    {{end}}
+    Backend.bookingConfiguration = {{.BookingConfiguration}};
   </script>
 </head>
 
@@ -49,7 +38,7 @@
     </div>
     <div id="Main-Header-Menu">
       <div class="main-menu-item" id="Main-Header-Menu-Home" screen="home">Home</div>
-      <div class="main-menu-item" id="Main-Header-Menu-Booking" screen="booking_time booking_location booking_confirmation booking_payment booking_complete">Book Your Ride</div>
+      <div class="main-menu-item" id="Main-Header-Menu-Booking" screen="booking_boat booking_time booking_location booking_confirmation booking_payment booking_complete">Book Your Ride</div>
       <div class="main-menu-item" id="Main-Header-Menu-Reservation" screen="reservation_retrieval reservation_update">My Reservation</div>
       <div class="main-menu-item" id="Main-Header-Menu-Contacts" screen="contacts">Contact Us</div>
     </div>

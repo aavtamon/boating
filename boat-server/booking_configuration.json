@@ -17,8 +17,10 @@
       "service_interval": 1,
       "boats": {
         "pantoon16": {
-          "name": "Pantoon boat 16 feet",
-          "type": "pantoon16",
+          "name": "Lanier Queen",
+          "type": "Pantoon 16ft",
+          "engine": "90h/p",
+          "mileage": 10,
           "maximum_capacity": 10,
           "rate": [
             {"range_min": 2, "range_max": 2, "price": 150},
@@ -35,15 +37,15 @@
         }
       },
       "center_location": {
-        "latitude": 34.2288159,
-        "longitude": -83.9592255,
+        "lat": 34.2288159,
+        "lng": -83.9592255,
         "zoom": 11
       },
       "pickup_locations": {
         "1": {
           "location": {
-            "latitude": 34.2169323,
-            "longitude": -83.9452699,
+            "lat": 34.2169323,
+            "lng": -83.9452699,
             "zoom": 0
           },
           "name": "Great Marina",
@@ -53,8 +55,8 @@
         },
         "2": {
           "location": {
-            "latitude": 34.2305583,
-            "longitude": -83.9294771,
+            "lat": 34.2305583,
+            "lng": -83.9294771,
             "zoom": 0
           },
           "name": "Parking lot at the beach",
@@ -64,8 +66,8 @@
         },
         "3": {
           "location": {
-            "latitude": 34.2700139,
-            "longitude": -83.8967458,
+            "lat": 34.2700139,
+            "lng": -83.8967458,
             "zoom": 0
           },
           "name": "Dam parking",

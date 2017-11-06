@@ -178,11 +178,11 @@ Backend = {
   
 
   
-  // Bookings mansgement
-  availableLocations: [],
+  // Booking management
+  bookingConfiguration: null,
 
-  getAvailableLocations: function() {
-    return this.availableLocations;
+  getBookingConfiguration: function() {
+    return this.bookingConfiguration;
   },
   
   

@@ -8,13 +8,12 @@
       ReservationUpdate.reservationId = {{.Reservation.Id}};
       ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
       ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+      ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
       ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
       ReservationUpdate.reservationEmail = {{.Reservation.Email}};
       ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
                     
       ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
-      ReservationUpdate.cancellationFees = {{.BookingSettings.CancellationFees}};
-      ReservationUpdate.extras = {{.BookingSettings.Extras}};
                     
       ReservationUpdate.onLoad();
     {{end}}

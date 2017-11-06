@@ -49,9 +49,12 @@ type TReservation struct {
   Id TReservationId `json:"id"`;
 
   Timestamp int64 `json:"creation_timestamp,omitempty"`;
+  
+  LocationId string `json:"location_id"`;
+  BoatId string `json:"boat_id"`;
 
   Slot TBookingSlot `json:"slot,omitempty"`;
-  LocationId string `json:"location_id"`;
+  PickupLocationId string `json:"pickup_location_id"`;
   
   NumOfAdults int `json:"adult_count"`;
   NumOfChildren int `json:"children_count"`;

@@ -10,8 +10,8 @@ import "fmt"
 
 
 type TMapLocation struct {
-  Latitude float64 `json:"latitude"`;
-  Longitude float64 `json:"longitude"`;
+  Latitude float64 `json:"lat"`;
+  Longitude float64 `json:"lng"`;
   Zoom int `json:"zoom"`;
 }
 
@@ -40,6 +40,8 @@ type TPricedRange struct {
 type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
+  Engine string `json:"engine"`;
+  Mileage int `json:"mileage"`;
   MaximumCapacity int `json:"maximum_capacity"`;
   Rate []TPricedRange `json:"rate"`;
 }
@@ -64,15 +66,9 @@ type TRentalLocation struct {
 }
 
 type TBookingSettings struct {
-  CurrentDate int64;
-  SchedulingBeginDate int64;
-  SchedulingEndDate int64;  
-  MaximumCapacity int;
-  CancellationFees []TPricedRange;
-  Extras map[string]TExtraEquipment;
-  
-  CenterLocation TMapLocation;
-  AvailableLocations map[string]TPickupLocation;
+  CurrentDate int64 `json:"current_date"`;
+  SchedulingBeginDate int64 `json:"scheduling_begin_date"`;
+  SchedulingEndDate int64 `json:"scheduling_end_date"`;
 }
 
 
@@ -168,20 +164,18 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
 
 func InitializeBookings() {
   initBookingSettings();    
-  refresh();
 
   AddReservationListener(reservationObserver);
   
   schedulePeriodicRefresh();  
 }
 
-func GetBookingSettings() TBookingSettings {
-  return *bookingSettings;
+func GetBookingSettings() *TBookingSettings {
+  return bookingSettings;
 }
 
-
 func GetAvailableDates() TAvailableDates {
-    return availableDates;
+  return availableDates;
 }
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
@@ -195,14 +189,7 @@ func initBookingSettings() {
     bookingSettings = new(TBookingSettings);
   }
 
-  bookingConfiguration := GetBookingConfiguration();
-  
-  bookingSettings.CancellationFees = bookingConfiguration.CancellationFees;
-  
-  bookingSettings.MaximumCapacity = bookingConfiguration.Locations[LOCATION].Boats[BOAT].MaximumCapacity;
-  bookingSettings.CenterLocation = bookingConfiguration.Locations[LOCATION].CenterLocation;
-  bookingSettings.AvailableLocations = bookingConfiguration.Locations[LOCATION].PickupLocations;
-  bookingSettings.Extras = bookingConfiguration.Locations[LOCATION].Extras;
+  refresh();
 }
 
 func refresh() {

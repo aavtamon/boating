@@ -1,6 +1,4 @@
 BookingPayment = {
-  maximumCapacity: null,
-  cancellationFees: null,
   extras: null,
   _cancellationPolicyAccepted: false,
   
@@ -8,7 +6,7 @@ BookingPayment = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
     
-    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
+    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.pickup_location_id == null || reservationContext.adult_count == null || reservationContext.children_count == null) {
       Main.loadScreen("home");
       
       return;
@@ -75,16 +73,17 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
     $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
     
-    $("#BookingPayment-Screen-ReservationSummary-Group-Value").html(reservationContext.adult_count + " adults and " + reservationContext.children_count + " children (allowed maximum - " + this.maximumCapacity + ")");
+    $("#BookingPayment-Screen-ReservationSummary-Group-Value").html(reservationContext.adult_count + " adults and " + reservationContext.children_count + " children (allowed maximum - " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId].maximum_capacity + ")");
     
-    var location = ScreenUtils.getLocation(reservationContext.location_id);
+    
+    var location = Backend.getBookingConfiguration().locations[reservationContext.location_id].pickup_locations[reservationContext.pickup_location_id];
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
     
     
-    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, this.extras);
+    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, Backend.getBookingConfiguration().locations[reservationContext.location_id].extras);
     $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
 
     $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + encludedExtrasAndPrice[1]));
@@ -156,11 +155,11 @@ BookingPayment = {
  
   
   _getCancellationPolicy: function() {
-    var policy = "<center><h1>Cancellation Policy</h1></center>&nbsp;&nbsp;We allow free cancellation " + BookingPayment.cancellationFees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + BookingPayment.cancellationFees[0].range_max + " hours, the following fees apply:<br><ul>";
+    var policy = "<center><h1>Cancellation Policy</h1></center>&nbsp;&nbsp;We allow free cancellation " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours, the following fees apply:<br><ul>";
     
     
-    for (var index in BookingPayment.cancellationFees) {
-      var fee = BookingPayment.cancellationFees[index];
+    for (var index in Backend.getBookingConfiguration().cancellation_fees) {
+      var fee = Backend.getBookingConfiguration().cancellation_fees[index];
       policy += "<li>" + fee.range_min + " - " + fee.range_max + " hours: $" + fee.price + " dollars</li>"
     }
     

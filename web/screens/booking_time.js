@@ -1,9 +1,7 @@
 BookingTime = {
-  availableSlots: {},
+  availableSlots: null,
+  bookingSettings: null,
 
-  schedulingBeginDate: null,
-  schedulingEndDate: null,
-  
   selectedDate: null,
   selectedTime: null,
   selectedDuration: null,
@@ -15,7 +13,7 @@ BookingTime = {
     
     
     if (Backend.getReservationContext().slot == null) {
-      this.selectedDate = BookingTime.schedulingBeginDate;
+      this.selectedDate = this.bookingSettings.scheduling_begin_date;
       this.selectedTime = null;
       this.selectedDuration = null;
     } else {
@@ -48,10 +46,14 @@ BookingTime = {
       }.bind(this),
       
       defaultDate: ScreenUtils.getLocalTime(this.selectedDate),
-      minDate: ScreenUtils.getLocalTime(BookingTime.schedulingBeginDate),
-      maxDate: ScreenUtils.getLocalTime(BookingTime.schedulingEndDate)
+      minDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_begin_date),
+      maxDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_end_date)
     });
 
+    
+    $("#BookingTime-Screen-Description-BackButton").click(function() {
+      Main.loadScreen("booking_boat");
+    });
     
     $("#BookingTime-Screen-Description-NextButton").click(function() {
       Main.loadScreen("booking_location");

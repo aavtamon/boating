@@ -1,12 +1,8 @@
 BookingConfirmation = {
-  maximumCapacity: null,
-  extras: null,
-  
-  
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
 
-    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.location_id == null) {
+    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.pickup_location_id == null) {
       Main.loadScreen("home");
       return;
     }
@@ -19,8 +15,8 @@ BookingConfirmation = {
     $("#BookingConfirmation-Screen-Description-NextButton").click(function() {
       Main.loadScreen("booking_payment");
     });
-    
 
+    
     if (Backend.getTemporaryData().ageCertification == null) {
       Backend.getTemporaryData().ageCertification = false;
     }
@@ -29,11 +25,16 @@ BookingConfirmation = {
     reservationContext.adult_count = reservationContext.adult_count || 1;
     reservationContext.children_count = reservationContext.children_count || 0;
     
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, this.maximumCapacity);
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, this.maximumCapacity - reservationContext.adult_count);
+    var maximumCapacity = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId].maximum_capacity;
+    
+    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number").html(maximumCapacity);
+
+
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, maximumCapacity);
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, maximumCapacity - reservationContext.adult_count);
         
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
-      var remainder = this.maximumCapacity - value;
+      var remainder = maximumCapacity - value;
       
       this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
     }.bind(this), null, function(value) {
@@ -49,8 +50,9 @@ BookingConfirmation = {
       reservationContext.extras = {};
     }
     
-    for (var name in this.extras) {
-      var extra = this.extras[name];
+    var extras = Backend.getBookingConfiguration().locations[reservationContext.location_id].extras;
+    for (var name in extras) {
+      var extra = extras[name];
       var extraId = "BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras-" + name;
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<input type="checkbox" id="' + extraId + '">');
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+$' + extra.price + ')</label>');

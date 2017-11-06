@@ -12,7 +12,8 @@ import "time"
 
 
 type THtmlObject struct {
-  BookingSettings TBookingSettings;
+  BookingSettings *TBookingSettings;
+  BookingConfiguration *TBookingConfiguration;
   AvailableDates TAvailableDates;
   Reservation *TReservation;
 }
@@ -91,6 +92,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       
       htmlObject := THtmlObject {
         BookingSettings: GetBookingSettings(),
+        BookingConfiguration: GetBookingConfiguration(),
         AvailableDates: GetAvailableDates(),
         Reservation: GetReservation(Sessions[TSessionId(sessionId)]),
       }

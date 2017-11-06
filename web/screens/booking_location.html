@@ -4,13 +4,6 @@
 
 
 <script>
-  var centerLocation = {
-    lat: {{.BookingSettings.CenterLocation.Latitude}},
-    lng: {{.BookingSettings.CenterLocation.Longitude}},
-    zoom: {{.BookingSettings.CenterLocation.Zoom}}
-  }
-  BookingLocation.centerLocation = centerLocation;
-  
   $(document).ready(function() {
     BookingLocation.onLoad();
   });

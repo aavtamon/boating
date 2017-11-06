@@ -2,11 +2,11 @@ ReservationUpdate = {
   reservationId: null,
   reservationDateTime: null,
   reservationLocationId: null,
+  reservationPickupLocationId: null,
   reservationCost: null,
   reservationEmail: null,
   reservationExtras: null,
   currentDate: null,
-  cancellationFees: null,
   extras: null,
   
   onLoad: function() {
@@ -19,14 +19,14 @@ ReservationUpdate = {
     $("#ReservationUpdate-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(this.reservationDateTime) + " " + ScreenUtils.getBookingTime(this.reservationDateTime));
     
     
-    var location = ScreenUtils.getLocation(this.reservationLocationId);
+    var location = Backend.getBookingConfiguration().locations[this.reservationLocationId].pickup_locations[this.reservationPickupLocationId];
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
 
     
-    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(this.reservationExtras, this.extras);
+    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(this.reservationExtras, Backend.getBookingConfiguration().locations[this.reservationLocationId].extras);
     $("#ReservationUpdate-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
     
     
@@ -64,8 +64,8 @@ ReservationUpdate = {
 
     var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentDate) / 1000 / 60 / 60);
 
-    for (var index in ReservationUpdate.cancellationFees) {
-      var fee = ReservationUpdate.cancellationFees[index];
+    for (var index in Backend.getCurrentConfiguration().cancellation_fees) {
+      var fee = Backend.getCurrentConfiguration().cancellation_fees[index];
       if (fee.range_min <= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
         cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.price + " dollars. This non-refundable fee will be deducted from the refund.";
 

@@ -94,10 +94,10 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
 
   paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
   
-  bookingSettings := GetBookingSettings();
+  bookingConfiguration := GetBookingConfiguration();
   for extraId, included := range reservation.Extras {
     if (included) {
-      paidAmount += bookingSettings.Extras[extraId].Price;
+      paidAmount += bookingConfiguration.Locations[reservation.LocationId].Extras[extraId].Price;
     }
   }
 
@@ -196,10 +196,11 @@ func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
 
 func getNonRefundableFee(reservation *TReservation) uint64 {
   bookingSettings := GetBookingSettings();
+  bookingConfiguration := GetBookingConfiguration();
   
   timeLeftToTrip := (reservation.Slot.DateTime - bookingSettings.CurrentDate) / 1000 / 60 / 60;
   
-  for _, fee := range bookingSettings.CancellationFees {
+  for _, fee := range bookingConfiguration.CancellationFees {
     if (fee.RangeMin <= timeLeftToTrip && timeLeftToTrip < fee.RangeMax) {
       return fee.Price;
     }
