@@ -19,7 +19,10 @@
         "pantoon16": {
           "name": "Lanier Queen",
           "type": "Pantoon 16ft",
-          "images": [{"name": "", "url": "files/images/boat-picture.jpg", "description": "Nice and powerful boat.<br>Good for surfing the lake and tubing."}],
+          "images": [
+            {"name": "", "url": "files/images/boat-picture.jpg", "description": "Nice and powerful boat.<br>Good for surfing the lake with your party."},
+            {"name": "", "url": "files/images/tubing-picture.jpg", "description": "Confortably sits up to 10 people"}
+          ],
           "engine": "90h/p",
           "mileage": 10,
           "maximum_capacity": 10,

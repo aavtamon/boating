@@ -28,7 +28,6 @@
   border-color: #dddddd;
 
   background: #eeeeee;
-  opacity: 50%;
 }
 
 #BookingBoat-Screen-SelectionPanel-Boats-Title,
@@ -51,6 +50,10 @@
   background-color: #f6a828;
 }
 
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title {
+  position: relative;
+}
+
 #BookingBoat-Screen-SelectionPanel-Boats-Options,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details {
   padding: 10px;
@@ -62,10 +65,27 @@
   margin-top: 5px;
 }
 
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton,
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton {
+  top: 5px;
+  padding: 0px;
+  min-width: 35px;
+}
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton {
+  left: 10px;
+}
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton {
+  right: 10px;
+}
+
 #BookingBoat-Screen-SelectionPanel-BoatPictures-Note {
+  height: 35px;
   margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
   
   white-space: normal;
+  overflow: hidden;
   
   font-size: 15px;
 }
