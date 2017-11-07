@@ -60,6 +60,13 @@ BookingBoat = {
     $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Value").html(boat.type);
     $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Value").html(boat.maximum_capacity + " people");
     $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Value").html(boat.engine);
+    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Value").html(boat.mileage + " mpg");
+
+    if (boat.images.length > 0) {
+      var primaryImage = boat.images[0];
+      $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Picture").attr("src", primaryImage.url);
+      $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Note").html(primaryImage.description);
+    }
   },
   
   

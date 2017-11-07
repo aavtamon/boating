@@ -10,7 +10,8 @@
 }
 
 #BookingBoat-Screen-SelectionPanel-Boats,
-#BookingBoat-Screen-SelectionPanel-BoatDescription {
+#BookingBoat-Screen-SelectionPanel-BoatDescription,
+#BookingBoat-Screen-SelectionPanel-BoatPictures {
   display: inline-block;
   height: 240px;
   width: 270px;
@@ -31,7 +32,8 @@
 }
 
 #BookingBoat-Screen-SelectionPanel-Boats-Title,
-#BookingBoat-Screen-SelectionPanel-BoatDescription-Title {
+#BookingBoat-Screen-SelectionPanel-BoatDescription-Title,
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Title {
   height: 39px;
   line-height: 39px;
   text-align: center;
@@ -54,6 +56,19 @@
   padding: 10px;
 }
 
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Picture {
+  width: 100%;
+  height: 150px;
+  margin-top: 5px;
+}
+
+#BookingBoat-Screen-SelectionPanel-BoatPictures-Note {
+  margin-top: 5px;
+  
+  white-space: normal;
+  
+  font-size: 15px;
+}
 
 .bookingboat-option {
   line-height: 30px;
@@ -74,6 +89,7 @@
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Label,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Label,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Label,
+#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Label,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Label {
   display: inline-block;
   
@@ -84,6 +100,7 @@
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Value,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Value,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Value,
+#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Value,
 #BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Value {
   display: inline-block;
   

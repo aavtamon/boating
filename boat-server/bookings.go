@@ -37,6 +37,12 @@ type TPricedRange struct {
   Price uint64 `json:"price"`;
 }
 
+type TImageResource struct {
+  Name string `json:"name"`;
+  Url string `json:"url"`;
+  Description string `json:"description"`;
+}
+
 type TBoat struct {
   Name string `json:"name"`;
   Type string `json:"type"`;
@@ -44,6 +50,7 @@ type TBoat struct {
   Mileage int `json:"mileage"`;
   MaximumCapacity int `json:"maximum_capacity"`;
   Rate []TPricedRange `json:"rate"`;
+  Images []TImageResource `json:"images"`;
 }
 
 type TExtraEquipment struct {
