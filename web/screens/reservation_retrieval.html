@@ -16,21 +16,24 @@
   {{if .Reservation}}
     <div class="info-box">
       You seem to have a reservation <a href="javascript:ScreenUtils.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
-
       <br>
-
-      If you want to pull a different one, please enter the confirmation number and the last name:
+      <br>
+      If you want to pull a different one, please enter the confirmation number and the last name below.
     </div>
   {{end}}
   
   <div id="ReservationRetrieval-Screen-Reservation" class="info-box">
-    <div id="ReservationRetrieval-Screen-Reservation-Number-Label">Confirmation Number:</div>
-    <input type="text" id="ReservationRetrieval-Screen-Reservation-Number-Input">
-    <div id="ReservationRetrieval-Screen-Reservation-LastName-Label">Last name on the reservation:</div>
-    <input type="text" id="ReservationRetrieval-Screen-Reservation-LastName-Input">
-    <div id="ReservationRetrieval-Screen-Reservation-Status">
-      Failed to retieve reservation.<br>Please correct your confirmation number and/or last name, and try again.
-      If you cannot retrieve your reservation, please give us a call.
+    <div id="ReservationRetrieval-Screen-Reservation-Details">
+      <div id="ReservationRetrieval-Screen-Reservation-Details-Id-Label">Confirmation Number:</div>
+      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-Id-Input">
+      <div id="ReservationRetrieval-Screen-Reservation-Details-LastName-Label">Last name on the reservation:</div>
+      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-LastName-Input">
+    </div>
+    <div id="ReservationRetrieval-Screen-Reservation-StatusHolder">
+      <div id="ReservationRetrieval-Screen-Reservation-Status">
+        Failed to retieve reservation.<br>Please correct your confirmation number and/or last name, and try again.
+        If you cannot retrieve your reservation, please give us a call.
+      </div>
     </div>
     <div id="ReservationRetrieval-Screen-Reservation-ButtonPanel">
       <button id="ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton" class="standard-button">Retrieve</button>

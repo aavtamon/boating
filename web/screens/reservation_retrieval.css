@@ -2,22 +2,27 @@
   position: relative;
 }
 
-#ReservationRetrieval-Screen-Reservation-Number-Input {
+#ReservationRetrieval-Screen-Reservation-Details {
+  display: inline-block;
+}
+
+#ReservationRetrieval-Screen-Reservation-Details-Id-Input {
   width: 200px;
 }
-#ReservationRetrieval-Screen-Reservation-LastName-Label {
+#ReservationRetrieval-Screen-Reservation-Details-LastName-Label {
   margin-top: 15px;
 }
-#ReservationRetrieval-Screen-Reservation-LastName-Input {
+#ReservationRetrieval-Screen-Reservation-Details-LastName-Input {
   width: 200px;
 }
 
-#ReservationRetrieval-Screen-Reservation-Status {
-  position: absolute;
-  max-width: 300px;
-  top: 30px;
-  right: 20px;
+#ReservationRetrieval-Screen-Reservation-StatusHolder {
+  display: inline-block;
+  margin-left: 50px;
   
+  max-width: 300px;
+}
+#ReservationRetrieval-Screen-Reservation-Status {
   color: red;
 }
 

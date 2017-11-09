@@ -11,7 +11,7 @@ ReservationRetrieval = {
     $("#ReservationRetrieval-Screen-Reservation-Status").hide();
     
     function reenableNextButton() {
-      var restoreButtonEnabled = $("#ReservationRetrieval-Screen-Reservation-Number-Input").val().length > 0 && $("#ReservationRetrieval-Screen-Reservation-LastName-Input").val().length > 0;
+      var restoreButtonEnabled = $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val().length > 0 && $("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input").val().length > 0;
       
       $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").prop("disabled", !restoreButtonEnabled);
       $("#ReservationRetrieval-Screen-Reservation-Status").hide();
@@ -20,8 +20,8 @@ ReservationRetrieval = {
     
     var reservationInfo = {};
     
-    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Number-Input")[0], reservationInfo, "id", reenableNextButton);
-    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-LastName-Input")[0], reservationInfo, "last_name", reenableNextButton);
+    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Details-Id-Input")[0], reservationInfo, "id", reenableNextButton);
+    ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input")[0], reservationInfo, "last_name", reenableNextButton);
     
     
     $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").click(function() {
@@ -35,6 +35,6 @@ ReservationRetrieval = {
     });
     
     
-    $("#ReservationRetrieval-Screen-Reservation-Number-Input").focus();
+    $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").focus();
   },
 }
