@@ -68,6 +68,15 @@ ScreenUtils = {
     return summaryInfo;
   },
   
+  retrieveReservation: function(reservationId, lastName) {
+    Backend.restoreReservationContext(reservationId, lastName, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.loadScreen("reservation_update");
+      }
+    });
+  },
+
+  
   
   formatPhoneNumber: function(value) {
     var result = ["(", "_", "_", "_", ")", " ", "_", "_", "_", "-", "_", "_", "_", "_"];
@@ -195,6 +204,60 @@ ScreenUtils = {
     }    
   },
   
+  stateSelect: function(stateElement, dataModel, dataModelProperty, changeCallback) {
+    $(stateElement).append("<option value='AL'>AL</option>");
+    $(stateElement).append("<option value='AK'>AK</option>");
+    $(stateElement).append("<option value='AZ'>AZ</option>");
+    $(stateElement).append("<option value='AR'>AR</option>");
+    $(stateElement).append("<option value='CA'>CA</option>");
+    $(stateElement).append("<option value='CO'>CO</option>");
+    $(stateElement).append("<option value='CT'>CT</option>");
+    $(stateElement).append("<option value='DE'>DE</option>");
+    $(stateElement).append("<option value='DC'>DC</option>");
+    $(stateElement).append("<option value='FL'>FL</option>");
+    $(stateElement).append("<option value='GA' selected='selected'>GA</option>");
+    $(stateElement).append("<option value='HI'>HI</option>");
+    $(stateElement).append("<option value='ID'>ID</option>");
+    $(stateElement).append("<option value='IL'>IL</option>");
+    $(stateElement).append("<option value='IN'>IN</option>");
+    $(stateElement).append("<option value='IA'>IA</option>");
+    $(stateElement).append("<option value='KS'>KS</option>");
+    $(stateElement).append("<option value='KY'>KY</option>");
+    $(stateElement).append("<option value='LA'>LA</option>");
+    $(stateElement).append("<option value='ME'>ME</option>");
+    $(stateElement).append("<option value='MD'>MD</option>");
+    $(stateElement).append("<option value='MA'>MA</option>");
+    $(stateElement).append("<option value='MI'>MI</option>");
+    $(stateElement).append("<option value='MN'>MN</option>");
+    $(stateElement).append("<option value='MS'>MS</option>");
+    $(stateElement).append("<option value='MO'>MO</option>");
+    $(stateElement).append("<option value='MT'>MT</option>");
+    $(stateElement).append("<option value='NE'>NE</option>");
+    $(stateElement).append("<option value='NV'>NV</option>");
+    $(stateElement).append("<option value='NH'>NH</option>");
+    $(stateElement).append("<option value='NJ'>NJ</option>");
+    $(stateElement).append("<option value='MN'>MN</option>");
+    $(stateElement).append("<option value='NY'>NY</option>");
+    $(stateElement).append("<option value='NC'>NC</option>");
+    $(stateElement).append("<option value='ND'>ND</option>");
+    $(stateElement).append("<option value='OH'>OH</option>");
+    $(stateElement).append("<option value='OK'>OK</option>");
+    $(stateElement).append("<option value='OR'>OR</option>");
+    $(stateElement).append("<option value='PA'>PA</option>");
+    $(stateElement).append("<option value='RI'>RI</option>");
+    $(stateElement).append("<option value='SC'>SC</option>");
+    $(stateElement).append("<option value='SD'>SD</option>");
+    $(stateElement).append("<option value='TN'>TN</option>");
+    $(stateElement).append("<option value='TX'>TX</option>");
+    $(stateElement).append("<option value='UT'>UT</option>");
+    $(stateElement).append("<option value='VT'>VT</option>");
+    $(stateElement).append("<option value='VA'>VA</option>");
+    $(stateElement).append("<option value='WA'>WA</option>");
+    $(stateElement).append("<option value='WI'>WI</option>");
+    $(stateElement).append("<option value='WV'>WV</option>");
+    
+    this.dataModelInput(stateElement, dataModel, dataModelProperty, changeCallback);
+  },
   
   
 
@@ -236,4 +299,9 @@ ScreenUtils = {
     var cvcRE = /^[0-9]{3,4}$/;
     return value != null && cvcRE.test(value);
   },
+  
+  isValidLicense: function(value) {
+    var licenseRE = /^[0-9]{8,12}$/;
+    return value != null && licenseRE.test(value);
+  }
 }

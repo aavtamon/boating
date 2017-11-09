@@ -15,7 +15,7 @@
   
   {{if .Reservation}}
     <div class="info-box">
-      You seem to have a reservation <a href="javascript:ReservationRetrieval.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
+      You seem to have a reservation <a href="javascript:ScreenUtils.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
 
       <br>
 

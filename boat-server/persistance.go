@@ -61,7 +61,8 @@ type TReservation struct {
   
   Extras map[string]bool `json:"extras"`;
 
-  DriversLicense string `json:"dl,omitempty"`;
+  DLState string `json:"dl_state,omitempty"`;
+  DLNumber string `json:"dl_number,omitempty"`;
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   Email string `json:"email,omitempty"`;

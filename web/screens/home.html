@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="screens/home.css">
+<script src="screens/screen_utils.js"></script>
 
 <div id="Home-Screen">
   <div id="Home-Screen-Welcome">
@@ -24,7 +25,7 @@
     <br>
     
     {{if .Reservation}}
-      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}">{{.Reservation.Id}}</a>. 
+      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ScreenUtils.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
       <br>
       Click on the reservation if you want to review or cancel it.
       <br>

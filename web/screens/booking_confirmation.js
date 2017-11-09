@@ -77,7 +77,9 @@ BookingConfirmation = {
       this._canProceedToNextStep();
     }.bind(this));
     
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-DL-License-Input")[0], reservationContext, "dl", this._canProceedToNextStep.bind(this));
+    ScreenUtils.stateSelect($("#BookingConfirmation-Screen-ContactInformation-DL-License-State-Input")[0], reservationContext, "dl_state");
+    
+    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input")[0], reservationContext, "dl_number", this._canProceedToNextStep.bind(this), ScreenUtils.isValidLicense);
     
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name", this._canProceedToNextStep.bind(this));
     
@@ -122,7 +124,7 @@ BookingConfirmation = {
     
     var reservationComplete = true;
 
-    var valid = Backend.getTemporaryData().ageCertification && ScreenUtils.isValid(reservationContext.dl)
+    var valid = Backend.getTemporaryData().ageCertification && ScreenUtils.isValidLicense(reservationContext.dl_number)
                 && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
                 && ScreenUtils.isValidEmail(reservationContext.email)
                 && ScreenUtils.isValidPhone(reservationContext.primary_phone)

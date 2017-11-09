@@ -114,7 +114,8 @@
 }
 
 
-#BookingConfirmation-Screen-ContactInformation-DL-License-Input,
+#BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input,
+#BookingConfirmation-Screen-ContactInformation-DL-License-State-Input,
 #BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input,
 #BookingConfirmation-Screen-ContactInformation-Name-LastName-Input,
 #BookingConfirmation-Screen-ContactInformation-Email-Input {
@@ -125,7 +126,11 @@
   margin-bottom: 5px;
 }
 
-#BookingConfirmation-Screen-ContactInformation-DL-License-Input {
+#BookingConfirmation-Screen-ContactInformation-DL-License-State-Input {
+  width: 70px;
+  margin-right: 10px;
+}
+#BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input {
   width: 200px;
 }
 

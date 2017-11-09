@@ -64,8 +64,8 @@ ReservationUpdate = {
 
     var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentDate) / 1000 / 60 / 60);
 
-    for (var index in Backend.getCurrentConfiguration().cancellation_fees) {
-      var fee = Backend.getCurrentConfiguration().cancellation_fees[index];
+    for (var index in Backend.getBookingConfiguration().cancellation_fees) {
+      var fee = Backend.getBookingConfiguration().cancellation_fees[index];
       if (fee.range_min <= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
         cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.price + " dollars. This non-refundable fee will be deducted from the refund.";
 

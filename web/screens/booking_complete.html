@@ -19,7 +19,7 @@
   
   <div id="BookingComplete-Screen-ReservationSummary" class="info-box">
     <div>
-      Your reservation is placed, confirmation number is <a href="#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}">{{.Reservation.Id}}</a>.
+      Your reservation is placed, confirmation number is <a href="javascript:ScreenUtils.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>.
       <br>
       You should receive an email at <b>{{.Reservation.Email}}</b> soon with this confirmation number and all the details.
       <br>

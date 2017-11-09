@@ -97,7 +97,7 @@ BookingPayment = {
     
     ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-City-Input")[0], paymentInfo, "city", this._canProceedToNextStep.bind(this));
 
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
+    ScreenUtils.stateSelect($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
     
     
     $("#BookingPayment-Screen-CancellationPolicy-Link").attr("href", "javascript:BookingPayment._showCancellationPolicy()");

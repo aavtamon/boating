@@ -4,7 +4,7 @@ ReservationRetrieval = {
     var lastName = Utils.getQueryParameterByName("name");
     
     if (reservationId != null && lastName != null) {
-      this.retrieveReservation(reservationId, lastName);
+      ScreenUtils.retrieveReservation(reservationId, lastName);
     }
     
     $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").prop("disabled", true);
@@ -37,13 +37,4 @@ ReservationRetrieval = {
     
     $("#ReservationRetrieval-Screen-Reservation-Number-Input").focus();
   },
-  
-  
-  retrieveReservation: function(reservationId, lastName) {
-    Backend.restoreReservationContext(reservationId, lastName, function(status) {
-      if (status == Backend.STATUS_SUCCESS) {
-        Main.loadScreen("reservation_update");
-      }
-    });
-  }
 }
