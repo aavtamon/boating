@@ -25,7 +25,7 @@ BookingConfirmation = {
     reservationContext.adult_count = reservationContext.adult_count || 1;
     reservationContext.children_count = reservationContext.children_count || 0;
     
-    var maximumCapacity = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId].maximum_capacity;
+    var maximumCapacity = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].maximum_capacity;
     
     $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number").html(maximumCapacity);
 

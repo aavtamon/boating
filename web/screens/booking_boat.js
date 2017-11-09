@@ -42,20 +42,20 @@ BookingBoat = {
         $(".bookingboat-option").removeClass("selected");
         $(event.target).addClass("selected");
 
-        Backend.getReservationContext().boatId = event.target._boatId;
+        Backend.getReservationContext().boat_id = event.target._boatId;
         
         this._showBoatDetails();
 
         this._canProceedToNextStep();
       }.bind(this));
       
-      if (boatId == Backend.getReservationContext().boatId) {
+      if (boatId == Backend.getReservationContext().boat_id) {
         boatOption.click();
       }
     }
     
     var boatOptions = $(".bookingboat-option");
-    if (boatOptions.length == 1 && Backend.getReservationContext().boatId == null) {
+    if (boatOptions.length == 1 && Backend.getReservationContext().boat_id == null) {
       boatOptions.click();
     }
   },
@@ -63,7 +63,7 @@ BookingBoat = {
   
   _showBoatDetails: function() {
     var reservationContext = Backend.getReservationContext();
-    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId];
+    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
     
     $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Value").html(boat.name);
     $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Value").html(boat.type);
@@ -76,7 +76,7 @@ BookingBoat = {
   
   _showBoatPicture: function(imageIndex) {
     var reservationContext = Backend.getReservationContext();
-    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId];
+    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
 
     if (imageIndex >= 0 && imageIndex < boat.images.length) {
       var imgResource = boat.images[imageIndex];
@@ -91,10 +91,10 @@ BookingBoat = {
   
   _canProceedToNextStep: function() {
     var reservationContext = Backend.getReservationContext();
-    if (reservationContext.boatId != null) {
+    if (reservationContext.boat_id != null) {
       $("#BookingBoat-Screen-Description-NextButton").prop("disabled", false);
       
-      $("#BookingBoat-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boatId].name);
+      $("#BookingBoat-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].name);
     } else {
       $("#BookingBoat-Screen-Description-NextButton").prop("disabled", true);
       $("#BookingBoat-Screen-ReservationSummary").html("Select a boat for your ride");
