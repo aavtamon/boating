@@ -182,5 +182,57 @@ input, select, .ui-widget {
 
 
 
+.optionbox {
+  display: inline-block;
+  height: 240px;
+  width: 270px;
+  padding: 5px;
+  margin-left: 50px;
+
+  vertical-align: top;
+  
+  text-align: left;
+
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #dddddd;
+
+  background: #eeeeee;
+}
+.optionbox-title {
+  height: 39px;
+  line-height: 39px;
+  text-align: center;
+
+  font-family: Trebuchet MS;
+  font-weight: bold;
+  font-size: 1.1em;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e78f08;
+  border-radius: 5px;
+
+  color: white;
+  background-color: #f6a828;
+}
+.optionbox-content {
+  padding: 10px;
+}
+.optionbox-option {
+  line-height: 30px;
+
+  font-family: Verdana;
+  font-weight: bold;
+  font-size: 1.1em;
+
+  color: #1c94c4;
+
+  cursor: pointer;
+}
+.optionbox-option.selected {
+  color: #eb8f00;
+}
 
 

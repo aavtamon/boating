@@ -34,12 +34,12 @@ BookingBoat = {
     for (var boatId in rentalLocation.boats) {
       var boat = rentalLocation.boats[boatId];
       
-      var boatOption = $("<div class=\"bookingboat-option\">" + boat.name + "</div>").appendTo($("#BookingBoat-Screen-SelectionPanel-Boats-Options"));
+      var boatOption = $("<div class=\"optionbox-option\">" + boat.name + "</div>").appendTo($("#BookingBoat-Screen-SelectionPanel-Boats-Options"));
 
       boatOption[0]._boatId = boatId;
 
       boatOption.click(function(event) {
-        $(".bookingboat-option").removeClass("selected");
+        $(".optionbox-option").removeClass("selected");
         $(event.target).addClass("selected");
 
         Backend.getReservationContext().boat_id = event.target._boatId;
@@ -54,7 +54,7 @@ BookingBoat = {
       }
     }
     
-    var boatOptions = $(".bookingboat-option");
+    var boatOptions = $(".optionbox-option");
     if (boatOptions.length == 1 && Backend.getReservationContext().boat_id == null) {
       boatOptions.click();
     }

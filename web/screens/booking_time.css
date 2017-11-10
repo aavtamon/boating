@@ -14,46 +14,9 @@
   vertical-align: top;
 }
 
-.ui-datepicker.ui-widget.ui-widget-content {
-  width: 270px;
-  height: 240px;
-  padding: 5px;
 
-  border-width: 1px;
-  border-radius: 5px;
-  border-style: solid;
-  border-color: #dddddd;
-
-  background-color: #eeeeee;
-}
-
-
-
-
-#BookingTime-Screen-SelectionPanel-TimeFrame,
-#BookingTime-Screen-SelectionPanel-Duration {
-  display: inline-block;
-  height: 240px;
-  width: 270px;
-  padding: 5px;
-  margin-left: 50px;
-
-  vertical-align: top;
-  
-  text-align: left;
-
-  border-width: 1px;
-  border-radius: 5px;
-  border-style: solid;
-  border-color: #dddddd;
-
-  background: #eeeeee;
-}
-
-.ui-datepicker .ui-datepicker-header,
-#BookingTime-Screen-SelectionPanel-TimeFrame-Title,
-#BookingTime-Screen-SelectionPanel-Duration-Title {
-  height: 39px;
+.ui-datepicker .ui-datepicker-header {
+  height: 31px;
   line-height: 39px;
   text-align: center;
 
@@ -70,30 +33,15 @@
   background-color: #f6a828;
 }
 
-.ui-datepicker .ui-datepicker-header {
-  height: 31px;
-}
+.ui-datepicker.ui-widget.ui-widget-content {
+  width: 270px;
+  height: 240px;
+  padding: 5px;
 
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #dddddd;
 
-#BookingTime-Screen-SelectionPanel-TimeFrame-Times,
-#BookingTime-Screen-SelectionPanel-Duration-Durations {
-  padding: 10px;
-}
-
-
-.bookingtime-time-interval,
-.bookingtime-duration {
-  line-height: 30px;
-
-  font-family: Verdana;
-  font-weight: bold;
-  font-size: 1.1em;
-
-  color: #1c94c4;
-
-  cursor: pointer;
-}
-.bookingtime-time-interval.selected,
-.bookingtime-duration.selected {
-  color: #eb8f00;
+  background-color: #eeeeee;
 }

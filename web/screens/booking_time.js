@@ -91,12 +91,12 @@ BookingTime = {
             }
           }
 
-          var timeInterval = $("<div class=\"bookingtime-time-interval\">" + ScreenUtils.getBookingTime(parseInt(time)) + " (" + ScreenUtils.getBookingDuration(maxDuration) + " max)</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
+          var timeInterval = $("<div class=\"optionbox-option\">" + ScreenUtils.getBookingTime(parseInt(time)) + " (" + ScreenUtils.getBookingDuration(maxDuration) + " max)</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
 
           timeInterval[0]._time = time;
 
           timeInterval.click(function(event) {
-            $(".bookingtime-time-interval").removeClass("selected");
+            $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").children().removeClass("selected");
             $(event.target).addClass("selected");
 
             Backend.getReservationContext().slot = null;
@@ -112,7 +112,7 @@ BookingTime = {
           }
         }
         
-        var timeIntervals = $(".bookingtime-time-interval");
+        var timeIntervals = $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").children();
         if (timeIntervals.length == 1 && this.selectedTime == null) {
           timeIntervals.addClass("selected");
           this._canProceedToNextStep();
@@ -128,11 +128,11 @@ BookingTime = {
     
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
-      var durationElement = $("<div class=\"bookingtime-duration\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
+      var durationElement = $("<div class=\"optionbox-option\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
       durationElement[0]._slot = slot;
       
       durationElement.click(function(event) {
-        $(".bookingtime-duration").removeClass("selected");
+        $("#BookingTime-Screen-SelectionPanel-Duration-Durations").children().removeClass("selected");
         $(event.target).addClass("selected");
         
         this.selectedDuration = event.target._slot.duration;
@@ -147,7 +147,7 @@ BookingTime = {
     }
     
     if (slots.length == 1 && this.selectedDuration == null) {
-      $(".bookingtime-duration").addClass("selected");
+      $("#BookingTime-Screen-SelectionPanel-Duration-Durations").children().addClass("selected");
       Backend.getReservationContext().slot = slots[0];
 
       this._canProceedToNextStep();
