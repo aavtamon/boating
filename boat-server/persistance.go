@@ -8,7 +8,8 @@ import "math/rand"
 import "sync"
 
 
-const DATABASE_FILE_NAME = "reservation_db.json";
+const RESERVATION_DATABASE_FILE_NAME = "reservation_db.json";
+const ACCOUNT_DATABASE_FILE_NAME = "account_db.json";
 const SYSTEM_CONFIG_FILE_NAME = "system_configuration.json";
 const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
@@ -84,12 +85,29 @@ type TChangeListener interface {
 }
 
 
+type TBoatIds struct {
+  Boats []string `json:"boats,omitempty"`;
+}
+
+type TOwnerAccount struct {
+  Username string `json:"username,omitempty"`;
+  Token string `json:"token,omitempty"`;
+  
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  
+  Locations map[string]TBoatIds `json:"locations,omitempty"`;
+}
+
+type TOwnerAccountMap map[string]*TOwnerAccount;
+
 
 const NO_RESERVATION_ID = TReservationId("");
 
 
 
 var reservationMap TReservationMap;
+var ownerAccountMap TOwnerAccountMap;
 var bookingConfiguration *TBookingConfiguration;
 var systemConfiguration *TSystemConfiguration;
 var listeners []TChangeListener;
@@ -101,6 +119,7 @@ func InitializePersistance(root string) {
   readSystemConfiguration(root);
   readBookingConfiguration(root);
   readReservationDatabase(root);
+  readOwnerAccountDatabase(root);
 }
 
 
@@ -218,11 +237,11 @@ func readBookingConfiguration(root string) {
 
 
 func readReservationDatabase(root string) {
-  databaseByteArray, err := ioutil.ReadFile(root + "/" + DATABASE_FILE_NAME);
+  databaseByteArray, err := ioutil.ReadFile(root + "/" + RESERVATION_DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &reservationMap);
     if (err != nil) {
-      log.Println("Persistance: failed to dersereialize the database - initializing", err);
+      log.Println("Persistance: failed to dersereialize reservation database - initializing", err);
     }
   } else {
     log.Println("Persistance: failed to read reservation database - initializing", err);
@@ -242,7 +261,7 @@ func saveReservationDatabase() {
 
   databaseByteArray, err := json.MarshalIndent(reservationMap, "", "  ");
   if (err == nil) {
-    err = ioutil.WriteFile(DATABASE_FILE_NAME, databaseByteArray, 0644);
+    err = ioutil.WriteFile(RESERVATION_DATABASE_FILE_NAME, databaseByteArray, 0644);
     if (err != nil) {
       log.Println("Persistance: failed to save reservation database to file", err);
     }
@@ -277,4 +296,25 @@ func generateReservationId() TReservationId {
   
   return TReservationId(bytes[:]);
 }
+
+
+
+func readOwnerAccountDatabase(root string) {
+  databaseByteArray, err := ioutil.ReadFile(root + "/" + ACCOUNT_DATABASE_FILE_NAME);
+  if (err == nil) {
+    err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
+    if (err != nil) {
+      log.Println("Persistance: failed to dersereialize account database - initializing", err);
+    }
+  } else {
+    log.Println("Persistance: failed to read account database - initializing", err);
+  }
+  
+  if (ownerAccountMap == nil) {
+    ownerAccountMap = make(TOwnerAccountMap);
+  }
+  
+  log.Println("Persistance: account database is read");
+}
+
 

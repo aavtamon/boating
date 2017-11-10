@@ -2,7 +2,7 @@ BookingConfirmation = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
 
-    if (Backend.isPayedReservation() || reservationContext.slot == null || reservationContext.pickup_location_id == null) {
+    if (Backend.isPayedReservation() || reservationContext.pickup_location_id == null) {
       Main.loadScreen("home");
       return;
     }

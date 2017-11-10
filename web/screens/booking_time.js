@@ -7,19 +7,21 @@ BookingTime = {
   selectedDuration: null,
   
   onLoad: function() {
-    if (Backend.isPayedReservation()) {
-      Backend.resetReservationContext();
+    var reservationContext = Backend.getReservationContext();
+
+    if (Backend.isPayedReservation() || reservationContext.location_id || reservationContext.boat_id == null) {
+      Main.loadScreen("home");
+      return;
     }
     
-    
-    if (Backend.getReservationContext().slot == null) {
+    if (reservationContext.slot == null) {
       this.selectedDate = this.bookingSettings.scheduling_begin_date;
       this.selectedTime = null;
       this.selectedDuration = null;
     } else {
-      this.selectedDate = ScreenUtils.getDateForTime(Backend.getReservationContext().slot.time).getTime();
-      this.selectedTime = Backend.getReservationContext().slot.time;
-      this.selectedDuration = Backend.getReservationContext().slot.duration;
+      this.selectedDate = ScreenUtils.getDateForTime(reservationContext.slot.time).getTime();
+      this.selectedTime = reservationContext.slot.time;
+      this.selectedDuration = reservationContext.slot.duration;
     }
     
     
@@ -38,7 +40,7 @@ BookingTime = {
         }
         
         this.selectedDate = newSelectedDate;
-        Backend.getReservationContext().slot = null;
+        reservationContext.slot = null;
         
         this._canProceedToNextStep();
         

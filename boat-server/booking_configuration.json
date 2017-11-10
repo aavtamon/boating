@@ -16,7 +16,7 @@
       "duration": 2,
       "service_interval": 1,
       "boats": {
-        "pantoon16": {
+        "lanier-queen": {
           "name": "Lanier Queen",
           "type": "Pantoon 16ft",
           "images": [

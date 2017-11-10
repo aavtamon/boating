@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="screens/owner_boat.css">
+<script src="screens/owner_boat.js"></script>
+
+<script>
+  $(document).ready(function() {
+    OwnerBoat.onLoad();
+  });
+</script>
+
+<div id="BookingBoat-Screen">
+  <div id="BookingBoat-Screen-Description" class="screen-description">
+    Choose the right boat for your ride
+    <button id="BookingBoat-Screen-Description-NextButton" class="screen-description-next">Date and Time</button>
+  </div>
+  <div id="BookingBoat-Screen-SelectionContainer">
+    <div id="BookingBoat-Screen-SelectionPanel" class="info-box">
+      <div id="BookingBoat-Screen-SelectionPanel-Boats" class="optionbox">
+        <div id="BookingBoat-Screen-SelectionPanel-Boats-Title" class="optionbox-title">Boats</div>
+        <div id="BookingBoat-Screen-SelectionPanel-Boats-Options" class="optionbox-content"></div>
+      </div>
+      <div id="BookingBoat-Screen-SelectionPanel-BoatDescription" class="optionbox">
+        <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Title" class="optionbox-title">Boat Description</div>
+        <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details" class="optionbox-content">
+          <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name" class="info-box-row">
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Label">Name:</div>
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Value"></div>
+          </div>          
+          <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type" class="info-box-row">
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Label">Type:</div>
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Value"></div>
+          </div>          
+          <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity" class="info-box-row">
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Label">Max Capacity:</div>
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Value"></div>
+          </div>          
+          <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine" class="info-box-row">
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Label">Engine:</div>
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Value"></div>
+          </div>          
+          <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage" class="info-box-row">
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Label">Fuel Economy:</div>
+            <div id="BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Value"></div>
+          </div>          
+        </div>
+      </div>
+      <div id="BookingBoat-Screen-SelectionPanel-BoatPictures" class="optionbox">
+        <div id="BookingBoat-Screen-SelectionPanel-BoatPictures-Title" class="optionbox-title">
+          <button id="BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton" class="screen-description-back"></button>
+          Boat Pictures
+          <button id="BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton" class="screen-description-next"></button>
+        </div>
+        <img id="BookingBoat-Screen-SelectionPanel-BoatPictures-Picture">
+        <div id="BookingBoat-Screen-SelectionPanel-BoatPictures-Note"></div>
+      </div>
+    </div>
+  </div>
+  <div id="BookingBoat-Screen-ReservationSummary" class="screen-summary"></div>
+</div>

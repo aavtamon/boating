@@ -1,0 +1,24 @@
+#OwnerLogin-Screen-Login {
+  position: relative;
+}
+
+#OwnerLogin-Screen-Login-Credentials {
+  display: inline-block;
+}
+
+#OwnerLogin-Screen-Login-Credentials-Username-Input,
+#OwnerLogin-Screen-Login-Credentials-Password-Input {
+  width: 200px;
+}
+#OwnerLogin-Screen-Login-Credentials-Password-Label {
+  margin-top: 15px;
+}
+
+#OwnerLogin-Screen-Login-Status {
+  color: red;
+}
+
+#OwnerLogin-Screen-Login-ButtonPanel {
+  margin-top: 20px;
+  margin-left: 110px;
+}

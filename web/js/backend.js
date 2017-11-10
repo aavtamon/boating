@@ -201,6 +201,39 @@ Backend = {
     });
   },
   
+  
+  
+  // Account management
+  
+  _accountDetails: null,
+  
+  isLogged: function() {
+    return this._accountDetails != null;
+  },
+  
+  logIn: function(username, password, callback) {
+    this._accountDetails = {
+      location_id: "lanier",
+      "boat_id": 
+    };
+    
+    if (callback) {
+      callback(Backend.STATUS_SUCCESS);
+    }
+  },
+  
+  logOut: function() {
+    this._accountDetails = null;
+  },
+  
+  
+  getAccountDetails: function() {
+    return this._accountDetails;
+  },
+  
+  
+  
+  // Communication
 
   _communicate: function(resource, method, data, isJsonResponse, headers, callback) {
     var request = new XMLHttpRequest();
