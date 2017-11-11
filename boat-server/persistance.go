@@ -46,6 +46,7 @@ type TSystemConfiguration struct {
 
 type TReservationId string;
 
+
 type TReservation struct {
   Id TReservationId `json:"id"`;
 
@@ -89,6 +90,8 @@ type TBoatIds struct {
   Boats []string `json:"boats,omitempty"`;
 }
 
+type TOwnerAccountId string;
+
 type TOwnerAccount struct {
   Username string `json:"username,omitempty"`;
   Token string `json:"token,omitempty"`;
@@ -102,6 +105,7 @@ type TOwnerAccount struct {
 type TOwnerAccountMap map[string]*TOwnerAccount;
 
 
+const NO_OWNER_ACCOUNT_ID = TOwnerAccountId("");
 const NO_RESERVATION_ID = TReservationId("");
 
 
@@ -185,6 +189,9 @@ func GetBookingConfiguration() *TBookingConfiguration {
   return bookingConfiguration;
 }
 
+func GetOwnerAccount(accountId string) *TOwnerAccount {
+  return ownerAccountMap[accountId];
+}
 
 func AddReservationListener(listener TChangeListener) {
   listeners = append(listeners, listener);

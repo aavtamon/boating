@@ -212,18 +212,45 @@ Backend = {
   },
   
   logIn: function(username, password, callback) {
-    this._accountDetails = {
-      location_id: "lanier",
-      "boat_id": 
-    };
-    
-    if (callback) {
-      callback(Backend.STATUS_SUCCESS);
-    }
+    this._communicate("account/?username=" + username + "&password=" + password, "get", null, true, [], {
+      success: function(accout) {
+        this._accountDetails = account;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status, message) {
+        if (callback) {
+          if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST, message);
+          } else if (status == 401) {
+            callback(Backend.STATUS_ERROR, message);
+          } else if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND, message);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
   },
   
-  logOut: function() {
-    this._accountDetails = null;
+  logOut: function(callback) {
+    this._communicate("account", "put", null, true, [], {
+      success: function() {
+        this._accountDetails = null;
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status, message) {
+        this._accountDetails = null;
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }.bind(this)
+    });
   },
   
   

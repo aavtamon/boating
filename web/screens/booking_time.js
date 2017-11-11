@@ -9,7 +9,7 @@ BookingTime = {
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
 
-    if (Backend.isPayedReservation() || reservationContext.location_id || reservationContext.boat_id == null) {
+    if (Backend.isPayedReservation() || reservationContext.location_id == null || reservationContext.boat_id == null) {
       Main.loadScreen("home");
       return;
     }

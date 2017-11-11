@@ -2,6 +2,7 @@ package main
 
 
 import "log"
+import "fmt"
 import "os"
 import "strings"
 import "io/ioutil"
@@ -18,6 +19,11 @@ type THtmlObject struct {
   Reservation *TReservation;
 }
 
+type TSession struct {
+  ReservationId *TReservationId;
+  AccountId *TOwnerAccountId;
+}
+
 type TSessionId string;
 
 
@@ -26,7 +32,7 @@ const SESSION_ID_COOKIE = "sessionId";
 var RuntimeRoot string = "";
 
 
-var Sessions = make(map[TSessionId]TReservationId);
+var Sessions = make(map[TSessionId]TSession);
 
 
 func parseQuery(r *http.Request) map[string]string {
@@ -37,7 +43,7 @@ func parseQuery(r *http.Request) map[string]string {
     for _, queryPart := range queryParts {
       queryNameValue := strings.Split(queryPart, "=");
       if (len(queryNameValue) != 2) {
-        log.Println("Malformed query component: " + queryPart);
+        fmt.Println("Malformed query component: " + queryPart);
       }
       result[queryNameValue[0]] = queryNameValue[1];
     }
@@ -53,25 +59,30 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     pageReference = "main";
   }
   
-  var sessionId string = "";
+  var sessionIdValue string = "";
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
   if (sessionCookie == nil) {
-    sessionId = generateSessionId();
+    sessionIdValue = generateSessionId();
 
-    log.Println("New session detected. Assigned id = " + sessionId);
+    fmt.Printf("New session detected. Assigned id = %s\n", sessionIdValue);
 
 
-    sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionId};
+    sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionIdValue};
     http.SetCookie(w, sessionCookie);
-
-    Sessions[TSessionId(sessionId)] = NO_RESERVATION_ID;
   } else {
-    sessionId = sessionCookie.Value;
+    sessionIdValue = sessionCookie.Value;
   }
+  
+  sessionId := TSessionId(sessionIdValue);
+  _, hasSession := Sessions[sessionId];
+  if (!hasSession) {
+    initialReservationId := NO_RESERVATION_ID;
+    initialAccountId := NO_OWNER_ACCOUNT_ID;
+    Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId};
+  }
+  
 
-  log.Println("***** Loading page " + pageReference + " *****");
-  
-  
+  fmt.Printf("***** Loading page %s *****\n", pageReference);
 
   pathToFile := RuntimeRoot + "/web/" + pageReference;
   _, err := os.Stat(pathToFile);
@@ -80,28 +91,27 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   }
 
   
-  log.Println("Path to resource = " + pathToFile);
+  fmt.Printf("Path to resource = %s\n", pathToFile);
   _, err = os.Stat(pathToFile);
   if (os.IsNotExist(err)) {
     w.WriteHeader(http.StatusNotFound);
-    log.Println("Requested resource " + pathToFile + " does not exist");
+    fmt.Printf("Requested resource %s does not exist\n", pathToFile);
   } else {
     if (strings.HasSuffix(pathToFile, ".html")) {
-      log.Println("Serving page " + pathToFile);
+      fmt.Printf("Serving page %s\n", pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
       
       htmlObject := THtmlObject {
         BookingSettings: GetBookingSettings(),
         BookingConfiguration: GetBookingConfiguration(),
         AvailableDates: GetAvailableDates(),
-        Reservation: GetReservation(Sessions[TSessionId(sessionId)]),
+        Reservation: GetReservation(*Sessions[sessionId].ReservationId),
       }
-      
       
       
       htmlTemplate.Execute(w, htmlObject);
     } else {
-      log.Println("Serving file " + pathToFile);
+      fmt.Printf("Serving file %s\n", pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);
       
       mimeType := "text/plain";
@@ -122,7 +132,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     }
   }
   
-  log.Println("---------");
+  fmt.Println("---------");
 }
 
 
@@ -157,6 +167,7 @@ func main() {
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
   httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
   httpMux.HandleFunc("/bookings/", BookingsHandler);
+  httpMux.HandleFunc("/account/", AccountHandler);
   httpMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot)));
   httpMux.HandleFunc("/", pageHandler);
   

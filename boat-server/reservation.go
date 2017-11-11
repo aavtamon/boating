@@ -55,7 +55,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
           w.Write(storedReservation);
 
           sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-          Sessions[TSessionId(sessionCookie.Value)] = reservation.Id;
+          *Sessions[TSessionId(sessionCookie.Value)].ReservationId = reservation.Id;
         }
       } else {
         w.WriteHeader(http.StatusNotFound);
@@ -66,7 +66,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
       w.Write([]byte("Reservation Id and Last Name must be provided\n"))
     }
   } else {
-    reservationId := Sessions[TSessionId(sessionCookie.Value)];
+    reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
     w.WriteHeader(http.StatusOK);
     if (reservationId == NO_RESERVATION_ID) {
       w.Write([]byte("{}\n"))
@@ -104,7 +104,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       w.Write(storedReservation);
 
       sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-      Sessions[TSessionId(sessionCookie.Value)] = reservationId;
+      *Sessions[TSessionId(sessionCookie.Value)].ReservationId = reservationId;
     } else {
       w.WriteHeader(http.StatusInternalServerError);
       w.Write([]byte("Failed to store reservation"));
@@ -118,7 +118,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
 func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
 
-  reservationId := Sessions[TSessionId(sessionCookie.Value)];
+  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
 
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
@@ -140,7 +140,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
 
   RemoveReservation(reservationId);
 
-  Sessions[TSessionId(sessionCookie.Value)] = NO_RESERVATION_ID;
+  *Sessions[TSessionId(sessionCookie.Value)].ReservationId = NO_RESERVATION_ID;
 
   w.WriteHeader(http.StatusOK);
 }
@@ -148,7 +148,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
 func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request) {
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
   
-  reservationId := Sessions[TSessionId(sessionCookie.Value)];
+  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
   if (reservationId == NO_RESERVATION_ID) {
     w.WriteHeader(http.StatusNotFound);
     w.Write([]byte("No reservation selected"));

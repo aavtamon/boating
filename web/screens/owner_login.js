@@ -21,7 +21,13 @@ OwnerLogin = {
         if (status == Backend.STATUS_SUCCESS) {
           Main.loadScreen("owner_boat");
         } else {
-          $("#ReservationRetrieval-Screen-Reservation-Status").show("Login failed: " + message);
+          var msg = "";
+          if (status == Backend.STATUS_BAD_REQUEST) {
+            msg = "Something went wrong - " + message;
+          } else {
+            msg = "Check your user name and password - " + message;
+          }
+          $("#ReservationRetrieval-Screen-Reservation-Status").show(msg);
         }
       });
     });
