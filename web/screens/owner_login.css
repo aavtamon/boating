@@ -4,6 +4,8 @@
 
 #OwnerLogin-Screen-Login-Credentials {
   display: inline-block;
+  
+  vertical-align: middle;
 }
 
 #OwnerLogin-Screen-Login-Credentials-Username-Input,
@@ -15,6 +17,12 @@
 }
 
 #OwnerLogin-Screen-Login-Status {
+  display: inline-block;
+  max-width: 300px;
+  margin-left: 50px;
+
+  vertical-align: middle;
+  
   color: red;
 }
 

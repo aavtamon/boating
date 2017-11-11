@@ -213,7 +213,7 @@ Backend = {
   
   logIn: function(username, password, callback) {
     this._communicate("account/?username=" + username + "&password=" + password, "get", null, true, [], {
-      success: function(accout) {
+      success: function(account) {
         this._accountDetails = account;
         
         if (callback) {
@@ -237,7 +237,7 @@ Backend = {
   },
   
   logOut: function(callback) {
-    this._communicate("account", "put", null, true, [], {
+    this._communicate("account/?logout", "get", null, true, [], {
       success: function() {
         this._accountDetails = null;
         if (callback) {

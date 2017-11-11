@@ -25,9 +25,9 @@ OwnerLogin = {
           if (status == Backend.STATUS_BAD_REQUEST) {
             msg = "Something went wrong - " + message;
           } else {
-            msg = "Check your user name and password - " + message;
+            msg = "Your user name or password is not correct.<br>Please try again.";
           }
-          $("#ReservationRetrieval-Screen-Reservation-Status").show(msg);
+          $("#OwnerLogin-Screen-Login-Status").html(msg);
         }
       });
     });
