@@ -125,14 +125,14 @@ BookingPayment = {
       if (result.error) {
         Main.showMessage("Payment Not Successful", result.error.message);
       } else {
-        Backend.saveReservation(function(status) {
+        Backend.saveReservation(function(status, reservationId) {
           if (status == Backend.STATUS_SUCCESS) {
             Backend.pay(result.token.id, function(status) {
               Main.hidePopup();
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.getTemporaryData().paymentInfo = null;
 
-                Main.loadScreen("booking_complete");
+                Main.loadScreen("booking_complete?id=" + reservationId);
               } else if (status == Backend.STATUS_BAD_REQUEST) {
                 Main.showMessage("Payment Not Successful", "Your payment did not get thru. Please check your payment details.");
               } else {

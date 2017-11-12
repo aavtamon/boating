@@ -47,9 +47,9 @@ Backend = {
     this._communicate("reservation/booking/", "put", persistentContext, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
-        
+
         if (callback) {
-          callback(Backend.STATUS_SUCCESS);
+          callback(Backend.STATUS_SUCCESS, persistentContext.id);
         }
       }.bind(this),
       error: function() {
