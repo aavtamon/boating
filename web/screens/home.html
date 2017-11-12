@@ -25,7 +25,7 @@
     <br>
     
     {{if .Reservation}}
-      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="javascript:ScreenUtils.retrieveReservation('{{.Reservation.Id}}', '{{.Reservation.LastName}}')">{{.Reservation.Id}}</a>. 
+      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>. 
       <br>
       Click on the reservation if you want to review or cancel it.
       <br>

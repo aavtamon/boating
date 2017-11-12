@@ -1,11 +1,9 @@
 ReservationRetrieval = {
   onLoad: function() {
-    var reservationId = Utils.getQueryParameterByName("id");
-    var lastName = Utils.getQueryParameterByName("name");
-    
-    if (reservationId != null && lastName != null) {
-      ScreenUtils.retrieveReservation(reservationId, lastName);
-    }
+    var reservationInfo = {
+      id: Utils.getQueryParameterByName("id"),
+      last_name: Utils.getQueryParameterByName("name")
+    };
     
     $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").prop("disabled", true);
     $("#ReservationRetrieval-Screen-Reservation-Status").hide();
@@ -18,11 +16,10 @@ ReservationRetrieval = {
     }
     
     
-    var reservationInfo = {};
-    
     ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Details-Id-Input")[0], reservationInfo, "id", reenableNextButton);
     ScreenUtils.dataModelInput($("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input")[0], reservationInfo, "last_name", reenableNextButton);
     
+    $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").click(this._retrieveReservation);
     
     $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").click(function() {
       Backend.restoreReservationContext(reservationInfo.id, reservationInfo.last_name, function(status) {
@@ -36,5 +33,11 @@ ReservationRetrieval = {
     
     
     $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").focus();
+    
+    if (reservationInfo.id != "" && reservationInfo.last_name != "") {
+      $("#ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton").click();
+    }
   },
 }
+
+  

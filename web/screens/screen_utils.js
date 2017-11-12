@@ -68,15 +68,6 @@ ScreenUtils = {
     return summaryInfo;
   },
   
-  retrieveReservation: function(reservationId, lastName) {
-    Backend.restoreReservationContext(reservationId, lastName, function(status) {
-      if (status == Backend.STATUS_SUCCESS) {
-        Main.loadScreen("reservation_update");
-      }
-    });
-  },
-
-  
   
   formatPhoneNumber: function(value) {
     var result = ["(", "_", "_", "_", ")", " ", "_", "_", "_", "-", "_", "_", "_", "_"];
