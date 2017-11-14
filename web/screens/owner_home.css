@@ -1,0 +1,11 @@
+#OwnerHome-Screen-Welcome {
+  margin-top: 20px;
+  padding: 20px;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+
+#OwnerHome-Screen-AccountInfoContainer {
+  text-align: center;
+}

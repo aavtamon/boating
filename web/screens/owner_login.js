@@ -19,7 +19,7 @@ OwnerLogin = {
     $("#OwnerLogin-Screen-Login-LoginButton").click(function() {
       Backend.logIn(loginInfo.username, loginInfo.password, function(status, message) {
         if (status == Backend.STATUS_SUCCESS) {
-          Main.loadScreen("owner_boat");
+          Main.loadScreen("owner_home");
         } else {
           var msg = "";
           if (status == Backend.STATUS_BAD_REQUEST) {

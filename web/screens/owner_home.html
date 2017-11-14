@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="screens/owner_home.css">
+<script src="screens/owner_home.js"></script>
+
+<script>
+  $(document).ready(function() {
+    OwnerHome.onLoad();
+  });
+</script>
+
+<div id="OwnerHome-Screen">
+  <div id="OwnerHome-Screen-Description" class="screen-description">
+    This is your account dashboard, {{.OwnerAccount.FirstName}} {{.OwnerAccount.LastName}}
+  </div>
+  
+  <div id="OwnerHome-Screen-AccountInfoContainer">
+    <div id="OwnerHome-Screen-AccountInfo" class="info-box">
+      <div id="OwnerHome-Screen-AccountInfo-OwnerReservations" class="optionbox">
+        <div id="OwnerHome-Screen-AccountInfo-OwnerReservations-Title" class="optionbox-title">Your bookings</div>
+        <div id="OwnerHome-Screen-AccountInfo-OwnerReservations-Bookings" class="optionbox-content"></div>
+      </div>
+
+      <div id="OwnerHome-Screen-AccountInfo-BoatReservations" class="optionbox">
+        <div id="OwnerHome-Screen-AccountInfo-BoatReservations-Title" class="optionbox-title">Your boat(s) usage</div>
+        <div id="OwnerHome-Screen-Reservations-BoatReservations-Bookings" class="optionbox-content"></div>
+      </div>
+    </div>
+  </div>
+</div>

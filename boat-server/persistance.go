@@ -102,7 +102,7 @@ type TOwnerAccount struct {
   Locations map[string]TBoatIds `json:"locations,omitempty"`;
 }
 
-type TOwnerAccountMap map[string]*TOwnerAccount;
+type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 
 
 const NO_OWNER_ACCOUNT_ID = TOwnerAccountId("");
@@ -189,7 +189,7 @@ func GetBookingConfiguration() *TBookingConfiguration {
   return bookingConfiguration;
 }
 
-func GetOwnerAccount(accountId string) *TOwnerAccount {
+func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
   return ownerAccountMap[accountId];
 }
 
