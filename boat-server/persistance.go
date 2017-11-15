@@ -135,15 +135,19 @@ var ownerAccountMap TOwnerAccountMap;
 var persistenceDb TPersistancenceDatabase;
 var listeners []TChangeListener;
 
+var persistentRoot string;
+
 var accessLock sync.Mutex;
 
 
 func InitializePersistance(root string) {
-  readSystemConfiguration(root);
-  readBookingConfiguration(root);
-  readOwnerAccountDatabase(root);
+  persistentRoot = root;
+
+  readSystemConfiguration();
+  readBookingConfiguration();
+  readOwnerAccountDatabase();
   
-  readPersistenceDatabase(root);
+  readPersistenceDatabase();
 }
 
 
@@ -260,8 +264,8 @@ func notifyReservationRemoved(reservation *TReservation) {
 }
 
 
-func readSystemConfiguration(root string) {
-  configurationByteArray, err := ioutil.ReadFile(root + "/" + SYSTEM_CONFIG_FILE_NAME);
+func readSystemConfiguration() {
+  configurationByteArray, err := ioutil.ReadFile(persistentRoot + "/" + SYSTEM_CONFIG_FILE_NAME);
   if (err == nil) {
     systemConfiguration = &TSystemConfiguration{};
     err := json.Unmarshal(configurationByteArray, systemConfiguration);
@@ -275,8 +279,8 @@ func readSystemConfiguration(root string) {
   }
 }
 
-func readBookingConfiguration(root string) {
-  configurationByteArray, err := ioutil.ReadFile(root + "/" + BOOKING_CONFIG_FILE_NAME);
+func readBookingConfiguration() {
+  configurationByteArray, err := ioutil.ReadFile(persistentRoot + "/" + BOOKING_CONFIG_FILE_NAME);
   if (err == nil) {
     bookingConfiguration = &TBookingConfiguration{};
     err := json.Unmarshal(configurationByteArray, bookingConfiguration);
@@ -291,8 +295,8 @@ func readBookingConfiguration(root string) {
 }
 
 
-func readPersistenceDatabase(root string) {
-  databaseByteArray, err := ioutil.ReadFile(root + "/" + PERSISTENCE_DATABASE_FILE_NAME);
+func readPersistenceDatabase() {
+  databaseByteArray, err := ioutil.ReadFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
@@ -320,7 +324,7 @@ func savePersistenceDatabase() {
 
   databaseByteArray, err := json.MarshalIndent(persistenceDb, "", "  ");
   if (err == nil) {
-    err = ioutil.WriteFile(PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
+    err = ioutil.WriteFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
     if (err != nil) {
       log.Println("Persistance: failed to save reservation database to file", err);
     }
@@ -344,8 +348,8 @@ func cleanObsoleteReservations() {
 }
 
 
-func readOwnerAccountDatabase(root string) {
-  databaseByteArray, err := ioutil.ReadFile(root + "/" + ACCOUNT_DATABASE_FILE_NAME);
+func readOwnerAccountDatabase() {
+  databaseByteArray, err := ioutil.ReadFile(persistentRoot + "/" + ACCOUNT_DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {
