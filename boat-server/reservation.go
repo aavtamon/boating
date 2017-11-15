@@ -155,7 +155,7 @@ func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request) {
 
     return;
   }
-fmt.Printf("SENDING CONFIRMATION TO: %s\n", r.URL.RawQuery)
+
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
 

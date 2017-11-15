@@ -17,8 +17,6 @@ const PAYMENT_STATUS_PAYED = "payed";
 const PAYMENT_STATUS_FAILED = "failed";
 const PAYMENT_STATUS_REFUNDED = "refunded";
 
-const PAYMENT_SECRET_KEY = "sk_test_7Fr3JQHkcFnbcTcYB17BizNM";
-
 
 type TPaymentRequest struct {
   ReservationId TReservationId `json:"reservation_id"`;
@@ -102,7 +100,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   }
 
 
-  stripe.Key = PAYMENT_SECRET_KEY;
+  stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
   
   params := &stripe.ChargeParams {
     Amount: paidAmount * 100,
@@ -113,32 +111,44 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   params.SetSource(request.PaymentToken);
   params.AddMeta("reservation_id", string(request.ReservationId));
   
-  charge, err := charge.New(params);
-  
-  if (err != nil) {
-    fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
-    reservation.PaymentStatus = PAYMENT_STATUS_FAILED;
-    SaveReservation(reservation);
+
+  if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    charge, err := charge.New(params);
     
-    fmt.Printf("Payment processing for reservation %s failed\n", reservation.Id);
-    
-    return false;
+    if (err != nil) {
+      fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
+      reservation.PaymentStatus = PAYMENT_STATUS_FAILED;
+      SaveReservation(reservation);
+
+      fmt.Printf("Payment processing for reservation %s failed\n", reservation.Id);
+
+      return false;
+    } else {
+      reservation.ChargeId = charge.ID;
+      reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
+      reservation.PaymentAmount = paidAmount;
+      SaveReservation(reservation);
+
+      fmt.Printf("Payment processing for reservation %s is complete successfully\n", reservation.Id);
+
+      return true;
+    }
   } else {
-    reservation.ChargeId = charge.ID;
-    reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
-    reservation.PaymentAmount = paidAmount;
-    SaveReservation(reservation);
+    fmt.Println("Payments turned off - payment will not be processed thru the payent portal");
     
-    fmt.Printf("Payment processing for reservation %s is complete successfully\n", reservation.Id);
-    
-    return true;
+      reservation.ChargeId = "fake charge";
+      reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
+      reservation.PaymentAmount = paidAmount;
+      SaveReservation(reservation);
+
+      return true;
   }
 }
 
 func refundReservation(reservation *TReservation) bool {
   fmt.Printf("Starting refund processing for reservation %s\n", reservation.Id);
 
-  stripe.Key = PAYMENT_SECRET_KEY;
+  stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
   
   params := &stripe.RefundParams {
     Charge: reservation.ChargeId,
@@ -157,22 +167,33 @@ func refundReservation(reservation *TReservation) bool {
     params.Amount = refundAmount * 100;
   }
   
-  refund, err := refund.New(params);
-  
-  if (err != nil) {
-    fmt.Printf("Refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
-    SaveReservation(reservation);
-    
-    fmt.Printf("Refund processing for reservation %s failed\n", reservation.Id);
-    
-    return false;
+  if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    refund, err := refund.New(params);
+
+    if (err != nil) {
+      fmt.Printf("Refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
+      SaveReservation(reservation);
+
+      fmt.Printf("Refund processing for reservation %s failed\n", reservation.Id);
+
+      return false;
+    } else {
+      reservation.RefundId = refund.ID;
+      reservation.PaymentStatus = PAYMENT_STATUS_REFUNDED;
+      reservation.RefundAmount = refundAmount;
+      SaveReservation(reservation);
+
+      fmt.Printf("Refund processing for reservation %s is complete successfully\n", reservation.Id);
+
+      return true;
+    }
   } else {
-    reservation.RefundId = refund.ID;
+    fmt.Println("Payments turned off - refund will not be processed thru the payent portal");
+    
+    reservation.RefundId = "fake refund";
     reservation.PaymentStatus = PAYMENT_STATUS_REFUNDED;
     reservation.RefundAmount = refundAmount;
     SaveReservation(reservation);
-    
-    fmt.Printf("Refund processing for reservation %s is complete successfully\n", reservation.Id);
     
     return true;
   }
