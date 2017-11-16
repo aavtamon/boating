@@ -96,8 +96,9 @@ input, select, .ui-widget {
 
 .info-box {
   margin-top: 20px;
-  
   padding: 10px 30px 10px 30px;
+  white-space: nowrap;
+  overflow: hidden;
   
   border-radius: 10px;
   
@@ -187,7 +188,6 @@ input, select, .ui-widget {
   height: 240px;
   width: 270px;
   padding: 5px;
-  margin-left: 50px;
 
   vertical-align: top;
   

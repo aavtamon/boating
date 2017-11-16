@@ -205,17 +205,9 @@ Backend = {
   
   // Account management
   
-  _accountDetails: null,
-  
-  isLogged: function() {
-    return this._accountDetails != null;
-  },
-  
   logIn: function(username, password, callback) {
     this._communicate("account/?username=" + username + "&password=" + password, "get", null, true, [], {
       success: function(account) {
-        this._accountDetails = account;
-        
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
         }
@@ -237,27 +229,20 @@ Backend = {
   },
   
   logOut: function(callback) {
-    this._communicate("account/?logout", "get", null, true, [], {
+    this._communicate("account/logout", "get", null, true, [], {
       success: function() {
-        this._accountDetails = null;
+        this.accountDetails = null;
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
         }
       }.bind(this),
       error: function(request, status, message) {
-        this._accountDetails = null;
         if (callback) {
           callback(Backend.STATUS_ERROR);
         }
       }.bind(this)
     });
   },
-  
-  
-  getAccountDetails: function() {
-    return this._accountDetails;
-  },
-  
   
   
   // Communication

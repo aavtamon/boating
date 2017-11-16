@@ -109,16 +109,20 @@ type TOwnerAccount struct {
 
 type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 
-
 type TRental struct {
-  Slots map[TReservationId]TBookingSlot `json:"slots,omitempty"`;
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  BoatId string `json:"boat_id,omitempty"`;
 }
 
-type TOwnerRentalsMap map[TOwnerAccountId]*TRental;
+type TRentalStat struct {
+  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
+}
+
+type TOwnerRentalStatMap map[TOwnerAccountId]*TRentalStat;
 
 type TPersistancenceDatabase struct {
   Reservations TReservationMap `json:"reservations,omitempty"`;
-  OwnerRentals TOwnerRentalsMap `json:"rentals,omitempty"`;
+  OwnerRentalStat TOwnerRentalStatMap `json:"rentals,omitempty"`;
 }
 
 
@@ -185,14 +189,21 @@ func SaveReservation(reservation *TReservation) TReservationId {
   // Update rentals
   accountId := findMatchingAccount(reservation.LocationId, reservation.BoatId);
   if (accountId != nil) {
-    rental, hasRental := persistenceDb.OwnerRentals[*accountId];
-    if (!hasRental) {
-      rental = &TRental{};
-      rental.Slots = make(map[TReservationId]TBookingSlot);
-      persistenceDb.OwnerRentals[*accountId] = rental;
+    rentalStat, hasRentalStat := persistenceDb.OwnerRentalStat[*accountId];
+    if (!hasRentalStat) {
+      rentalStat = &TRentalStat{};
+      rentalStat.Rentals = make(map[TReservationId]*TRental);
+      persistenceDb.OwnerRentalStat[*accountId] = rentalStat;
     }
     
-    rental.Slots[reservation.Id] = reservation.Slot;
+    rental, hasRental := rentalStat.Rentals[reservation.Id];
+    if (!hasRental) {
+      rental = &TRental{};
+      rentalStat.Rentals[reservation.Id] = rental;
+    }
+    
+    rental.BoatId = reservation.BoatId;
+    rental.Slot = reservation.Slot;    
   }
   
   
@@ -220,9 +231,9 @@ func RemoveReservation(reservationId TReservationId) {
   // Update rentals
   accountId := findMatchingAccount(reservation.LocationId, reservation.BoatId);
   if (accountId != nil) {
-    rental, hasRental := persistenceDb.OwnerRentals[*accountId];
-    if (hasRental) {
-      delete(rental.Slots, reservationId);
+    rentalStat, hasRentalStat := persistenceDb.OwnerRentalStat[*accountId];
+    if (hasRentalStat) {
+      delete(rentalStat.Rentals, reservationId);
     }
   }
 
@@ -231,6 +242,10 @@ func RemoveReservation(reservationId TReservationId) {
   accessLock.Unlock();
   
   notifyReservationRemoved(&reservation);
+}
+
+func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
+  return persistenceDb.OwnerRentalStat[accountId];
 }
 
 func GetSystemConfiguration() *TSystemConfiguration {
@@ -312,8 +327,8 @@ func readPersistenceDatabase() {
     cleanObsoleteReservations();
   }
 
-  if (persistenceDb.OwnerRentals == nil) {
-    persistenceDb.OwnerRentals = make(TOwnerRentalsMap);
+  if (persistenceDb.OwnerRentalStat == nil) {
+    persistenceDb.OwnerRentalStat = make(TOwnerRentalStatMap);
   }
 
   log.Println("Persistance: reservation database is read");

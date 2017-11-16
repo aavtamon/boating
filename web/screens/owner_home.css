@@ -9,3 +9,38 @@
 #OwnerHome-Screen-AccountInfoContainer {
   text-align: center;
 }
+
+#OwnerHome-Screen-Description-LogoutButton {
+  position: absolute;
+  right: 20px;
+  
+  font-size: 15px;
+}
+
+#OwnerHome-Screen-AccountInfo-BoatRentals {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Label,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Time-Label,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Duration-Label,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Label,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Label,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Label {
+  display: inline-block;
+  
+  width: 100px;
+  margin-right: 50px;
+}
+
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Value,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Time-Value,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Duration-Value,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Value,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Value,
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Value {
+  display: inline-block;
+  
+  font-weight: bold;
+}

@@ -9,6 +9,11 @@
   white-space: nowrap;
 }
 
+#BookingTime-Screen-SelectionPanel-TimeFrame {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
 #BookingTime-Screen-SelectionPanel-Calendar {
   display: inline-block;
   vertical-align: top;

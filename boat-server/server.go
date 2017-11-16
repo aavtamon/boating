@@ -18,6 +18,7 @@ type THtmlObject struct {
   AvailableDates TAvailableDates;
   Reservation *TReservation;
   OwnerAccount *TOwnerAccount;
+  OwnerRentalStat *TRentalStat;
 }
 
 type TSession struct {
@@ -108,6 +109,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         AvailableDates: GetAvailableDates(),
         Reservation: GetReservation(*Sessions[sessionId].ReservationId),
         OwnerAccount: GetOwnerAccount(*Sessions[sessionId].AccountId),
+        OwnerRentalStat: GetOwnerRentalStat(*Sessions[sessionId].AccountId),
       }
       
       

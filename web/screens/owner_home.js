@@ -1,85 +1,58 @@
 OwnerHome = {
+  ownerAccount: null,
+  rentalStat: null,
+  
   onLoad: function() {
-    if (!Backend.isLogged()) {
+    if (this.ownerAccount == null) {
       Main.loadScreen("owner_login");
       return;
     }
     
     
+    $("#OwnerHome-Screen-Description-LogoutButton").click(function() {
+      Backend.logOut(function() {
+        Main.loadScreen("owner_login");
+      });
+    });
+    
+    this._showRentals();
   },
   
-  _showBoats: function() {
-    $("#BookingTime-Screen-SelectionPanel-Boats-Options").empty();
+  _showRentals: function() {
+    var optionsSelector = $("#OwnerHome-Screen-AccountInfo-BoatRentals-Rentals");
+    optionsSelector.empty();
     
-    var rentalLocation = Backend.getBookingConfiguration().locations[Backend.getReservationContext().location_id];
-    
-    for (var boatId in rentalLocation.boats) {
-      var boat = rentalLocation.boats[boatId];
+    for (var reservationId in this.rentalStat.rentals) {
+      var rental = this.rentalStat.rentals[reservationId];
       
-      var boatOption = $("<div class=\"optionbox-option\">" + boat.name + "</div>").appendTo($("#BookingBoat-Screen-SelectionPanel-Boats-Options"));
+      var rentalInfo = ScreenUtils.getBookingDate(rental.slot.time) + ", " + ScreenUtils.getBookingDuration(rental.slot.duration);
+      
+      var rentalOption = $("<div class=\"optionbox-option\">" + rentalInfo + "</div>").appendTo(optionsSelector);
+      rentalOption[0]._rental = rental;
+      rentalOption[0]._reservationId = reservationId;
 
-      boatOption[0]._boatId = boatId;
-
-      boatOption.click(function(event) {
+      rentalOption.click(function(event) {
         $(".optionbox-option").removeClass("selected");
         $(event.target).addClass("selected");
 
-        Backend.getReservationContext().boat_id = event.target._boatId;
-        
-        this._showBoatDetails();
-
-        this._canProceedToNextStep();
+        this._showSlotDetails(event.target);
       }.bind(this));
-      
-      if (boatId == Backend.getReservationContext().boat_id) {
-        boatOption.click();
-      }
     }
-    
-    var boatOptions = $(".optionbox-option");
-    if (boatOptions.length == 1 && Backend.getReservationContext().boat_id == null) {
-      boatOptions.click();
-    }
-  },
-  
-  
-  _showBoatDetails: function() {
-    var reservationContext = Backend.getReservationContext();
-    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
-    
-    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Name-Value").html(boat.name);
-    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Type-Value").html(boat.type);
-    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Capacity-Value").html(boat.maximum_capacity + " people");
-    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Engine-Value").html(boat.engine);
-    $("#BookingBoat-Screen-SelectionPanel-BoatDescription-Details-Mileage-Value").html(boat.mileage + " mpg");
 
-    this._showBoatPicture(this._currentImageIndex);
+    if ($(".optionbox-option").length > 0) {
+      $(".optionbox-option")[0].click();
+    }
   },
   
-  _showBoatPicture: function(imageIndex) {
-    var reservationContext = Backend.getReservationContext();
-    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
-
-    if (imageIndex >= 0 && imageIndex < boat.images.length) {
-      var imgResource = boat.images[imageIndex];
-      $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Picture").attr("src", imgResource.url);
-      $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Note").html(imgResource.description);
-    }
+  
+  _showSlotDetails: function(rentalElement) {
+    var rental = rentalElement._rental;
     
-    $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton").prop("disabled", imageIndex == 0);
-    $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton").prop("disabled", imageIndex >= boat.images.length - 1);
-  },
-  
-  
-  _canProceedToNextStep: function() {
-    var reservationContext = Backend.getReservationContext();
-    if (reservationContext.boat_id != null) {
-      $("#BookingBoat-Screen-Description-NextButton").prop("disabled", false);
-      
-      $("#BookingBoat-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].name);
-    } else {
-      $("#BookingBoat-Screen-Description-NextButton").prop("disabled", true);
-      $("#BookingBoat-Screen-ReservationSummary").html("Select a boat for your ride");
-    }
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Value").html(ScreenUtils.getBookingDate(rental.slot.time));
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Time-Value").html(ScreenUtils.getBookingTime(rental.slot.time));
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Duration-Value").html(ScreenUtils.getBookingDuration(rental.slot.duration));
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Value").html(rental.boat_id);
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Value").html(ScreenUtils.getBookingPrice(rental.slot.price));
   },
 }

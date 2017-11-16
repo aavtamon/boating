@@ -1,5 +1,13 @@
 OwnerLogin = {
+  ownerAccount: null,
+  
+  
   onLoad: function() {
+    if (this.ownerAccount != null) {
+      Main.loadScreen("owner_home");
+      return;
+    }
+    
     $("#OwnerLogin-Screen-Login-LoginButton").prop("disabled", true);
     $("#ReservationRetrieval-Screen-Reservation-Status").html("");
     
