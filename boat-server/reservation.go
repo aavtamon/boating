@@ -8,7 +8,11 @@ import "encoding/json"
 import "fmt"
 import "strings"
 
-var temporaryReservations TReservationMap;
+
+
+const RESERVATION_STATUS_BOOKED = "booked";
+const RESERVATION_STATUS_CANCELLED = "cancelled";
+const RESERVATION_STATUS_COMPLETED = "completed";
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +49,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
       reservationId := TReservationId(queryReservationId);
 
       reservation := RecoverReservation(reservationId, queryLastName);
-      if (reservation != nil) {
+      if (reservation != nil && reservation.Status == RESERVATION_STATUS_BOOKED) {
         storedReservation, err := json.Marshal(reservation);
         if (err != nil) {
           w.WriteHeader(http.StatusInternalServerError);
@@ -91,6 +95,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
 
       //TODO: Verify integrity first - not all fields can be modified by the user
 
+      reservation.Status = RESERVATION_STATUS_BOOKED;
       reservationId = SaveReservation(reservation);
     } else {
       //TODO: validate changed fields - reject those that cannot be changed
@@ -138,7 +143,11 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
     return;
   }
 
-  RemoveReservation(reservationId);
+  //RemoveReservation(reservationId);
+  reservation := GetReservation(reservationId);
+  reservation.Status = RESERVATION_STATUS_CANCELLED;
+  SaveReservation(reservation);
+  
 
   *Sessions[TSessionId(sessionCookie.Value)].ReservationId = NO_RESERVATION_ID;
 

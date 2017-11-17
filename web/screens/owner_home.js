@@ -16,6 +16,8 @@ OwnerHome = {
     });
     
     this._showRentals();
+    
+    this._showStatistics();
   },
   
   _showRentals: function() {
@@ -51,8 +53,27 @@ OwnerHome = {
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Value").html(ScreenUtils.getBookingDate(rental.slot.time));
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Time-Value").html(ScreenUtils.getBookingTime(rental.slot.time));
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Duration-Value").html(ScreenUtils.getBookingDuration(rental.slot.duration));
-    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Value").html(rental.boat_id);
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Location-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].name);
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
+    
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Value").html(ScreenUtils.getBookingPrice(rental.slot.price));
   },
+  
+  
+  
+  _showStatistics: function() {
+    var numberOfRentals = 0;
+    var earnedMoney = 0;
+    
+    for (var reservationId in this.rentalStat.rentals) {
+      numberOfRentals++;
+      
+      var rental = this.rentalStat.rentals[reservationId];
+      earnedMoney += rental.slot.price;
+    }
+    
+    $("#OwnerHome-Screen-Statistics-NumberOfRentals-Value").html(numberOfRentals);
+    $("#OwnerHome-Screen-Statistics-Earnings-Value").html(ScreenUtils.getBookingPrice(earnedMoney));
+  }
 }

@@ -219,6 +219,8 @@ input, select, .ui-widget {
 }
 .optionbox-content {
   padding: 10px;
+  
+  overflow-y: auto;
 }
 .optionbox-option {
   line-height: 30px;

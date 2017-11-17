@@ -1,6 +1,6 @@
 package main
 
-import "log"
+import "fmt"
 import "io/ioutil"
 import "encoding/json"
 import "time"
@@ -15,6 +15,7 @@ const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
 
 const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
+
 
 
 type TBookingConfiguration struct {
@@ -80,6 +81,8 @@ type TReservation struct {
   RefundAmount uint64 `json:"refund_amount,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
   RefundId string `json:"refund_id,omitempty"`;
+  
+  Status string `json:"status,omitempty"`;
 }
 
 type TReservationMap map[TReservationId]*TReservation;
@@ -111,6 +114,7 @@ type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 
 type TRental struct {
   Slot TBookingSlot `json:"slot,omitempty"`;
+  LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
 }
 
@@ -174,7 +178,7 @@ func GetAllReservations() TReservationMap {
 }
 
 func SaveReservation(reservation *TReservation) TReservationId {
-  log.Println("Persistance: saving reservation " + reservation.Id);
+  fmt.Printf("Persistance: saving reservation %s\n", reservation.Id);
   
   if (reservation.Id == NO_RESERVATION_ID) {
     reservation.Id = generateReservationId();
@@ -201,7 +205,8 @@ func SaveReservation(reservation *TReservation) TReservationId {
       rental = &TRental{};
       rentalStat.Rentals[reservation.Id] = rental;
     }
-    
+    fmt.Printf("\n\n\n\nANTON: location = %s\n\n\n\n", reservation.LocationId)
+    rental.LocationId = reservation.LocationId;
     rental.BoatId = reservation.BoatId;
     rental.Slot = reservation.Slot;    
   }
@@ -216,7 +221,7 @@ func SaveReservation(reservation *TReservation) TReservationId {
 }
 
 func RemoveReservation(reservationId TReservationId) {
-  log.Println("Persistance: removing reservation " + reservationId);
+  fmt.Printf("Persistance: removing reservation %s\n", reservationId);
   
   if (persistenceDb.Reservations[reservationId] == nil) {
     return;
@@ -285,12 +290,12 @@ func readSystemConfiguration() {
     systemConfiguration = &TSystemConfiguration{};
     err := json.Unmarshal(configurationByteArray, systemConfiguration);
     if (err != nil) {
-      log.Println("Persistance: failed to parse system config file", err);
+      fmt.Println("Persistance: failed to parse system config file", err);
     } else {
-      log.Println("Persistance: system config is read");
+      fmt.Println("Persistance: system config is read");
     }
   } else {
-    log.Println("Persistance: failed to read booking config", err);
+    fmt.Println("Persistance: failed to read booking config", err);
   }
 }
 
@@ -300,12 +305,12 @@ func readBookingConfiguration() {
     bookingConfiguration = &TBookingConfiguration{};
     err := json.Unmarshal(configurationByteArray, bookingConfiguration);
     if (err != nil) {
-      log.Println("Persistance: failed to parse booking config file", err);
+      fmt.Println("Persistance: failed to parse booking config file", err);
     } else {
-      log.Println("Persistance: booking config is read");
+      fmt.Println("Persistance: booking config is read");
     }
   } else {
-    log.Println("Persistance: failed to read booking config", err);
+    fmt.Println("Persistance: failed to read booking config", err);
   }
 }
 
@@ -315,10 +320,10 @@ func readPersistenceDatabase() {
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
-      log.Println("Persistance: failed to dersereialize reservation database - initializing", err);
+      fmt.Println("Persistance: failed to dersereialize reservation database - initializing", err);
     }
   } else {
-    log.Println("Persistance: failed to read reservation database - initializing", err);
+    fmt.Println("Persistance: failed to read reservation database - initializing", err);
   }
   
   if (persistenceDb.Reservations == nil) {
@@ -331,7 +336,7 @@ func readPersistenceDatabase() {
     persistenceDb.OwnerRentalStat = make(TOwnerRentalStatMap);
   }
 
-  log.Println("Persistance: reservation database is read");
+  fmt.Println("Persistance: reservation database is read");
 }
 
 func savePersistenceDatabase() {
@@ -341,13 +346,13 @@ func savePersistenceDatabase() {
   if (err == nil) {
     err = ioutil.WriteFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
     if (err != nil) {
-      log.Println("Persistance: failed to save reservation database to file", err);
+      fmt.Println("Persistance: failed to save reservation database to file", err);
     }
   } else {
-    log.Println("Persistance: failed to serialize reservation database", err);
+    fmt.Println("Persistance: failed to serialize reservation database", err);
   }
   
-  log.Println("Persistance: saving database");
+  fmt.Println("Persistance: saving database");
 }
 
 func cleanObsoleteReservations() {
@@ -368,17 +373,17 @@ func readOwnerAccountDatabase() {
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {
-      log.Println("Persistance: failed to dersereialize account database - initializing", err);
+      fmt.Println("Persistance: failed to dersereialize account database - initializing", err);
     }
   } else {
-    log.Println("Persistance: failed to read account database - initializing", err);
+    fmt.Println("Persistance: failed to read account database - initializing", err);
   }
   
   if (ownerAccountMap == nil) {
     ownerAccountMap = make(TOwnerAccountMap);
   }
   
-  log.Println("Persistance: account database is read");
+  fmt.Println("Persistance: account database is read");
 }
 
 

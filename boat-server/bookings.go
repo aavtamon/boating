@@ -288,6 +288,10 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
 
 func isBooked(slot TBookingSlot) bool {
   for _, reservation := range GetAllReservations() {
+    if (reservation.Status == RESERVATION_STATUS_BOOKED) {
+      continue;
+    }
+  
     if (reservation.Slot.DateTime <= slot.DateTime && reservation.Slot.DateTime + int64(time.Duration(reservation.Slot.Duration) * time.Hour / time.Millisecond) > slot.DateTime) {
       return true;
     }
