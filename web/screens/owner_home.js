@@ -24,12 +24,16 @@ OwnerHome = {
     var optionsSelector = $("#OwnerHome-Screen-AccountInfo-BoatRentals-Rentals");
     optionsSelector.empty();
     
+
+    
+    var upcomingRentals = [];
+    var completedRentals = [];
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
       
       var rentalInfo = ScreenUtils.getBookingDate(rental.slot.time) + ", " + ScreenUtils.getBookingDuration(rental.slot.duration);
+      var rentalOption = $("<div class=\"optionbox-option\">" + rentalInfo + "</div>");
       
-      var rentalOption = $("<div class=\"optionbox-option\">" + rentalInfo + "</div>").appendTo(optionsSelector);
       rentalOption[0]._rental = rental;
       rentalOption[0]._reservationId = reservationId;
 
@@ -39,10 +43,43 @@ OwnerHome = {
 
         this._showSlotDetails(event.target);
       }.bind(this));
+      
+      if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
+        upcomingRentals.push(rentalOption[0]);
+      } else {
+        completedRentals.push(rentalOption[0]);
+      }
     }
+    
+    upcomingRentals.sort(function(option1, option2) {
+      return option1._rental.slot.time - option2._rental.slot.time;
+    });
+    completedRentals.sort(function(option1, option2) {
+      return option2._rental.slot.time - option1._rental.slot.time;
+    });
 
+    
+    var upcomingRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Upcoming rentals</div></div>").appendTo(optionsSelector);
+    var completedRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Completed rentals</div></div>").appendTo(optionsSelector);
+    
+    for (var i in upcomingRentals) {
+      $(upcomingRentals[i]).appendTo(upcomingRentalsGroup);
+    }
+    
+    for (var i in completedRentals) {
+      $(completedRentals[i]).appendTo(completedRentalsGroup);
+    }
+    
+    
     if ($(".optionbox-option").length > 0) {
       $(".optionbox-option")[0].click();
+    }
+
+    if (upcomingRentalsGroup.children().length == 1) {
+      $("<div class=\"optionbox-nooption\">None</div>").appendTo(upcomingRentalsGroup);
+    }
+    if (completedRentalsGroup.children().length == 1) {
+      $("<div class=\"optionbox-nooption\">None</div>").appendTo(completedRentalsGroup);
     }
   },
   
@@ -67,10 +104,12 @@ OwnerHome = {
     var earnedMoney = 0;
     
     for (var reservationId in this.rentalStat.rentals) {
-      numberOfRentals++;
-      
       var rental = this.rentalStat.rentals[reservationId];
-      earnedMoney += rental.slot.price;
+      
+      if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
+        numberOfRentals++;
+        earnedMoney += rental.slot.price;
+      }
     }
     
     $("#OwnerHome-Screen-Statistics-NumberOfRentals-Value").html(numberOfRentals);

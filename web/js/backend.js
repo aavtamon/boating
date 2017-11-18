@@ -8,6 +8,8 @@ Backend = {
   
   PAYMENT_STATUS_PAYED: "payed",
   
+  RESERVATION_STATUS_BOOKED: "booked",
+  RESERVATION_STATUS_COMPLETED: "completed",
   
   // Current reservation management
   _reservationContext: {},

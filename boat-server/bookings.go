@@ -9,69 +9,6 @@ import "time"
 import "fmt"
 
 
-type TMapLocation struct {
-  Latitude float64 `json:"lat"`;
-  Longitude float64 `json:"lng"`;
-  Zoom int `json:"zoom"`;
-}
-
-type TPickupLocation struct {
-  Location TMapLocation `json:"location"`;
-  Name string `json:"name"`;
-  Address string `json:"address"`;
-  ParkingFee string `json:"parking_fee"`;
-  Instructions string `json:"instructions"`;
-}
-
-
-type TBookingSlot struct {
-  DateTime int64 `json:"time"`;
-  Duration int `json:"duration"`;
-  Price uint64 `json:"price"`;
-}
-
-
-type TPricedRange struct {
-  RangeMin int64 `json:"range_min"`;
-  RangeMax int64 `json:"range_max"`;
-  Price uint64 `json:"price"`;
-}
-
-type TImageResource struct {
-  Name string `json:"name"`;
-  Url string `json:"url"`;
-  Description string `json:"description"`;
-}
-
-type TBoat struct {
-  Name string `json:"name"`;
-  Type string `json:"type"`;
-  Engine string `json:"engine"`;
-  Mileage int `json:"mileage"`;
-  MaximumCapacity int `json:"maximum_capacity"`;
-  Rate []TPricedRange `json:"rate"`;
-  Images []TImageResource `json:"images"`;
-}
-
-type TExtraEquipment struct {
-  Name string `json:"name"`;
-  Price uint64 `json:"price"`;
-}
-
-
-type TRentalLocation struct {
-  Name string `json:"name"`;
-  StartHour int `json:"start_hour"`;
-  EndHour int `json:"end_hour"`;
-  Duration int `json:"duration"`;
-  ServiceInterval int `json:"service_interval"`;
-  
-  Boats map[string]TBoat `json:"boats"`;
-  Extras map[string]TExtraEquipment `json:"extras"`;
-  CenterLocation TMapLocation `json:"center_location"`;
-  PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
-}
-
 type TBookingSettings struct {
   CurrentDate int64 `json:"current_date"`;
   SchedulingBeginDate int64 `json:"scheduling_begin_date"`;
@@ -288,7 +225,7 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
 
 func isBooked(slot TBookingSlot) bool {
   for _, reservation := range GetAllReservations() {
-    if (reservation.Status == RESERVATION_STATUS_BOOKED) {
+    if (reservation.Status != RESERVATION_STATUS_BOOKED) {
       continue;
     }
   

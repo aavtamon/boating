@@ -10,11 +10,6 @@ import "strings"
 
 
 
-const RESERVATION_STATUS_BOOKED = "booked";
-const RESERVATION_STATUS_CANCELLED = "cancelled";
-const RESERVATION_STATUS_COMPLETED = "completed";
-
-
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Reservation Handler: request method=" + r.Method);
   

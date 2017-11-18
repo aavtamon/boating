@@ -18,6 +18,69 @@ const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
 
 
 
+type TMapLocation struct {
+  Latitude float64 `json:"lat"`;
+  Longitude float64 `json:"lng"`;
+  Zoom int `json:"zoom"`;
+}
+
+type TPickupLocation struct {
+  Location TMapLocation `json:"location"`;
+  Name string `json:"name"`;
+  Address string `json:"address"`;
+  ParkingFee string `json:"parking_fee"`;
+  Instructions string `json:"instructions"`;
+}
+
+
+type TBookingSlot struct {
+  DateTime int64 `json:"time"`;
+  Duration int `json:"duration"`;
+  Price uint64 `json:"price"`;
+}
+
+
+type TPricedRange struct {
+  RangeMin int64 `json:"range_min"`;
+  RangeMax int64 `json:"range_max"`;
+  Price uint64 `json:"price"`;
+}
+
+type TImageResource struct {
+  Name string `json:"name"`;
+  Url string `json:"url"`;
+  Description string `json:"description"`;
+}
+
+type TBoat struct {
+  Name string `json:"name"`;
+  Type string `json:"type"`;
+  Engine string `json:"engine"`;
+  Mileage int `json:"mileage"`;
+  MaximumCapacity int `json:"maximum_capacity"`;
+  Rate []TPricedRange `json:"rate"`;
+  Images []TImageResource `json:"images"`;
+}
+
+type TExtraEquipment struct {
+  Name string `json:"name"`;
+  Price uint64 `json:"price"`;
+}
+
+
+type TRentalLocation struct {
+  Name string `json:"name"`;
+  StartHour int `json:"start_hour"`;
+  EndHour int `json:"end_hour"`;
+  Duration int `json:"duration"`;
+  ServiceInterval int `json:"service_interval"`;
+  
+  Boats map[string]TBoat `json:"boats"`;
+  Extras map[string]TExtraEquipment `json:"extras"`;
+  CenterLocation TMapLocation `json:"center_location"`;
+  PickupLocations map[string]TPickupLocation `json:"pickup_locations"`;
+}
+
 type TBookingConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
@@ -116,6 +179,7 @@ type TRental struct {
   Slot TBookingSlot `json:"slot,omitempty"`;
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
+  Status string `json:"status,omitempty"`;
 }
 
 type TRentalStat struct {
@@ -128,6 +192,18 @@ type TPersistancenceDatabase struct {
   Reservations TReservationMap `json:"reservations,omitempty"`;
   OwnerRentalStat TOwnerRentalStatMap `json:"rentals,omitempty"`;
 }
+
+
+const RESERVATION_STATUS_BOOKED = "booked";
+const RESERVATION_STATUS_CANCELLED = "cancelled";
+const RESERVATION_STATUS_COMPLETED = "completed";
+
+
+const PAYMENT_STATUS_PAYED = "payed";
+const PAYMENT_STATUS_FAILED = "failed";
+const PAYMENT_STATUS_REFUNDED = "refunded";
+
+
 
 
 
@@ -205,10 +281,11 @@ func SaveReservation(reservation *TReservation) TReservationId {
       rental = &TRental{};
       rentalStat.Rentals[reservation.Id] = rental;
     }
-    fmt.Printf("\n\n\n\nANTON: location = %s\n\n\n\n", reservation.LocationId)
+
     rental.LocationId = reservation.LocationId;
     rental.BoatId = reservation.BoatId;
-    rental.Slot = reservation.Slot;    
+    rental.Slot = reservation.Slot;  
+    rental.Status = reservation.Status;
   }
   
   

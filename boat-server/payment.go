@@ -13,11 +13,6 @@ import "github.com/stripe/stripe-go/charge"
 import "github.com/stripe/stripe-go/refund"
 
 
-const PAYMENT_STATUS_PAYED = "payed";
-const PAYMENT_STATUS_FAILED = "failed";
-const PAYMENT_STATUS_REFUNDED = "refunded";
-
-
 type TPaymentRequest struct {
   ReservationId TReservationId `json:"reservation_id"`;
   PaymentToken string `json:"payment_token"`;
