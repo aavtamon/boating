@@ -113,43 +113,6 @@ type TSystemConfiguration struct {
 }
 
 
-type TReservationId string;
-
-
-type TReservation struct {
-  Id TReservationId `json:"id"`;
-
-  Timestamp int64 `json:"creation_timestamp,omitempty"`;
-  
-  LocationId string `json:"location_id"`;
-  BoatId string `json:"boat_id"`;
-
-  Slot TBookingSlot `json:"slot,omitempty"`;
-  PickupLocationId string `json:"pickup_location_id"`;
-  
-  NumOfAdults int `json:"adult_count"`;
-  NumOfChildren int `json:"children_count"`;
-  
-  Extras map[string]bool `json:"extras"`;
-
-  DLState string `json:"dl_state,omitempty"`;
-  DLNumber string `json:"dl_number,omitempty"`;
-  FirstName string `json:"first_name,omitempty"`;
-  LastName string `json:"last_name,omitempty"`;
-  Email string `json:"email,omitempty"`;
-  PrimaryPhone string `json:"primary_phone,omitempty"`;
-  AlternativePhone string `json:"alternative_phone,omitempty"`;
-  PaymentStatus string `json:"payment_status,omitempty"`;
-  PaymentAmount uint64 `json:"payment_amount,omitempty"`;
-  RefundAmount uint64 `json:"refund_amount,omitempty"`;
-  ChargeId string `json:"charge_id,omitempty"`;
-  RefundId string `json:"refund_id,omitempty"`;
-  
-  Status string `json:"status,omitempty"`;
-}
-
-type TReservationMap map[TReservationId]*TReservation;
-
 
 type TChangeListener interface {
   OnReservationChanged(reservation *TReservation);
@@ -192,6 +155,53 @@ type TPersistancenceDatabase struct {
   Reservations TReservationMap `json:"reservations,omitempty"`;
   OwnerRentalStat TOwnerRentalStatMap `json:"rentals,omitempty"`;
 }
+
+
+type TReservationId string;
+
+
+type TReservation struct {
+  Id TReservationId `json:"id"`;
+  
+  OwnerAccountId TOwnerAccountId `json:"owner_account_id"`;
+
+  Timestamp int64 `json:"creation_timestamp,omitempty"`;
+  
+  LocationId string `json:"location_id"`;
+  BoatId string `json:"boat_id"`;
+
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  PickupLocationId string `json:"pickup_location_id"`;
+  
+  NumOfAdults int `json:"adult_count"`;
+  NumOfChildren int `json:"children_count"`;
+  
+  Extras map[string]bool `json:"extras"`;
+
+  DLState string `json:"dl_state,omitempty"`;
+  DLNumber string `json:"dl_number,omitempty"`;
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
+  PrimaryPhone string `json:"primary_phone,omitempty"`;
+  AlternativePhone string `json:"alternative_phone,omitempty"`;
+  PaymentStatus string `json:"payment_status,omitempty"`;
+  PaymentAmount uint64 `json:"payment_amount,omitempty"`;
+  RefundAmount uint64 `json:"refund_amount,omitempty"`;
+  ChargeId string `json:"charge_id,omitempty"`;
+  RefundId string `json:"refund_id,omitempty"`;
+  
+  Status string `json:"status,omitempty"`;
+}
+
+type TReservationMap map[TReservationId]*TReservation;
+
+type TReservationSummary struct {
+  Id TReservationId `json:"id"`;
+  Slot TBookingSlot `json:"slot,omitempty"`;
+}
+
+
 
 
 const RESERVATION_STATUS_BOOKED = "booked";
@@ -241,7 +251,17 @@ func GetReservation(reservationId TReservationId) *TReservation {
 
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && reservation.LastName == lastName) {
+    if (reservationId == resId && reservation.LastName == lastName && reservation.Status == RESERVATION_STATUS_BOOKED) {
+      return reservation;
+    }
+  }
+
+  return nil;
+}
+
+func RecoverOwnerReservation(reservationId TReservationId, ownerAccountId TOwnerAccountId) *TReservation {
+  for resId, reservation := range persistenceDb.Reservations {
+    if (reservationId == resId && reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
       return reservation;
     }
   }
@@ -252,6 +272,21 @@ func RecoverReservation(reservationId TReservationId, lastName string) *TReserva
 func GetAllReservations() TReservationMap {
   return persistenceDb.Reservations;
 }
+
+func GetOwnerReservationSummaries(ownerAccountId TOwnerAccountId) []*TReservationSummary {
+  reservationSummaries := []*TReservationSummary{};
+  
+  if (ownerAccountId != NO_OWNER_ACCOUNT_ID) {
+    for _, reservation := range persistenceDb.Reservations {
+      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
+        reservationSummaries = append(reservationSummaries, getReservationSummary(reservation));
+      }
+    }
+  }
+
+  return reservationSummaries;
+}
+
 
 func SaveReservation(reservation *TReservation) TReservationId {
   fmt.Printf("Persistance: saving reservation %s\n", reservation.Id);
@@ -492,4 +527,11 @@ func findMatchingAccount(locationId string, boatId string) *TOwnerAccountId {
   }
   
   return nil;
+}
+
+func getReservationSummary(reservation *TReservation) *TReservationSummary {
+  return &TReservationSummary{
+    Id: reservation.Id,
+    Slot: reservation.Slot,
+  };
 }

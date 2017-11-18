@@ -5,6 +5,7 @@
 <script>
   OwnerHome.ownerAccount = {{.OwnerAccount}};
   OwnerHome.rentalStat = {{.OwnerRentalStat}};
+  OwnerHome.bookingSummaries = {{.ReservationSummaries}};
   
   $(document).ready(function() {
     OwnerHome.onLoad();
@@ -20,7 +21,7 @@
   <div id="OwnerHome-Screen-AccountInfoContainer">
     <div id="OwnerHome-Screen-AccountInfo" class="info-box">
       <div id="OwnerHome-Screen-AccountInfo-OwnerReservations" class="optionbox">
-        <div id="OwnerHome-Screen-AccountInfo-OwnerReservations-Title" class="optionbox-title">Your bookings</div>
+        <div id="OwnerHome-Screen-AccountInfo-OwnerReservations-Title" class="optionbox-title">Your personal boat rides</div>
         <div id="OwnerHome-Screen-AccountInfo-OwnerReservations-Bookings" class="optionbox-content"></div>
       </div>
 

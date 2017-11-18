@@ -12,10 +12,6 @@ func AccountHandler(w http.ResponseWriter, r *http.Request) {
   if (r.Method == http.MethodGet) {
     if (strings.HasSuffix(r.URL.Path, "/logout")) {
       handleLogout(w, r);
-    } else if (strings.HasSuffix(r.URL.Path, "/bookings")) {
-      handleGetBookings(w, r);
-    } else if (strings.HasSuffix(r.URL.Path, "/rentals")) {
-      handleGetRentals(w, r);
     } else {
       handleGetAccount(w, r);
     }
@@ -66,12 +62,6 @@ func handleLogout(w http.ResponseWriter, r *http.Request) {
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
   *Sessions[TSessionId(sessionCookie.Value)].AccountId = NO_OWNER_ACCOUNT_ID;
   w.WriteHeader(http.StatusOK);
-}
-
-func handleGetBookings(w http.ResponseWriter, r *http.Request) {
-}
-
-func handleGetRentals(w http.ResponseWriter, r *http.Request) {
 }
 
 

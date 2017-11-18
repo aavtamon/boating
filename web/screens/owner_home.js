@@ -1,6 +1,7 @@
 OwnerHome = {
   ownerAccount: null,
   rentalStat: null,
+  bookingSummaries: null,
   
   onLoad: function() {
     if (this.ownerAccount == null) {
@@ -15,6 +16,8 @@ OwnerHome = {
       });
     });
     
+    
+    this._showBookings();
     this._showRentals();
     
     this._showStatistics();
@@ -32,13 +35,13 @@ OwnerHome = {
       var rental = this.rentalStat.rentals[reservationId];
       
       var rentalInfo = ScreenUtils.getBookingDate(rental.slot.time) + ", " + ScreenUtils.getBookingDuration(rental.slot.duration);
-      var rentalOption = $("<div class=\"optionbox-option\">" + rentalInfo + "</div>");
+      var rentalOption = $("<div class=\"optionbox-option rentals\">" + rentalInfo + "</div>");
       
       rentalOption[0]._rental = rental;
       rentalOption[0]._reservationId = reservationId;
 
       rentalOption.click(function(event) {
-        $(".optionbox-option").removeClass("selected");
+        $(".rentals").removeClass("selected");
         $(event.target).addClass("selected");
 
         this._showSlotDetails(event.target);
@@ -71,8 +74,8 @@ OwnerHome = {
     }
     
     
-    if ($(".optionbox-option").length > 0) {
-      $(".optionbox-option")[0].click();
+    if ($(".rentals").length > 0) {
+      $(".rentals")[0].click();
     }
 
     if (upcomingRentalsGroup.children().length == 1) {
@@ -98,6 +101,27 @@ OwnerHome = {
   },
   
   
+  _showBookings: function() {
+    var bookingGroup = $("#OwnerHome-Screen-AccountInfo-OwnerReservations-Bookings");
+    
+    for (var i in this.bookingSummaries) {
+      var bookingSummary = this.bookingSummaries[i];
+      
+      var summaryOption = $("<div class=\"optionbox-option bookings\">" + ScreenUtils.getBookingDate(bookingSummary.slot.time) + " " + ScreenUtils.getBookingTime(bookingSummary.slot.time) + "</div>");
+      summaryOption[0]._summary = bookingSummary;
+      
+      summaryOption.appendTo(bookingGroup);
+      
+      summaryOption.click(function(event) {
+        $(".bookings").removeClass("selected");
+        $(event.target).addClass("selected");
+        
+        Backend.restoreReservationContext(event.target._summary.id, null, function() {
+          Main.loadScreen("owner_reservation_update");
+        });
+      });
+    }
+  },
   
   _showStatistics: function() {
     var numberOfRentals = 0;

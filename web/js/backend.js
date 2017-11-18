@@ -26,7 +26,12 @@ Backend = {
   
   
   restoreReservationContext: function(reservationId, lastName, callback) {
-    this._communicate("reservation/booking/?reservation_id=" + reservationId + "&last_name=" + lastName, "get", null, true, [], {
+    var params = "reservation_id=" + reservationId;
+    if (lastName != null) {
+      params += "&last_name=" + lastName;
+    }
+    
+    this._communicate("reservation/booking/?" + params, "get", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         
@@ -41,7 +46,6 @@ Backend = {
       }
     });
   },
-  
   
   saveReservation: function(callback) {
     var persistentContext = this._reservationContext;

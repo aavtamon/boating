@@ -40,11 +40,21 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
 
     fmt.Printf("Restoring reservation for %s and %s\n", queryParams["reservation_id"], queryParams["last_name"]);
 
-    if (hasReservationId && hasLastName) {
+    if (hasReservationId) {
       reservationId := TReservationId(queryReservationId);
 
-      reservation := RecoverReservation(reservationId, queryLastName);
-      if (reservation != nil && reservation.Status == RESERVATION_STATUS_BOOKED) {
+      var reservation *TReservation = nil;
+      
+      if (hasLastName) {
+        reservation = RecoverReservation(reservationId, queryLastName);
+      } else {
+        accountId := *Sessions[TSessionId(sessionCookie.Value)].AccountId;
+        if (accountId != NO_OWNER_ACCOUNT_ID) {
+          reservation = RecoverOwnerReservation(reservationId, accountId);
+        }
+      }
+      
+      if (reservation != nil) {
         storedReservation, err := json.Marshal(reservation);
         if (err != nil) {
           w.WriteHeader(http.StatusInternalServerError);
