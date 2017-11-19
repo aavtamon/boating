@@ -149,11 +149,8 @@ type TRentalStat struct {
   Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
 }
 
-type TOwnerRentalStatMap map[TOwnerAccountId]*TRentalStat;
-
 type TPersistancenceDatabase struct {
   Reservations TReservationMap `json:"reservations,omitempty"`;
-  OwnerRentalStat TOwnerRentalStatMap `json:"rentals,omitempty"`;
 }
 
 
@@ -300,30 +297,7 @@ func SaveReservation(reservation *TReservation) TReservationId {
   accessLock.Lock();
   persistenceDb.Reservations[reservation.Id] = reservation;
   
-  
-  // Update rentals
-  accountId := findMatchingAccount(reservation.LocationId, reservation.BoatId);
-  if (accountId != nil) {
-    rentalStat, hasRentalStat := persistenceDb.OwnerRentalStat[*accountId];
-    if (!hasRentalStat) {
-      rentalStat = &TRentalStat{};
-      rentalStat.Rentals = make(map[TReservationId]*TRental);
-      persistenceDb.OwnerRentalStat[*accountId] = rentalStat;
-    }
     
-    rental, hasRental := rentalStat.Rentals[reservation.Id];
-    if (!hasRental) {
-      rental = &TRental{};
-      rentalStat.Rentals[reservation.Id] = rental;
-    }
-
-    rental.LocationId = reservation.LocationId;
-    rental.BoatId = reservation.BoatId;
-    rental.Slot = reservation.Slot;  
-    rental.Status = reservation.Status;
-  }
-  
-  
   savePersistenceDatabase();
   accessLock.Unlock();
   
@@ -344,17 +318,6 @@ func RemoveReservation(reservationId TReservationId) {
 
   delete(persistenceDb.Reservations, reservationId);
   
-  
-  // Update rentals
-  accountId := findMatchingAccount(reservation.LocationId, reservation.BoatId);
-  if (accountId != nil) {
-    rentalStat, hasRentalStat := persistenceDb.OwnerRentalStat[*accountId];
-    if (hasRentalStat) {
-      delete(rentalStat.Rentals, reservationId);
-    }
-  }
-
-
   savePersistenceDatabase();
   accessLock.Unlock();
   
@@ -362,7 +325,33 @@ func RemoveReservation(reservationId TReservationId) {
 }
 
 func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
-  return persistenceDb.OwnerRentalStat[accountId];
+  if (accountId == NO_OWNER_ACCOUNT_ID) {
+    return nil;
+  }
+
+
+  account := ownerAccountMap[accountId];
+  
+  rentalStat := &TRentalStat{};
+  rentalStat.Rentals = make(map[TReservationId]*TRental);
+  
+  for _, reservation := range persistenceDb.Reservations {
+    boatIds, hasLocation := account.Locations[reservation.LocationId];
+    if (hasLocation) {
+      for _, id := range boatIds.Boats {
+        if (id == reservation.BoatId) {
+          rentalStat.Rentals[reservation.Id] = &TRental{};
+
+          rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
+          rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
+          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
+          rentalStat.Rentals[reservation.Id].Status = reservation.Status;
+        }
+      }
+    }
+  }
+  
+  return rentalStat;
 }
 
 func GetSystemConfiguration() *TSystemConfiguration {
@@ -442,10 +431,6 @@ func readPersistenceDatabase() {
     persistenceDb.Reservations = make(TReservationMap);
   } else {
     cleanObsoleteReservations();
-  }
-
-  if (persistenceDb.OwnerRentalStat == nil) {
-    persistenceDb.OwnerRentalStat = make(TOwnerRentalStatMap);
   }
 
   fmt.Println("Persistance: reservation database is read");
