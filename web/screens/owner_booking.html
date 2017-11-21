@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="screens/owner_booking.css">
+<script src="screens/owner_booking.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+<script>
+  OwnerBooking.ownerAccount = {{.OwnerAccount}};
+  OwnerBooking.bookingSettings = {{.BookingSettings}};
+  
+  $(document).ready(function() {
+    OwnerBooking.onLoad();
+  });
+</script>
+
+<div id="OwnerBooking-Screen">
+  <div id="OwnerBooking-Screen-Description" class="screen-description">
+    Book your personal boat usage
+    <button id="OwnerBooking-Screen-Description-BookButton" class="screen-description-next">Book</button>
+  </div>
+  <div id="OwnerBooking-Screen-SelectionContainer">
+    <div id="OwnerBooking-Screen-SelectionPanel" class="info-box">
+      <div id="OwnerBooking-Screen-SelectionPanel-Boats" class="optionbox">
+        <div id="OwnerBooking-Screen-SelectionPanel-Boats-Title" class="optionbox-title">Boats</div>
+        <div id="OwnerBooking-Screen-SelectionPanel-Boats-Options" class="optionbox-content"></div>
+      </div>
+      <div id="OwnerBooking-Screen-SelectionPanel-Calendar"></div>
+      <div id="OwnerBooking-Screen-SelectionPanel-TimeFrame" class="optionbox">
+        <div id="OwnerBooking-Screen-SelectionPanel-TimeFrame-Title" class="optionbox-title">Take-off time</div>
+        <div id="OwnerBooking-Screen-SelectionPanel-TimeFrame-Times" class="optionbox-content"></div>
+      </div>
+      <div id="OwnerBooking-Screen-SelectionPanel-Duration" class="optionbox">
+        <div id="OwnerBooking-Screen-SelectionPanel-Duration-Title" class="optionbox-title">Ride duration</div>
+        <div id="OwnerBooking-Screen-SelectionPanel-Duration-Durations" class="optionbox-content"></div>
+      </div>
+    </div>
+  </div>
+  <div id="OwnerBooking-Screen-ReservationSummary" class="screen-summary"></div>
+  <div id="OwnerBooking-Screen-Agreement" class="info-box">
+    Remember, that after all it is <b>your</b> boat, and you should be able to enjoy it.
+    <br>
+    We recommend, that when you book your boat for a personal use, you book it for the whole day. This way you can enjoy it fully without having to think that you need to take it back on time, as scheduled.
+    <br>
+    If, despite this recomendation, you make your reservation for less then a full day, please remember that you must be punctual, be back on time, and strictly follow your contractial agreement.
+    <br>
+    This is a reference to the <a id="OwnerBooking-Screen-Agreement-Link" href="files/docs/personal-boat-usage-agreement.html" target="_blank">Personal Usage Agreement</a>. Please make sure to review and follow.
+  </div>
+</div>

@@ -16,37 +16,6 @@
 
 #BookingTime-Screen-SelectionPanel-Calendar {
   display: inline-block;
-  vertical-align: top;
 }
 
 
-.ui-datepicker .ui-datepicker-header {
-  height: 31px;
-  line-height: 39px;
-  text-align: center;
-
-  font-family: Trebuchet MS;
-  font-weight: bold;
-  font-size: 1.1em;
-
-  border-width: 1px;
-  border-style: solid;
-  border-color: #e78f08;
-  border-radius: 5px;
-
-  color: white;
-  background-color: #f6a828;
-}
-
-.ui-datepicker.ui-widget.ui-widget-content {
-  width: 270px;
-  height: 240px;
-  padding: 5px;
-
-  border-width: 1px;
-  border-radius: 5px;
-  border-style: solid;
-  border-color: #dddddd;
-
-  background-color: #eeeeee;
-}

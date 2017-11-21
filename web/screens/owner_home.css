@@ -24,6 +24,20 @@
   height: 300px;
 }
 
+#OwnerHome-Screen-AccountInfo-OwnerReservations-Actions {
+  height: 30px;
+  padding: 5px 0px 5px 0px;
+  
+  text-align: right;
+}
+#OwnerHome-Screen-AccountInfo-OwnerReservations-Actions-BookButton {
+}
+
+
+#OwnerHome-Screen-AccountInfo-OwnerReservations-Bookings {
+  height: calc(100% - 20px - 45px - 30px);
+}
+
 #OwnerHome-Screen-AccountInfo-BoatRentals {
   margin-left: 50px;
   margin-right: 50px;
@@ -66,3 +80,4 @@
 #OwnerHome-Screen-Statistics-Earnings-Value {
   float: right;
 }
+

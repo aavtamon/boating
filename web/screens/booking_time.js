@@ -2,9 +2,9 @@ BookingTime = {
   availableSlots: null,
   bookingSettings: null,
 
-  selectedDate: null,
-  selectedTime: null,
-  selectedDuration: null,
+  _selectedDate: null,
+  _selectedTime: null,
+  _selectedDuration: null,
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
@@ -15,13 +15,13 @@ BookingTime = {
     }
     
     if (reservationContext.slot == null) {
-      this.selectedDate = this.bookingSettings.scheduling_begin_date;
-      this.selectedTime = null;
-      this.selectedDuration = null;
+      this._selectedDate = this.bookingSettings.scheduling_begin_date;
+      this._selectedTime = null;
+      this._selectedDuration = null;
     } else {
-      this.selectedDate = ScreenUtils.getDateForTime(reservationContext.slot.time).getTime();
-      this.selectedTime = reservationContext.slot.time;
-      this.selectedDuration = reservationContext.slot.duration;
+      this._selectedDate = ScreenUtils.getDateForTime(reservationContext.slot.time).getTime();
+      this._selectedTime = reservationContext.slot.time;
+      this._selectedDuration = reservationContext.slot.duration;
     }
     
     
@@ -35,11 +35,11 @@ BookingTime = {
       onSelect: function(dateText, instance) {
         var newSelectedDate = ScreenUtils.getUTCMillis(new Date(dateText));
         
-        if (newSelectedDate == this.selectedDate) {
+        if (newSelectedDate == this._selectedDate) {
           return;
         }
         
-        this.selectedDate = newSelectedDate;
+        this._selectedDate = newSelectedDate;
         reservationContext.slot = null;
         
         this._canProceedToNextStep();
@@ -47,7 +47,7 @@ BookingTime = {
         this._showTimes();
       }.bind(this),
       
-      defaultDate: ScreenUtils.getLocalTime(this.selectedDate),
+      defaultDate: ScreenUtils.getLocalTime(this._selectedDate),
       minDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_begin_date),
       maxDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_end_date)
     });
@@ -70,7 +70,7 @@ BookingTime = {
     $("#BookingTime-Screen-SelectionPanel-Duration-Durations").empty();
     $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").empty();
     
-    var intervals = Backend.getAvailableSlots(this.selectedDate, function(status, slots) {
+    var intervals = Backend.getAvailableSlots(this._selectedDate, function(status, slots) {
       if (status == Backend.STATUS_SUCCESS) {
         var times = {};
         
@@ -93,29 +93,29 @@ BookingTime = {
             }
           }
 
-          var timeInterval = $("<div class=\"optionbox-option\">" + ScreenUtils.getBookingTime(parseInt(time)) + " (" + ScreenUtils.getBookingDuration(maxDuration) + " max)</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
+          var timeInterval = $("<div class=\"optionbox-option times\">" + ScreenUtils.getBookingTime(parseInt(time)) + " (" + ScreenUtils.getBookingDuration(maxDuration) + " max)</div>").appendTo($("#BookingTime-Screen-SelectionPanel-TimeFrame-Times"));
 
           timeInterval[0]._time = time;
 
           timeInterval.click(function(event) {
-            $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").children().removeClass("selected");
+            $(".times").removeClass("selected");
             $(event.target).addClass("selected");
 
             Backend.getReservationContext().slot = null;
-            this.selectedTime = event.target._time;
+            this._selectedTime = event.target._time;
 
             this._canProceedToNextStep();
 
             this._showDurations(times[event.target._time]);
           }.bind(this));
           
-          if (time == this.selectedTime) {
+          if (time == this._selectedTime) {
             timeInterval.click();
           }
         }
         
-        var timeIntervals = $("#BookingTime-Screen-SelectionPanel-TimeFrame-Times").children();
-        if (timeIntervals.length == 1 && this.selectedTime == null) {
+        var timeIntervals = $(".times");
+        if (timeIntervals.length == 1 && this._selectedTime == null) {
           timeIntervals.addClass("selected");
           this._canProceedToNextStep();
 
@@ -130,26 +130,26 @@ BookingTime = {
     
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
-      var durationElement = $("<div class=\"optionbox-option\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
+      var durationElement = $("<div class=\"optionbox-option durations\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#BookingTime-Screen-SelectionPanel-Duration-Durations"));
       durationElement[0]._slot = slot;
       
       durationElement.click(function(event) {
-        $("#BookingTime-Screen-SelectionPanel-Duration-Durations").children().removeClass("selected");
+        $(".durations").removeClass("selected");
         $(event.target).addClass("selected");
         
-        this.selectedDuration = event.target._slot.duration;
+        this._selectedDuration = event.target._slot.duration;
         Backend.getReservationContext().slot = event.target._slot;
 
         this._canProceedToNextStep();
       }.bind(this));
       
-      if (slot.duration == this.selectedDuration) {
+      if (slot.duration == this._selectedDuration) {
         durationElement.click();
       }
     }
     
-    if (slots.length == 1 && this.selectedDuration == null) {
-      $("#BookingTime-Screen-SelectionPanel-Duration-Durations").children().addClass("selected");
+    if (slots.length == 1 && this._selectedDuration == null) {
+      $(".durations").addClass("selected");
       Backend.getReservationContext().slot = slots[0];
 
       this._canProceedToNextStep();

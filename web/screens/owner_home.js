@@ -16,6 +16,10 @@ OwnerHome = {
       });
     });
     
+    $("#OwnerHome-Screen-AccountInfo-OwnerReservations-Actions-BookButton").click(function() {
+      Main.loadScreen("owner_booking");
+    });    
+    
     
     this._showBookings();
     this._showRentals();
