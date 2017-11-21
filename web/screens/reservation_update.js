@@ -2,6 +2,7 @@ ReservationUpdate = {
   reservationId: null,
   reservationDateTime: null,
   reservationLocationId: null,
+  reservationBoatId: null,
   reservationPickupLocationId: null,
   reservationCost: null,
   reservationEmail: null,
@@ -18,6 +19,8 @@ ReservationUpdate = {
     
     $("#ReservationUpdate-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(this.reservationDateTime) + " " + ScreenUtils.getBookingTime(this.reservationDateTime));
     
+    var boat = Backend.getBookingConfiguration().locations[this.reservationLocationId].boats[this.reservationBoatId];
+    $("#ReservationUpdate-Screen-ReservationSummary-Boat-Value").html(boat.name);
     
     var location = Backend.getBookingConfiguration().locations[this.reservationLocationId].pickup_locations[this.reservationPickupLocationId];
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
@@ -86,11 +89,12 @@ ReservationUpdate = {
 
         Backend.cancelPayment(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
-            Backend.removeReservation(ReservationUpdate.reservationId, function(status) {
+            Backend.cancelReservation(ReservationUpdate.reservationId, function(status) {
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.resetReservationContext();
               } else {
                 console.error("Refund issued but the reservation is not removed: " + ReservationUpdate.reservationId);
+                //TODO: Handle it!
               }
 
 

@@ -73,7 +73,7 @@ Backend = {
   },
   
 
-  removeReservation: function(reservationId, callback) {
+  cancelReservation: function(reservationId, callback) {
     this._communicate("reservation/booking/?reservation_id=" + reservationId, "delete", null, false, [], {
       success: function() {
         if (callback) {

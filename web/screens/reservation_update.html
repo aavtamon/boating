@@ -8,6 +8,7 @@
       ReservationUpdate.reservationId = {{.Reservation.Id}};
       ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
       ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+      ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
       ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
       ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
       ReservationUpdate.reservationEmail = {{.Reservation.Email}};
@@ -46,6 +47,10 @@
     <div id="ReservationUpdate-Screen-ReservationSummary-Group" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Group-Title">Your party:</div>
       <div id="ReservationUpdate-Screen-ReservationSummary-Group-Value">{{.Reservation.NumOfAdults}} adult(s) and {{.Reservation.NumOfChildren}} children</div>
+    </div>
+    <div id="ReservationUpdate-Screen-ReservationSummary-Boat" class="info-box-row">
+      <div id="ReservationUpdate-Screen-ReservationSummary-Boat-Title">Boat:</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Boat-Value"></div>
     </div>
     <div id="ReservationUpdate-Screen-ReservationSummary-Location">
       <div id="ReservationUpdate-Screen-ReservationSummary-Location-Title">Pick up location:</div>

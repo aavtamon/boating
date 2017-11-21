@@ -117,7 +117,7 @@ OwnerHome = {
         $(event.target).addClass("selected");
         
         Backend.restoreReservationContext(event.target._summary.id, null, function() {
-          Main.loadScreen("owner_reservation_update");
+          Main.loadScreen("owner_reservation_update?id=" + event.target._summary.id);
         });
       });
     }

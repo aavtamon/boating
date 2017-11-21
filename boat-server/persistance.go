@@ -132,6 +132,7 @@ type TOwnerAccount struct {
   
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
   
   Locations map[string]TBoatIds `json:"locations,omitempty"`;
 }
@@ -336,16 +337,18 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
   rentalStat.Rentals = make(map[TReservationId]*TRental);
   
   for _, reservation := range persistenceDb.Reservations {
-    boatIds, hasLocation := account.Locations[reservation.LocationId];
-    if (hasLocation) {
-      for _, id := range boatIds.Boats {
-        if (id == reservation.BoatId) {
-          rentalStat.Rentals[reservation.Id] = &TRental{};
+    if (reservation.OwnerAccountId != accountId) {
+      boatIds, hasLocation := account.Locations[reservation.LocationId];
+      if (hasLocation) {
+        for _, id := range boatIds.Boats {
+          if (id == reservation.BoatId) {
+            rentalStat.Rentals[reservation.Id] = &TRental{};
 
-          rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
-          rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
-          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
-          rentalStat.Rentals[reservation.Id].Status = reservation.Status;
+            rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
+            rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
+            rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
+            rentalStat.Rentals[reservation.Id].Status = reservation.Status;
+          }
         }
       }
     }

@@ -1,0 +1,47 @@
+#OwnerReservationUpdate-Screen-ReservationSummary-Id-Title,
+#OwnerReservationUpdate-Screen-ReservationSummary-DateTime-Title,
+#OwnerReservationUpdate-Screen-ReservationSummary-Duration-Title,
+#OwnerReservationUpdate-Screen-ReservationSummary-Boat-Title {
+  display: inline-block;
+  width: 450px;
+}
+#OwnerReservationUpdate-Screen-ReservationSummary-Id-Value,
+#OwnerReservationUpdate-Screen-ReservationSummary-DateTime-Value,
+#OwnerReservationUpdate-Screen-ReservationSummary-Duration-Value,
+#OwnerReservationUpdate-Screen-ReservationSummary-Boat-Value {
+  display: inline-block;
+  width: 200px;
+
+  font-weight: bold;
+}
+
+#OwnerReservationUpdate-Screen-ReservationSummary-Email {
+  margin-top: 30px;
+}
+#OwnerReservationUpdate-Screen-ReservationSummary-Email-Description {
+  margin-bottom: 5px;
+}
+#OwnerReservationUpdate-Screen-ReservationSummary-Email-Label {
+  display: inline-block;
+  margin-right: 20px;
+  
+  font-weight: bold;
+  
+  vertical-align: middle;
+}
+#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input {
+  width: 400px;
+  margin-right: 30px;
+  
+  vertical-align: middle;
+}
+#OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton {
+  margin-bottom: 5px;
+  vertical-align: middle;
+}
+
+
+#OwnerReservationUpdate-Screen-ButtonsPanel {
+  margin-top: 20px;
+  text-align: center;
+}

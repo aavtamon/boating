@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="screens/owner_reservation_update.css">
+<script src="screens/owner_reservation_update.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+<script>
+  $(document).ready(function() {
+    {{if .Reservation}}
+      OwnerReservationUpdate.reservationId = {{.Reservation.Id}};
+      OwnerReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+      OwnerReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+      OwnerReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
+      OwnerReservationUpdate.ownerAccountEmail = {{.OwnerAccount.Email}};
+                    
+      OwnerReservationUpdate.onLoad();
+    {{end}}
+  });
+</script>
+
+<div id="ReservationUpdate-Screen">
+  <div class="screen-description">
+    Your reservation details
+  </div>
+  
+  
+  <div id="OwnerReservationUpdate-Screen-ReservationSummary" class="info-box">
+    <div id="OwnerReservationUpdate-Screen-ReservationSummary-Id" class="info-box-row">
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Id-Title">Confirmation number:</div>
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Id-Value">{{.Reservation.Id}}</div>
+    </div>
+    <div id="OwnerReservationUpdate-Screen-ReservationSummary-DateTime" class="info-box-row">
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-DateTime-Value"></div>
+    </div>
+    <div id="OwnerReservationUpdate-Screen-ReservationSummary-Duration" class="info-box-row">
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Duration-Value">{{.Reservation.Slot.Duration}} hours</div>
+    </div>
+    <div id="OwnerReservationUpdate-Screen-ReservationSummary-Boat" class="info-box-row">
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Boat-Title">Boat:</div>
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Boat-Value"></div>
+    </div>
+    <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Description">
+        You can email this information if you lost or did not receive the original confirmation email.
+      </div>
+      <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Label">Email:</div>
+      <input type="text" id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Input">
+      <button id="OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton" class="standard-button">Send</button>
+    </div>
+  </div>  
+  <div id="OwnerReservationUpdate-Screen-ButtonsPanel">
+    <button id="OwnerReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>
+  </div>
+</div>
