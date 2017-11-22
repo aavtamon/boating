@@ -24,15 +24,22 @@
     <br>
     <br>
     
-    {{if .Reservation}}
-      Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>. 
-      <br>
-      Click on the reservation if you want to review or cancel it.
-      <br>
-      <br>
-      You can also <a href="#booking_time">book</a> another trip if you would like.
+    {{if .OwnerAccount}}
+      Welcome back, {{.OwnerAccount.FirstName}}! You can proceed to your <a href="#owner_login">dashboard</a>. 
     {{else}}
-      While you are <a href="#booking_time">booking</a> your ride, you will be asked to provide your mobile phone. It is optional but we really advise you to do so. That will let us stay connected, and gives us an oportunity to text you any chabges in your trip if any. We will even text you a reminder, and also the location of the boat so that you know when to expect it.
+      {{if .Reservation}}
+        {{if eq .Reservation.OwnerAccountId ""}}
+          Welcome back, {{.Reservation.FirstName}}! You seem to have a reservation with us, <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>. 
+          <br>
+          Click on the reservation if you want to review or cancel it.
+          <br>
+          <br>
+          You can also <a href="#booking_boat">book</a> another trip if you would like.
+        {{else}}
+        {{end}}
+      {{else}}
+        While you are <a href="#booking_boat">booking</a> your ride, you will be asked to provide your mobile phone. It is optional but we really advise you to do so. That will let us stay connected, and gives us an oportunity to text you any chabges in your trip if any. We will even text you a reminder, and also the location of the boat so that you know when to expect it.
+      {{end}}
     {{end}}
   </div>
   

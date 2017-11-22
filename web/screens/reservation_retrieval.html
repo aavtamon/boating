@@ -13,13 +13,15 @@
     Retrieve your reservation
   </div>
   
-  {{if .Reservation}}
-    <div class="info-box">
-      You have a reservation in our system. <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
-      <br>
-      <br>
-      If you want to locate a different reservation, please enter the confirmation number and the last name below.
-    </div>
+  {{if .Reservation }}
+    {{if eq .Reservation.OwnerAccountId ""}}
+      <div class="info-box">
+        You have a reservation in our system. <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>. Click on the reservation if you want to modify this one.
+        <br>
+        <br>
+        If you want to locate a different reservation, please enter the confirmation number and the last name below.
+      </div>
+    {{end}}
   {{end}}
   
   <div id="ReservationRetrieval-Screen-Reservation" class="info-box">

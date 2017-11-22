@@ -4,7 +4,7 @@
 
 <script>
   $(document).ready(function() {
-    {{if .Reservation}}
+    {{if and .Reservation (eq .Reservation.OwnerAccountId "")}}
       ReservationUpdate.reservationId = {{.Reservation.Id}};
       ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
       ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
@@ -15,9 +15,9 @@
       ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
                     
       ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
-                    
-      ReservationUpdate.onLoad();
     {{end}}
+                    
+    ReservationUpdate.onLoad();
   });
 </script>
 

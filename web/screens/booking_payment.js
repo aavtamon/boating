@@ -138,6 +138,8 @@ BookingPayment = {
               } else {
                 Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
               }
+
+              //TODO: Consider removing of the previously saved reservation
             });
           } else if (status == Backend.STATUS_NOT_FOUND) {
             Main.showMessage("Not Successful", "We cannot save your reservation. Try again later");
@@ -146,8 +148,6 @@ BookingPayment = {
           } else {
             Main.showMessage("Not Successful", "An error occured. Please try again");
           }
-
-          //TODO: Consider removing of the previous;y saved reservation
         });
       }
     });    

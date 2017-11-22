@@ -14,9 +14,6 @@ const SYSTEM_CONFIG_FILE_NAME = "system_configuration.json";
 const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
 
 
-const EXPIRATION_TIMEOUT = 60 * 10; //10 mins
-
-
 
 type TMapLocation struct {
   Latitude float64 `json:"lat"`;
@@ -106,10 +103,15 @@ type TPaymentConfiguration struct {
   Enabled bool `json:"enabled"`;
   SecretKey string `json:"secret_key"`;
 }
+type TBookingExpirationConfiguration struct {
+  CancelledTimeout int64 `json:"cancelled"`;
+  CompletedTimeout int64 `json:"completed"`;
+}
 type TSystemConfiguration struct {
   EmailConfiguration TEmailConfiguration `json:"email"`;
   SMSConfiguration TSMSConfiguration `json:"sms"`;
   PaymentConfiguration TPaymentConfiguration `json:"payment"`;
+  BookingExpirationConfiguration TBookingExpirationConfiguration `json:"booking_expiration"`;
 }
 
 
@@ -127,6 +129,8 @@ type TBoatIds struct {
 type TOwnerAccountId string;
 
 type TOwnerAccount struct {
+  Id TOwnerAccountId `json:"id,omitempty"`;
+
   Username string `json:"username,omitempty"`;
   Token string `json:"token,omitempty"`;
   
@@ -273,7 +277,7 @@ func GetAllReservations() TReservationMap {
 
 func GetOwnerReservationSummaries(ownerAccountId TOwnerAccountId) []*TReservationSummary {
   reservationSummaries := []*TReservationSummary{};
-  
+
   if (ownerAccountId != NO_OWNER_ACCOUNT_ID) {
     for _, reservation := range persistenceDb.Reservations {
       if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
@@ -366,7 +370,14 @@ func GetBookingConfiguration() *TBookingConfiguration {
 }
 
 func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
-  return ownerAccountMap[accountId];
+  ownerAccount := ownerAccountMap[accountId];
+  if (ownerAccount == nil) {
+    return nil;
+  }
+  
+  ownerAccount.Id = accountId;
+  
+  return ownerAccount;
 }
 
 func AddReservationListener(listener TChangeListener) {
@@ -459,8 +470,15 @@ func cleanObsoleteReservations() {
   currentMoment := time.Now().Unix();
 
   for reservationId, reservation := range persistenceDb.Reservations {
-    if (reservation.PaymentStatus != PAYMENT_STATUS_PAYED) {
-      if (reservation.Timestamp + EXPIRATION_TIMEOUT < currentMoment) {
+    expiration := int64(0);
+    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
+      expiration = systemConfiguration.BookingExpirationConfiguration.CancelledTimeout;
+    } else if (reservation.Status == RESERVATION_STATUS_COMPLETED) {
+      expiration = systemConfiguration.BookingExpirationConfiguration.CompletedTimeout;
+    }
+
+    if (expiration > 0) {
+      if (reservation.Timestamp + expiration * 1000 * 60 * 60 *24 < currentMoment) {
         delete(persistenceDb.Reservations, reservationId);
       }
     }

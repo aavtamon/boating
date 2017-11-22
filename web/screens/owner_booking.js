@@ -1,8 +1,7 @@
 OwnerBooking = {
   ownerAccount: null,
   bookingSettings: null,
-  
-  _selectedDate: null,
+
   
   onLoad: function() {
     if (this.ownerAccount == null) {
@@ -11,11 +10,13 @@ OwnerBooking = {
     }
 
 
-    Backend.resetReservationContext();
-
     this._selectedDate = this.bookingSettings.scheduling_begin_date;
     this._selectedTime = null;
     this._selectedDuration = null;
+    
+    this._locationId = null;
+    this._boatId = null;
+    this._slot = null;
     
     $("#OwnerBooking-Screen-SelectionPanel-Calendar").datepicker({
       onSelect: function(dateText, instance) {
@@ -26,7 +27,7 @@ OwnerBooking = {
         }
         
         this._selectedDate = newSelectedDate;
-        Backend.getReservationContext().slot = null;
+        this._slot = null;
         
         this._canProceedToNextStep();
         
@@ -40,8 +41,24 @@ OwnerBooking = {
     
     
     $("#OwnerBooking-Screen-Description-BookButton").click(function() {
-      Main.loadScreen("booking_time");
-    });
+      Backend.resetReservationContext();
+      
+      var reservationContent = Backend.getReservationContext();
+      reservationContent.owner_account_id = this.ownerAccount.id;
+      reservationContent.location_id = this._locationId;
+      reservationContent.boat_id = this._boatId;
+      reservationContent.slot = this._slot;
+      
+      Backend.saveReservation(function(status, reservationId) {
+        if (status == Backend.STATUS_SUCCESS) {
+          Main.showMessage("Reservation confirmed", "Your reservation <a href=\"#owner_reservation_update?id=" + reservationId + "\">" + reservationId + "</a> is booked.", function(action) {
+            Main.loadScreen("owner_home");
+          });
+        } else {
+          Main.showMessage("Not Successful", "An error occured. Please try again");
+        }
+      });
+    }.bind(this));
     
     this._showBoats();
     this._showTimes();
@@ -70,20 +87,20 @@ OwnerBooking = {
           $(".boats").removeClass("selected");
           $(event.target).addClass("selected");
 
-          Backend.getReservationContext().location_id = event.target._locationId;
-          Backend.getReservationContext().boat_id = event.target._boatId;
+          this._locationId = event.target._locationId;
+          this._boatId = event.target._boatId;
 
           this._canProceedToNextStep();
         }.bind(this));
 
-        if (boatId == Backend.getReservationContext().boat_id) {
+        if (boatId == this._boatId) {
           boatOption.click();
         }
       }
     }
-    
+
     var boatOptions = $(".boats");
-    if (boatOptions.length == 1 && Backend.getReservationContext().boat_id == null) {
+    if (boatOptions.length == 1 && this._boatId == null) {
       boatOptions.click();
     }
   },
@@ -124,7 +141,7 @@ OwnerBooking = {
             $(".times").removeClass("selected");
             $(event.target).addClass("selected");
 
-            Backend.getReservationContext().slot = null;
+            this._slot = null;
             this._selectedTime = event.target._time;
 
             this._canProceedToNextStep();
@@ -161,7 +178,7 @@ OwnerBooking = {
         $(event.target).addClass("selected");
         
         this._selectedDuration = event.target._slot.duration;
-        Backend.getReservationContext().slot = event.target._slot;
+        this._slot = event.target._slot;
 
         this._canProceedToNextStep();
       }.bind(this));
@@ -173,7 +190,7 @@ OwnerBooking = {
     
     if (slots.length == 1 && this._selectedDuration == null) {
       $(".durations").addClass("selected");
-      Backend.getReservationContext().slot = slots[0];
+      this._slot = slots[0];
 
       this._canProceedToNextStep();
     }
@@ -182,11 +199,10 @@ OwnerBooking = {
   
   
   _canProceedToNextStep: function() {
-    var reservationContext = Backend.getReservationContext();
-    if (reservationContext.location_id != null && reservationContext.boat_id != null && reservationContext.slot != null) {
+    if (this._locationId != null && this._boatId != null && this._slot != null) {
       $("#OwnerBooking-Screen-Description-BookButton").prop("disabled", false);
 
-      $("#OwnerBooking-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].name + ", " + ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time) + ", " + ScreenUtils.getBookingDuration(reservationContext.slot.duration));
+      $("#OwnerBooking-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[this._locationId].boats[this._boatId].name + ", " + ScreenUtils.getBookingDate(this._slot.time) + " " + ScreenUtils.getBookingTime(this._slot.time) + ", " + ScreenUtils.getBookingDuration(this._slot.duration));
     } else {
       $("#OwnerBooking-Screen-Description-BookButton").prop("disabled", true);
       $("#OwnerBooking-Screen-ReservationSummary").html("Book your personal boat usage");

@@ -5,15 +5,19 @@
 <script>
   $(document).ready(function() {
     {{if .Reservation}}
-      OwnerReservationUpdate.reservationId = {{.Reservation.Id}};
-      OwnerReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
-      OwnerReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
-      OwnerReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
-      OwnerReservationUpdate.ownerAccountEmail = {{.OwnerAccount.Email}};
-                    
-      OwnerReservationUpdate.onLoad();
+      {{if .OwnerAccount}}
+        {{if eq .Reservation.OwnerAccountId .OwnerAccount.Id}}
+          OwnerReservationUpdate.reservationId = {{.Reservation.Id}};
+          OwnerReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+          OwnerReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+          OwnerReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
+          OwnerReservationUpdate.ownerAccountEmail = {{.OwnerAccount.Email}};
+        {{end}}
+      {{end}}
     {{end}}
-  });
+                    
+    OwnerReservationUpdate.onLoad();
+});
 </script>
 
 <div id="ReservationUpdate-Screen">

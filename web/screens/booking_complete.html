@@ -4,7 +4,9 @@
 
 <script>
   {{if .Reservation}}
-    BookingComplete.reservationId = "{{.Reservation.Id}}";
+    {{if eq .Reservation.OwnerAccountId ""}}
+      BookingComplete.reservationId = "{{.Reservation.Id}}";
+    {{end}}
   {{end}}
   
   $(document).ready(function() {
