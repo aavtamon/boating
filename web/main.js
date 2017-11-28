@@ -25,7 +25,9 @@ Main = {
     // Special handling
     var requestedScreen = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.split('?')[0].substr(1) : null;
     if (requestedScreen) {
-      if (requestedScreen != "reservation_retrieval") {
+      if (requestedScreen != "reservation_retrieval"
+          || requestedScreen != "safety_test") {
+        
         requestedScreen = null;
       }
     }
