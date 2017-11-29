@@ -251,6 +251,22 @@ Backend = {
   },
   
   
+  retrieveSafetyTestSuite: function(callback) {
+    this._communicate("safety-test", "get", null, true, [], {
+      success: function(testSuite) {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS, testSuite);
+        }
+      }.bind(this),
+      error: function(request, status, message) {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }.bind(this)
+    });
+  },
+  
+  
   // Communication
 
   _communicate: function(resource, method, data, isJsonResponse, headers, callback) {

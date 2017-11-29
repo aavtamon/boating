@@ -436,6 +436,8 @@ func readPersistenceDatabase() {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
       fmt.Println("Persistance: failed to dersereialize reservation database - initializing", err);
+    } else {
+      fmt.Println("Persistance: reservation database is read");
     }
   } else {
     fmt.Println("Persistance: failed to read reservation database - initializing", err);
@@ -446,8 +448,6 @@ func readPersistenceDatabase() {
   } else {
     cleanObsoleteReservations();
   }
-
-  fmt.Println("Persistance: reservation database is read");
 }
 
 func savePersistenceDatabase() {
@@ -458,12 +458,12 @@ func savePersistenceDatabase() {
     err = ioutil.WriteFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
     if (err != nil) {
       fmt.Println("Persistance: failed to save reservation database to file", err);
+    } else {
+      fmt.Println("Persistance: saving database");
     }
   } else {
     fmt.Println("Persistance: failed to serialize reservation database", err);
   }
-  
-  fmt.Println("Persistance: saving database");
 }
 
 func cleanObsoleteReservations() {
@@ -492,6 +492,8 @@ func readOwnerAccountDatabase() {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {
       fmt.Println("Persistance: failed to dersereialize account database - initializing", err);
+    } else {
+      fmt.Println("Persistance: account database is read");    
     }
   } else {
     fmt.Println("Persistance: failed to read account database - initializing", err);
@@ -500,8 +502,6 @@ func readOwnerAccountDatabase() {
   if (ownerAccountMap == nil) {
     ownerAccountMap = make(TOwnerAccountMap);
   }
-  
-  fmt.Println("Persistance: account database is read");
 }
 
 

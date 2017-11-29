@@ -10,13 +10,13 @@ SafetyTest = {
       return;
     }
     
-    $("#SaferyTest-Screen-SanityTestPanel").html("The tests are being retrieved");
+    $("#SafetyTest-Screen-SafetyTestPanel").html("The tests are being retrieved");
     
-    Backend.retrieveSafetyTest(function(status, tests) {
+    Backend.retrieveSafetyTestSuite(function(status, suite) {
       if (status == Backend.STATUS_SUCCESS) {
-        this._populateSanityTests(tests);
+        this._populateSafetySuite(suite);
       } else {
-        $("#SaferyTest-Screen-SanityTestPanel").html("Failed to retrieve tests");
+        $("#SafetyTest-Screen-SafetyTestPanel").html("Failed to retrieve tests");
       }
     }.bind(this));
     
@@ -34,26 +34,32 @@ SafetyTest = {
       });
     }.bind(this));
     
-    ScreenUtils.dataModelInput($("#ReservationUpdate-Screen-ReservationSummary-Email-Input")[0], emailData, "email", function(value) {
+    ScreenUtils.dataModelInput($("#SafetyTest-Screen-TestResults-Email-Input")[0], emailData, "email", function(value) {
       $("#SafetyTest-Screen-TestResults-Email-SendButton").prop("disabled", !ScreenUtils.isValidEmail(value));
     }, ScreenUtils.isValidEmail);
   },
 }
 
-SaferyTest._populateSanityTests = function(tests) {
+SafetyTest._populateSafetySuite = function(suite) {
   var testsHtml = "";
   
-  for (var testIndex in tests) {
-    var test = tests[testIndex];
+  for (var testId in suite.tests) {
+    var test = suite.tests[testId];
     
-    var testHtml = "<div class='test-option'>";
-    for (var optionIndex in test.options) {      
-      var testOption = test.options[optionIndex];
-      var optionId = test.id + "." + testOption.id;
-      var optionHtml = "<input type='radio' id='" + optionId + "'><label for='" + optionId + "'>" + testOption.text + "</label>";
+    var testHtml = "<div class='test'>" + test.text;
+    testHtml += "<div class='test-options'>";
+    for (var optionId in test.options) {      
+      var testOption = test.options[optionId];
+      var fullOptionId = testId + "." + optionId;
+      var optionHtml = "<input class='test-option' type='radio' id='" + fullOptionId + "'><label for='" + fullOptionId + "'>" + testOption + "</label>";
+      
+      testHtml += optionHtml;
     }
     testHtml += "</div>";
+    testHtml += "</div>";
+    
+    testsHtml += testHtml;
   }
   
-  $("#SafetyTest-Screen-SanityTestPanel").html(testHtml);
+  $("#SafetyTest-Screen-SafetyTestPanel").html(testsHtml);
 }

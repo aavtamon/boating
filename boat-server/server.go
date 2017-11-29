@@ -25,6 +25,7 @@ type THtmlObject struct {
 type TSession struct {
   ReservationId *TReservationId;
   AccountId *TOwnerAccountId;
+  SafetySuiteId *TSafetySuiteId;
 }
 
 type TSessionId string;
@@ -81,7 +82,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   if (!hasSession) {
     initialReservationId := NO_RESERVATION_ID;
     initialAccountId := NO_OWNER_ACCOUNT_ID;
-    Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId};
+    initialSuiteId := NO_SAFETY_SUITE_ID;
+    Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId, SafetySuiteId: &initialSuiteId};
   }
   
 
@@ -164,11 +166,12 @@ func main() {
   if (len(args) > 0) {
     RuntimeRoot = args[0];
   } else {
-    log.Fatal("Path to HTML templates is not provided");
+    log.Fatal("Runtime root directory is not provided");
     return;
   }
 
   InitializePersistance(RuntimeRoot);
+  InitializeSafetyTest(RuntimeRoot);
   InitializeBookings();
 
   httpMux := http.NewServeMux();
@@ -176,6 +179,7 @@ func main() {
   httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
   httpMux.HandleFunc("/bookings/", BookingsHandler);
   httpMux.HandleFunc("/account/", AccountHandler);
+  httpMux.HandleFunc("/safety-test/", SafetyTestHandler);
   httpMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot)));
   httpMux.HandleFunc("/", pageHandler);
   

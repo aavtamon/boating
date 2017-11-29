@@ -1,103 +1,33 @@
-<link rel="stylesheet" href="screens/safery_test.css">
-<script src="screens/safery_test.js"></script>
+<link rel="stylesheet" href="screens/safety_test.css">
+<script src="screens/safety_test.js"></script>
 <script src="screens/screen_utils.js"></script>
 
 <script>
   $(document).ready(function() {
     {{if and .Reservation (eq .Reservation.OwnerAccountId "")}}
-      ReservationUpdate.reservationId = {{.Reservation.Id}};
-      ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
-      ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
-      ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
-      ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
-      ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
-      ReservationUpdate.reservationEmail = {{.Reservation.Email}};
-      ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
-                    
-      ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
+      SafetyTest.reservationId = {{.Reservation.Id}};
+      SafetyTest.reservationEmail = {{.Reservation.Email}};
     {{end}}
                     
     SafetyTest.onLoad();
   });
 </script>
 
-<div id="ReservationUpdate-Screen">
+<div id="SafetyTest-Screen">
   <div class="screen-description">
     Safety Test To Operate Motor Boat
   </div>
   
   
-  <div id="ReservationUpdate-Screen-ReservationSummary" class="info-box">
-    <div id="ReservationUpdate-Screen-ReservationSummary-Id" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Id-Title">Confirmation number:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Id-Value">{{.Reservation.Id}}</div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-DateTime" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-DateTime-Title">Pick up date/time:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-DateTime-Value"></div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Duration" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Title">Duration of your trip:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Duration-Value">{{.Reservation.Slot.Duration}} hours</div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Renter" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Renter-Title">Primary Renter:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Renter-Value">{{.Reservation.FirstName}} {{.Reservation.LastName}} (phone: {{.Reservation.PrimaryPhone}})</div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Group" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Title">Your party:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Group-Value">{{.Reservation.NumOfAdults}} adult(s) and {{.Reservation.NumOfChildren}} children</div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Boat" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Boat-Title">Boat:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Boat-Value"></div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Location">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Location-Title">Pick up location:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details">
-        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName" class="info-box-row">
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Title">Place:</div>
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value"></div>
-        </div>
-        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress" class="info-box-row">
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Title">Address:</div>
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value"></div>
-        </div>
-        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee" class="info-box-row">
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Title">Parking fee:</div>
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value"></div>
-        </div>
-        <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions" class="info-box-row">
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Title">Additional instructions:</div>
-          <div id="ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value"></div>
-        </div>
-      </div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Extras" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Extras-Title">Additional equipment:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Extras-Value"></div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Price" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{.Reservation.PaymentAmount}} dollars</div>
-    </div>
-    <div id="ReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
-      <div id="ReservationUpdate-Screen-ReservationSummary-Email-Description">
-        You can email this information if you lost or did not receive the original confirmation email.
-      </div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Email-Label">Email:</div>
-      <input type="text" id="ReservationUpdate-Screen-ReservationSummary-Email-Input">
-      <button id="ReservationUpdate-Screen-ReservationSummary-Email-SendButton" class="standard-button">Send</button>
-    </div>
-  </div>  
-  <div class="info-box">
-    GA State law requires you to take and pass a safety training course, in order to be allowed to operate a motor boat.
-    <br>
-    Our records indicate that you haven't taken/passed the course and exam yet.
-    You will have to re-take the test if you took it more than 6 months ago. Use this <a href="#safety_test">link</a> to take the test.
-  </div>
+  <div id="SafetyTest-Screen-SafetyTestPanel" class="info-box"></div>
   
-  <div id="ReservationUpdate-Screen-ButtonsPanel">
-    <button id="ReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>
+  <div id="SafetyTest-Screen-TestResults" class="info-box">
+    <div id="SafetyTest-Screen-TestResults-Score" class="">
+    </div>
+    <div id="SafetyTest-Screen-TestResults-Email" class="">
+      <div id="SafetyTest-Screen-TestResults-Email-Label">Email:</div>
+      <input type="text" id="SafetyTest-Screen-TestResults-Email-Input">
+      <button id="SafetyTest-Screen-TestResults-Email-SendButton" class="standard-button">Send Confirmation Email</button>
+    </div>
   </div>
 </div>
