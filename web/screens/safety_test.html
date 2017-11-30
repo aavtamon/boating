@@ -4,9 +4,11 @@
 
 <script>
   $(document).ready(function() {
-    {{if and .Reservation (eq .Reservation.OwnerAccountId "")}}
-      SafetyTest.reservationId = {{.Reservation.Id}};
-      SafetyTest.reservationEmail = {{.Reservation.Email}};
+    {{if .Reservation}}
+      {{if eq .Reservation.OwnerAccountId ""}}
+        SafetyTest.reservationId = {{.Reservation.Id}};
+        SafetyTest.reservationEmail = {{.Reservation.Email}};
+      {{end}}
     {{end}}
                     
     SafetyTest.onLoad();
@@ -19,15 +21,23 @@
   </div>
   
   
-  <div id="SafetyTest-Screen-SafetyTestPanel" class="info-box"></div>
+  <div id="SafetyTest-Screen-SafetyTestPanel" class="info-box">
+    <div id="SafetyTest-Screen-SafetyTestPanel-Tests"></div>
+    <center><button id="SafetyTest-Screen-SafetyTestPanel-SubmitButton" class="standard-button">Submit</button></center>
+  </div>
   
-  <div id="SafetyTest-Screen-TestResults" class="info-box">
-    <div id="SafetyTest-Screen-TestResults-Score" class="">
-    </div>
-    <div id="SafetyTest-Screen-TestResults-Email" class="">
-      <div id="SafetyTest-Screen-TestResults-Email-Label">Email:</div>
-      <input type="text" id="SafetyTest-Screen-TestResults-Email-Input">
-      <button id="SafetyTest-Screen-TestResults-Email-SendButton" class="standard-button">Send Confirmation Email</button>
+  <div id="SafetyTest-Screen-TestPassed" class="info-box">
+    <div id="SafetyTest-Screen-TestPassed-Score"></div>
+    <div id="SafetyTest-Screen-TestPassed-Email" class="">
+      <div id="SafetyTest-Screen-TestPassed-Email-Description">We can email you the test results</div>
+      <div id="SafetyTest-Screen-TestPassed-Email-Label">Email:</div>
+      <input type="text" id="SafetyTest-Screen-TestPassed-Email-Input">
+      <button id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button">Send Confirmation Email</button>
     </div>
   </div>
+  
+  <div id="SafetyTest-Screen-TestFailed" class="info-box">
+    <div id="SafetyTest-Screen-TestFailed-Score"></div>
+    <center><button id="SafetyTest-Screen-TestFailed-RetakeButton" class="standard-button">Retake test</button></center>
+  </div>  
 </div>

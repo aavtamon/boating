@@ -266,6 +266,20 @@ Backend = {
     });
   },
   
+  submitSafetyTestSuite: function(suite, callback) {
+    this._communicate("safety-test", "put", suite, true, [], {
+      success: function(testSuite) {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS, testSuite);
+        }
+      }.bind(this),
+      error: function(request, status, message) {
+        if (callback) {
+          callback(Backend.STATUS_ERROR);
+        }
+      }.bind(this)
+    });
+  },
   
   // Communication
 

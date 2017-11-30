@@ -4,17 +4,19 @@
 
 <script>
   $(document).ready(function() {
-    {{if and .Reservation (eq .Reservation.OwnerAccountId "")}}
-      ReservationUpdate.reservationId = {{.Reservation.Id}};
-      ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
-      ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
-      ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
-      ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
-      ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
-      ReservationUpdate.reservationEmail = {{.Reservation.Email}};
-      ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
-                    
-      ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
+    {{if .Reservation}}
+      {{if eq .Reservation.OwnerAccountId ""}}
+        ReservationUpdate.reservationId = {{.Reservation.Id}};
+        ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+        ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+        ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
+        ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
+        ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
+        ReservationUpdate.reservationEmail = {{.Reservation.Email}};
+        ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
+
+        ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
+      {{end}}
     {{end}}
                     
     ReservationUpdate.onLoad();
