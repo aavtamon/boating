@@ -20,6 +20,7 @@ type THtmlObject struct {
   ReservationSummaries []*TReservationSummary;
   OwnerAccount *TOwnerAccount;
   OwnerRentalStat *TRentalStat;
+  SafetyTestStatus bool;
 }
 
 type TSession struct {
@@ -116,6 +117,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         
         OwnerAccount: GetOwnerAccount(*Sessions[sessionId].AccountId),
         OwnerRentalStat: GetOwnerRentalStat(*Sessions[sessionId].AccountId),
+        
+        SafetyTestStatus: FindSafetyTestResult(GetReservation(*Sessions[sessionId].ReservationId)) != nil,
       }
       
       

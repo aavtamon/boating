@@ -19,3 +19,7 @@
   margin-bottom: 5px;
   vertical-align: middle;
 }
+
+#BookingComplete-Screen-Cancellation, #BookingComplete-Screen-SafetyTest {
+  white-space: normal;
+}

@@ -5,6 +5,7 @@ import "encoding/json"
 import "fmt"
 import "io"
 import "io/ioutil"
+import "time"
 
 
 type TSafetyTest struct {
@@ -17,6 +18,8 @@ type TSafetyTest struct {
 type TSafetySuiteId string;
 
 type TSafetyTestSuite struct {
+  PassingGrade int `json:"passing_grade"`;
+  ValidityPeriod int `json:"validity_period"`;
   Tests map[string]*TSafetyTest `json:"tests"`;
 }
 
@@ -96,14 +99,6 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
     return;
   }
   
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    w.WriteHeader(http.StatusNotFound);
-    w.Write([]byte("Resevration does not exist"));
-
-    return;
-  }
-  
   suiteId := *Sessions[TSessionId(sessionCookie.Value)].SafetySuiteId;
   if (suiteId == NO_SAFETY_SUITE_ID) {
     w.WriteHeader(http.StatusBadRequest);
@@ -129,10 +124,34 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
   }
   
   
-
+  passedTests := 0;
   for testId, resultTest := range resultTestSuite.Tests {
     test := testSuite.Tests[testId];
     resultTest.Status = resultTest.AnswerOptionId == test.AnswerOptionId;
+    if (resultTest.Status) {
+      passedTests++;
+    }
+  }
+  
+  if (passedTests >= testSuite.PassingGrade) {
+    reservation := GetReservation(reservationId);
+    if (reservation == nil) {
+      w.WriteHeader(http.StatusNotFound);
+      w.Write([]byte("Reservation does not exist"));
+
+      return;
+    }
+
+    testResult := &TSafetyTestResult {
+      PassDate: time.Now().UTC().Unix(),
+      ExpirationDate: time.Now().UTC().AddDate(0, 0, testSuite.ValidityPeriod).Unix(),
+      LastName: reservation.LastName,
+      Score: passedTests,
+      SuiteId: suiteId,
+    };
+  
+
+    SaveSafetyTestResult(reservation.DLNumber, testResult);
   }
   
   processedTestSuite, _ := json.Marshal(resultTestSuite);

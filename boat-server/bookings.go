@@ -15,6 +15,18 @@ type TBookingSettings struct {
   SchedulingEndDate int64 `json:"scheduling_end_date"`;
 }
 
+type TRental struct {
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  LocationId string `json:"location_id,omitempty"`;
+  BoatId string `json:"boat_id,omitempty"`;
+  Status string `json:"status,omitempty"`;
+}
+
+type TRentalStat struct {
+  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
+}
+
+
 
 type TAvailableDates map[int64]int;
 
@@ -116,6 +128,39 @@ func GetBookingSettings() *TBookingSettings {
 func GetAvailableDates() TAvailableDates {
   return availableDates;
 }
+
+func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
+  if (accountId == NO_OWNER_ACCOUNT_ID) {
+    return nil;
+  }
+
+
+  account := ownerAccountMap[accountId];
+  
+  rentalStat := &TRentalStat{};
+  rentalStat.Rentals = make(map[TReservationId]*TRental);
+  
+  for _, reservation := range persistenceDb.Reservations {
+    if (reservation.OwnerAccountId != accountId) {
+      boatIds, hasLocation := account.Locations[reservation.LocationId];
+      if (hasLocation) {
+        for _, id := range boatIds.Boats {
+          if (id == reservation.BoatId) {
+            rentalStat.Rentals[reservation.Id] = &TRental{};
+
+            rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
+            rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
+            rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
+            rentalStat.Rentals[reservation.Id].Status = reservation.Status;
+          }
+        }
+      }
+    }
+  }
+  
+  return rentalStat;
+}
+
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
   return availableSlots[date];

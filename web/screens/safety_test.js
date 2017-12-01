@@ -107,15 +107,14 @@ SafetyTest._verifyTestResults = function(checkedTestResult) {
   }
   
   var totalNumberOfTests = Object.keys(checkedTestResult.tests).length;
-  var percentage = 100 * numOfCorrectTests / totalNumberOfTests;
+  var percentage = (100 * numOfCorrectTests / totalNumberOfTests).toFixed(2);
   
-  if (percentage > 80) {
+  if (numOfCorrectTests >= checkedTestResult.passing_grade) {
     var message = "Congratulation! You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You passed."
     
     $("#SafetyTest-Screen-TestPassed").show();
     $("#SafetyTest-Screen-TestPassed-Score").html(message);
-  } else {
-    
+  } else {    
     var message = "Unfortunately you failed the test. You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You failed. Would you like to retake the test?";
     
     $("#SafetyTest-Screen-TestFailed").show();

@@ -95,8 +95,11 @@
   <div id="ReservationUpdate-Screen-SafetyTest" class="info-box">
     GA State law requires you to take and pass a safety training course, in order to be allowed to operate a motor boat.
     <br>
-    Our records indicate that you haven't taken/passed the course and exam yet.
-    You will have to re-take the test if you took it more than 6 months ago. Use this <a href="#safety_test">link</a> to take the test.
+    {{if .SafetyTestStatus}}
+      Our records indicate that you have passed a safery test that is still valid. You are good to go!
+    {{else}}
+      Our records indicate that you haven't taken/passed the course and exam yet. Use <a href="#safety_test">Safety Test</a> link to take the test.
+    {{end}}
   </div>
   
   <div id="ReservationUpdate-Screen-ButtonsPanel">

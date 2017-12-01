@@ -143,19 +143,21 @@ type TOwnerAccount struct {
 
 type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 
-type TRental struct {
-  Slot TBookingSlot `json:"slot,omitempty"`;
-  LocationId string `json:"location_id,omitempty"`;
-  BoatId string `json:"boat_id,omitempty"`;
-  Status string `json:"status,omitempty"`;
+
+type TSafetyTestResult struct {
+  SuiteId TSafetySuiteId `json:"suite_id"`;
+  Score int `json:"score"`;
+  LastName string `json:"last_name"`;
+  PassDate int64 `json:"pass_date"`;
+  ExpirationDate int64 `json:"expiration_date"`;
 }
 
-type TRentalStat struct {
-  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
-}
+type TSafetyTestResultMap map[string]*TSafetyTestResult;
+
 
 type TPersistancenceDatabase struct {
-  Reservations TReservationMap `json:"reservations,omitempty"`;
+  SafetyTestResults TSafetyTestResultMap `json:"safety_test_results"`;
+  Reservations TReservationMap `json:"reservations"`;
 }
 
 
@@ -202,7 +204,6 @@ type TReservationSummary struct {
   Id TReservationId `json:"id"`;
   Slot TBookingSlot `json:"slot,omitempty"`;
 }
-
 
 
 
@@ -297,7 +298,7 @@ func SaveReservation(reservation *TReservation) TReservationId {
     reservation.Id = generateReservationId();
   }
 
-  reservation.Timestamp = time.Now().Unix();
+  reservation.Timestamp = time.Now().UTC().Unix();
 
   accessLock.Lock();
   persistenceDb.Reservations[reservation.Id] = reservation;
@@ -329,37 +330,33 @@ func RemoveReservation(reservationId TReservationId) {
   notifyReservationRemoved(&reservation);
 }
 
-func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
-  if (accountId == NO_OWNER_ACCOUNT_ID) {
+func FindSafetyTestResult(reservation *TReservation) *TSafetyTestResult {
+  if (reservation == nil) {
     return nil;
   }
 
-
-  account := ownerAccountMap[accountId];
+  result := persistenceDb.SafetyTestResults[reservation.DLNumber];
   
-  rentalStat := &TRentalStat{};
-  rentalStat.Rentals = make(map[TReservationId]*TRental);
+  fmt.Printf("DL LICENSE = %v\n", result)
   
-  for _, reservation := range persistenceDb.Reservations {
-    if (reservation.OwnerAccountId != accountId) {
-      boatIds, hasLocation := account.Locations[reservation.LocationId];
-      if (hasLocation) {
-        for _, id := range boatIds.Boats {
-          if (id == reservation.BoatId) {
-            rentalStat.Rentals[reservation.Id] = &TRental{};
-
-            rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
-            rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
-            rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
-            rentalStat.Rentals[reservation.Id].Status = reservation.Status;
-          }
-        }
-      }
-    }
+  if (result != nil && result.LastName == reservation.LastName && result.ExpirationDate > time.Now().UTC().Unix()) {
+    return result;
   }
   
-  return rentalStat;
+  return nil;
 }
+
+func SaveSafetyTestResult(dlNumber string, testResult *TSafetyTestResult) {
+  fmt.Printf("Persistance: saving safety test result for dl %s\n", dlNumber);
+  
+  accessLock.Lock();
+  persistenceDb.SafetyTestResults[dlNumber] = testResult;
+  
+  savePersistenceDatabase();
+  accessLock.Unlock();
+}
+
+
 
 func GetSystemConfiguration() *TSystemConfiguration {
   return systemConfiguration;
@@ -383,6 +380,7 @@ func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
 func AddReservationListener(listener TChangeListener) {
   listeners = append(listeners, listener);
 }
+
 
 
 
@@ -445,6 +443,7 @@ func readPersistenceDatabase() {
   
   if (persistenceDb.Reservations == nil) {
     persistenceDb.Reservations = make(TReservationMap);
+    persistenceDb.SafetyTestResults = make(TSafetyTestResultMap);
   } else {
     cleanObsoleteReservations();
   }
@@ -467,7 +466,7 @@ func savePersistenceDatabase() {
 }
 
 func cleanObsoleteReservations() {
-  currentMoment := time.Now().Unix();
+  currentMoment := time.Now().UTC().Unix();
 
   for reservationId, reservation := range persistenceDb.Reservations {
     expiration := int64(0);
@@ -507,7 +506,7 @@ func readOwnerAccountDatabase() {
 
 
 func generateReservationId() TReservationId {
-  rand.Seed(time.Now().UnixNano());
+  rand.Seed(time.Now().UTC().UnixNano());
   
   var bytes [10]byte;
   
