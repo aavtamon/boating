@@ -1,10 +1,8 @@
 package main
 
 import "net/smtp"
-import "net/http"
-import "net/url"
-import "strings";
 import "fmt"
+import "bitbucket.org/ckvist/twilio/twirest"
 
 
 const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json";
@@ -92,6 +90,36 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
 }
 
 
+func sendTextMessage(phoneNumber string, messageText string) {
+  if (!GetSystemConfiguration().SMSConfiguration.Enabled) {
+    fmt.Println("SMS notifications are turned off - no email sent");
+    return;
+  }
+  
+  twilioClient := twirest.NewClient(GetSystemConfiguration().SMSConfiguration.AccountSid, GetSystemConfiguration().SMSConfiguration.AuthToken);
+  
+  msg := twirest.SendMessage {
+    Text: messageText,
+    From: GetSystemConfiguration().SMSConfiguration.SourcePhone,
+    To:   phoneNumber,
+  }
+
+  resp, err := twilioClient.Request(msg);
+  if (err != nil) {
+    fmt.Printf("SMS send failed with error %s\n", err);
+  } else {
+    fmt.Printf("SMS sent successfully. Response: %v\n", resp.Message);
+  }
+}
+
+
+
+
+/*
+//import "net/http"
+//import "net/url"
+//import "strings"
+
 
 func sendTextMessage(phoneNumber string, messageText string) {
   if (!GetSystemConfiguration().SMSConfiguration.Enabled) {
@@ -107,7 +135,7 @@ func sendTextMessage(phoneNumber string, messageText string) {
 
   client := &http.Client{};
 
-  req, _ := http.NewRequest("POST", fmt.Sprintf(SMS_BRIDGE_URL, GetSystemConfiguration().SMSConfiguration.AccountSid), rb);
+  req, _ := http.NewRequest("POST", fmt.Sprintf(SMS_BRIDGE_URL, zGetSystemConfiguration().SMSConfiguration.AccountSid), rb);
   req.SetBasicAuth(GetSystemConfiguration().SMSConfiguration.AccountSid, GetSystemConfiguration().SMSConfiguration.AuthToken);
   req.Header.Add("Accept", "application/json");
   req.Header.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -120,4 +148,4 @@ func sendTextMessage(phoneNumber string, messageText string) {
     fmt.Printf("SMS send failed with error %s\nFull message: %s", resp.Status, resp.Body);
   }  
 }
-
+*/

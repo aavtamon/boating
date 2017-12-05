@@ -1,0 +1,31 @@
+{
+  "validity_period": 180,
+  "passing_grade": 2,
+  "tests": {
+    "test1": {
+      "text": "Is motor fan presents a danger?",
+      "options": {
+        "test1-option1": "Yes",
+        "test1-option2": "No"
+      },
+      "answer_option_id": "test1-option1"
+    },
+    "test2": {
+      "text": "Is it safe to be on the stern during boat motion?",
+      "options": {
+        "test2-option1": "Yes",
+        "test2-option2": "No"
+      },
+      "answer_option_id": "test2-option1"
+    },
+    "test3": {
+      "text": "What is the minomal age to ride a boat?",
+      "options": {
+        "test3-option1": "12 years old",
+        "test3-option2": "13 years old",
+        "test3-option3": "no limit"
+      },
+      "answer_option_id": "test3-option3"
+    }
+  }
+}
