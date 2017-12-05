@@ -112,6 +112,7 @@ type TSystemConfiguration struct {
   SMSConfiguration TSMSConfiguration `json:"sms"`;
   PaymentConfiguration TPaymentConfiguration `json:"payment"`;
   BookingExpirationConfiguration TBookingExpirationConfiguration `json:"booking_expiration"`;
+  SafetyTestHoldTime int64 `json:"safety_test_hold_time"`;
 }
 
 
@@ -446,11 +447,13 @@ func readPersistenceDatabase() {
     persistenceDb.SafetyTestResults = make(TSafetyTestResultMap);
   } else {
     cleanObsoleteReservations();
+    cleanObsoleteSafetyTestResults();
   }
 }
 
 func savePersistenceDatabase() {
   cleanObsoleteReservations();
+  cleanObsoleteSafetyTestResults();
 
   databaseByteArray, err := json.MarshalIndent(persistenceDb, "", "  ");
   if (err == nil) {
@@ -477,9 +480,19 @@ func cleanObsoleteReservations() {
     }
 
     if (expiration > 0) {
-      if (reservation.Timestamp + expiration * 1000 * 60 * 60 *24 < currentMoment) {
+      if (reservation.Timestamp + expiration * 1000 * 60 * 60 * 24 < currentMoment) {
         delete(persistenceDb.Reservations, reservationId);
       }
+    }
+  }
+}
+
+func cleanObsoleteSafetyTestResults() {
+  currentMoment := time.Now().UTC().Unix();
+
+  for dl, testResult := range persistenceDb.SafetyTestResults {
+    if (testResult.ExpirationDate + systemConfiguration.SafetyTestHoldTime * 60 * 60 * 24 < currentMoment) {
+      delete(persistenceDb.SafetyTestResults, dl);
     }
   }
 }
