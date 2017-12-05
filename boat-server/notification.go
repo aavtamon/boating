@@ -5,7 +5,8 @@ import "fmt"
 import "bitbucket.org/ckvist/twilio/twirest"
 
 
-const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json";
+
+var twilioClient *twirest.TwilioClient = nil;
 
 
 func EmailPaymentConfirmation(reservationId TReservationId) {
@@ -95,13 +96,16 @@ func sendTextMessage(phoneNumber string, messageText string) {
     fmt.Println("SMS notifications are turned off - no email sent");
     return;
   }
+
+  if (twilioClient == nil) {
+    twilioClient = twirest.NewClient(GetSystemConfiguration().SMSConfiguration.AccountSid, GetSystemConfiguration().SMSConfiguration.AuthToken);
+  }
   
-  twilioClient := twirest.NewClient(GetSystemConfiguration().SMSConfiguration.AccountSid, GetSystemConfiguration().SMSConfiguration.AuthToken);
   
   msg := twirest.SendMessage {
     Text: messageText,
     From: GetSystemConfiguration().SMSConfiguration.SourcePhone,
-    To:   phoneNumber,
+    To: phoneNumber,
   }
 
   resp, err := twilioClient.Request(msg);
@@ -119,6 +123,8 @@ func sendTextMessage(phoneNumber string, messageText string) {
 //import "net/http"
 //import "net/url"
 //import "strings"
+
+const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json";
 
 
 func sendTextMessage(phoneNumber string, messageText string) {
