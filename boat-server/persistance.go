@@ -229,8 +229,6 @@ func FindSafetyTestResult(reservation *TReservation) *TSafetyTestResult {
 
   result := persistenceDb.SafetyTestResults[reservation.DLNumber];
   
-  fmt.Printf("DL LICENSE = %v\n", result)
-  
   if (result != nil && result.LastName == reservation.LastName && result.ExpirationDate > time.Now().UTC().Unix()) {
     return result;
   }

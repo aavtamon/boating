@@ -195,7 +195,7 @@ func main() {
   startHttpsServer();
 }
 
-/*
+
 func startHttpServer() {
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
@@ -209,7 +209,7 @@ func startHttpServer() {
   
   log.Fatal(http.ListenAndServe(":8080", httpMux));
 }
-*/
+
 
 func startHttpsServer() {
   httpMux := http.NewServeMux();

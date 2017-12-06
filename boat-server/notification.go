@@ -4,7 +4,7 @@ import "net/smtp"
 import "fmt"
 import "bitbucket.org/ckvist/twilio/twirest"
 
-
+const WEBSITE_REFERENCE = "https://localhost:8443";
 
 var twilioClient *twirest.TwilioClient = nil;
 
@@ -12,9 +12,7 @@ var twilioClient *twirest.TwilioClient = nil;
 func EmailPaymentConfirmation(reservationId TReservationId) {
   fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
   
-  reservation := GetReservation(reservationId);
-  
-  sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is confirmed", reservationId), fmt.Sprintf("Your boat reservation %s is placed. You are charged for $%d dollars", reservationId, reservation.PaymentAmount));
+  EmailReservationConfirmation(reservationId, "");
 }
 
 func EmailRefundConfirmation(reservationId TReservationId) {
@@ -31,12 +29,37 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   
   reservation := GetReservation(reservationId);
   
+  safetyTestResult := FindSafetyTestResult(reservation);
+  
   email := reservation.Email;
   if (emailOverride != "") {
     email = emailOverride;
   }
   
-  sendEmail(email, fmt.Sprintf("Reservation %s is booked", reservationId), fmt.Sprintf("Details of your boat reservation %s", reservationId));
+  bookingReference := fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", WEBSITE_REFERENCE, reservationId, reservation.LastName, reservationId);
+  
+  emailText := "<html><center><h1>Booking Confirmation - " + bookingReference + "</h1></center>";
+  emailText += "<br>You booked a reservation " + bookingReference + " and payed " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.";
+  emailText += "<br><br>";
+  
+  if (safetyTestResult != nil) {
+    emailText += "Our records indicate that you have a valid safety test and do not need to take it again. You are good to go.";
+  } else {
+    emailText += "You do not seem to have a safety test passed. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
+    emailText += fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", WEBSITE_REFERENCE, reservationId, reservation.LastName);
+  }
+  
+  emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", WEBSITE_REFERENCE); 
+
+  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a> .", WEBSITE_REFERENCE);
+  
+  emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help", reservationId);
+  
+  emailText += "<br><br>Best regards,<br>BizBoats team";
+
+  emailText += "</html>";
+  
+  sendEmail(email, fmt.Sprintf("Booking confirmation for %s", reservationId), emailText);
 }
 
 
@@ -81,6 +104,9 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   body := "From: " + GetSystemConfiguration().EmailConfiguration.SourceAddress + "\n";
   body += "To: " + destinationAddress + "\n";
   body += "Subject: " + emailSubject + "\n";
+  
+  body += "Mime-Version: 1.0\n";
+  body += "Content-Type: text/html; charset=\"ISO-8859-1\"\n";
   body += emailBody;
   
   

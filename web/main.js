@@ -23,11 +23,11 @@ Main = {
     
     
     // Special handling
-    var requestedScreen = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.split('?')[0].substr(1) : null;
+    var requestedPath = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.substr(1) : "";
+    var requestedScreen = requestedPath.split('?')[0];
+    
     if (requestedScreen) {
-      if (requestedScreen != "reservation_retrieval"
-          || requestedScreen != "safety_test") {
-        
+      if (requestedScreen != "reservation_retrieval") {
         requestedScreen = null;
       }
     }
@@ -36,7 +36,7 @@ Main = {
     if (requestedScreen == null) {
       this.loadScreen("home");
     } else {
-      this.loadScreen(requestedScreen);
+      this.loadScreen(requestedPath);
     }
   },
   
