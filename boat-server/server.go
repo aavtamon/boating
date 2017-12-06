@@ -12,6 +12,11 @@ import "math/rand"
 import "time"
 
 
+const WEB_ROOT = "web";
+const CERTIFICATE_FILE = "certificate.cer";
+const PRIVATE_KEY = "private_key.key";
+
+
 type THtmlObject struct {
   BookingSettings *TBookingSettings;
   BookingConfiguration *TBookingConfiguration;
@@ -58,10 +63,19 @@ func parseQuery(r *http.Request) map[string]string {
 }
 
 
+func redirectionHandler(w http.ResponseWriter, r *http.Request) {
+  fmt.Printf("Serving index file\n");
+  body, _ := ioutil.ReadFile(RuntimeRoot + "/" + WEB_ROOT + "/index.html");
+
+  w.Header().Add("Content-Type", "text/html");
+  w.Write(body);
+}
+
+
 func pageHandler(w http.ResponseWriter, r *http.Request) {
   pageReference := r.URL.Path[1:];
   if (pageReference == "") {
-    pageReference = "main";
+    pageReference = "index.html";
   }
   
   var sessionIdValue string = "";
@@ -90,7 +104,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 
   fmt.Printf("***** Loading page %s *****\n", pageReference);
 
-  pathToFile := RuntimeRoot + "/web/" + pageReference;
+  pathToFile := RuntimeRoot + "/" + WEB_ROOT + "/" + pageReference;
   _, err := os.Stat(pathToFile);
   if (os.IsNotExist(err)) {
     pathToFile = pathToFile + ".html";
@@ -173,10 +187,16 @@ func main() {
     return;
   }
 
+
+  InitializeSystemConfig(RuntimeRoot);
   InitializePersistance(RuntimeRoot);
   InitializeSafetyTest(RuntimeRoot);
-  InitializeBookings();
 
+  startWebServer();
+}
+
+/*
+func startWebServer() {
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
   httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
@@ -196,5 +216,28 @@ func main() {
   //}();
 
   //log.Fatal(http.ListenAndServe(":8081", httpsMux));
-  //log.Fatal(http.ListenAndServeTLS(":8443", "server.crt", "server.key", httpsMux))
+  //log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux))
+}
+*/
+
+func startWebServer() {
+  httpMux := http.NewServeMux();
+  httpMux.HandleFunc("/", redirectionHandler);
+  
+  
+  httpsMux := http.NewServeMux();
+  httpsMux.HandleFunc("/reservation/payment/", PaymentHandler);
+  httpsMux.HandleFunc("/reservation/booking/", ReservationHandler);
+  httpsMux.HandleFunc("/bookings/", BookingsHandler);
+  httpsMux.HandleFunc("/account/", AccountHandler);
+  httpsMux.HandleFunc("/safety-test/", SafetyTestHandler);
+  httpsMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot)));
+  httpsMux.HandleFunc("/", pageHandler);
+  
+  
+  go func() {
+    log.Fatal(http.ListenAndServe(":8080", httpMux));
+  }();
+
+  log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux))
 }
