@@ -192,11 +192,11 @@ func main() {
   InitializePersistance(RuntimeRoot);
   InitializeSafetyTest(RuntimeRoot);
 
-  startWebServer();
+  startHttpsServer();
 }
 
 /*
-func startWebServer() {
+func startHttpServer() {
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/reservation/payment/", PaymentHandler);
   httpMux.HandleFunc("/reservation/booking/", ReservationHandler);
@@ -207,20 +207,11 @@ func startWebServer() {
   httpMux.HandleFunc("/", pageHandler);
   
   
-  //httpsMux := http.NewServeMux();
-  //httpsMux.HandleFunc("/", ReservationHandler);
-  
-  
-  //go func() {
-    log.Fatal(http.ListenAndServe(":8080", httpMux));
-  //}();
-
-  //log.Fatal(http.ListenAndServe(":8081", httpsMux));
-  //log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux))
+  log.Fatal(http.ListenAndServe(":8080", httpMux));
 }
 */
 
-func startWebServer() {
+func startHttpsServer() {
   httpMux := http.NewServeMux();
   httpMux.HandleFunc("/", redirectionHandler);
   
@@ -239,5 +230,5 @@ func startWebServer() {
     log.Fatal(http.ListenAndServe(":8080", httpMux));
   }();
 
-  log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux))
+  log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux));
 }
