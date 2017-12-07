@@ -2,6 +2,7 @@ package main
 
 import "net/smtp"
 import "fmt"
+import "time"
 import "bitbucket.org/ckvist/twilio/twirest"
 
 const WEBSITE_REFERENCE = "https://localhost:8443";
@@ -38,8 +39,20 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   
   bookingReference := fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", WEBSITE_REFERENCE, reservationId, reservation.LastName, reservationId);
   
-  emailText := "<html><center><h1>Booking Confirmation - " + bookingReference + "</h1></center>";
-  emailText += "<br>You booked a reservation " + bookingReference + " and payed " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.";
+  emailText := "<center><h1 style='padding-top: 10px;'>Booking Confirmation - " + bookingReference + "</h1></center>";
+  emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + " and payed " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
+  
+  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2  2006, 15:04") + "</b>.";
+  
+  boat := GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId];
+  emailText += "<br>Boat name: <b>" + boat.Name + "</b>";
+  emailText += "<br>";
+  
+  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
+  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
+  emailText += "<br>Parking fee: <b>" + location.ParkingFee + "</b>";
+  emailText += "<br>Special instructions: <b>" + location.Instructions + "</b>";
   emailText += "<br><br>";
   
   if (safetyTestResult != nil) {
@@ -51,13 +64,10 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   
   emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", WEBSITE_REFERENCE); 
 
-  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a> .", WEBSITE_REFERENCE);
+  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a>.", WEBSITE_REFERENCE);
   
-  emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help", reservationId);
-  
-  emailText += "<br><br>Best regards,<br>BizBoats team";
-
-  emailText += "</html>";
+  emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help.", reservationId);
+  emailText += "<br>We look forward to seeing you soon!";
   
   sendEmail(email, fmt.Sprintf("Booking confirmation for %s", reservationId), emailText);
 }
@@ -107,9 +117,16 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   
   body += "Mime-Version: 1.0\n";
   body += "Content-Type: text/html; charset=\"ISO-8859-1\"\n";
+  
+  body += "<html><body style='width: 100%; background-color: rgb(255, 234, 191);'><div style='margin: 10px;'>";
   body += emailBody;
+  body += "<div style='margin-top: 20px; font-style: italic; font-size: 15px; color: rgb(54, 84, 132);'>Best Regards,<br>PizBoats Team</div>";
+  body += "</div>";
+  body += "<div style='margin-top: 20px; padding: 10px; text-align: center; font-size: 15px; background-color: rgb(54, 84, 132); color: white;'>PizTec Corporation, 2017.&nbsp;&nbsp;&nbsp;All Rights Reserved.</div>";
+  body += "</body></html>";
   
-  
+
+
   err := smtp.SendMail(GetSystemConfiguration().EmailConfiguration.MailServer + ":" + GetSystemConfiguration().EmailConfiguration.ServerPort, auth, GetSystemConfiguration().EmailConfiguration.SourceAddress, []string{destinationAddress}, []byte(body));
   if (err != nil) {
       fmt.Printf("Failed to send an email %s", err);
