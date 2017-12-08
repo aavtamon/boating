@@ -62,6 +62,7 @@ type TExtraEquipment struct {
 
 type TRentalLocation struct {
   Name string `json:"name"`;
+  TimeZoneOffset int `json:"time_zone_offset"`;
   StartHour int `json:"start_hour"`;
   EndHour int `json:"end_hour"`;
   Duration int `json:"duration"`;

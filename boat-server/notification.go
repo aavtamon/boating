@@ -29,21 +29,22 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
   
   reservation := GetReservation(reservationId);
-  
-  safetyTestResult := FindSafetyTestResult(reservation);
+  if (reservation == nil) {
+    return;
+  }
   
   email := reservation.Email;
   if (emailOverride != "") {
     email = emailOverride;
   }
   
-  bookingReference := fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", WEBSITE_REFERENCE, reservationId, reservation.LastName, reservationId);
+  bookingReference := getBookingReference(reservation);
   
   emailText := "<center><h1 style='padding-top: 10px;'>Booking Confirmation - " + bookingReference + "</h1></center>";
   emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + " and payed " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
   
   reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2  2006, 15:04") + "</b>.";
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
   
   boat := GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId];
   emailText += "<br>Boat name: <b>" + boat.Name + "</b>";
@@ -55,11 +56,11 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   emailText += "<br>Special instructions: <b>" + location.Instructions + "</b>";
   emailText += "<br><br>";
   
-  if (safetyTestResult != nil) {
+  if (FindSafetyTestResult(reservation) != nil) {
     emailText += "Our records indicate that you have a valid safety test and do not need to take it again. You are good to go.";
   } else {
     emailText += "You do not seem to have a safety test passed. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
-    emailText += fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", WEBSITE_REFERENCE, reservationId, reservation.LastName);
+    emailText += getSafetyTestLink(reservation);
   }
   
   emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", WEBSITE_REFERENCE); 
@@ -73,8 +74,68 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
 }
 
 
+func EmailDayBeforeReminder(reservationId TReservationId) {
+  fmt.Printf("Sending day-before email for reservation %s\n", reservationId);
+  
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailText := "<center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>";
+  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
+  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
+  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
+
+  emailText += "<br>Your reservation confirmation number is " + getBookingReference(reservation) + " just in case you need to see or cancel it.";
+  emailText += "<br><br>We hope to see you soon!";
+  
+  emailText += "<br><br>";
+  
+  if (FindSafetyTestResult(reservation) == nil) {
+    emailText += "Our records indicate that you still did not take the safety test. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
+    emailText += getSafetyTestLink(reservation);
+  }
+  
+  sendEmail(reservation.Email, fmt.Sprintf("PizBoats Ride Reminder", reservationId), emailText);
+}
+
+func EmailGetReadyReminder(reservationId TReservationId) {
+  fmt.Printf("Sending get-ready email for reservation %s\n", reservationId);
+  
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailText := "<center><h1 style='padding-top: 10px;'>Your boat will begin in just a couple of hours!</h1></center>";
+  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
+  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
+  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
+
+  emailText += "<br>Your reservation confirmation number is " + getBookingReference(reservation) + " just in case you need to see or cancel it.";
+  emailText += "<br><br>We hope to see you soon!";
+  
+  emailText += "<br><br>";
+  
+  if (FindSafetyTestResult(reservation) == nil) {
+    emailText += "You have the last chance to take the safety test. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
+    emailText += getSafetyTestLink(reservation);
+  }
+  
+  sendEmail(reservation.Email, fmt.Sprintf("PizBoats Ride Reminder", reservationId), emailText);
+}
+
+
+
+
 func TextPaymentConfirmation(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
 
   if (reservation.PrimaryPhone == "") {
     return;
@@ -95,6 +156,40 @@ func TextRefundConfirmation(reservationId TReservationId) {
   fmt.Printf("Texting refund confirmation for reservation %s\n", reservationId);
   
   sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservationId, reservation.RefundAmount));
+}
+
+func TextDayBeforeReminder(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+
+  if (reservation.PrimaryPhone == "") {
+    return;
+  }
+
+  fmt.Printf("Texting day-before reminder for reservation %s\n", reservationId);
+  
+  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
+  
+  sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + reservationDateTime.Format("Mon Jan 2 2006, 15:04"));
+}
+
+func TextGetReadyReminder(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+
+  if (reservation.PrimaryPhone == "") {
+    return;
+  }
+
+  fmt.Printf("Texting get-ready reminder for reservation %s\n", reservationId);
+  
+  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
+  
+  sendTextMessage(reservation.PrimaryPhone, "Your boat ride will begin soon. Please arrive to the pick up location before " + reservationDateTime.Format("15:04 on Jan 2 2006"));
 }
 
 
@@ -160,6 +255,15 @@ func sendTextMessage(phoneNumber string, messageText string) {
 }
 
 
+
+
+func getBookingReference(reservation *TReservation) string {
+  return fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", WEBSITE_REFERENCE, reservation.Id, reservation.LastName, reservation.Id);
+}
+
+func getSafetyTestLink(reservation *TReservation) string {
+  return fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", WEBSITE_REFERENCE, reservation.Id, reservation.LastName);
+}
 
 
 /*

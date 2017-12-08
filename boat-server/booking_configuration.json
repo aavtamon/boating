@@ -11,6 +11,7 @@
   "locations": {
     "lanier": {
       "name": "Lake Lanier",
+      "time_zone_offset": -5,
       "start_hour": 10,
       "end_hour": 18,
       "duration": 2,

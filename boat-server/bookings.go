@@ -118,7 +118,8 @@ func InitializeBookings() {
 
   AddReservationListener(reservationObserver);
   
-  schedulePeriodicRefresh();  
+  schedulePeriodicBookingRefresh();
+  schedulePeriodicNotifications();
 }
 
 func GetBookingSettings() *TBookingSettings {
@@ -173,10 +174,10 @@ func initBookingSettings() {
     bookingSettings = new(TBookingSettings);
   }
 
-  refresh();
+  refreshBookingAvailability();
 }
 
-func refresh() {
+func refreshBookingAvailability() {
   currentTime := time.Now().UTC();
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
@@ -191,7 +192,7 @@ func refresh() {
     }
   }  
   
-  fmt.Println("Database refreshed");
+  fmt.Println("Bookings availability refreshed");
 }
 
 
@@ -287,15 +288,63 @@ func isBooked(slot TBookingSlot) bool {
 }
 
 
+func notifyUpcomingBookings(now time.Time) {
+  utcTime := now.UTC();
+  dayBeforeNotificationLowerBound := utcTime.AddDate(0, 0, 1);
+  dayBeforeNotificationUpperBound := dayBeforeNotificationLowerBound.Add(time.Hour);
 
-func schedulePeriodicRefresh() {
-  ticker := time.NewTicker(24 * time.Hour);
+  comingSoonNotificationLowerBound := utcTime.Add(2 * time.Hour);
+  comingSoonNotificationUpperBound := comingSoonNotificationLowerBound.Add(time.Hour);
+
+  for reservationId, reservation := range GetAllReservations() {
+    if (reservation.Status != RESERVATION_STATUS_BOOKED) {
+      continue;
+    }
+    
+    timeZoneOffset := GetBookingConfiguration().Locations[reservation.LocationId].TimeZoneOffset;
+    reservationTime := time.Unix(reservation.Slot.DateTime / 1000, 0).Add(time.Duration(timeZoneOffset) * time.Hour);
+
+    if (reservationTime.After(dayBeforeNotificationLowerBound) && reservationTime.Before(dayBeforeNotificationUpperBound)) {
+      dayBeforeNotification(reservationId);
+    } else if (reservationTime.After(comingSoonNotificationLowerBound) && reservationTime.Before(comingSoonNotificationUpperBound)) {
+      comingSoonNotification(reservationId);
+    }
+  }
+}
+
+func dayBeforeNotification(reservationId TReservationId) {
+  EmailDayBeforeReminder(reservationId);
+  TextDayBeforeReminder(reservationId);
+}
+
+func comingSoonNotification(reservationId TReservationId) {
+  EmailGetReadyReminder(reservationId);
+  TextGetReadyReminder(reservationId);
+}
+
+
+
+
+
+func schedulePeriodicBookingRefresh() {
+  tickChannel := time.Tick(24 * time.Hour);
   go func() {
-    for {
-       select {
-         case <- ticker.C:
-           refresh();
-       }
+    for range tickChannel {
+      refreshBookingAvailability();
+    }
+  }();
+}
+
+
+
+func schedulePeriodicNotifications() {
+  go func() {
+    initialDelay := 60 - time.Now().Minute();
+    time.Sleep(time.Duration(initialDelay) * time.Minute);
+    
+    tickChannel := time.Tick(time.Hour);
+    for now := range tickChannel {
+      notifyUpcomingBookings(now);
     }
   }();
 }
