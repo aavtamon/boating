@@ -97,7 +97,7 @@ func EmailDayBeforeReminder(reservationId TReservationId) {
     emailText += getSafetyTestLink(reservation);
   }
   
-  sendEmail(reservation.Email, fmt.Sprintf("PizBoats Ride Reminder", reservationId), emailText);
+  sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
 }
 
 func EmailGetReadyReminder(reservationId TReservationId) {
@@ -124,7 +124,7 @@ func EmailGetReadyReminder(reservationId TReservationId) {
     emailText += getSafetyTestLink(reservation);
   }
   
-  sendEmail(reservation.Email, fmt.Sprintf("PizBoats Ride Reminder", reservationId), emailText);
+  sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
 }
 
 

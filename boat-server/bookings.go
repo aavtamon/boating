@@ -194,7 +194,6 @@ func refreshBookingAvailability() {
   
   endDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset);
   schedulingEndDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingEndDate);
-  
   if (err == nil && schedulingEndDate.Before(endDate)) {
     endDate = schedulingEndDate;
   }
@@ -317,7 +316,7 @@ func notifyUpcomingBookings(now time.Time) {
     }
     
     timeZoneOffset := GetBookingConfiguration().Locations[reservation.LocationId].TimeZoneOffset;
-    reservationTime := time.Unix(reservation.Slot.DateTime / 1000, 0).Add(time.Duration(timeZoneOffset) * time.Hour);
+    reservationTime := time.Unix(reservation.Slot.DateTime / 1000, 0).Add(time.Duration(-timeZoneOffset) * time.Hour);
 
     if (reservationTime.After(dayBeforeNotificationLowerBound) && reservationTime.Before(dayBeforeNotificationUpperBound)) {
       dayBeforeNotification(reservationId);
