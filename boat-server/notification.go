@@ -231,7 +231,7 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
 
 func sendTextMessage(phoneNumber string, messageText string) {
   if (!GetSystemConfiguration().SMSConfiguration.Enabled) {
-    fmt.Println("SMS notifications are turned off - no email sent");
+    fmt.Println("SMS notifications are turned off - no text sent");
     return;
   }
 
@@ -276,7 +276,7 @@ const SMS_BRIDGE_URL = "https://api.twilio.com/2010-04-01/Accounts/%s/Messages.j
 
 func sendTextMessage(phoneNumber string, messageText string) {
   if (!GetSystemConfiguration().SMSConfiguration.Enabled) {
-    fmt.Println("SMS notifications are turned off - no email sent");
+    fmt.Println("SMS notifications are turned off - no text sent");
     return;
   }
 
