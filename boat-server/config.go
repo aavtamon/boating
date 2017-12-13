@@ -108,6 +108,7 @@ type TBookingExpirationConfiguration struct {
 
 
 type TSystemConfiguration struct {
+  Domain string `json:"domain"`;
   EmailConfiguration TEmailConfiguration `json:"email"`;
   SMSConfiguration TSMSConfiguration `json:"sms"`;
   PaymentConfiguration TPaymentConfiguration `json:"payment"`;

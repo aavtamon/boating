@@ -5,7 +5,6 @@ import "fmt"
 import "time"
 import "bitbucket.org/ckvist/twilio/twirest"
 
-const WEBSITE_REFERENCE = "https://localhost:8443";
 
 var twilioClient *twirest.TwilioClient = nil;
 
@@ -63,9 +62,9 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
     emailText += getSafetyTestLink(reservation);
   }
   
-  emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", WEBSITE_REFERENCE); 
+  emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", getWebsiteReference()); 
 
-  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a>.", WEBSITE_REFERENCE);
+  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a>.", getWebsiteReference());
   
   emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help.", reservationId);
   emailText += "<br>We look forward to seeing you soon!";
@@ -258,11 +257,15 @@ func sendTextMessage(phoneNumber string, messageText string) {
 
 
 func getBookingReference(reservation *TReservation) string {
-  return fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", WEBSITE_REFERENCE, reservation.Id, reservation.LastName, reservation.Id);
+  return fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", getWebsiteReference(), reservation.Id, reservation.LastName, reservation.Id);
 }
 
 func getSafetyTestLink(reservation *TReservation) string {
-  return fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", WEBSITE_REFERENCE, reservation.Id, reservation.LastName);
+  return fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", getWebsiteReference(), reservation.Id, reservation.LastName);
+}
+
+func getWebsiteReference() string {
+  return fmt.Sprintf("https://%s:8443", GetSystemConfiguration().Domain);
 }
 
 
