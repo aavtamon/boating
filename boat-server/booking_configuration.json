@@ -1,4 +1,6 @@
 {
+  "scheduling_begin_date": "2017-Dec-1",
+  "scheduling_end_date": "2018-Mar-31",
   "scheduling_begin_offset": 1,
   "scheduling_end_offset": 60,
   

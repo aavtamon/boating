@@ -183,8 +183,23 @@ func refreshBookingAvailability() {
   currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
 
   bookingSettings.CurrentDate = currentDateAsInt;
-  bookingSettings.SchedulingBeginDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset).UnixNano() / int64(time.Millisecond);
-  bookingSettings.SchedulingEndDate = currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset).UnixNano() / int64(time.Millisecond);
+  
+  
+  beginDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset);
+  schedulingBeginDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingBeginDate);
+  if (err == nil && schedulingBeginDate.After(beginDate)) {
+    beginDate = schedulingBeginDate;
+  }
+  bookingSettings.SchedulingBeginDate = beginDate.UnixNano() / int64(time.Millisecond);
+  
+  endDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset);
+  schedulingEndDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingEndDate);
+  
+  if (err == nil && schedulingEndDate.Before(endDate)) {
+    endDate = schedulingEndDate;
+  }
+  bookingSettings.SchedulingEndDate = endDate.UnixNano() / int64(time.Millisecond);
+  
 
   for locationId := range bookingConfiguration.Locations {
     for boatId := range bookingConfiguration.Locations[locationId].Boats {

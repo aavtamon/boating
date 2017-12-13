@@ -75,6 +75,8 @@ type TRentalLocation struct {
 }
 
 type TBookingConfiguration struct {
+  SchedulingBeginDate string `json:"scheduling_begin_date"`;
+  SchedulingEndDate string `json:"scheduling_end_date"`;
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
   CancellationFees []TPricedRange `json:"cancellation_fees"`;

@@ -26,12 +26,10 @@ Main = {
     var requestedPath = window.location.hash != null && window.location.hash.length > 0 ? window.location.hash.substr(1) : "";
     var requestedScreen = requestedPath.split('?')[0];
     
-    if (requestedScreen) {
-      if (requestedScreen != "reservation_retrieval") {
-        requestedScreen = null;
-      }
+    if (requestedScreen != "reservation_retrieval") {
+      requestedScreen = null;
     }
-    
+
     this.loadScreen("");
     if (requestedScreen == null) {
       this.loadScreen("home");
