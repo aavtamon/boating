@@ -4,7 +4,7 @@ ScreenUtils = {
   
   getBookingDate: function(dateMs) {
     var date = new Date(dateMs);
-    return date.getUTCMonth() + "/" + date.getUTCDate() + "/" + date.getUTCFullYear();
+    return (date.getUTCMonth() + 1) + "/" + date.getUTCDate() + "/" + date.getUTCFullYear();
   },
 
   getBookingDuration: function(duration) {
