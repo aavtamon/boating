@@ -41,7 +41,7 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   bookingReference := getBookingReference(reservation);
   
   emailText := "<center><h1 style='padding-top: 10px;'>Booking Confirmation - " + bookingReference + "</h1></center>";
-  emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + " and payed " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
+  emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + ".<br> You paid " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
   
   reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
   emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
