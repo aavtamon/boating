@@ -186,8 +186,11 @@ func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservartion not found\n"))
     } else {
-      EmailReservationConfirmation(reservationId, queryEmail);
-      w.WriteHeader(http.StatusOK);
+      if (EmailReservationConfirmation(reservationId, queryEmail)) {
+        w.WriteHeader(http.StatusOK);
+      } else {
+        w.WriteHeader(http.StatusInternalServerError);
+      }
     }
   } else {
     w.WriteHeader(http.StatusBadRequest);

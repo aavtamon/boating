@@ -9,27 +9,27 @@ import "bitbucket.org/ckvist/twilio/twirest"
 var twilioClient *twirest.TwilioClient = nil;
 
 
-func EmailPaymentConfirmation(reservationId TReservationId) {
+func EmailPaymentConfirmation(reservationId TReservationId) bool {
   fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
   
-  EmailReservationConfirmation(reservationId, "");
+  return EmailReservationConfirmation(reservationId, "");
 }
 
-func EmailRefundConfirmation(reservationId TReservationId) {
+func EmailRefundConfirmation(reservationId TReservationId) bool {
   fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
   
   reservation := GetReservation(reservationId);
   
-  sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is refunded", reservationId), fmt.Sprintf("Your boat reservation %s is cancelled. You will be refunded for the amount of $%d dollars within 5 business days", reservationId, reservation.RefundAmount));
+  return sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is refunded", reservationId), fmt.Sprintf("Your boat reservation %s is cancelled. You will be refunded for the amount of $%d dollars within 5 business days", reservationId, reservation.RefundAmount));
 }
 
 
-func EmailReservationConfirmation(reservationId TReservationId, emailOverride string) {
+func EmailReservationConfirmation(reservationId TReservationId, emailOverride string) bool {
   fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
   
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
-    return;
+    return false;
   }
   
   email := reservation.Email;
@@ -43,7 +43,7 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + ".<br> You paid " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
   
   reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
   
   boat := GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId];
   emailText += "<br>Boat name: <b>" + boat.Name + "</b>";
@@ -69,21 +69,21 @@ func EmailReservationConfirmation(reservationId TReservationId, emailOverride st
   emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help.", reservationId);
   emailText += "<br>We look forward to seeing you soon!";
   
-  sendEmail(email, fmt.Sprintf("Booking confirmation for %s", reservationId), emailText);
+  return sendEmail(email, fmt.Sprintf("Booking confirmation for %s", reservationId), emailText);
 }
 
 
-func EmailDayBeforeReminder(reservationId TReservationId) {
+func EmailDayBeforeReminder(reservationId TReservationId) bool {
   fmt.Printf("Sending day-before email for reservation %s\n", reservationId);
   
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
-    return;
+    return false;
   }
   
   emailText := "<center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>";
   reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
   location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
   emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
 
@@ -97,20 +97,20 @@ func EmailDayBeforeReminder(reservationId TReservationId) {
     emailText += getSafetyTestLink(reservation);
   }
   
-  sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
+  return sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
 }
 
-func EmailGetReadyReminder(reservationId TReservationId) {
+func EmailGetReadyReminder(reservationId TReservationId) bool {
   fmt.Printf("Sending get-ready email for reservation %s\n", reservationId);
   
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
-    return;
+    return false;
   }
   
   emailText := "<center><h1 style='padding-top: 10px;'>Your boat will begin in just a couple of hours!</h1></center>";
   reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04") + "</b>.";
+  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
   location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
   emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
 
@@ -124,7 +124,7 @@ func EmailGetReadyReminder(reservationId TReservationId) {
     emailText += getSafetyTestLink(reservation);
   }
   
-  sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
+  return sendEmail(reservation.Email, "PizBoats Ride Reminder", emailText);
 }
 
 
@@ -196,10 +196,10 @@ func TextGetReadyReminder(reservationId TReservationId) {
 
 
 
-func sendEmail(destinationAddress string, emailSubject string, emailBody string) {
+func sendEmail(destinationAddress string, emailSubject string, emailBody string) bool {
   if (!GetSystemConfiguration().EmailConfiguration.Enabled) {
     fmt.Println("Email notifications are turned off - no email sent");
-    return;
+    return false;
   }
 
   auth := smtp.PlainAuth("", GetSystemConfiguration().EmailConfiguration.SourceAddress, GetSystemConfiguration().EmailConfiguration.ServerPassword, GetSystemConfiguration().EmailConfiguration.MailServer);
@@ -208,9 +208,9 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   body := "From: " + GetSystemConfiguration().EmailConfiguration.SourceAddress + "\n";
   body += "To: " + destinationAddress + "\n";
   body += "Subject: " + emailSubject + "\n";
-  
+
   body += "Mime-Version: 1.0\n";
-  body += "Content-Type: text/html; charset=\"ISO-8859-1\"\n";
+  body += "Content-Type: text/html; charset=\"ISO-8859-1\"\n\n";
   
   body += "<html><body style='width: 100%; background-color: rgb(255, 234, 191);'><div style='margin: 10px;'>";
   body += emailBody;
@@ -218,13 +218,16 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   body += "</div>";
   body += "<div style='margin-top: 20px; padding: 10px; text-align: center; font-size: 15px; background-color: rgb(54, 84, 132); color: white;'>PizTec Corporation, 2017.&nbsp;&nbsp;&nbsp;All Rights Reserved.</div>";
   body += "</body></html>";
-  
+  body += "\n";
 
 
   err := smtp.SendMail(GetSystemConfiguration().EmailConfiguration.MailServer + ":" + GetSystemConfiguration().EmailConfiguration.ServerPort, auth, GetSystemConfiguration().EmailConfiguration.SourceAddress, []string{destinationAddress}, []byte(body));
   if (err != nil) {
-      fmt.Printf("Failed to send an email %s", err);
+    fmt.Printf("Failed to send an email %s\n", err);
+    return false;
   }
+
+  return true;
 }
 
 
