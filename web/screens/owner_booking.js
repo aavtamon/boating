@@ -58,7 +58,7 @@ OwnerBooking = {
         } else {
           Main.showMessage("Not Successful", "An error occured. Please try again");
         }
-      });
+      }.bind(this));
     }.bind(this));
     
     this._showBoats();
