@@ -173,20 +173,17 @@ func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request) {
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
 
-    queryEmail, hasEmail := queryParams["email"];
-    
-    if (!hasEmail) {
-      w.WriteHeader(http.StatusBadRequest);
-      w.Write([]byte("email address is not provided\n"))
-      return;
-    }
-    
     reservation := GetReservation(TReservationId(reservationId));
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservartion not found\n"))
     } else {
-      if (EmailReservationConfirmation(reservationId, queryEmail)) {
+      email, hasEmail := queryParams["email"];
+      if (!hasEmail) {
+        email = reservation.Email;
+      }
+    
+      if (EmailReservationConfirmation(reservationId, email)) {
         w.WriteHeader(http.StatusOK);
       } else {
         w.WriteHeader(http.StatusInternalServerError);

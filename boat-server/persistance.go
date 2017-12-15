@@ -29,6 +29,7 @@ type TOwnerAccount struct {
   FirstName string `json:"first_name,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   Email string `json:"email,omitempty"`;
+  PrimaryPhone string `json:"primary_phone,omitempty"`;
   
   Locations map[string]TBoatIds `json:"locations,omitempty"`;
 }

@@ -94,7 +94,7 @@ Backend = {
     });
   },
   
-  resendConfirmationEmail: function(email, callback) {
+  sendConfirmationEmail: function(email, callback) {
     this._communicate("reservation/booking/email?email=" + email, "put", null, false, [], {
       success: function(persistentContext) {
         if (callback) {

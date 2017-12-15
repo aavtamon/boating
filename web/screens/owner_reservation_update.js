@@ -20,7 +20,7 @@ OwnerReservationUpdate = {
     var emailData = {email: this.ownerAccountEmail};
     
     $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton").click(function() {
-      Backend.resendConfirmationEmail(emailData.email, function(status) {
+      Backend.sendConfirmationEmail(emailData.email, function(status) {
         if (status == Backend.STATUS_SUCCESS) {
           Main.showMessage("Confirmation email sent", "The email was sent to <b>" + emailData.email + "</b>");
         } else if (status == Backend.STATUS_NOT_FOUND) {
