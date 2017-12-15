@@ -1,7 +1,10 @@
+#OwnerHome-Screen {
+  min-width: 1050px;
+}
+
 #OwnerHome-Screen-Welcome {
   margin-top: 20px;
   padding: 20px;
-  overflow: auto;
   white-space: nowrap;
 }
 

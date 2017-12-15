@@ -47,12 +47,17 @@ input, select, .ui-widget {
   width: 15ch;
 }
 
+.screen {
+  min-width: 1000px;
+}
+
 .screen-description {
   position: relative;
   width: calc(100% - 20px);
   padding: 10px;
   text-align: center;
   white-space: nowrap;
+  overflow: hidden;
   
   font-size: 25px;
   font-weight: bold;
@@ -114,6 +119,7 @@ input, select, .ui-widget {
   margin-top: 30px;
   text-align: center;
   padding: 10px;
+  overflow: hidden;
 
   font-family: Verdana;
   font-size: 25px;
@@ -129,7 +135,6 @@ input, select, .ui-widget {
 .info-box {
   margin-top: 20px;
   padding: 10px 30px 10px 30px;
-  white-space: nowrap;
   overflow: hidden;
   
   border-radius: 10px;

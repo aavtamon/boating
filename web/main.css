@@ -20,6 +20,8 @@ html, body {
 
 #Main-Header-Title {
   position: relative;
+  overflow: hidden;
+
   font-family: Verdana;
   font-size: 40px;
 }
