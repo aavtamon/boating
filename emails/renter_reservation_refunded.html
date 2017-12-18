@@ -1,0 +1,15 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Booking Cancellation - {{.Reservation.Id}}</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Your reservation {{.Reservation.Id}} was cancelled.
+        <br>
+        A refund in the amount of ${{.Reservation.RefundAmount}} dollars is issued and should appear on your original payment method in about 5 business days.
+      </div>
+      We are sorry that you cannot make it this time, but we hope to see you in the future.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:reservations@bizboats.com' target='_top'>reservations@bizboats.com</a> if you have any questions or need any help.
+
+{{template "email_footer"}}

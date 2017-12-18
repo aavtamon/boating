@@ -155,7 +155,7 @@ func emailRenterReservationPaid(reservation *TReservation) bool {
 }
 
 func emailRenterReservationRefunded(reservation *TReservation) bool {
-  fmt.Printf("Sending reservation-paid email for reservation %s\n", reservation.Id);
+  fmt.Printf("Sending reservation-refunded email for reservation %s\n", reservation.Id);
   
   return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, "renter_reservation_refunded.html");
 }
