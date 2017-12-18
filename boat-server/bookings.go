@@ -327,13 +327,11 @@ func notifyUpcomingBookings(now time.Time) {
 }
 
 func dayBeforeNotification(reservationId TReservationId) {
-  EmailDayBeforeReminder(reservationId);
-  TextDayBeforeReminder(reservationId);
+  NotifyDayBeforeReminder(reservationId);
 }
 
 func comingSoonNotification(reservationId TReservationId) {
-  EmailGetReadyReminder(reservationId);
-  TextGetReadyReminder(reservationId);
+  NotifyGetReadyReminder(reservationId);
 }
 
 

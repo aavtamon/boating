@@ -1,0 +1,16 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Booking Confirmation - {{.Reservation.Id}}</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Your reservation confirmation number is {{.Reservation.Id}}.
+      </div>
+      <br>
+      Your ride is on <b>{{.ReservationDateTime}}</b>.
+      <br>
+      Boat name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Please take a chance to review <a href='{{.WebReference}}/files/docs/personal-boat-usage-agreement.html'>Personal usage agreement</a>
+
+{{template "email_footer"}}

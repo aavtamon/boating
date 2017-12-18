@@ -131,9 +131,7 @@ var listeners []TChangeListener;
 var accessLock sync.Mutex;
 
 
-func InitializePersistance(root string) {
-  persistentRoot = root;
-
+func InitializePersistance() {
   readOwnerAccountDatabase();
   readPersistenceDatabase();
   
@@ -283,7 +281,7 @@ func notifyReservationRemoved(reservation *TReservation) {
 
 
 func readPersistenceDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
@@ -310,7 +308,7 @@ func savePersistenceDatabase() {
 
   databaseByteArray, err := json.MarshalIndent(persistenceDb, "", "  ");
   if (err == nil) {
-    err = ioutil.WriteFile(persistentRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
+    err = ioutil.WriteFile(RuntimeRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
     if (err != nil) {
       fmt.Println("Persistance: failed to save reservation database to file", err);
     } else {
@@ -352,7 +350,7 @@ func cleanObsoleteSafetyTestResults() {
 
 
 func readOwnerAccountDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(persistentRoot + "/" + ACCOUNT_DATABASE_FILE_NAME);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + ACCOUNT_DATABASE_FILE_NAME);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {

@@ -188,9 +188,8 @@ func main() {
   }
 
 
-  InitializeSystemConfig(RuntimeRoot);
-  InitializePersistance(RuntimeRoot);
-  InitializeSafetyTest(RuntimeRoot);
+  InitializeSystemConfig();
+  InitializePersistance();
 
   startHttpsServer();
 }

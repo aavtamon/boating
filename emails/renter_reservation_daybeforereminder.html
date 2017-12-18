@@ -1,0 +1,30 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+      </div>
+      <br>
+      Your ride is on <b>{{.ReservationDateTime}}</b>.
+      <br>
+      Boat name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Pickup location: <b>.PickupLocation.Name</b> ({{.PickupLocation.Address}})
+      <br>
+      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      <br>
+      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      <br>
+      <br>
+      We hope to see you soon!
+
+      {{if not .SafetyTestResult}}
+        Our records indicate that you still did not take the safety test. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. 
+        Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.
+        <br>
+        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_test'>Safety Test</a> link.
+      {{end}}
+
+{{template "email_footer"}}

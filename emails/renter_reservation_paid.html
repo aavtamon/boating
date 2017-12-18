@@ -1,0 +1,46 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Booking Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        <br>
+        You paid ${{.Reservation.PaymentAmount}} dollars.
+      </div>
+      <br>
+      Your ride is on <b>{{.ReservationDateTime}}</b>.
+      <br>
+      Boat name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Pickup location: <b>.PickupLocation.Name</b> ({{.PickupLocation.Address}})
+      <br>
+      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      <br>
+      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      <br>
+      <br>
+
+      {{if .SafetyTestResult}}
+        Our records indicate that you have a valid safety test and do not need to take it again. You are good to go.
+      {{else}}
+        You do not seem to have a safety test passed. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.
+
+        <br>
+        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_test'>Safety Test</a> link.
+      {{end}}
+
+      <br>
+      <br>
+      In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you.
+      Please use this <a href='{{.WebReference}}/files/docs/waivers.docx' download>link</a> to get the forms.
+      <br>
+      <br>
+      Please also take a chance to review <a href='{{.WebReference}}/files/docs/rental-agreement.html'>Rental's agreement</a>.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation {{.Reservation.Id}}' target='_top'>reservations@bizboats.com</a> if you need any help.
+      <br>
+      We look forward to seeing you soon!
+
+{{template "email_footer"}}

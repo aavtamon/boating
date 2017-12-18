@@ -102,6 +102,8 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
 
       reservation.Status = RESERVATION_STATUS_BOOKED;
       reservationId = SaveReservation(reservation);
+      
+      NotifyReservationBooked(reservationId);
     } else {
       //TODO: validate changed fields - reject those that cannot be changed
     }
@@ -153,6 +155,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
   reservation.Status = RESERVATION_STATUS_CANCELLED;
   SaveReservation(reservation);
   
+  NotifyReservationCancelled(reservationId);
 
   *Sessions[TSessionId(sessionCookie.Value)].ReservationId = NO_RESERVATION_ID;
 

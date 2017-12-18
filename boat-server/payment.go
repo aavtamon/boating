@@ -43,8 +43,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.WriteHeader(http.StatusOK);
       w.Write(storedReservation);
 
-      EmailPaymentConfirmation(request.ReservationId);
-      TextPaymentConfirmation(request.ReservationId);
+      NotifyReservationPaid(request.ReservationId);
     } else {
       w.WriteHeader(http.StatusBadRequest);
     }
@@ -63,8 +62,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
             w.WriteHeader(http.StatusOK);
             w.Write(storedReservation);
 
-            EmailRefundConfirmation(reservation.Id);
-            TextRefundConfirmation(reservation.Id);
+            NotifyReservationRefunded(reservation.Id);
           } else {
             w.WriteHeader(http.StatusBadRequest);
           }

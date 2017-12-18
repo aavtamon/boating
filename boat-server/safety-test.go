@@ -25,12 +25,6 @@ type TSafetyTestSuite struct {
 
 var NO_SAFETY_SUITE_ID = TSafetySuiteId("");
 
-var testFilesDir string;
-
-
-func InitializeSafetyTest(testRoot string) {
-  testFilesDir = testRoot;
-}
 
 func SafetyTestHandler(w http.ResponseWriter, r *http.Request) {
   fmt.Println("Safety Test Handler: request method=" + r.Method);
@@ -163,7 +157,7 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
 func readTestSuite(suiteId string) *TSafetyTestSuite {
   testSuite := TSafetyTestSuite{};
   
-  testFileByteArray, err := ioutil.ReadFile(testFilesDir + "/safety/" + suiteId + ".json");
+  testFileByteArray, err := ioutil.ReadFile(RuntimeRoot + "/safety/" + suiteId + ".json");
   if (err == nil) {
     err := json.Unmarshal(testFileByteArray, &testSuite);
     if (err != nil) {

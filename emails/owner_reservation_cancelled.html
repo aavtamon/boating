@@ -1,0 +1,9 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Booking Cancellation - {{.Reservation.Id}}</h1></center>
+      <br>
+      Your reservation {{.Reservation.Id}} is cancelled.
+      <br>
+      We are sorry that you will not be able to make it.
+
+{{template "email_footer"}}

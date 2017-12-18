@@ -3,211 +3,304 @@ package main
 import "net/smtp"
 import "fmt"
 import "time"
+import "bytes"
+import "html/template"
 import "bitbucket.org/ckvist/twilio/twirest"
+
+
+const EMAIL_TEMPLATES_LOCATION = "emails";
+
+
+type TReservationEmailObject struct {
+  WebReference string;
+  
+  Reservation *TReservation;
+  ReservationDateTime string;
+  PickupLocation TPickupLocation;
+  Boat TBoat;
+  
+  SafetyTestResult *TSafetyTestResult;
+}
 
 
 var twilioClient *twirest.TwilioClient = nil;
 
 
-func EmailPaymentConfirmation(reservationId TReservationId) bool {
-  fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
-  
-  return EmailReservationConfirmation(reservationId, "");
-}
-
-func EmailRefundConfirmation(reservationId TReservationId) bool {
-  fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
-  
+func NotifyReservationBooked(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
   
-  return sendEmail(reservation.Email, fmt.Sprintf("Reservation %s is refunded", reservationId), fmt.Sprintf("Your boat reservation %s is cancelled. You will be refunded for the amount of $%d dollars within 5 business days", reservationId, reservation.RefundAmount));
+  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+  if (isOwnerReservation) {
+    emailOwnerReservationBooked(reservation);
+    textOwnerReservationBooked(reservation);
+  } else {
+    // We do not notify renters about booking. We only notify about payment
+  }
 }
 
-
-func EmailReservationConfirmation(reservationId TReservationId, emailOverride string) bool {
-  fmt.Printf("Sending confirmation email for reservation %s\n", reservationId);
+func NotifyReservationCancelled(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
   
+  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+  if (isOwnerReservation) {
+    emailOwnerReservationCancelled(reservation);
+    textOwnerReservationCancelled(reservation);
+  } else {
+    // We do not notify renters about cancellation. We only notify about refund
+  }
+}
+
+func NotifyReservationPaid(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailRenterReservationPaid(reservation);
+  textRenterReservationPaid(reservation);
+}
+
+func NotifyReservationRefunded(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailRenterReservationRefunded(reservation);
+  textRenterReservationRefunded(reservation);
+}
+
+func NotifyDayBeforeReminder(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+  if (isOwnerReservation) {
+    emailOwnerDayBeforeReminder(reservation);
+    textOwnerDayBeforeReminder(reservation);
+  } else {
+    emailRenterDayBeforeReminder(reservation);
+    textRenterDayBeforeReminder(reservation);
+  }
+}
+
+func NotifyGetReadyReminder(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+  if (isOwnerReservation) {
+    emailOwnerGetReadyReminder(reservation);
+    textOwnerGetReadyReminder(reservation);
+  } else {
+    emailRenterGetReadyReminder(reservation);
+    textRenterGetReadyReminder(reservation);
+  }
+}
+
+func EmailReservationConfirmation(reservationId TReservationId, email string) bool {
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
     return false;
   }
   
   isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
-  account := GetOwnerAccount(reservation.OwnerAccountId);
-  if (isOwnerReservation && account == nil) {
-    return false;
-  }
-
-
-  email := "";
-  emailText := "";
   if (isOwnerReservation) {
-    email = account.Email;
-    emailText = getOwnerReservationConfirmationEmailText(reservation);
+    return emailOwnerReservationBooked(reservation);
   } else {
-    email = reservation.Email;
-    emailText = getRenterReservationConfirmationEmailText(reservation);
+    return emailRenterReservationPaid(reservation);
   }
-  
-  if (emailOverride != "") {
-    email = emailOverride;
-  }
-  
-  return sendEmail(email, fmt.Sprintf("Booking confirmation for %s", reservationId), emailText);
 }
 
 
 
 
-func EmailDayBeforeReminder(reservationId TReservationId) bool {
-  fmt.Printf("Sending day-before email for reservation %s\n", reservationId);
+
+func emailOwnerReservationBooked(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-booked email for reservation %s\n", reservation.Id);
   
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    return false;
-  }
-  
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
   account := GetOwnerAccount(reservation.OwnerAccountId);
-  if (isOwnerReservation && account == nil) {
+  if (account == nil) {
     return false;
   }
   
-  email := "";
-  emailText := "";
-  if (isOwnerReservation) {
-    email = account.Email;
-    emailText = getOwnerDayBeforeReminderEmailText(reservation);
-  } else {
-    email = reservation.Email;
-    emailText = getRenterDayBeforeReminderEmailText(reservation);
-  }
-  
-  return sendEmail(email, "PizBoats Ride Reminder", emailText);
+  return sendReservationEmail(account.Email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, "owner_reservation_booked.html");
 }
 
-func EmailGetReadyReminder(reservationId TReservationId) bool {
-  fmt.Printf("Sending get-ready email for reservation %s\n", reservationId);
+func emailOwnerReservationCancelled(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-cancelled email for reservation %s\n", reservation.Id);
   
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    return false;
-  }
-  
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
   account := GetOwnerAccount(reservation.OwnerAccountId);
-  if (isOwnerReservation && account == nil) {
+  if (account == nil) {
     return false;
   }
   
+  return sendReservationEmail(account.Email, fmt.Sprintf("Booking %s cancelled", reservation.Id), reservation, "owner_reservation_cancelled.html");
+}
+
+func emailRenterReservationPaid(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-paid email for reservation %s\n", reservation.Id);
   
-  email := "";
-  emailText := "";
-  if (isOwnerReservation) {
-    email = account.Email;
-    emailText = getOwnerGetReadyReminderEmailText(reservation);
-  } else {
-    email = reservation.Email;
-    emailText = getRenterGetReadyReminderEmailText(reservation);
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Payment confirmation for %s", reservation.Id), reservation, "renter_reservation_paid.html");
+}
+
+func emailRenterReservationRefunded(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-paid email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, "renter_reservation_refunded.html");
+}
+
+func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
+  fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
+  
+  account := GetOwnerAccount(reservation.OwnerAccountId);
+  if (account == nil) {
+    return false;
   }
+  
+  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, "owner_reservation_daybeforereminder.html");
+}
+
+func emailRenterDayBeforeReminder(reservation *TReservation) bool {
+  fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_daybeforereminder.html");
+}
+
+func emailOwnerGetReadyReminder(reservation *TReservation) bool {
+  fmt.Printf("Sending get-ready email for reservation %s\n", reservation.Id);
+  
+  account := GetOwnerAccount(reservation.OwnerAccountId);
+  if (account == nil) {
+    return false;
+  }
+  
+  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, "owner_reservation_getreadyreminder.html");
+}
+
+func emailRenterGetReadyReminder(reservation *TReservation) bool {
+  fmt.Printf("Sending get-ready email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_getreadyreminder.html");
+}
+
+
+
+
+
+func textOwnerReservationBooked(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting booking confirmation for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat ride is booked. Confirmation number is %s", reservation.Id));
+}
+
+func textOwnerReservationCancelled(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting booking cancellation for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat ride %s is cancelled.", reservation.Id));
+}
+
+func textRenterReservationPaid(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting booking paid confirmation for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation is confirmed, your card is charged for the amount of $%d dollars. Confirmation number is %s", reservation.PaymentAmount, reservation.Id));
+}
+
+func textRenterReservationRefunded(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting booking refunded for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservation.Id, reservation.RefundAmount));
+}
+
+func textOwnerDayBeforeReminder(reservation *TReservation) bool {
+  account := GetOwnerAccount(reservation.OwnerAccountId);
+  if (account == nil) {
+    return false;
+  }
+
+  fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+}
+
+func textRenterDayBeforeReminder(reservation *TReservation) bool {
+  fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+}
+
+func textOwnerGetReadyReminder(reservation *TReservation) bool {
+  account := GetOwnerAccount(reservation.OwnerAccountId);
+  if (account == nil) {
+    return false;
+  }
+
+  fmt.Printf("Texting get-ready reminder for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM") + ". Get ready for it.");
+}
+
+func textRenterGetReadyReminder(reservation *TReservation) bool {
+  fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+}
+
+
+
+
+
+
+func sendReservationEmail(destinationAddress string, emailSubject string, reservation *TReservation, emailTemplateName string) bool {
+  emailTemplate, err := template.ParseFiles(RuntimeRoot + "/" + EMAIL_TEMPLATES_LOCATION + "/" + emailTemplateName, RuntimeRoot + "/" + EMAIL_TEMPLATES_LOCATION + "/email_envelope.html");
+  
+  if (err != nil) {
+    fmt.Printf("Error parsing template: %s\n", err);
+    return false;
+  }
+
+  emailObject := TReservationEmailObject {
+    WebReference: fmt.Sprintf("https://%s:8443", GetSystemConfiguration().Domain),
     
-  return sendEmail(email, "PizBoats Ride Reminder", emailText);
-}
-
-
-
-
-func TextPaymentConfirmation(reservationId TReservationId) bool {
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    return false;
+    Reservation: reservation,
+    ReservationDateTime: time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"),
+    PickupLocation: GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId],
+    Boat: GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId],
+//    OwnerAccount: GetOwnerAccount(reservation.OwnerAccountId),
+    SafetyTestResult: FindSafetyTestResult(reservation),
   }
-
-  if (reservation.PrimaryPhone == "") {
-    return false;
-  }
-
-  fmt.Printf("Texting payment confirmation for reservation %s\n", reservationId);
   
-  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation is confirmed, your card is charged for the amount of $%d  dollars. Confirmation number is %s", reservation.PaymentAmount, reservationId));
-}
-
-func TextRefundConfirmation(reservationId TReservationId) bool {
-  reservation := GetReservation(reservationId);
-
-  if (reservation.PrimaryPhone == "") {
-    return false;
-  }
-
-  fmt.Printf("Texting refund confirmation for reservation %s\n", reservationId);
+  buf := new(bytes.Buffer);
+  emailTemplate.Execute(buf, emailObject);
   
-  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservationId, reservation.RefundAmount));
+  return sendEmail(destinationAddress, emailSubject, buf.String());
 }
-
-func TextDayBeforeReminder(reservationId TReservationId) bool {
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    return false;
-  }
-
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
-  account := GetOwnerAccount(reservation.OwnerAccountId);
-  if (isOwnerReservation && account == nil) {
-    return false;
-  }
-
-  phone := "";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  text := "Your boat ride is coming soon - " + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM");
-  if (isOwnerReservation) {
-    phone = account.PrimaryPhone;
-  } else {
-    phone = reservation.PrimaryPhone;
-  }
-
-  if (phone == "") {
-    return false;
-  }
-
-  fmt.Printf("Texting day-before reminder for reservation %s\n", reservationId);
-  
-  return sendTextMessage(phone, text);
-}
-
-func TextGetReadyReminder(reservationId TReservationId) bool {
-  reservation := GetReservation(reservationId);
-  if (reservation == nil) {
-    return false;
-  }
-
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
-  account := GetOwnerAccount(reservation.OwnerAccountId);
-  if (isOwnerReservation && account == nil) {
-    return false;
-  }
-
-  phone := "";
-  text := "";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  if (isOwnerReservation) {
-    phone = account.PrimaryPhone;
-    text = "Your boat ride will begin soon. Please arrive to the pick up location before " + reservationDateTime.Format("15:04 PM on Jan 2 2006");
-  } else {
-    phone = reservation.PrimaryPhone;
-    text = "Your boat ride is coming soon - " + reservationDateTime.Format("15:04 PM on Jan 2 2006");
-  }
-
-  if (phone == "") {
-    return false;
-  }
-
-  fmt.Printf("Texting get-ready reminder for reservation %s\n", reservationId);
-  
-  return sendTextMessage(phone, text);
-}
-
-
-
 
 
 
@@ -227,15 +320,10 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   body += "Mime-Version: 1.0\n";
   body += "Content-Type: text/html; charset=\"ISO-8859-1\"\n\n";
   
-  body += "<html><body style='width: 100%; background-color: rgb(255, 234, 191);'><div style='margin: 10px;'>";
   body += emailBody;
-  body += "<div style='margin-top: 20px; font-style: italic; font-size: 15px; color: rgb(54, 84, 132);'>Best Regards,<br>PizBoats Team</div>";
-  body += "</div>";
-  body += "<div style='margin-top: 20px; padding: 10px; text-align: center; font-size: 15px; background-color: rgb(54, 84, 132); color: white;'>PizTec Corporation, 2017.&nbsp;&nbsp;&nbsp;All Rights Reserved.</div>";
-  body += "</body></html>";
+  
   body += "\n";
-
-
+  
   err := smtp.SendMail(GetSystemConfiguration().EmailConfiguration.MailServer + ":" + GetSystemConfiguration().EmailConfiguration.ServerPort, auth, GetSystemConfiguration().EmailConfiguration.SourceAddress, []string{destinationAddress}, []byte(body));
   if (err != nil) {
     fmt.Printf("Failed to send an email %s\n", err);
@@ -275,142 +363,6 @@ func sendTextMessage(phoneNumber string, messageText string) bool {
 
 
 
-
-
-func getRenterReservationConfirmationEmailText(reservation *TReservation) string {
-  bookingReference := getRenterBookingReference(reservation);
-  
-  emailText := "<center><h1 style='padding-top: 10px;'>Booking Confirmation - " + bookingReference + "</h1></center>";
-  emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + ".<br> You paid " + fmt.Sprintf("$%d", reservation.PaymentAmount) + " dollars.</div>";
-  
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-  
-  boat := GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId];
-  emailText += "<br>Boat name: <b>" + boat.Name + "</b>";
-  emailText += "<br>";
-  
-  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
-  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
-  emailText += "<br>Parking fee: <b>" + location.ParkingFee + "</b>";
-  emailText += "<br>Special instructions: <b>" + location.Instructions + "</b>";
-  emailText += "<br><br>";
-  
-  if (FindSafetyTestResult(reservation) != nil) {
-    emailText += "Our records indicate that you have a valid safety test and do not need to take it again. You are good to go.";
-  } else {
-    emailText += "You do not seem to have a safety test passed. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
-    emailText += getSafetyTestLink(reservation);
-  }
-  
-  emailText += "<br><br>In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you. " + fmt.Sprintf("Please use this <a href='%s/files/docs/waivers.docx' download>link</a> to get the forms.", getWebsiteReference()); 
-
-  emailText += fmt.Sprintf("<br><br>Please also take a chance to review <a href='%s/files/docs/rental-agreement.html'>Rental's agreement</a>.", getWebsiteReference());
-  
-  emailText += fmt.Sprintf("<br><br>Please contact us at <a href='mailto:reservations@bizboats.com?Subject=Inquery regarding reservation %s' target='_top'>reservations@bizboats.com</a> if you need any help.", reservation.Id);
-  emailText += "<br>We look forward to seeing you soon!";
-
-  return emailText;
-}
-
-func getOwnerReservationConfirmationEmailText(reservation *TReservation) string {
-  bookingReference := getOwnerBookingReference(reservation);
-  
-  emailText := "<center><h1 style='padding-top: 10px;'>Booking Confirmation - " + bookingReference + "</h1></center>";
-  emailText += "<br><div style='font-size: 15px;'>Your reservation confirmation number is " + bookingReference + ".</div>";
-  
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-  
-  boat := GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId];
-  emailText += "<br>Boat name: <b>" + boat.Name + "</b>";
-  emailText += "<br>";
-  
-  emailText += fmt.Sprintf("<br><br>Please take a chance to review <a href='%s/files/docs/personal-boat-usage-agreement.html'>Personal usage agreement</a>.", getWebsiteReference());
-
-  return emailText;
-}
-
-
-func getRenterDayBeforeReminderEmailText(reservation *TReservation) string {
-  emailText := "<center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
-  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
-
-  emailText += "<br>Your reservation confirmation number is " + getRenterBookingReference(reservation) + " just in case you need to see or cancel it.";
-  emailText += "<br><br>We hope to see you soon!";
-  
-  emailText += "<br><br>";
-  
-  if (FindSafetyTestResult(reservation) == nil) {
-    emailText += "Our records indicate that you still did not take the safety test. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
-    emailText += getSafetyTestLink(reservation);
-  }
-  
-  return emailText;
-}
-
-func getOwnerDayBeforeReminderEmailText(reservation *TReservation) string {
-  emailText := "<center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-
-  emailText += "<br>Your reservation confirmation number is " + getRenterBookingReference(reservation);
-  
-  return emailText;
-}
-
-func getRenterGetReadyReminderEmailText(reservation *TReservation) string {
-  emailText := "<center><h1 style='padding-top: 10px;'>Your boat will begin in just a couple of hours!</h1></center>";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-  location := GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId];
-  emailText += "<br>Pickup location: <b>" + location.Name + "</b> (" + location.Address + ")";
-
-  emailText += "<br>Your reservation confirmation number is " + getRenterBookingReference(reservation) + " just in case you need to see or cancel it.";
-  emailText += "<br><br>We hope to see you soon!";
-  
-  emailText += "<br><br>";
-  
-  if (FindSafetyTestResult(reservation) == nil) {
-    emailText += "You have the last chance to take the safety test. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.";
-    emailText += getSafetyTestLink(reservation);
-  }
-  
-  return emailText;
-}
-
-func getOwnerGetReadyReminderEmailText(reservation *TReservation) string {
-  emailText := "<center><h1 style='padding-top: 10px;'>Your boat will begin in just a couple of hours!</h1></center>";
-  reservationDateTime := time.Unix(reservation.Slot.DateTime / 1000, 0).UTC();  
-  emailText += "<br>Your ride is on <b>" + reservationDateTime.Format("Mon Jan 2 2006, 15:04 PM") + "</b>.";
-
-  emailText += "<br>Your reservation confirmation number is " + getRenterBookingReference(reservation);
-  
-  return emailText;
-}
-
-
-
-func getRenterBookingReference(reservation *TReservation) string {
-  return fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=reservation_update'>%s</a>", getWebsiteReference(), reservation.Id, reservation.LastName, reservation.Id);
-}
-
-func getOwnerBookingReference(reservation *TReservation) string {
-  //return fmt.Sprintf("<a href='%s/main.html#reservation_retrieval?id=%s&account=%s&action=owner_reservation_update'>%s</a>", getWebsiteReference(), reservation.Id, reservation.OwnerAccountId, reservation.Id);
-  
-  return fmt.Sprintf("<b>%s</b>", reservation.Id);
-}
-
-func getSafetyTestLink(reservation *TReservation) string {
-  return fmt.Sprintf("<br>Use this <a href='%s/main.html#reservation_retrieval?id=%s&name=%s&action=safety_test'>Safety Test</a> link.", getWebsiteReference(), reservation.Id, reservation.LastName);
-}
-
-func getWebsiteReference() string {
-  return fmt.Sprintf("https://%s:8443", GetSystemConfiguration().Domain);
-}
 
 
 /*

@@ -121,11 +121,8 @@ type TSystemConfiguration struct {
 var bookingConfiguration *TBookingConfiguration;
 var systemConfiguration *TSystemConfiguration;
 
-var persistentRoot string;
 
-func InitializeSystemConfig(root string) {
-  persistentRoot = root;
-
+func InitializeSystemConfig() {
   readSystemConfiguration();
   readBookingConfiguration();
 }
@@ -145,7 +142,7 @@ func GetBookingConfiguration() *TBookingConfiguration {
 
 
 func readSystemConfiguration() {
-  configurationByteArray, err := ioutil.ReadFile(persistentRoot + "/" + SYSTEM_CONFIG_FILE_NAME);
+  configurationByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + SYSTEM_CONFIG_FILE_NAME);
   if (err == nil) {
     systemConfiguration = &TSystemConfiguration{};
     err := json.Unmarshal(configurationByteArray, systemConfiguration);
@@ -160,7 +157,7 @@ func readSystemConfiguration() {
 }
 
 func readBookingConfiguration() {
-  configurationByteArray, err := ioutil.ReadFile(persistentRoot + "/" + BOOKING_CONFIG_FILE_NAME);
+  configurationByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + BOOKING_CONFIG_FILE_NAME);
   if (err == nil) {
     bookingConfiguration = &TBookingConfiguration{};
     err := json.Unmarshal(configurationByteArray, bookingConfiguration);
