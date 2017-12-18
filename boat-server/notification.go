@@ -114,12 +114,17 @@ func EmailReservationConfirmation(reservationId TReservationId, email string) bo
     return false;
   }
   
+  fmt.Printf("Sending reservation confirmation email for reservation %s to %s\n", reservation.Id, email);
+  
+  templateName := "";
   isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
   if (isOwnerReservation) {
-    return emailOwnerReservationBooked(reservation);
+    templateName = "owner_reservation_booked.html";
   } else {
-    return emailRenterReservationPaid(reservation);
+    templateName = "renter_reservation_paid.html";
   }
+  
+  return sendReservationEmail(email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, templateName);
 }
 
 
