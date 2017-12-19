@@ -1,0 +1,7 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Your Boat Booking {{.Reservation.Id}} Was Cancelled</h1></center>
+      <br>
+      The ride on boat <b>{{.Boat.Name}}</b> on <b>{{.ReservationDateTime}}</b> for <b>{{.Reservation.Slot.Duration}} hours</b> was canclled.
+
+{{template "email_footer"}}

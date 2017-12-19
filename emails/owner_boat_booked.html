@@ -1,0 +1,11 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Your Boat Was Booked</h1></center>
+      <br>
+      Your boat <b>{{.Boat.Name}}</b> was booked for a ride
+      <br>
+      The ride begins on <b>{{.ReservationDateTime}}</b>
+      <br>
+      Ride duration is <b>{{.Reservation.Slot.Duration}} hours</b>
+
+{{template "email_footer"}}

@@ -19,9 +19,11 @@ type TBoatIds struct {
 }
 
 type TOwnerAccountId string;
+type TOwnerAccountType string;
 
 type TOwnerAccount struct {
   Id TOwnerAccountId `json:"id,omitempty"`;
+  Type TOwnerAccountType `json:"type,omitempty"`;
 
   Username string `json:"username,omitempty"`;
   Token string `json:"token,omitempty"`;
@@ -55,6 +57,8 @@ type TPersistancenceDatabase struct {
 
 
 type TReservationId string;
+type TReservationStatus string;
+type TPaymentStatus string;
 
 type TReservation struct {
   Id TReservationId `json:"id"`;
@@ -81,13 +85,13 @@ type TReservation struct {
   Email string `json:"email,omitempty"`;
   PrimaryPhone string `json:"primary_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
-  PaymentStatus string `json:"payment_status,omitempty"`;
+  PaymentStatus TPaymentStatus `json:"payment_status,omitempty"`;
   PaymentAmount uint64 `json:"payment_amount,omitempty"`;
   RefundAmount uint64 `json:"refund_amount,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
   RefundId string `json:"refund_id,omitempty"`;
   
-  Status string `json:"status,omitempty"`;
+  Status TReservationStatus `json:"status,omitempty"`;
 }
 
 type TReservationMap map[TReservationId]*TReservation;
@@ -105,16 +109,18 @@ type TChangeListener interface {
 
 
 
-const RESERVATION_STATUS_BOOKED = "booked";
-const RESERVATION_STATUS_CANCELLED = "cancelled";
-const RESERVATION_STATUS_COMPLETED = "completed";
+const RESERVATION_STATUS_BOOKED TReservationStatus = "booked";
+const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
+const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
 
 
-const PAYMENT_STATUS_PAYED = "payed";
-const PAYMENT_STATUS_FAILED = "failed";
-const PAYMENT_STATUS_REFUNDED = "refunded";
+const PAYMENT_STATUS_PAYED TPaymentStatus = "payed";
+const PAYMENT_STATUS_FAILED TPaymentStatus = "failed";
+const PAYMENT_STATUS_REFUNDED TPaymentStatus = "refunded";
 
 
+const OWNER_ACCOUNT_TYPE_BOATOWNER TOwnerAccountType = "boat_owner";
+const OWNER_ACCOUNT_TYPE_ADMIN TOwnerAccountType = "admin";
 
 
 
@@ -383,20 +389,29 @@ func generateReservationId() TReservationId {
 
 
 
-func findMatchingAccount(locationId string, boatId string) *TOwnerAccountId {
+func findMatchingAccounts(locationId string, boatId string) []*TOwnerAccountId {
+  result := []*TOwnerAccountId{};
+
   for accountId, account := range ownerAccountMap {
     boatIds, hasLocation := account.Locations[locationId];
     if (hasLocation) {
-      for _, id := range boatIds.Boats {
-        if (id == boatId) {
-          return &accountId;
+      if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+        result = append(result, &accountId);
+      } else {
+        for _, id := range boatIds.Boats {
+          if (id == boatId) {
+            result = append(result, &accountId);
+          }
         }
       }
+    } else if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      result = append(result, &accountId);
     }
   }
   
-  return nil;
+  return result;
 }
+
 
 func getReservationSummary(reservation *TReservation) *TReservationSummary {
   return &TReservationSummary{

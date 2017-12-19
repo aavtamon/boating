@@ -1,0 +1,30 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Reservation Placed - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        <br>
+        Amount paid ${{.Reservation.PaymentAmount}} dollars.
+      </div>
+      <br>
+      The ride is on <b>{{.ReservationDateTime}}</b>.
+      <br>
+      Boat name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Pickup location: <b>.PickupLocation.Name</b> ({{.PickupLocation.Address}})
+      <br>
+      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      <br>
+      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      <br>
+      <br>
+
+      {{if .SafetyTestResult}}
+        Safety test passed
+      {{else}}
+        Safety test not taken
+      {{end}}
+
+{{template "email_footer"}}

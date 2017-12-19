@@ -19,7 +19,7 @@ type TRental struct {
   Slot TBookingSlot `json:"slot,omitempty"`;
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
-  Status string `json:"status,omitempty"`;
+  Status TReservationStatus `json:"status,omitempty"`;
 }
 
 type TRentalStat struct {

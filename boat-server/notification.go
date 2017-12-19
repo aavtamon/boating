@@ -36,6 +36,8 @@ func NotifyReservationBooked(reservationId TReservationId) {
   if (isOwnerReservation) {
     emailOwnerReservationBooked(reservation);
     textOwnerReservationBooked(reservation);
+    
+    emailAdminReservationBooked(reservation);
   } else {
     // We do not notify renters about booking. We only notify about payment
   }
@@ -51,6 +53,8 @@ func NotifyReservationCancelled(reservationId TReservationId) {
   if (isOwnerReservation) {
     emailOwnerReservationCancelled(reservation);
     textOwnerReservationCancelled(reservation);
+    
+    emailAdminReservationCancelled(reservation);
   } else {
     // We do not notify renters about cancellation. We only notify about refund
   }
@@ -64,6 +68,8 @@ func NotifyReservationPaid(reservationId TReservationId) {
   
   emailRenterReservationPaid(reservation);
   textRenterReservationPaid(reservation);
+  
+  emailAdminReservationBooked(reservation);
 }
 
 func NotifyReservationRefunded(reservationId TReservationId) {
@@ -74,6 +80,8 @@ func NotifyReservationRefunded(reservationId TReservationId) {
   
   emailRenterReservationRefunded(reservation);
   textRenterReservationRefunded(reservation);
+  
+  emailAdminReservationCancelled(reservation);
 }
 
 func NotifyDayBeforeReminder(reservationId TReservationId) {
@@ -199,7 +207,35 @@ func emailRenterGetReadyReminder(reservation *TReservation) bool {
   return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_getreadyreminder.html");
 }
 
+func emailAdminReservationBooked(reservation *TReservation) bool {
+  fmt.Printf("Sending admin reservation-booked email for reservation %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reervation.BoatId);
+  for account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked.html");
+    } else {
+      sendReservationEmail(account.Email, "Your boat was booked", reservation, "owner_boat_booked.html");
+    }
+  }
+  
+  return true;
+}
 
+func emailAdminReservationCancelled(reservation *TReservation) bool {
+  fmt.Printf("Sending admin reservation-cancelled email for reservation %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reervation.BoatId);
+  for account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Reservation cancelled", reservation, "admin_boat_cancelled.html");
+    } else {
+      sendReservationEmail(account.Email, "Your boat was booked", reservation, "owner_boat_cancelled.html");
+    }
+  }
+  
+  return true;
+}
 
 
 
