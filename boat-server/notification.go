@@ -230,7 +230,7 @@ func emailAdminReservationCancelled(reservation *TReservation) bool {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
       sendReservationEmail(account.Email, "Reservation cancelled", reservation, "admin_boat_cancelled.html");
     } else {
-      sendReservationEmail(account.Email, "Your boat was booked", reservation, "owner_boat_cancelled.html");
+      sendReservationEmail(account.Email, "Your boat booking was cancelled", reservation, "owner_boat_cancelled.html");
     }
   }
   
