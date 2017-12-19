@@ -210,8 +210,8 @@ func emailRenterGetReadyReminder(reservation *TReservation) bool {
 func emailAdminReservationBooked(reservation *TReservation) bool {
   fmt.Printf("Sending admin reservation-booked email for reservation %s\n", reservation.Id);
   
-  adminAccounts := findMatchingAccounts(reservation.LocationId, reervation.BoatId);
-  for account := range adminAccounts {
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
       sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked.html");
     } else {
@@ -225,8 +225,8 @@ func emailAdminReservationBooked(reservation *TReservation) bool {
 func emailAdminReservationCancelled(reservation *TReservation) bool {
   fmt.Printf("Sending admin reservation-cancelled email for reservation %s\n", reservation.Id);
   
-  adminAccounts := findMatchingAccounts(reservation.LocationId, reervation.BoatId);
-  for account := range adminAccounts {
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
       sendReservationEmail(account.Email, "Reservation cancelled", reservation, "admin_boat_cancelled.html");
     } else {

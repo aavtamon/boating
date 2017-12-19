@@ -389,23 +389,23 @@ func generateReservationId() TReservationId {
 
 
 
-func findMatchingAccounts(locationId string, boatId string) []*TOwnerAccountId {
-  result := []*TOwnerAccountId{};
+func findMatchingAccounts(locationId string, boatId string) []*TOwnerAccount {
+  result := []*TOwnerAccount{};
 
-  for accountId, account := range ownerAccountMap {
+  for _, account := range ownerAccountMap {
     boatIds, hasLocation := account.Locations[locationId];
     if (hasLocation) {
       if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-        result = append(result, &accountId);
+        result = append(result, account);
       } else {
         for _, id := range boatIds.Boats {
           if (id == boatId) {
-            result = append(result, &accountId);
+            result = append(result, account);
           }
         }
       }
     } else if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      result = append(result, &accountId);
+      result = append(result, account);
     }
   }
   
