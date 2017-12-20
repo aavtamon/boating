@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="screens/admin_home.css">
+<script src="screens/admin_home.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+<script>
+  AdminHome.adminAccount = {{.OwnerAccount}};
+  AdminHome.rentalStat = {{.OwnerRentalStat}};
+  
+  $(document).ready(function() {
+    AdminHome.onLoad();
+  });
+</script>
+
+<div id="AdminHome-Screen" class="screen">
+  <div id="AdminHome-Screen-Description" class="screen-description">
+    This is your administration dashboard, {{.OwnerAccount.FirstName}} {{.OwnerAccount.LastName}}
+    <button id="AdminHome-Screen-Description-LogoutButton" class="standard-button">Logout</button>
+  </div>
+  
+  <div id="AdminHome-Screen-AdminInfo" class="info-box">
+    <div id="AdminHome-Screen-AdminInfo-BoatRentals" class="optionbox">
+      <div id="AdminHome-Screen-AdminInfo-BoatRentals-Title" class="optionbox-title">Rentals</div>
+      <div id="AdminHome-Screen-AdminInfo-BoatRentals-Rentals" class="optionbox-content"></div>
+    </div>
+      
+    <div id="AdminHome-Screen-AdminInfo-RentalInfo" class="optionbox">
+      <div id="AdminHome-Screen-AdminInfo-RentalInfo-Title" class="optionbox-title">Rental details</div>
+      <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details" class="optionbox-content">
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Date" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Label">Date:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Time" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Time-Label">Time:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Time-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Label">Duration:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Location" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Label">Location:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Label">Boat:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Label">Reservation:</div>
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value"></div>
+        </div>          
+        <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Status" class="info-box-row">
+          <div id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Label">Status:</div>
+          <button id="AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button" class="standard-button">No action</button>
+        </div>          
+      </div>
+    </div>
+  </div>  
+</div>

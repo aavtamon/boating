@@ -11,6 +11,9 @@ Backend = {
   RESERVATION_STATUS_BOOKED: "booked",
   RESERVATION_STATUS_COMPLETED: "completed",
   
+  OWNER_ACCOUNT_TYPE_ADMIN: "admin",
+  
+  
   // Current reservation management
   _reservationContext: {},
   
@@ -215,7 +218,7 @@ Backend = {
     this._communicate("account/?username=" + username + "&password=" + password, "get", null, true, [], {
       success: function(account) {
         if (callback) {
-          callback(Backend.STATUS_SUCCESS);
+          callback(Backend.STATUS_SUCCESS, account);
         }
       }.bind(this),
       error: function(request, status, message) {

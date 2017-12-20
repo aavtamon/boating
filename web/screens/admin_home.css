@@ -1,0 +1,53 @@
+#AdminHome-Screen {
+  min-width: 1050px;
+}
+
+#AdminHome-Screen-Description-LogoutButton {
+  position: absolute;
+  right: 20px;
+  
+  font-size: 15px;
+}
+
+
+#AdminHome-Screen-AdminInfo-BoatRentals,
+#AdminHome-Screen-AdminInfo-RentalInfo {
+  height: 300px;
+}
+
+#AdminHome-Screen-AdminInfo-BoatRentals {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#AdminHome-Screen-AdminInfo-RentalInfo {
+  width: 280px;
+}
+
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Time-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Label {
+  display: inline-block;
+  
+  width: 100px;
+  margin-right: 50px;
+}
+
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Time-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value {
+  display: inline-block;
+  
+  font-weight: bold;
+}
+
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button {
+  
+}

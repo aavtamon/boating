@@ -4,7 +4,11 @@ OwnerLogin = {
   
   onLoad: function() {
     if (this.ownerAccount != null) {
-      Main.loadScreen("owner_home");
+      if (this.ownerAccount.type == Backend.OWNER_ACCOUNT_TYPE_ADMIN) {
+        Main.loadScreen("admin_home");
+      } else {
+        Main.loadScreen("owner_home");
+      }      
       return;
     }
     
@@ -25,9 +29,13 @@ OwnerLogin = {
     ScreenUtils.dataModelInput($("#OwnerLogin-Screen-Login-Credentials-Password-Input")[0], loginInfo, "password", reenableLoginButton);
     
     $("#OwnerLogin-Screen-Login-LoginButton").click(function() {
-      Backend.logIn(loginInfo.username, loginInfo.password, function(status, message) {
+      Backend.logIn(loginInfo.username, loginInfo.password, function(status, account) {
         if (status == Backend.STATUS_SUCCESS) {
-          Main.loadScreen("owner_home");
+          if (account.type == Backend.OWNER_ACCOUNT_TYPE_ADMIN) {
+            Main.loadScreen("admin_home");
+          } else {
+            Main.loadScreen("owner_home");
+          }
         } else {
           var msg = "";
           if (status == Backend.STATUS_BAD_REQUEST) {
