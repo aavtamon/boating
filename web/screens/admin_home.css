@@ -1,7 +1,3 @@
-#AdminHome-Screen {
-  min-width: 1050px;
-}
-
 #AdminHome-Screen-Description-LogoutButton {
   position: absolute;
   right: 20px;
@@ -9,6 +5,9 @@
   font-size: 15px;
 }
 
+#AdminHome-Screen-AdminInfo {
+  text-align: center;
+}
 
 #AdminHome-Screen-AdminInfo-BoatRentals,
 #AdminHome-Screen-AdminInfo-RentalInfo {

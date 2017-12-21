@@ -1,11 +1,9 @@
-#BookingBoat-Screen-SelectionContainer {
-  text-align: center;
-}
-
 #BookingBoat-Screen-SelectionPanel {
   margin-top: 20px;
   padding: 20px;
   white-space: nowrap;
+  
+  text-align: center;
 }
 
 

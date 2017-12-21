@@ -17,7 +17,7 @@ AdminHome = {
       });
     });
     
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Status-Button").click(function() {
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").click(function() {
       if (this._selectedReservationId != null) {
         Main.showPopup("Updating...", "Reservation status is being updated.");
         
@@ -111,21 +111,24 @@ AdminHome = {
   
   
   _showSlotDetails: function(rentalElement) {
+    console.debug("Showing rental details... " + this._selectedReservationId)
+    console.debug(rentalElement._rental)
+    
     this._selectedReservationId = rentalElement._reservationId;
     rental = rentalElement._rental;
     
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Date-Value").html(ScreenUtils.getBookingDate(rental.slot.time));
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Time-Value").html(ScreenUtils.getBookingTime(rental.slot.time));
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Duration-Value").html(ScreenUtils.getBookingDuration(rental.slot.duration));
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Location-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].name);
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Value").html(ScreenUtils.getBookingDate(rental.slot.time));
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Time-Value").html(ScreenUtils.getBookingTime(rental.slot.time));
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Value").html(ScreenUtils.getBookingDuration(rental.slot.duration));
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].name);
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
     
-    $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Reservation-Value").html(rentalElement._reservationId);
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
     
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
-      $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Status-Button").html("Complete it");
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").html("Complete it");
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
-      $("#AdminHome-Screen-AdminInfo-RentalDetails-Details-Status-Button").html("Un-complete it");
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").html("Un-complete it");
     }
   },
 }

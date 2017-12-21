@@ -13,6 +13,9 @@
   font-size: 15px;
 }
 
+#OwnerHome-Screen-AccountInfo {
+  text-align: center;
+}
 
 #OwnerHome-Screen-AccountInfo-OwnerReservations, 
 #OwnerHome-Screen-AccountInfo-BoatRentals,

@@ -142,18 +142,28 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
   rentalStat.Rentals = make(map[TReservationId]*TRental);
   
   for _, reservation := range persistenceDb.Reservations {
-    if (reservation.OwnerAccountId != accountId) {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN || reservation.OwnerAccountId != accountId) {
       boatIds, hasLocation := account.Locations[reservation.LocationId];
       if (hasLocation) {
-        for _, id := range boatIds.Boats {
-          if (id == reservation.BoatId) {
-            rentalStat.Rentals[reservation.Id] = &TRental{};
-
-            rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
-            rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
-            rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
-            rentalStat.Rentals[reservation.Id].Status = reservation.Status;
+        matches := false;
+        if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+          matches = true;
+        } else if (len(boatIds.Boats) > 0) {
+          for _, boatId := range boatIds.Boats {
+            if (boatId == reservation.BoatId) {
+              matches = true;
+              break;
+            }
           }
+        }
+
+        if (matches) {
+          rentalStat.Rentals[reservation.Id] = &TRental{};
+
+          rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
+          rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
+          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
+          rentalStat.Rentals[reservation.Id].Status = reservation.Status;
         }
       }
     }

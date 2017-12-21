@@ -1,11 +1,9 @@
-#BookingTime-Screen-SelectionContainer {
-  text-align: center;
-}
-
 #BookingTime-Screen-SelectionPanel {
   margin-top: 20px;
   padding: 20px;
   white-space: nowrap;
+  
+  text-align: center;
 }
 
 #BookingTime-Screen-SelectionPanel-TimeFrame {
