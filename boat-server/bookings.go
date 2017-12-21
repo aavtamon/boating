@@ -142,6 +142,10 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
   rentalStat.Rentals = make(map[TReservationId]*TRental);
   
   for _, reservation := range persistenceDb.Reservations {
+    if (reservation.Status != RESERVATION_STATUS_BOOKED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+      continue;
+    }
+  
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN || reservation.OwnerAccountId != accountId) {
       boatIds, hasLocation := account.Locations[reservation.LocationId];
       if (hasLocation) {

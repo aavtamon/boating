@@ -161,8 +161,15 @@ func RecoverReservation(reservationId TReservationId, lastName string) *TReserva
 
 func RecoverOwnerReservation(reservationId TReservationId, ownerAccountId TOwnerAccountId) *TReservation {
   for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
-      return reservation;
+    if (reservationId == resId) {
+      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
+        return reservation;
+      }
+
+      account := GetOwnerAccount(ownerAccountId);
+      if (account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+        return reservation;
+      }
     }
   }
 

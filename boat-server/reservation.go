@@ -105,7 +105,11 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       
       NotifyReservationBooked(reservationId);
     } else {
-      //TODO: validate changed fields - reject those that cannot be changed
+      // TODO: may need better validation
+      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_COMPLETED) {
+        existingReservation.Status = reservation.Status;
+        SaveReservation(existingReservation);
+      }
     }
 
 

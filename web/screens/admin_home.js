@@ -2,7 +2,7 @@ AdminHome = {
   adminAccount: null,
   rentalStat: null,
   
-  _selectedReservationId: null,
+  _selectedRentalElement: null,
   
   onLoad: function() {
     if (this.adminAccount == null || this.adminAccount.type != Backend.OWNER_ACCOUNT_TYPE_ADMIN) {
@@ -18,10 +18,10 @@ AdminHome = {
     });
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").click(function() {
-      if (this._selectedReservationId != null) {
+      if (this._selectedRentalElement != null) {
         Main.showPopup("Updating...", "Reservation status is being updated.");
         
-        Backend.restoreReservationContext(this._selectedReservationId, null, function(status) {
+        Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
           if (status == Backend.STATUS_SUCCESS) {
             if (Backend.getReservationContext().status == Backend.RESERVATION_STATUS_BOOKED) {
               Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
@@ -31,15 +31,18 @@ AdminHome = {
             Backend.saveReservation(function() {
               if (status == Backend.STATUS_SUCCESS) {
                 Main.hidePopup();
-                // TODO: update
+                Backend.resetReservationContext();
+
+                this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                this._showRentals();
               } else {
                 Main.showMessage("Update Not Successful", "Reservation can not be updated.");
               }
-            })
+            }.bind(this));
           } else {
             Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
           }
-        });
+        }.bind(this));
       }
     }.bind(this));
     
@@ -49,8 +52,6 @@ AdminHome = {
   _showRentals: function() {
     var optionsSelector = $("#AdminHome-Screen-AdminInfo-BoatRentals-Rentals");
     optionsSelector.empty();
-    
-
     
     var upcomingRentals = [];
     var completedRentals = [];
@@ -111,10 +112,7 @@ AdminHome = {
   
   
   _showSlotDetails: function(rentalElement) {
-    console.debug("Showing rental details... " + this._selectedReservationId)
-    console.debug(rentalElement._rental)
-    
-    this._selectedReservationId = rentalElement._reservationId;
+    this._selectedRentalElement = rentalElement;
     rental = rentalElement._rental;
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Value").html(ScreenUtils.getBookingDate(rental.slot.time));
@@ -124,7 +122,7 @@ AdminHome = {
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
-    
+
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").html("Complete it");
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
