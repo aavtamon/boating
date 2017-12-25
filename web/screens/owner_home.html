@@ -12,12 +12,11 @@
   });
 </script>
 
+<div id="OwnerHome-Screen-Description" class="screen-description">
+  This is your management dashboard, {{.OwnerAccount.FirstName}} {{.OwnerAccount.LastName}}
+  <button id="OwnerHome-Screen-Description-LogoutButton" class="standard-button">Logout</button>
+</div>
 <div id="OwnerHome-Screen" class="screen">
-  <div id="OwnerHome-Screen-Description" class="screen-description">
-    This is your management dashboard, {{.OwnerAccount.FirstName}} {{.OwnerAccount.LastName}}
-    <button id="OwnerHome-Screen-Description-LogoutButton" class="standard-button">Logout</button>
-  </div>
-  
   <div id="OwnerHome-Screen-AccountInfoContainer">
     <div id="OwnerHome-Screen-AccountInfo" class="info-box">
       <div id="OwnerHome-Screen-AccountInfo-OwnerReservations" class="optionbox">

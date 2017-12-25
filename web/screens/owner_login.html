@@ -10,16 +10,16 @@
   });
 </script>
 
-<div id="OwnerLogin-Screen" class="screen">
-  <div id="OwnerLogin-Screen-Description" class="screen-description">
-    Owner's Portal
-  </div>
+<div id="OwnerLogin-Screen-Description" class="screen-description">
+  Owner's Portal
+</div>
+<form id="OwnerLogin-Screen" class="screen" action="javascript:OwnerLogin.login()">
   <div id="OwnerLogin-Screen-Login" class="info-box">
     <div id="OwnerLogin-Screen-Login-Credentials">
       <div id="OwnerLogin-Screen-Login-Credentials-Username-Label">User name:</div>
-      <input type="text" id="OwnerLogin-Screen-Login-Credentials-Username-Input">
+      <input type="text" id="OwnerLogin-Screen-Login-Credentials-Username-Input" name="username" required>
       <div id="OwnerLogin-Screen-Login-Credentials-Password-Label">Password:</div>
-      <input type="password" id="OwnerLogin-Screen-Login-Credentials-Password-Input">
+      <input type="password" id="OwnerLogin-Screen-Login-Credentials-Password-Input" name="password" required>
     </div>
     <div id="OwnerLogin-Screen-Login-Status"></div>
     <div id="OwnerLogin-Screen-Login-ButtonPanel">
@@ -39,4 +39,4 @@
     <br>
     Your agreement with us, in no way prevents you from enjoying your own boat.  When you determine that you will need your boat on a particular day(s), visit our web site (via the owners page), and indicate that the boat is not available for public rental.  Assuming your boat has not already been booked for the days your are interested in,  we will automatically update our web site, and indicate that your boat is not available for public rental.  It is that simple.
   </div>
-</div>
+</form>

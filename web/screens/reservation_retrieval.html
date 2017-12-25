@@ -8,11 +8,11 @@
   });
 </script>
 
-<div id="ReservationRetrieval-Screen" class="screen">
-  <div class="screen-description">
-    Retrieve your reservation
-  </div>
-  
+
+<div class="screen-description">
+  Retrieve your reservation
+</div>
+<form id="ReservationRetrieval-Screen" class="screen" action="javascript:ReservationRetrieval.retrieve();">
   {{if .Reservation }}
     {{if eq .Reservation.OwnerAccountId ""}}
       <div class="info-box">
@@ -27,9 +27,9 @@
   <div id="ReservationRetrieval-Screen-Reservation" class="info-box">
     <div id="ReservationRetrieval-Screen-Reservation-Details">
       <div id="ReservationRetrieval-Screen-Reservation-Details-Id-Label">Confirmation Number:</div>
-      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-Id-Input">
+      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-Id-Input" required>
       <div id="ReservationRetrieval-Screen-Reservation-Details-LastName-Label">Last name on the reservation:</div>
-      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-LastName-Input">
+      <input type="text" id="ReservationRetrieval-Screen-Reservation-Details-LastName-Input" required>
     </div>
     <div id="ReservationRetrieval-Screen-Reservation-StatusHolder">
       <div id="ReservationRetrieval-Screen-Reservation-Status">
@@ -41,4 +41,4 @@
       <button id="ReservationRetrieval-Screen-Reservation-ButtonPanel-RestoreButton" class="standard-button">Retrieve</button>
     </div>
   </div>
-</div>
+</form>

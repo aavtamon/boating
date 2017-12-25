@@ -97,7 +97,7 @@ BookingConfirmation = {
     this._canProceedToNextStep();
   },
   
- 
+   
   _fillSelectorValues: function(selector, min, max) {
     var value = $(selector).val();
     var currentValue = value != null ? parseInt(value) : 0;
