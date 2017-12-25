@@ -1,31 +1,266 @@
 {
   "validity_period": 180,
-  "passing_grade": 2,
+  "passing_grade": 20,
   "tests": {
-    "test1": {
-      "text": "Is motor fan presents a danger?",
+    "TestQuestion_1": {
+      "text": "How many life jackets are required to be on the boat?",
       "options": {
-        "test1-option1": "Yes",
-        "test1-option2": "No"
+        "TestQuestion_1-option1": "One jacket for each adult over the age of 18.",
+        "TestQuestion_1-option2": "One jacket for each person on the boat.",
+        "TestQuestion_1-option3": "One jacket for each child under the age of 13."
       },
-      "answer_option_id": "test1-option1"
+      "answer_option_id": "TestQuestion_1-option2"
     },
-    "test2": {
-      "text": "Is it safe to be on the stern during boat motion?",
+
+    "TestQuestion_2": {
+      "text": "When traveling up river, what color are the buoys on the starboard (right) side of the boat?",
       "options": {
-        "test2-option1": "Yes",
-        "test2-option2": "No"
+        "TestQuestion_2-option1": "White with a red text and stripes",
+        "TestQuestion_2-option2": "Green",
+        "TestQuestion_2-option3": "Red",
+        "TestQuestion_2-option4": "Yellow with a black diamond"
       },
-      "answer_option_id": "test2-option1"
+      "answer_option_id": "TestQuestion_1-option3"
     },
-    "test3": {
-      "text": "What is the minomal age to ride a boat?",
+   
+    "TestQuestion_3": {
+      "text": "Who must wear a life jacket at all times, while on the boat?",
       "options": {
-        "test3-option1": "12 years old",
-        "test3-option2": "13 years old",
-        "test3-option3": "no limit"
+        "TestQuestion_3-option1": "No one is required to wear a life jacket as they are for emergency use only.",
+        "TestQuestion_3-option2": "Only those passengers that cannot swim.",
+        "TestQuestion_3-option3": "Everyone must wear a life jacket.",
+        "TestQuestion_3-option4": "Anyone under the age of 13 years, and not in a fully enclosed cabin"
       },
-      "answer_option_id": "test3-option3"
+      "answer_option_id": "TestQuestion_3-option4"
+    },
+
+    "TestQuestion_4": {
+      "text": "Alcohol is involved in what percentage of boating accidents?",
+      "options": {
+        "TestQuestion_4-option1": "25%",
+        "TestQuestion_4-option2": "33%",
+        "TestQuestion_4-option3": "72%",
+        "TestQuestion_4-option4": "93%"
+      },
+      "answer_option_id": "TestQuestion_4-option2"
+    },
+
+    "TestQuestion_5": {
+      "text": "When operating the boat at a speed greater than an idle, what clearance distance must be maintained between your boat, and other boats, docks, the shoreline, etc?",
+      "options": {
+        "TestQuestion_5-option1": "500 Feet",
+        "TestQuestion_5-option2": "250 Feet",
+        "TestQuestion_5-option3": "100 Feet",
+        "TestQuestion_5-option4": "50 Feet"
+      },
+      "answer_option_id": "TestQuestion_5-option3"
+    },
+
+    "TestQuestion_6": {
+      "text": "When is it safe for a swimmer to exit or board the boat?",
+      "options": {
+        "TestQuestion_6-option1": "Only when at the marina dock.",
+        "TestQuestion_6-option2": "When the boat has come to a complete stop, and the ladder lowered.",
+        "TestQuestion_6-option3": "When the boat has come to a complete stop, and the engine is off.",
+        "TestQuestion_6-option4": "When the boat has come to a complete stop, and there are no other boats in the vicinity."
+      },
+      "answer_option_id": "TestQuestion_6-option3"
+    },
+
+    "TestQuestion_7": {
+      "text": "When is it safe to ride on the gunwales, forward platform, seat backs, or outside the rail of the boat?",
+      "options": {
+        "TestQuestion_7-option1": "Anytime, provided the passenger is wearing a life jacket.",
+        "TestQuestion_7-option2": "Anytime, provided the passenger is over the age of 18.",
+        "TestQuestion_7-option3": "When the boat is stopped, and then engine is off."
+      },
+      "answer_option_id": "TestQuestion_7-option3"
+    },
+
+    "TestQuestion_8": {
+      "text": "If another boat is headed toward you, what should you do?",
+      "options": {
+        "TestQuestion_8-option1": "Nothing, as it is responsibility of the other boat to take evasive maneuvers.",
+        "TestQuestion_8-option2": "Slow down, and continue to approach.",
+        "TestQuestion_8-option3": "steer your boat to the starboard (right), passing the other boat on your port (left) side.",
+        "TestQuestion_8-option4": "Steer your boat to the port (left), passing the other boat on your starboard (right) side."
+      },
+      "answer_option_id": "TestQuestion_8-option3"
+    },
+
+    "TestQuestion_9": {
+      "text": "What determines the maximum number of crew members and passengers that may ride on boat?",
+      "options": {
+        "TestQuestion_9-option1": "The number is only limited by the number of life jackets on board.",
+        "TestQuestion_9-option2": "The number of seats on the boat",
+        "TestQuestion_9-option3": "The boat manufacture's builders plate on the boat lists the maximum number of crew members and passengers."
+      },
+      "answer_option_id": "TestQuestion_9-option3"
+    },
+
+    "TestQuestion_10": {
+      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxx?",
+      "options": {
+        "TestQuestion_10-option1": "No one is required to wear a life jacket as they are for emergency use only.",
+        "TestQuestion_10-option2": "Only those passengers that cannot swim.",
+        "TestQuestion_10-option3": "Everyone must wear a life jacket.",
+        "TestQuestion_10-option4": "Anyone under the age of 13 years."
+      },
+      "answer_option_id": "TestQuestion_10-option4"
+    },
+
+	"TestQuestion_11": {
+      "text": "Boat related collisions are primarily the result of what?",
+      "options": {
+        "TestQuestion_11-option1": "Poor Visibility",
+        "TestQuestion_11-option2": "Inclement Weather",
+        "TestQuestion_11-option3": "Operator inattention and/or excessive speed"
+      },
+      "answer_option_id": "TestQuestion_11-option3"
+    },
+
+    "TestQuestion_12": {
+      "text": "When anchoring the boat, where should the anchor be attached?",
+      "options": {
+        "TestQuestion_12-option1": "The bow",
+        "TestQuestion_12-option2": "The stern",
+        "TestQuestion_12-option3": "The gunwale",
+        "TestQuestion_12-option4": "All of the above"
+      },
+      "answer_option_id": "TestQuestion_12-option1"
+    },
+   
+    "TestQuestion_13": {
+      "text": "A power boat must yield the right of way to which other types of boats?",
+      "options": {
+        "TestQuestion_13-option1": "Personal Water Craft (PWC)",
+        "TestQuestion_13-option2": "Canoes/Kayaks",
+        "TestQuestion_13-option3": "Saleboats",
+        "TestQuestion_13-option4": "Any unpowered craft"
+      },
+      "answer_option_id": "TestQuestion_13-option4"
+    },
+
+    "TestQuestion_14": {
+      "text": "When towing a water skier, or someone on a tube, at least one passenger on the boat must act as an observer?",
+      "options": {
+        "TestQuestion_14-option1": "True",
+        "TestQuestion_14-option2": "False"
+      },
+      "answer_option_id": "TestQuestion_14-option1"
+    },
+
+    "TestQuestion_15": {
+      "text": "What are examples of negligent boat operations?",
+      "options": {
+        "TestQuestion_15-option1": "Boating under the influence of drugs or alcohol",
+        "TestQuestion_15-option2": "Traveling at excessive speed",
+        "TestQuestion_15-option3": "Not requiring children under the age of 13 to wear life jackets",
+        "TestQuestion_15-option4": "All of the above"
+      },
+      "answer_option_id": "TestQuestion_15-option4"
+    },
+
+    "TestQuestion_16": {
+      "text": "Two out of three deaths related to boating accidents are due to drowning?",
+      "options": {
+        "TestQuestion_16-option1": "True",
+        "TestQuestion_16-option2": "False"
+      },
+      "answer_option_id": "TestQuestion_16-option2"
+    },
+
+    "TestQuestion_17": {
+      "text": "Every passenger on the boat must know where the fire extinguisher is located",
+      "options": {
+        "TestQuestion_17-option1": "True",
+        "TestQuestion_17-option2": "False"
+      },
+      "answer_option_id": "TestQuestion_17-option1"
+    },
+
+    "TestQuestion_18": {
+      "text": "When over taking (passing) another boat, you should do what?",
+      "options": {
+        "TestQuestion_18-option1": "Steer to the port (left) side of the boat you are over taking.",
+        "TestQuestion_18-option2": "Steer to the starboard (right) side of the boat you are over taking.",
+        "TestQuestion_18-option3": "Steer either to the port (left), or starboard (right) side of the boat you are over taking",
+        "TestQuestion_18-option4": "All of the above"
+      },
+      "answer_option_id": "TestQuestion_18-option1"
+    },
+
+    "TestQuestion_19": {
+      "text": "When traveling down river, what color are the buoys on the starboard (right) side of the boat?",
+      "options": {
+        "TestQuestion_19-option1": "White with a red text and stripes",
+        "TestQuestion_19-option2": "Green",
+        "TestQuestion_19-option3": "Red",
+        "TestQuestion_19-option4": "Yellow with a black diamond"
+      },
+      "answer_option_id": "TestQuestion_19-option2"
+    },
+
+    "TestQuestion_20": {
+      "text": "Informational Buoys/markers are what color?",
+      "options": {
+        "TestQuestion_20-option1": "White with a red text and stripes",
+        "TestQuestion_20-option2": "Red",
+        "TestQuestion_20-option3": "Green",
+        "TestQuestion_20-option4": "Yellow with Black Diamonds"
+      },
+      "answer_option_id": "TestQuestion_20-option1"
+    },
+
+    "TestQuestion_21": {
+      "text": "The awareness zone is a ring around the boat with a radius of how many feet?",
+      "options": {
+        "TestQuestion_21-option1": "20 feet",
+        "TestQuestion_21-option2": "30 feet",
+        "TestQuestion_21-option3": "100 feet",
+        "TestQuestion_21-option4": "120 feet"
+      },
+      "answer_option_id": "TestQuestion_21-option2"
+    },
+
+    "TestQuestion_22": {
+      "text": "When is it safe to ride on the gunwales, stern or outside the rail of the boat?",
+      "options": {
+        "TestQuestion_22-option1": "Anytime, provided the passenger is wearing a life jacket.",
+        "TestQuestion_22-option2": "Anytime, provided the passenger is over the age of 18.",
+        "TestQuestion_22-option3": "When the boat is stopped, and then engine is off."
+      },
+      "answer_option_id": "TestQuestion_22-option3"
+    },
+
+    "TestQuestion_23": {
+      "text": "When must running lights must be switched on?",
+      "options": {
+        "TestQuestion_23-option1": "At night",
+        "TestQuestion_23-option2": "At night or at during times of poor visibility",
+        "TestQuestion_23-option3": "Any time the boat is in operation"
+      },
+      "answer_option_id": "TestQuestion_23-option2"
+    },
+
+    "TestQuestion_24": {
+      "text": "All boat operators must carry with them proper government issued identification?",
+      "options": {
+        "TestQuestion_24-option1": "True",
+        "TestQuestion_24-option2": "False"
+      },
+      "answer_option_id": "TestQuestion_24-option1"
+    },
+
+    "TestQuestion_25": {
+      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx?",
+      "options": {
+        "TestQuestion_25-option1": "No one is required to wear a life jacket as they are for emergency use only.",
+        "TestQuestion_25-option2": "Only those passengers that cannot swim.",
+        "TestQuestion_25-option3": "Everyone must wear a life jacket.",
+        "TestQuestion_25-option4": "Anyone under the age of 13 years."
+      },
+      "answer_option_id": "TestQuestion_25-option4"
     }
   }
 }
