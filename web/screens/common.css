@@ -52,8 +52,6 @@ input, select, .ui-widget {
 }
 
 .screen-description {
-  position: relative;
-  width: calc(100% - 20px);
   padding: 10px;
   text-align: center;
   white-space: nowrap;
@@ -61,11 +59,6 @@ input, select, .ui-widget {
   
   font-size: 25px;
   font-weight: bold;
-  
-  border-radius: 10px;
-  
-  background-color: #f7b742;
-  color: yellow;  
 }
 .screen-description-back, .screen-description-next {
   position: absolute;
@@ -133,7 +126,7 @@ input, select, .ui-widget {
 
 
 .info-box {
-  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 10px 30px 10px 30px;
   overflow: hidden;
   

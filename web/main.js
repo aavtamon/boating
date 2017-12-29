@@ -125,10 +125,13 @@ Main = {
     this._storeElements = [];
     this._currentScreen = screen;
     
-    $("#Main-ScreenContainer").load("screens/" + screen + ".html");
-    
-    
     $(".main-menu-item").css("font-weight", "normal");
     $(".main-menu-item[screen~='" + screen + "']").css("font-weight", "bold");
+
+
+    $("#Main-ScreenContainer").load("screens/" + screen + ".html", function() {
+      $("#Main-ScreenHeader").empty();
+      $(document).find(".screen-description").appendTo("#Main-ScreenHeader");
+    });
   }
 }

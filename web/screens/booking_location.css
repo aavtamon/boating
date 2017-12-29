@@ -6,7 +6,6 @@
   position: relative;
   width: 100%;
   height: calc(100% - 200px);
-  margin-top: 20px;
 }
 
 #BookingLocation-Screen-SelectionPanel-LocationMap {
