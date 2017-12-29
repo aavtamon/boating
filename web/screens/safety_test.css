@@ -65,8 +65,15 @@
   margin-left: 30px;
 }
 
+.test-option-hor {
+  display: inline-block;
+}
+.test-option-ver {
+}
+
 .test-option-label {
   margin-right: 20px;
   margin-left: 5px;
   font-size: 15px;
 }
+

@@ -10,6 +10,7 @@ import "time"
 
 type TSafetyTest struct {
   Text string `json:"text"`;
+  OptionsFormat string `json:"options_format"`;
   Options map[string]string `json:"options"`;
   AnswerOptionId string `json:"answer_option_id"`;
   Status bool `json:"status"`;

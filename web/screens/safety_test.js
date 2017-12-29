@@ -57,11 +57,15 @@ SafetyTest._populateSafetySuite = function() {
   for (var testId in this._suite.tests) {
     var test = this._suite.tests[testId];
     
+    var optionFormat = test.options_format || "horizontal";
+
+    var optionClass = optionFormat == "horizontal" ? "test-option-hor" : "test-option-ver";
+    
     var testHtml = "<div class='test' id='" + testId + "'><div class='test-icon'></div><div class='test-description'>" + test.text + "</div>";
     testHtml += "<div class='test-options'>";
-    for (var optionId in test.options) {      
+    for (var optionId in test.options) {
       var testOption = test.options[optionId];
-      var optionHtml = "<input class='test-option' name='" + testId + "' type='radio' id='" + optionId + "'><label class='test-option-label' for='" + optionId + "'>" + testOption + "</label>";
+      var optionHtml = "<div class='" + optionClass + "'><input name='" + testId + "' type='radio' id='" + optionId + "'><label class='test-option-label' for='" + optionId + "'>" + testOption + "</label></div>";
       
       testHtml += optionHtml;
     }

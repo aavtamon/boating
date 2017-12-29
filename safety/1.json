@@ -4,6 +4,7 @@
   "tests": {
     "TestQuestion_1": {
       "text": "How many life jackets are required to be on the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_1-option1": "One jacket for each adult over the age of 18.",
         "TestQuestion_1-option2": "One jacket for each person on the boat.",
@@ -14,6 +15,7 @@
 
     "TestQuestion_2": {
       "text": "When traveling up river, what color are the buoys on the starboard (right) side of the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_2-option1": "White with a red text and stripes",
         "TestQuestion_2-option2": "Green",
@@ -25,6 +27,7 @@
    
     "TestQuestion_3": {
       "text": "Who must wear a life jacket at all times, while on the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_3-option1": "No one is required to wear a life jacket as they are for emergency use only.",
         "TestQuestion_3-option2": "Only those passengers that cannot swim.",
@@ -36,6 +39,7 @@
 
     "TestQuestion_4": {
       "text": "Alcohol is involved in what percentage of boating accidents?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_4-option1": "25%",
         "TestQuestion_4-option2": "33%",
@@ -47,6 +51,7 @@
 
     "TestQuestion_5": {
       "text": "When operating the boat at a speed greater than an idle, what clearance distance must be maintained between your boat, and other boats, docks, the shoreline, etc?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_5-option1": "500 Feet",
         "TestQuestion_5-option2": "250 Feet",
@@ -58,6 +63,7 @@
 
     "TestQuestion_6": {
       "text": "When is it safe for a swimmer to exit or board the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_6-option1": "Only when at the marina dock.",
         "TestQuestion_6-option2": "When the boat has come to a complete stop, and the ladder lowered.",
@@ -69,6 +75,7 @@
 
     "TestQuestion_7": {
       "text": "When is it safe to ride on the gunwales, forward platform, seat backs, or outside the rail of the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_7-option1": "Anytime, provided the passenger is wearing a life jacket.",
         "TestQuestion_7-option2": "Anytime, provided the passenger is over the age of 18.",
@@ -79,6 +86,7 @@
 
     "TestQuestion_8": {
       "text": "If another boat is headed toward you, what should you do?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_8-option1": "Nothing, as it is responsibility of the other boat to take evasive maneuvers.",
         "TestQuestion_8-option2": "Slow down, and continue to approach.",
@@ -90,6 +98,7 @@
 
     "TestQuestion_9": {
       "text": "What determines the maximum number of crew members and passengers that may ride on boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_9-option1": "The number is only limited by the number of life jackets on board.",
         "TestQuestion_9-option2": "The number of seats on the boat",
@@ -100,6 +109,7 @@
 
     "TestQuestion_10": {
       "text": "xxxxxxxxxxxxxxxxxxxxxxxxxx?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_10-option1": "No one is required to wear a life jacket as they are for emergency use only.",
         "TestQuestion_10-option2": "Only those passengers that cannot swim.",
@@ -111,6 +121,7 @@
 
 	"TestQuestion_11": {
       "text": "Boat related collisions are primarily the result of what?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_11-option1": "Poor Visibility",
         "TestQuestion_11-option2": "Inclement Weather",
@@ -121,6 +132,7 @@
 
     "TestQuestion_12": {
       "text": "When anchoring the boat, where should the anchor be attached?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_12-option1": "The bow",
         "TestQuestion_12-option2": "The stern",
@@ -132,6 +144,7 @@
    
     "TestQuestion_13": {
       "text": "A power boat must yield the right of way to which other types of boats?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_13-option1": "Personal Water Craft (PWC)",
         "TestQuestion_13-option2": "Canoes/Kayaks",
@@ -143,6 +156,7 @@
 
     "TestQuestion_14": {
       "text": "When towing a water skier, or someone on a tube, at least one passenger on the boat must act as an observer?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_14-option1": "True",
         "TestQuestion_14-option2": "False"
@@ -152,6 +166,7 @@
 
     "TestQuestion_15": {
       "text": "What are examples of negligent boat operations?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_15-option1": "Boating under the influence of drugs or alcohol",
         "TestQuestion_15-option2": "Traveling at excessive speed",
@@ -163,6 +178,7 @@
 
     "TestQuestion_16": {
       "text": "Two out of three deaths related to boating accidents are due to drowning?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_16-option1": "True",
         "TestQuestion_16-option2": "False"
@@ -172,6 +188,7 @@
 
     "TestQuestion_17": {
       "text": "Every passenger on the boat must know where the fire extinguisher is located",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_17-option1": "True",
         "TestQuestion_17-option2": "False"
@@ -181,6 +198,7 @@
 
     "TestQuestion_18": {
       "text": "When over taking (passing) another boat, you should do what?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_18-option1": "Steer to the port (left) side of the boat you are over taking.",
         "TestQuestion_18-option2": "Steer to the starboard (right) side of the boat you are over taking.",
@@ -192,6 +210,7 @@
 
     "TestQuestion_19": {
       "text": "When traveling down river, what color are the buoys on the starboard (right) side of the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_19-option1": "White with a red text and stripes",
         "TestQuestion_19-option2": "Green",
@@ -203,6 +222,7 @@
 
     "TestQuestion_20": {
       "text": "Informational Buoys/markers are what color?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_20-option1": "White with a red text and stripes",
         "TestQuestion_20-option2": "Red",
@@ -214,6 +234,7 @@
 
     "TestQuestion_21": {
       "text": "The awareness zone is a ring around the boat with a radius of how many feet?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_21-option1": "20 feet",
         "TestQuestion_21-option2": "30 feet",
@@ -225,6 +246,7 @@
 
     "TestQuestion_22": {
       "text": "When is it safe to ride on the gunwales, stern or outside the rail of the boat?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_22-option1": "Anytime, provided the passenger is wearing a life jacket.",
         "TestQuestion_22-option2": "Anytime, provided the passenger is over the age of 18.",
@@ -235,6 +257,7 @@
 
     "TestQuestion_23": {
       "text": "When must running lights must be switched on?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_23-option1": "At night",
         "TestQuestion_23-option2": "At night or at during times of poor visibility",
@@ -245,6 +268,7 @@
 
     "TestQuestion_24": {
       "text": "All boat operators must carry with them proper government issued identification?",
+      "options_format": "horizontal",
       "options": {
         "TestQuestion_24-option1": "True",
         "TestQuestion_24-option2": "False"
@@ -254,6 +278,7 @@
 
     "TestQuestion_25": {
       "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx?",
+      "options_format": "vertical",
       "options": {
         "TestQuestion_25-option1": "No one is required to wear a life jacket as they are for emergency use only.",
         "TestQuestion_25-option2": "Only those passengers that cannot swim.",
