@@ -9,9 +9,12 @@ Backend = {
   PAYMENT_STATUS_PAYED: "payed",
   
   RESERVATION_STATUS_BOOKED: "booked",
+  RESERVATION_STATUS_DEPOSITED: "deposited",
   RESERVATION_STATUS_COMPLETED: "completed",
   
   OWNER_ACCOUNT_TYPE_ADMIN: "admin",
+  
+  PAYMENT_KEY: "pk_test_39gZjXaJ3YlMgPhFcISoz2MC",
   
   
   // Current reservation management
@@ -127,7 +130,7 @@ Backend = {
   },
   
   
-  pay: function(paymentToken, callback) {
+  payReservation: function(paymentToken, callback) {
     var paymentRequest = {
       reservation_id: this._reservationContext.id,
       payment_token: paymentToken
@@ -158,7 +161,7 @@ Backend = {
   },
   
 
-  cancelPayment: function(callback) {
+  refundReservation: function(callback) {
     this._communicate("reservation/payment/?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
@@ -185,6 +188,61 @@ Backend = {
     return this._reservationContext.payment_status != null && this._reservationContext.payment_status != "";
   },
   
+  
+  
+  payDeposit: function(paymentToken, callback) {
+    var paymentRequest = {
+      reservation_id: this._reservationContext.id,
+      payment_token: paymentToken
+    }
+    
+    this._communicate("reservation/payment/", "put", paymentRequest, true, [], {
+      success: function(persistentContext) {
+        this._reservationContext = persistentContext;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status) {
+        if (callback) {
+          if (status == 409) {
+            callback(Backend.STATUS_CONFLICT);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
+  },
+  
+
+  refundDeposit: function(callback) {
+    this._communicate("reservation/payment/?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
+      success: function(persistentContext) {
+        this._reservationContext = persistentContext;
+        
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status) {
+        if (callback) {
+          if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
+  },  
 
   
   // Booking management

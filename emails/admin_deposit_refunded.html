@@ -1,0 +1,12 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Security Deposit Release - {{.Reservation.Id}}</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Security deposit in the amount of ${{.Reservation.DepositAmount}} dollars is issued and should appear on your original payment method in about 5 business days.
+      </div>
+      <br>
+      <br>
+      Please contact us at <a href='mailto:reservations@pizboats.com' target='_top'>reservations@pizboats.com</a> if you have any questions or need any help.
+
+{{template "email_footer"}}

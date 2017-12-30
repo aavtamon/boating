@@ -142,7 +142,7 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
   rentalStat.Rentals = make(map[TReservationId]*TRental);
   
   for _, reservation := range persistenceDb.Reservations {
-    if (reservation.Status != RESERVATION_STATUS_BOOKED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
       continue;
     }
   
@@ -299,7 +299,7 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
 
 func isBooked(slot TBookingSlot) bool {
   for _, reservation := range GetAllReservations() {
-    if (reservation.Status != RESERVATION_STATUS_BOOKED) {
+    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
       continue;
     }
   

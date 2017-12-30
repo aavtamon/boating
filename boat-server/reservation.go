@@ -106,7 +106,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       NotifyReservationBooked(reservationId);
     } else {
       // TODO: may need better validation
-      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_COMPLETED) {
+      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_COMPLETED) {
         existingReservation.Status = reservation.Status;
         SaveReservation(existingReservation);
       }

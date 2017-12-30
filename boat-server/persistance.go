@@ -90,6 +90,10 @@ type TReservation struct {
   RefundAmount uint64 `json:"refund_amount,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
   RefundId string `json:"refund_id,omitempty"`;
+  DepositChargeId string `json:"deposit_charge_id,omitempty"`;
+  DepositRefundId string `json:"deposit_refund_id,omitempty"`;
+  DepositAmount uint64 `json:"deposit_amount,omitempty"`;
+  DepositStatus TPaymentStatus `json:"deposit_status,omitempty"`;
   
   Status TReservationStatus `json:"status,omitempty"`;
 }
@@ -111,6 +115,7 @@ type TChangeListener interface {
 
 const RESERVATION_STATUS_BOOKED TReservationStatus = "booked";
 const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
+const RESERVATION_STATUS_DEPOSITED TReservationStatus = "deposited";
 const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
 
 
@@ -151,7 +156,8 @@ func GetReservation(reservationId TReservationId) *TReservation {
 
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && reservation.LastName == lastName && reservation.Status == RESERVATION_STATUS_BOOKED) {
+    if (reservationId == resId && reservation.LastName == lastName &&
+        reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
       return reservation;
     }
   }
@@ -185,7 +191,7 @@ func GetOwnerReservationSummaries(ownerAccountId TOwnerAccountId) []*TReservatio
 
   if (ownerAccountId != NO_OWNER_ACCOUNT_ID) {
     for _, reservation := range persistenceDb.Reservations {
-      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
+      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
         reservationSummaries = append(reservationSummaries, getReservationSummary(reservation));
       }
     }

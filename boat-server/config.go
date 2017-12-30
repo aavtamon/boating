@@ -52,6 +52,7 @@ type TBoat struct {
   MaximumCapacity int `json:"maximum_capacity"`;
   Rate []TPricedRange `json:"rate"`;
   Images []TImageResource `json:"images"`;
+  Deposit uint64 `json:"deposit"`;
 }
 
 type TExtraEquipment struct {

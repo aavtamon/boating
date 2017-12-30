@@ -84,6 +84,30 @@ func NotifyReservationRefunded(reservationId TReservationId) {
   emailAdminReservationCancelled(reservation);
 }
 
+func NotifyDepositPaid(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailRenterDepositPaid(reservation);
+  textRenterDepositPaid(reservation);
+  
+  emailAdminDepositPaid(reservation);
+}
+
+func NotifyDepositRefunded(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  emailRenterDepositRefunded(reservation);
+  textRenterDepositRefunded(reservation);
+  
+  emailAdminDepositRefunded(reservation);
+}
+
 func NotifyDayBeforeReminder(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
@@ -173,6 +197,18 @@ func emailRenterReservationRefunded(reservation *TReservation) bool {
   return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, "renter_reservation_refunded.html");
 }
 
+func emailRenterDepositPaid(reservation *TReservation) bool {
+  fmt.Printf("Sending deposit-paid email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit payment confirmation for %s", reservation.Id), reservation, "renter_deposit_paid.html");
+}
+
+func emailRenterDepositRefunded(reservation *TReservation) bool {
+  fmt.Printf("Sending deposit-refunded email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit released for %s", reservation.Id), reservation, "renter_deposit_refunded.html");
+}
+
 func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
   fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
   
@@ -237,6 +273,31 @@ func emailAdminReservationCancelled(reservation *TReservation) bool {
   return true;
 }
 
+func emailAdminDepositPaid(reservation *TReservation) bool {
+  fmt.Printf("Sending admin deposit-paid email for reservation %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Deposit paid", reservation, "admin_deposit_paid.html");
+    }
+  }
+  
+  return true;
+}
+
+func emailAdminDepositRefunded(reservation *TReservation) bool {
+  fmt.Printf("Sending admin deposit-refunded email for reservation %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Deposit refunded", reservation, "admin_deposit_refunded.html");
+    }
+  }
+  
+  return true;
+}
 
 
 func textOwnerReservationBooked(reservation *TReservation) bool {
@@ -277,6 +338,26 @@ func textRenterReservationRefunded(reservation *TReservation) bool {
   fmt.Printf("Texting booking refunded for reservation %s\n", reservation.Id);
   
   return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservation.Id, reservation.RefundAmount));
+}
+
+func textRenterDepositPaid(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting deposit paid confirmation for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("You paid a security deposit in the amount of $%d dollars for the reservation %s", reservation.DepositAmount, reservation.Id));
+}
+
+func textRenterDepositRefunded(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting deposit refunded for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your security deposit of $%d for reservation %s is released and should be available on your account soon", reservation.DepositAmount, reservation.Id));
 }
 
 func textOwnerDayBeforeReminder(reservation *TReservation) bool {

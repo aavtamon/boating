@@ -87,7 +87,7 @@ ReservationUpdate = {
       if (action == Main.ACTION_OK) {
         Main.showPopup("Cancellation Processing", "Your cancellation request is being processed.<br>Do not refresh or close your browser");
 
-        Backend.cancelPayment(function(status) {
+        Backend.refundReservation(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
             Backend.cancelReservation(ReservationUpdate.reservationId, function(status) {
               if (status == Backend.STATUS_SUCCESS) {

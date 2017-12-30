@@ -1,0 +1,16 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Deposit Payment Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        You paid a security deposit in the amount of ${{.Reservation.DepositAmount}} dollars.
+      </div>
+      <br>
+      Your deposit will be refunded back to you when your trip is over.
+      <br>
+      We may have to withhold it partially or in full should any damage occur to the boat during your jorney.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:reservations@pizboats.com' target='_top'>reservations@pizboats.com</a> if you have any questions or need any help, or if this transaction was not initiated with your explicit consent.
+
+{{template "email_footer"}}

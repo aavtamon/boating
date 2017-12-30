@@ -17,34 +17,57 @@ AdminHome = {
       });
     });
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").click(function() {
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").click(function() {
       if (this._selectedRentalElement != null) {
         Main.showPopup("Updating...", "Reservation status is being updated.");
         
         Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
           if (status == Backend.STATUS_SUCCESS) {
-            if (Backend.getReservationContext().status == Backend.RESERVATION_STATUS_BOOKED) {
-              Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
-            } else if (Backend.getReservationContext().status == Backend.RESERVATION_STATUS_COMPLETED) {
-              Backend.getReservationContext().status = Backend.RESERVATION_STATUS_BOOKED;
-            }
-            Backend.saveReservation(function() {
-              if (status == Backend.STATUS_SUCCESS) {
-                Main.hidePopup();
-                Backend.resetReservationContext();
-
-                this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
-                this._showRentals();
-              } else {
-                Main.showMessage("Update Not Successful", "Reservation can not be updated.");
-              }
-            }.bind(this));
+            Main.loadScreen("admin_deposit");
           } else {
             Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
           }
         }.bind(this));
       }
     }.bind(this));
+    
+    
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
+      if (this._selectedRentalElement != null) {
+        Main.showMessage("Successful Rental Completion", "By clicking OK you certify that the boat was returned in the original condition, no any accidents occured, and that the deposit can be released in full.", function(action) {
+          if (action == Main.ACTION_OK) {
+            Main.showPopup("Updating...", "Reservation status is being updated.");
+
+            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+              if (status == Backend.STATUS_SUCCESS) {
+                Backend.refundDeposit(function(status) {
+                  if (status == Backend.STATUS_SUCCESS) {
+                    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
+
+                    Backend.saveReservation(function(status) {
+                      if (status == Backend.STATUS_SUCCESS) {
+                        Main.hidePopup();
+                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                        Backend.resetReservationContext();
+
+                        this._showRentals();
+                      } else {
+                        Main.showMessage("Update Not Successful", "Reservation can not be updated.");
+                      }
+                    }.bind(this));
+                  } else {
+                    Main.showMessage("Deposit Refund Not Successful", "Deposit was not refunded.");
+                  }
+                });
+              } else {
+                Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
+              }
+            }.bind(this));
+          }
+        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
+      }
+    }.bind(this));
+    
     
     this._showRentals();
   },
@@ -124,9 +147,17 @@ AdminHome = {
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
 
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").html("Complete it");
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").show();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+    } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").show();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button").html("Un-complete it");
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").show();
     }
   },
 }

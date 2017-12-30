@@ -24,7 +24,7 @@ BookingPayment = {
     paymentInfo.card_ready = false;
     
     
-    var stripe = Stripe('pk_test_39gZjXaJ3YlMgPhFcISoz2MC');    
+    var stripe = Stripe(Backend.PAYMENT_KEY);    
     var elements = stripe.elements();
     
     var style = {
@@ -127,7 +127,7 @@ BookingPayment = {
       } else {
         Backend.saveReservation(function(status, reservationId) {
           if (status == Backend.STATUS_SUCCESS) {
-            Backend.pay(result.token.id, function(status) {
+            Backend.payReservation(result.token.id, function(status) {
               Main.hidePopup();
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.getTemporaryData().paymentInfo = null;

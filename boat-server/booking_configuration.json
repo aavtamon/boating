@@ -34,7 +34,8 @@
             {"range_min": 4, "range_max": 4, "price": 250},
             {"range_min": 6, "range_max": 6, "price": 350},
             {"range_min": 8, "range_max": 8, "price": 400}
-          ]
+          ],
+          "deposit": 500
         }
       },
       "extras": {

@@ -1,0 +1,110 @@
+#AdminDeposit-Screen-ReservationSummary-Boat-Title,
+#AdminDeposit-Screen-ReservationSummary-Deposit-Title {
+  display: inline-block;
+  width: 450px;
+}
+#AdminDeposit-Screen-ReservationSummary-Boat-Value,
+#AdminDeposit-Screen-ReservationSummary-Deposit-Value {
+  display: inline-block;
+  width: 200px;
+
+  font-weight: bold;
+}
+
+#AdminDeposit-Screen-PaymentInformation-Address-Street,
+#AdminDeposit-Screen-PaymentInformation-Address-Additional,
+#AdminDeposit-Screen-PaymentInformation-Area-City,
+#AdminDeposit-Screen-PaymentInformation-Area-State
+{
+  display: inline-block;
+}
+
+
+#AdminDeposit-Screen-PaymentInformation-Name-Label,
+#AdminDeposit-Screen-PaymentInformation-Address-Street-Label,
+#AdminDeposit-Screen-PaymentInformation-Address-Additional-Label,
+#AdminDeposit-Screen-PaymentInformation-Area-City-Label,
+#AdminDeposit-Screen-PaymentInformation-Area-State-Label,
+#AdminDeposit-Screen-PaymentInformation-CreditCard-Label
+{
+  display: inline-block;
+  margin-right: 20px;
+  
+  font-weight: bold;
+}
+#AdminDeposit-Screen-PaymentInformation-Address-Additional-Label {
+  font-weight: normal;
+}
+
+#AdminDeposit-Screen-PaymentInformation-Name-Input,
+#AdminDeposit-Screen-PaymentInformation-Address-Street-Input,
+#AdminDeposit-Screen-PaymentInformation-Address-Additional-Input,
+#AdminDeposit-Screen-PaymentInformation-Area-City-Input,
+#AdminDeposit-Screen-PaymentInformation-CreditCard-Input
+{
+  display: inline-block;
+  width: 300px;
+  
+  margin-right: 50px;
+  margin-bottom: 5px;
+}
+
+
+#AdminDeposit-Screen-PaymentInformation-Name-Input {
+  width: 400px;
+}
+
+#AdminDeposit-Screen-PaymentInformation-Address-Additional-Input {
+  width: 280px;
+}
+
+#AdminDeposit-Screen-PaymentInformation-Area-State-Input {
+  width: 150px;
+}
+
+#AdminDeposit-Screen-PaymentInformation {
+  margin-top: 30px;
+}
+
+#AdminDeposit-Screen-PaymentInformation-CreditCard {
+  margin-top: 20px;
+}
+
+#AdminDeposit-Screen-PaymentInformation-CreditCard-Input {
+  display: inline-block;
+  width: 400px;
+  padding: 3px 3px 3px 5px;
+  margin-right: 10px;
+  
+  border-style: solid;
+  border-color: azure;
+  border-width: 2px;
+  border-radius: 5px;
+
+  vertical-align: middle;
+
+  background-color: white;
+}
+
+#AdminDeposit-Screen-PaymentInformation-CreditCard-Status {
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 20px;
+
+  vertical-align: middle;
+  color: red;
+}
+
+#AdminDeposit-Screen-PaymentInformation-CreditCard-Note {
+  margin-top: 10px;
+  margin-left: 10px;
+
+  font-size: 12px;
+}
+
+
+#AdminDeposit-Screen-Description-ConfirmButton {
+  background-image: none;
+  padding-right: 20px;
+}

@@ -4,6 +4,7 @@ import "log"
 import "net/http"
 import "encoding/json"
 import "fmt"
+import "strings"
 import "io"
 import "io/ioutil"
 
@@ -38,14 +39,26 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    if (payReservation(reservation, request)) {
-      storedReservation, _ := json.Marshal(reservation);
-      w.WriteHeader(http.StatusOK);
-      w.Write(storedReservation);
+    if (strings.HasSuffix(r.URL.Path, "/deposit")) {
+      if (payDeposit(reservation, request)) {
+        storedReservation, _ := json.Marshal(reservation);
+        w.WriteHeader(http.StatusOK);
+        w.Write(storedReservation);
 
-      NotifyReservationPaid(request.ReservationId);
+        NotifyDepositPaid(request.ReservationId);
+      } else {
+        w.WriteHeader(http.StatusBadRequest);
+      }
     } else {
-      w.WriteHeader(http.StatusBadRequest);
+      if (payReservation(reservation, request)) {
+        storedReservation, _ := json.Marshal(reservation);
+        w.WriteHeader(http.StatusOK);
+        w.Write(storedReservation);
+
+        NotifyReservationPaid(request.ReservationId);
+      } else {
+        w.WriteHeader(http.StatusBadRequest);
+      }
     }
   } else if (r.Method == http.MethodDelete) {
     if (r.URL.RawQuery != "") {
@@ -57,14 +70,26 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
         if (reservation == nil) {
           w.WriteHeader(http.StatusNotFound);
         } else {
-          if (refundReservation(reservation)) {
-            storedReservation, _ := json.Marshal(reservation);
-            w.WriteHeader(http.StatusOK);
-            w.Write(storedReservation);
+          if (strings.HasSuffix(r.URL.Path, "/deposit")) {
+            if (refundDeposit(reservation)) {
+              storedReservation, _ := json.Marshal(reservation);
+              w.WriteHeader(http.StatusOK);
+              w.Write(storedReservation);
 
-            NotifyReservationRefunded(reservation.Id);
+              NotifyDepositRefunded(reservation.Id);
+            } else {
+              w.WriteHeader(http.StatusBadRequest);
+            }
           } else {
-            w.WriteHeader(http.StatusBadRequest);
+            if (refundReservation(reservation)) {
+              storedReservation, _ := json.Marshal(reservation);
+              w.WriteHeader(http.StatusOK);
+              w.Write(storedReservation);
+
+              NotifyReservationRefunded(reservation.Id);
+            } else {
+              w.WriteHeader(http.StatusBadRequest);
+            }
           }
         }
       } else {
@@ -93,19 +118,19 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   }
 
 
-  stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
-  
-  params := &stripe.ChargeParams {
-    Amount: paidAmount * 100,
-    Currency: "usd",
-    Desc: "Boat reservation #" + string(request.ReservationId),
-  }
-  
-  params.SetSource(request.PaymentToken);
-  params.AddMeta("reservation_id", string(request.ReservationId));
-  
-
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
+
+    params := &stripe.ChargeParams {
+      Amount: paidAmount * 100,
+      Currency: "usd",
+      Desc: "Boat reservation #" + string(request.ReservationId),
+    }
+
+    params.SetSource(request.PaymentToken);
+    params.AddMeta("reservation_id", string(request.ReservationId));
+
+
     charge, err := charge.New(params);
     
     if (err != nil) {
@@ -129,24 +154,18 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   } else {
     fmt.Println("Payments turned off - payment will not be processed thru the payent portal");
     
-      reservation.ChargeId = "fake charge";
-      reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
-      reservation.PaymentAmount = paidAmount;
-      SaveReservation(reservation);
+    reservation.ChargeId = "fake charge";
+    reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
+    reservation.PaymentAmount = paidAmount;
+    SaveReservation(reservation);
 
-      return true;
+    return true;
   }
 }
 
 func refundReservation(reservation *TReservation) bool {
   fmt.Printf("Starting refund processing for reservation %s\n", reservation.Id);
 
-  stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
-  
-  params := &stripe.RefundParams {
-    Charge: reservation.ChargeId,
-  }
-  
   cancellationFee := getNonRefundableFee(reservation);
   fmt.Printf("Non refundable fees = %d\n", cancellationFee);
   
@@ -157,10 +176,16 @@ func refundReservation(reservation *TReservation) bool {
     if (refundAmount < 0) {
       refundAmount = 0;
     }
-    params.Amount = refundAmount * 100;
   }
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
+
+    params := &stripe.RefundParams {
+      Charge: reservation.ChargeId,
+      Amount: refundAmount * 100,
+    }
+
     refund, err := refund.New(params);
 
     if (err != nil) {
@@ -191,6 +216,105 @@ func refundReservation(reservation *TReservation) bool {
     return true;
   }
 }
+
+
+
+func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
+  fmt.Printf("Starting deposit payment processing for reservation %s\n", request.ReservationId);
+
+  depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
+  
+  if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
+
+    params := &stripe.ChargeParams {
+      Amount: depositAmount * 100,
+      Currency: "usd",
+      Desc: "Security deposit for #" + string(request.ReservationId),
+    }
+
+    params.SetSource(request.PaymentToken);
+    params.AddMeta("reservation_id", string(request.ReservationId));
+
+
+    charge, err := charge.New(params);
+    
+    if (err != nil) {
+      fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
+      reservation.DepositStatus = PAYMENT_STATUS_FAILED;
+      SaveReservation(reservation);
+
+      fmt.Printf("Deposit processing for reservation %s failed\n", reservation.Id);
+
+      return false;
+    } else {
+      reservation.DepositChargeId = charge.ID;
+      reservation.DepositAmount = depositAmount;
+      reservation.DepositStatus = PAYMENT_STATUS_PAYED;
+      SaveReservation(reservation);
+
+      fmt.Printf("Deposit processing for reservation %s is complete successfully\n", reservation.Id);
+
+      return true;
+    }
+  } else {
+    fmt.Println("Payments turned off - payment will not be processed thru the payent portal");
+    
+    reservation.DepositChargeId = "fake deposit charge";
+    reservation.DepositAmount = depositAmount;
+    reservation.DepositStatus = PAYMENT_STATUS_PAYED;
+    SaveReservation(reservation);
+
+    return true;
+  }
+}
+
+func refundDeposit(reservation *TReservation) bool {
+  fmt.Printf("Starting deposit refund processing for reservation %s\n", reservation.Id);
+
+  depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
+  
+  if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
+    stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
+
+    params := &stripe.RefundParams {
+      Charge: reservation.ChargeId,
+      Amount: depositAmount * 100,
+    }
+
+  
+    refund, err := refund.New(params);
+
+    if (err != nil) {
+      fmt.Printf("Deposit refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
+      SaveReservation(reservation);
+
+      fmt.Printf("Deposit refund processing for reservation %s failed\n", reservation.Id);
+
+      return false;
+    } else {
+      reservation.DepositRefundId = refund.ID;
+      reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
+      SaveReservation(reservation);
+
+      fmt.Printf("Deposit refund processing for reservation %s is complete successfully\n", reservation.Id);
+
+      return true;
+    }
+  } else {
+    fmt.Println("Payments turned off - deposit refund will not be processed thru the payent portal");
+    
+    reservation.DepositRefundId = "fake deposit refund";
+    reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
+    SaveReservation(reservation);
+    
+    return true;
+  }
+}
+
+
+
+
 
 
 func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
