@@ -107,6 +107,12 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
 
 func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   fmt.Printf("Starting payment processing for reservation %s\n", request.ReservationId);
+  
+  if (reservation.PaymentStatus == PAYMENT_STATUS_PAYED) {
+    fmt.Printf("Reservation %s is already paid\n", reservation.Id);
+
+    return false;
+  }
 
   paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
   
@@ -166,6 +172,12 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
 func refundReservation(reservation *TReservation) bool {
   fmt.Printf("Starting refund processing for reservation %s\n", reservation.Id);
 
+  if (reservation.PaymentStatus != PAYMENT_STATUS_PAYED) {
+    fmt.Printf("Reservation %s is not paid - cannot refund\n", reservation.Id);
+
+    return false;
+  }
+
   cancellationFee := getNonRefundableFee(reservation);
   fmt.Printf("Non refundable fees = %d\n", cancellationFee);
   
@@ -222,6 +234,12 @@ func refundReservation(reservation *TReservation) bool {
 func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
   fmt.Printf("Starting deposit payment processing for reservation %s\n", request.ReservationId);
 
+  if (reservation.DepositStatus == PAYMENT_STATUS_PAYED) {
+    fmt.Printf("Deposit for reservation %s is already paid\n", reservation.Id);
+
+    return false;
+  }
+
   depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
@@ -271,6 +289,12 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
 
 func refundDeposit(reservation *TReservation) bool {
   fmt.Printf("Starting deposit refund processing for reservation %s\n", reservation.Id);
+
+  if (reservation.DepositStatus != PAYMENT_STATUS_PAYED) {
+    fmt.Printf("Deposit for reservation %s is not paid - cannot refund\n", reservation.Id);
+
+    return false;
+  }
 
   depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
   

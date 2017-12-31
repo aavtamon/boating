@@ -196,7 +196,7 @@ Backend = {
       payment_token: paymentToken
     }
     
-    this._communicate("reservation/payment/", "put", paymentRequest, true, [], {
+    this._communicate("reservation/payment/deposit", "put", paymentRequest, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         
@@ -222,7 +222,7 @@ Backend = {
   
 
   refundDeposit: function(callback) {
-    this._communicate("reservation/payment/?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
+    this._communicate("reservation/payment/deposit?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         

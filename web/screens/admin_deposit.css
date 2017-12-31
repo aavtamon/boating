@@ -1,8 +1,12 @@
+#AdminDeposit-Screen-ReservationSummary-Reservation-Title,
+#AdminDeposit-Screen-ReservationSummary-Name-Title,
 #AdminDeposit-Screen-ReservationSummary-Boat-Title,
 #AdminDeposit-Screen-ReservationSummary-Deposit-Title {
   display: inline-block;
   width: 450px;
 }
+#AdminDeposit-Screen-ReservationSummary-Reservation-Value,
+#AdminDeposit-Screen-ReservationSummary-Name-Value,
 #AdminDeposit-Screen-ReservationSummary-Boat-Value,
 #AdminDeposit-Screen-ReservationSummary-Deposit-Value {
   display: inline-block;

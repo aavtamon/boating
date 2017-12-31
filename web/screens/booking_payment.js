@@ -72,7 +72,10 @@ BookingPayment = {
 
     $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
     $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
-    
+
+    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
+    $("#BookingPayment-Screen-ReservationSummary-Boat-Value").html(boat.name);
+  
     $("#BookingPayment-Screen-ReservationSummary-Group-Value").html(reservationContext.adult_count + " adults and " + reservationContext.children_count + " children (allowed maximum - " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].maximum_capacity + ")");
     
     

@@ -146,7 +146,7 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
       continue;
     }
   
-    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN || reservation.OwnerAccountId != accountId) {
+    if (reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID) {
       boatIds, hasLocation := account.Locations[reservation.LocationId];
       if (hasLocation) {
         matches := false;

@@ -113,7 +113,9 @@ Main = {
   },
   
   
-  _loadScreen: function(screen) {
+  _loadScreen: function(requestedPath) {
+    var screen = requestedPath.split('?')[0];
+    
     if (this._currentScreen == screen) {
       return;
     }

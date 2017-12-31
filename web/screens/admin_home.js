@@ -58,7 +58,7 @@ AdminHome = {
                   } else {
                     Main.showMessage("Deposit Refund Not Successful", "Deposit was not refunded.");
                   }
-                });
+                }.bind(this));
               } else {
                 Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
               }
@@ -77,6 +77,7 @@ AdminHome = {
     optionsSelector.empty();
     
     var upcomingRentals = [];
+    var inprocessRentals = [];
     var completedRentals = [];
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
@@ -96,24 +97,35 @@ AdminHome = {
       
       if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
         upcomingRentals.push(rentalOption[0]);
-      } else {
+      } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
+        inprocessRentals.push(rentalOption[0]);
+      } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
         completedRentals.push(rentalOption[0]);
+      } else {
+        console.error("Unexpected reservation status: " + rental.status + " of reservation " + reservationId);
       }
     }
+
     
-    upcomingRentals.sort(function(option1, option2) {
+    sortFunction = function(option1, option2) {
       return option1._rental.slot.time - option2._rental.slot.time;
-    });
-    completedRentals.sort(function(option1, option2) {
-      return option2._rental.slot.time - option1._rental.slot.time;
-    });
+    }
+    
+    upcomingRentals.sort(sortFunction);
+    inprocessRentals.sort(sortFunction);
+    completedRentals.sort(sortFunction);
 
     
     var upcomingRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Upcoming rentals</div></div>").appendTo(optionsSelector);
+    var inprocessRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">In-process rentals</div></div>").appendTo(optionsSelector);
     var completedRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Completed rentals</div></div>").appendTo(optionsSelector);
     
     for (var i in upcomingRentals) {
       $(upcomingRentals[i]).appendTo(upcomingRentalsGroup);
+    }
+    
+    for (var i in inprocessRentals) {
+      $(inprocessRentals[i]).appendTo(inprocessRentalsGroup);
     }
     
     for (var i in completedRentals) {
@@ -127,6 +139,9 @@ AdminHome = {
 
     if (upcomingRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(upcomingRentalsGroup);
+    }
+    if (inprocessRentalsGroup.children().length == 1) {
+      $("<div class=\"optionbox-nooption\">None</div>").appendTo(inprocessRentalsGroup);
     }
     if (completedRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(completedRentalsGroup);

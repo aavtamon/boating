@@ -41,7 +41,8 @@
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Value,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value,
-#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value {
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete {
   display: inline-block;
   
   font-weight: bold;
