@@ -96,7 +96,7 @@ OwnerHome = {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(upcomingRentalsGroup);
     }
     if (inprocessRentalsGroup.children().length == 1) {
-      $("<div class=\"optionbox-nooption\">None</div>").appendTo(upcomingRentalsGroup);
+      $("<div class=\"optionbox-nooption\">None</div>").appendTo(inprocessRentalsGroup);
     }
     if (completedRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(completedRentalsGroup);
