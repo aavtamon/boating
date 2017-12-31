@@ -40,6 +40,10 @@ OwnerBooking = {
     });
     
     
+    $("#OwnerBooking-Screen-Description-BackButton").click(function() {
+      Main.loadScreen("owner_home");
+    });
+    
     $("#OwnerBooking-Screen-Description-BookButton").click(function() {
       Backend.resetReservationContext();
       
