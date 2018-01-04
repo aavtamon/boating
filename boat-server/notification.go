@@ -37,7 +37,7 @@ func NotifyReservationBooked(reservationId TReservationId) {
     emailOwnerReservationBooked(reservation);
     textOwnerReservationBooked(reservation);
     
-    emailAdminReservationBooked(reservation);
+    emailAdminReservationBookedByOwner(reservation);
   } else {
     // We do not notify renters about booking. We only notify about payment
   }
@@ -69,7 +69,7 @@ func NotifyReservationPaid(reservationId TReservationId) {
   emailRenterReservationPaid(reservation);
   textRenterReservationPaid(reservation);
   
-  emailAdminReservationBooked(reservation);
+  emailAdminReservationBookedByRenter(reservation);
 }
 
 func NotifyReservationRefunded(reservationId TReservationId) {
@@ -243,15 +243,28 @@ func emailRenterGetReadyReminder(reservation *TReservation) bool {
   return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_getreadyreminder.html");
 }
 
-func emailAdminReservationBooked(reservation *TReservation) bool {
-  fmt.Printf("Sending admin reservation-booked email for reservation %s\n", reservation.Id);
+func emailAdminReservationBookedByRenter(reservation *TReservation) bool {
+  fmt.Printf("Sending admin reservation-booked email for reservation booked by renter %s\n", reservation.Id);
   
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked.html");
+      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked_by_renter.html");
     } else {
       sendReservationEmail(account.Email, "Your boat was booked", reservation, "owner_boat_booked.html");
+    }
+  }
+  
+  return true;
+}
+
+func emailAdminReservationBookedByOwner(reservation *TReservation) bool {
+  fmt.Printf("Sending admin reservation-booked email for reservation booked by boat owner %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked_by_owner.html");
     }
   }
   
