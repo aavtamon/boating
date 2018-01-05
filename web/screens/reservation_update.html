@@ -91,12 +91,13 @@
     </div>
   </div>  
   <div id="ReservationUpdate-Screen-SafetyTest" class="info-box">
+    <div id="ReservationUpdate-Screen-SafetyTest-Note">IMPORTANT NOTE:</div>
     GA State law requires you to take and pass a safety training course, in order to be allowed to operate a motor boat.
     <br>
     {{if .SafetyTestStatus}}
       Our records indicate that you have passed a safery test that is still valid. You are good to go!
     {{else}}
-      Our records indicate that you haven't taken/passed the course and exam yet. Use <a href="#safety_test">Safety Test</a> link to take the test.
+      Our records indicate that you haven't taken/passed the course and exam yet. Use <a id="ReservationUpdate-Screen-SafetyTest-Link" href="#safety_tips">Safety Test</a> link to take the test.
     {{end}}
   </div>
   

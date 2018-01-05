@@ -76,6 +76,15 @@
   white-space: normal;
 }
 
+#ReservationUpdate-Screen-SafetyTest-Note {
+  margin-bottom: 5px;
+  color: red;
+}
+
+#ReservationUpdate-Screen-SafetyTest-Link {
+  font-size: 20px; 
+}
+
 #ReservationUpdate-Screen-ButtonsPanel {
   margin-top: 20px;
   text-align: center;

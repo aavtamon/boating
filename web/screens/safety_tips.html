@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="screens/safety_tips.css">
+<script src="screens/safety_tips.js"></script>
+
+<script>
+  $(document).ready(function() {
+    {{if .Reservation}}
+      {{if eq .Reservation.OwnerAccountId ""}}
+        SafetyTips.reservationId = {{.Reservation.Id}};
+      {{end}}
+    {{end}}
+    
+    SafetyTips.onLoad();
+  });
+</script>
+
+<div class="screen-description info-box">
+  Safety Course And Tips
+  <button id="SafetyTips-Screen-Description-NextButton" class="screen-description-next">Take Safety Test</button>
+</div>
+<div id="SafetyTips-Screen">
+  <div id="SafetyTips-Screen-SafetyCourse" class="info-box">
+    Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}}.
+    <br>
+    Thank you for taking the test. This is required by the state of Georgia.
+    <br>
+    <br>
+    Please watch the DNR-approved <a id="SafetyTips-Screen-SafetyCourse-Link" href="https://www.youtube.com/watch?v=L-jKdihXUeA" target="_blank">Safery Course</a> first.
+    <br>
+    When finished, please review the safety tips below.
+    <br>
+    <br>
+    Once you are done and feel comfortable, please press the button in the top-right corner to take the test.
+    <br>
+    <br>
+    <h4>Use of Life Jackets</h4>
+    All boats must contain one life jacket for each passenger.   Children age 13 and under must wear a life jacket at all times.   Parents need to make sure that the life jacket their child is wearing is the correct size for the child.   Parents must also make sure their children’s life jackets are properly fitted.  It is advisable that anyone swimming in the lake, should wear a life jacket, even those individuals over the age of 13.
+    <br>
+    <br>
+
+    <h4>Buoys</h4>
+    There are various types of buoys, each conveying different information.   Red and green buoys mark the navigable channel.   Red buoys will be on the starboard (right) side of the boat, as you travel up river (remember, red, right).   Green buoys mark the port (left) side of the channel (as you travel up river).   White buoys with red letters are used to convey specific information, such as “make no wake” or “swimming area”.
+    <br>
+    <br>
+
+    <h4>Riding on the boat</h4>
+    The maximum number of passengers on a boat, is determined by the manufacture, and will be indicated on the builder’s plate.   Keep in mind, that the capacity of the boat is not determined by the number of seats on the boat, rather the number on the builder’s plate.    When the boat is in motion, it is unlawful to ride on seatbacks, gunwales, transom, or in any seat that is outside the railing.   While a pontoon boat may have seats outside the railing (for fishing), it is unlawful to ride in these seats while the boat is in motion.
+    <br>
+    <br>
+
+    <h4>Running Lights</h4>
+    Running lights must be switched on when it is dark, or if visibly is greatly reduced (fog or a storm).   All boats shall exhibit a red light on port (left) side and a green light on the starboard (right) side.  Thus if you see a green light in the distance, then you are seeing the starboard (right) side of another boat.   Likewise, if you see a red light, you are seeing the port (left) side of another boat.
+    <br>
+    <br>
+
+    <h4>100-Foot Safe Zone</h4>
+    When operating the boat at a speed greater than an idle, you must not come within 100 feet of another boat, dock, or the shore.  Likewise if you are pulling a water skier, or someone on a tube, you must maintain the 100 foot safety zone.  Do not intentionally ride the wake of another boat, nor allow a water skier/tuber to do the same.
+    <br>
+    <br>
+
+    <h4>Running Engine</h4>
+    Do not permit passengers to embark or disembark from the boat when the engine is running or the boat is in motion. Make sure the engine is off, and keys have been removed from the ignition.
+    <br>
+    <br>
+    
+    <h4>Passing Other Boats</h4>
+    When passing a boat that is traveling in the same direction as you are, pass the other boat on its starboard (right) side.  Keep in mind, that you must maintain the minimum 100 feet clearance between your boat and the other boat. 
+    <br>
+    When passing a boat headed toward you, pass the other boat on its port (left) side.
+    <br>
+    <br>
+
+    <h4>Right of Way</h4>
+    All unpowered boats (sail, canoe, etc.)  have the right of way over that of powered (motorizes) boats.   Thus a powered boat must yield the right of way to unpowered boats.  This means you must go around the unpowered boat.   If passing smaller boats (ex: canoes), reduce your speed to avoid “swamping” the smaller craft.
+    <br>
+    <br>
+
+    <h4>Fire Extinguisher</h4>
+    Every boat over 20 feet in length must have a fire extinguisher on board.  Make sure every passenger must be aware of its location.
+    <br>
+    <br>
+
+    <h4>Negligent Operation of a Boat</h4>
+    The DNR considers any of the following to be negligent operation of a boat:
+    <ul>
+      <li>Children 13 and under not wearing a life jacket.</li>
+      <li>Operating at excessive or unsafe speed for the given conditions</li>
+      <li>Failing to maintain the 100 feet clearance zone</li>
+      <li>Failing to yield the right of way to another boat</li>
+      <li>Failing to switch on the running lights at night or during times of reduced visibility</li>
+      <li>Carrying more passengers than the boat is rated for</li>
+      <li>Not having a life jacket for every passenger on the boat</li>
+    </ul>
+    <br>
+    <br>
+
+    If you watched the video and read all the tips, you are ready to <a href="#safety_test">Take Safety Test</a>.  
+  </div>
+</div>

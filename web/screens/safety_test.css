@@ -1,3 +1,8 @@
+#SafetyTest-Screen-SafetyTestPanel-Info-Total,
+#SafetyTest-Screen-SafetyTestPanel-Info-Correct {
+  display: inline-block;
+}
+
 #SafetyTest-Screen-SafetyTestPanel-SubmitButton {
   margin-top: 20px;
 }
@@ -42,6 +47,7 @@
 .test-icon {
   display: inline-block;
   margin-right: 10px;
+  margin-top: -3px;
   vertical-align: middle;
   
   width: 10px;

@@ -23,7 +23,7 @@
       {{if not .SafetyTestResult}}
         You have the last chance to take the safety test. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.
         <br>
-        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_test'>Safety Test</a> link.
+        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link.
       {{end}}
 
 {{template "email_footer"}}

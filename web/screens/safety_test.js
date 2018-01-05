@@ -11,11 +11,18 @@ SafetyTest = {
       return;
     }
     
+    
+    $("#SafetyTest-Screen-Description-BackButton").click(function() {
+      Main.loadScreen("safety_tips");
+    }.bind(this));
+    
+    
     this._retrieveTestSuite();
+    
     
     $("#SafetyTest-Screen-SafetyTestPanel-SubmitButton").click(function() {
       if ($(".test").length > $(".test-option:checked").length) {
-        Main.showMessage("Please complete all tests", "You did not complete all the tests. Please go back and review them all.");
+        Main.showMessage("Please complete all tests", "You did not complete all the questions. Please go back and review them all. A competed question has a little green circle on the left.");
       } else {
         Backend.submitSafetyTestSuite(this._suite, function(status, checkedSuite) {
           if (status == Backend.STATUS_SUCCESS) {
@@ -46,7 +53,7 @@ SafetyTest = {
     
     
     $("#SafetyTest-Screen-TestFailed-RetakeButton").click(function() {
-      this._retrieveTestSuite();
+      Main.loadScreen("safety_tips");
     }.bind(this));
   },
 }
@@ -61,11 +68,11 @@ SafetyTest._populateSafetySuite = function() {
 
     var optionClass = optionFormat == "horizontal" ? "test-option-hor" : "test-option-ver";
     
-    var testHtml = "<div class='test' id='" + testId + "'><div class='test-icon'></div><div class='test-description'>" + test.text + "</div>";
+    var testHtml = "<div class='test' id='" + testId + "'><div class='test-description'><div class='test-icon'></div>" + test.text + "</div>";
     testHtml += "<div class='test-options'>";
     for (var optionId in test.options) {
       var testOption = test.options[optionId];
-      var optionHtml = "<div class='" + optionClass + "'><input name='" + testId + "' type='radio' id='" + optionId + "'><label class='test-option-label' for='" + optionId + "'>" + testOption + "</label></div>";
+      var optionHtml = "<div class='" + optionClass + "'><input class='test-option' name='" + testId + "' type='radio' id='" + optionId + "'><label class='test-option-label' for='" + optionId + "'>" + testOption + "</label></div>";
       
       testHtml += optionHtml;
     }
@@ -75,11 +82,13 @@ SafetyTest._populateSafetySuite = function() {
     testsHtml += testHtml;
   }
   
+  $("#SafetyTest-Screen-SafetyTestPanel-Info-Total").html(Object.keys(this._suite.tests).length);
+  $("#SafetyTest-Screen-SafetyTestPanel-Info-Correct").html(this._suite.passing_grade);
+  
   $("#SafetyTest-Screen-SafetyTestPanel-Tests").html(testsHtml);
-  $(".test-option").change(function() {
-    $(this).parent().parent().children(".test-icon").addClass("completed");
-    
-    SafetyTest._suite.tests[$(this).parent().parent().attr("id")].answer_option_id = $(this).parent().children(":checked").attr("id");
+  $(".test").change(function() {
+    $(this).find(".test-icon").addClass("completed");
+    SafetyTest._suite.tests[$(this).attr("id")].answer_option_id = $(this).find(":checked").attr("id");
   });
 }
 
@@ -119,7 +128,7 @@ SafetyTest._verifyTestResults = function(checkedTestResult) {
     $("#SafetyTest-Screen-TestPassed").show();
     $("#SafetyTest-Screen-TestPassed-Score").html(message);
   } else {    
-    var message = "Unfortunately you failed the test. You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You failed. Would you like to retake the test?";
+    var message = "Unfortunately you failed the test. You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You failed. Would you like to re-review the safety tips and retake the test?";
     
     $("#SafetyTest-Screen-TestFailed").show();
     $("#SafetyTest-Screen-TestFailed-Score").html(message);
