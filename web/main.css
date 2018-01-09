@@ -9,8 +9,8 @@ html, body {
 
 #Main-Header {
   display: block;
-  height: 110px;
-  padding-top: 20px;
+  height: 115px;
+  padding-top: 15px;
   text-align: center;
 
   white-space: nowrap;
@@ -19,21 +19,26 @@ html, body {
 }
 
 #Main-Header-Title {
-  position: relative;
+  height: 70px;
   overflow: hidden;
-
-  font-family: Verdana;
-  font-size: 40px;
 }
-
-#Main-Header-Title-Icon {
-  position: absolute;
-  top: -10px;
-  right: 20px;
+#Main-Header-Title-Summary {
+  font-size: 40px;
+  
+  text-shadow: 2px 2px gray;
+}
+#Main-Header-Title-Sub {
+  margin-left: 300px;
+  
+  font-size: 18px;
+  font-family: serif;
+  font-style: italic;
+  text-shadow: 1px 1px gray;
 }
 
 #Main-Header-Menu {
-  margin-top: 20px;
+  margin-top: 5px;
+  height: 40px;
 
   overflow: hidden;
   text-align: center;
@@ -45,6 +50,7 @@ html, body {
   display: inline-block;
   padding: 10px 0px 10px 0px;
   width: 200px;
+  height: 20px;
 
   cursor: pointer;
 
@@ -66,8 +72,8 @@ html, body {
 #Main-ScreenContainer {
   position: relative;
   padding: 10px;
-  height: -webkit-calc(100% - 110px - 40px - 20px - 70px);
-  height: calc(100% - 130px - 40px - 20px - 70px);
+  height: -webkit-calc(100% - 120px - 40px - 20px - 70px);
+  height: calc(100% - 120px - 40px - 20px - 70px);
 
   overflow-y: auto;
 }
