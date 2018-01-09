@@ -98,12 +98,12 @@ Main = {
   },
   
   
-  storeElement(tag, element) {
+  storeElement: function(tag, element) {
     element.setAttribute("id", tag);
     this._storeElements.push(element);
   },
   
-  recoverElement(tag) {
+  recoverElement: function(tag) {
     var element = $("#Main-RecycleBin #" + tag);
     if (element.length == 1) {
       return element[0];
