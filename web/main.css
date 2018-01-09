@@ -72,8 +72,8 @@ html, body {
 #Main-ScreenContainer {
   position: relative;
   padding: 10px;
-  height: -webkit-calc(100% - 120px - 40px - 20px - 70px);
-  height: calc(100% - 120px - 40px - 20px - 70px);
+  height: -webkit-calc(100% - 130px - 40px - 20px - 70px);
+  height: calc(100% - 130px - 40px - 20px - 70px);
 
   overflow-y: auto;
 }
