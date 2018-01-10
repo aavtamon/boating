@@ -2,22 +2,19 @@
 <script src="screens/safety_tips.js"></script>
 
 <script>
-  $(document).ready(function() {
-    {{if .Reservation}}
-      {{if eq .Reservation.OwnerAccountId ""}}
-        SafetyTips.reservationId = {{.Reservation.Id}};
-      {{end}}
+  {{if .Reservation}}
+    {{if eq .Reservation.OwnerAccountId ""}}
+      SafetyTips.reservationId = {{.Reservation.Id}};
     {{end}}
-    
-    SafetyTips.onLoad();
-  });
+  {{end}}
 </script>
 
 <div class="screen-description info-box">
   Safety Course And Tips
   <button id="SafetyTips-Screen-Description-NextButton" class="screen-description-next">Take Safety Test</button>
 </div>
-<div id="SafetyTips-Screen">
+
+<div id="SafetyTips-Screen" class="screen" onshow="SafetyTips.onLoad()">
   <div id="SafetyTips-Screen-SafetyCourse" class="info-box">
     Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}}.
     <br>

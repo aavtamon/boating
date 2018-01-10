@@ -4,16 +4,13 @@
 
 <script>
   OwnerLogin.ownerAccount = {{.OwnerAccount}};
-  
-  $(document).ready(function() {
-    OwnerLogin.onLoad();
-  });
 </script>
 
 <div id="OwnerLogin-Screen-Description" class="screen-description info-box">
   Owner's Portal
 </div>
-<form id="OwnerLogin-Screen" class="screen" action="javascript:OwnerLogin.login()">
+
+<form id="OwnerLogin-Screen" class="screen" action="javascript:OwnerLogin.login()" onshow="OwnerLogin.onLoad()">
   <div id="OwnerLogin-Screen-Login" class="info-box">
     <div id="OwnerLogin-Screen-Login-Credentials">
       <div id="OwnerLogin-Screen-Login-Credentials-Username-Label">User name:</div>

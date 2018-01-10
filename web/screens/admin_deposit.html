@@ -2,18 +2,14 @@
 <script src="screens/admin_deposit.js"></script>
 <script src="screens/screen_utils.js"></script>
 
-<script>
-  $(document).ready(function() {
-    AdminDeposit.onLoad();
-  });
-</script>
 
 <div id="AdminDeposit-Screen-Description" class="screen-description info-box">
   <button id="AdminDeposit-Screen-Description-BackButton" class="screen-description-back">Dashboard</button>
   Deposit Withdrawal
   <button id="AdminDeposit-Screen-Description-ConfirmButton" class="screen-description-next">Pay Deposit</button>
 </div>
-<form id="AdminDeposit-Screen" class="screen">
+
+<form id="AdminDeposit-Screen" class="screen" onshow="AdminDeposit.onLoad()">
   <div id="AdminDeposit-Screen-ReservationSummary" class="info-box">
     <div id="AdminDeposit-Screen-ReservationSummary-Reservation" class="info-box-row">
       <div id="AdminDeposit-Screen-ReservationSummary-Reservation-Title">Reservation:</div>

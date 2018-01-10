@@ -3,23 +3,20 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-  $(document).ready(function() {
-    {{if .Reservation}}
-      {{if eq .Reservation.OwnerAccountId ""}}
-        SafetyTest.reservationId = {{.Reservation.Id}};
-        SafetyTest.reservationEmail = {{.Reservation.Email}};
-      {{end}}
+  {{if .Reservation}}
+    {{if eq .Reservation.OwnerAccountId ""}}
+      SafetyTest.reservationId = {{.Reservation.Id}};
+      SafetyTest.reservationEmail = {{.Reservation.Email}};
     {{end}}
-                    
-    SafetyTest.onLoad();
-  });
+  {{end}}
 </script>
 
 <div class="screen-description info-box">
   <button id="SafetyTest-Screen-Description-BackButton" class="screen-description-back">Safety Tips</button>
   Safety Test To Operate Motor Boat
 </div>
-<div id="SafetyTest-Screen">
+
+<div id="SafetyTest-Screen" class="screen" onshow="SafetyTest.onLoad()">
   <div id="SafetyTest-Screen-SafetyCourse" class="info-box">
     Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}} (Driver's Licence #{{.Reservation.DLNumber}}). Thanks for taking the test.
     <br>

@@ -2,18 +2,13 @@
 <script src="screens/booking_confirmation.js"></script>
 <script src="screens/screen_utils.js"></script>
 
-<script>
-  $(document).ready(function() {
-    BookingConfirmation.onLoad();
-  });
-</script>
 
 <div id="BookingConfirmation-Screen-Description" class="screen-description info-box">
   <button id="BookingConfirmation-Screen-Description-BackButton" class="screen-description-back">Location</button>
   Provide information about the riders
   <button id="BookingConfirmation-Screen-Description-NextButton" class="screen-description-next">Payment</button>
 </div>
-<form id="BookingConfirmation-Screen" class="screen">
+<form id="BookingConfirmation-Screen" class="screen" onshow="BookingConfirmation.onLoad()">
   <div id="BookingConfirmation-Screen-AdditionalInformation" class="info-box">
     <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note">

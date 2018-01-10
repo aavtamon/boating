@@ -130,11 +130,22 @@ Main = {
     $(".main-menu-item").css("font-weight", "normal");
     $(".main-menu-item[screen~='" + screen + "']").css("font-weight", "bold");
 
+    $("#Main-ScreenHeader").empty();
+    $("#Main-ScreenHeader").hide();
+    $("#Main-ScreenContainer").hide();
     $("#Main-ScreenContainer").load("screens/" + screen + ".html", function() {
-      $("#Main-ScreenContainer").scrollTop(0);
-
-      $("#Main-ScreenHeader").empty();
       $(document).find(".screen-description").appendTo("#Main-ScreenHeader");
+      $("#Main-ScreenHeader").show();
+      $("#Main-ScreenContainer").fadeIn();
+      $("#Main-ScreenContainer").scrollTop(0);
+      
+      var screenElements = $(document).find(".screen");
+      if (screenElements.length > 0) {
+        var onShowAttr = screenElements[0].getAttribute("onshow");
+        if (onShowAttr != null) {
+          eval(onShowAttr);
+        }
+      }
     });
   }
 }

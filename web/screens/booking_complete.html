@@ -8,16 +8,12 @@
       BookingComplete.reservationId = "{{.Reservation.Id}}";
     {{end}}
   {{end}}
-  
-  $(document).ready(function() {
-    BookingComplete.onLoad();
-  });
 </script>
 
 <div id="BookingComplete-Screen-Description" class="screen-description info-box">
   Your reservation is successfully placed
 </div>
-<div id="BookingComplete-Screen" class="screen">
+<div id="BookingComplete-Screen" class="screen" onshow="BookingComplete.onLoad()">
   <div id="BookingComplete-Screen-ReservationSummary" class="info-box">
     <div>
       Your reservation has been placed, your confirmation number is <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>.

@@ -135,7 +135,6 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
     return nil;
   }
 
-
   account := ownerAccountMap[accountId];
   
   rentalStat := &TRentalStat{};
@@ -194,11 +193,8 @@ func initBookingSettings() {
 func refreshBookingAvailability() {
   currentTime := time.Now().UTC();
   currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
-  currentDateAsInt := currentDate.UnixNano() / int64(time.Millisecond);
+  bookingSettings.CurrentDate = currentDate.UnixNano() / int64(time.Millisecond);
 
-  bookingSettings.CurrentDate = currentDateAsInt;
-  
-  
   beginDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset);
   schedulingBeginDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingBeginDate);
   if (err == nil && schedulingBeginDate.After(beginDate)) {

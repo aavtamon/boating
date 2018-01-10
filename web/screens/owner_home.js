@@ -1,4 +1,5 @@
 OwnerHome = {
+  currentDate: null,
   ownerAccount: null,
   rentalStat: null,
   bookingSummaries: null,
@@ -144,10 +145,16 @@ OwnerHome = {
     var numberOfRentals = 0;
     var earnedMoney = 0;
     
+    var curDate = ScreenUtils.getDateForTime(this.currentDate);
+    curDate.setUTCDate(1);
+    var begginingOfMonthMillis = curDate.getTime();
+    
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
       
-      if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
+      if (rental.status == Backend.RESERVATION_STATUS_COMPLETED
+         && rental.slot.time > begginingOfMonthMillis) {
+
         numberOfRentals++;
         earnedMoney += rental.slot.price;
       }

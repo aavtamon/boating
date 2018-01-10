@@ -3,27 +3,24 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-  $(document).ready(function() {
-    {{if .Reservation}}
-      {{if .OwnerAccount}}
-        {{if eq .Reservation.OwnerAccountId .OwnerAccount.Id}}
-          OwnerReservationUpdate.reservationId = {{.Reservation.Id}};
-          OwnerReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
-          OwnerReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
-          OwnerReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
-          OwnerReservationUpdate.ownerAccountEmail = {{.OwnerAccount.Email}};
-        {{end}}
+  {{if .Reservation}}
+    {{if .OwnerAccount}}
+      {{if eq .Reservation.OwnerAccountId .OwnerAccount.Id}}
+        OwnerReservationUpdate.reservationId = {{.Reservation.Id}};
+        OwnerReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+        OwnerReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+        OwnerReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
+        OwnerReservationUpdate.ownerAccountEmail = {{.OwnerAccount.Email}};
       {{end}}
     {{end}}
-                    
-    OwnerReservationUpdate.onLoad();
-});
+  {{end}}
 </script>
 
 <div class="screen-description info-box">
   Your reservation details
 </div>
-<div id="ReservationUpdate-Screen">
+
+<div id="ReservationUpdate-Screen" class="screen" onshow="OwnerReservationUpdate.onLoad()">
   <div id="OwnerReservationUpdate-Screen-ReservationSummary" class="info-box">
     <div id="OwnerReservationUpdate-Screen-ReservationSummary-Id" class="info-box-row">
       <div id="OwnerReservationUpdate-Screen-ReservationSummary-Id-Title">Confirmation number:</div>

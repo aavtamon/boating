@@ -3,30 +3,27 @@
 <script src="screens/screen_utils.js"></script>
 
 <script>
-  $(document).ready(function() {
-    {{if .Reservation}}
-      {{if eq .Reservation.OwnerAccountId ""}}
-        ReservationUpdate.reservationId = {{.Reservation.Id}};
-        ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
-        ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
-        ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
-        ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
-        ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
-        ReservationUpdate.reservationEmail = {{.Reservation.Email}};
-        ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
+  {{if .Reservation}}
+    {{if eq .Reservation.OwnerAccountId ""}}
+      ReservationUpdate.reservationId = {{.Reservation.Id}};
+      ReservationUpdate.reservationDateTime = {{.Reservation.Slot.DateTime}};
+      ReservationUpdate.reservationLocationId = {{.Reservation.LocationId}};
+      ReservationUpdate.reservationBoatId = {{.Reservation.BoatId}};
+      ReservationUpdate.reservationPickupLocationId = {{.Reservation.PickupLocationId}};
+      ReservationUpdate.reservationCost = {{.Reservation.PaymentAmount}};
+      ReservationUpdate.reservationEmail = {{.Reservation.Email}};
+      ReservationUpdate.reservationExtras = {{.Reservation.Extras}};
 
-        ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
-      {{end}}
+      ReservationUpdate.currentDate = {{.BookingSettings.CurrentDate}};
     {{end}}
-                    
-    ReservationUpdate.onLoad();
-  });
+  {{end}}
 </script>
 
 <div class="screen-description info-box">
   Your reservation details
 </div>
-<div id="ReservationUpdate-Screen" class="screen">
+
+<div id="ReservationUpdate-Screen" class="screen" onshow="ReservationUpdate.onLoad()">
   <div id="ReservationUpdate-Screen-ReservationSummary" class="info-box">
     <div id="ReservationUpdate-Screen-ReservationSummary-Id" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Id-Title">Confirmation number:</div>

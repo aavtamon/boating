@@ -3,18 +3,12 @@
 <script src="screens/screen_utils.js"></script>
 
 
-<script>
-  $(document).ready(function() {
-    BookingLocation.onLoad();
-  });
-</script>
-
 <div id="BookingLocation-Screen-Description" class="screen-description info-box">
   <button id="BookingLocation-Screen-Description-BackButton" class="screen-description-back">Date and Time</button>
   Choose your pickup location
   <button id="BookingLocation-Screen-Description-NextButton" class="screen-description-next">Boaters</button>
 </div>
-<div id="BookingLocation-Screen" class="screen">
+<div id="BookingLocation-Screen" class="screen" onshow="BookingLocation.onLoad()">
   <div id="BookingLocation-Screen-SelectionPanel">
     <div id="BookingLocation-Screen-SelectionPanel-LocationMap"></div>
     <div id="BookingLocation-Screen-SelectionPanel-CenterButton"></div>

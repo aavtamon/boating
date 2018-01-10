@@ -5,17 +5,14 @@
 <script>
   AdminHome.adminAccount = {{.OwnerAccount}};
   AdminHome.rentalStat = {{.OwnerRentalStat}};
-  
-  $(document).ready(function() {
-    AdminHome.onLoad();
-  });
 </script>
 
 <div id="AdminHome-Screen-Description" class="screen-description info-box">
   This is your administration dashboard, {{.OwnerAccount.FirstName}} {{.OwnerAccount.LastName}}
   <button id="AdminHome-Screen-Description-LogoutButton" class="standard-button">Logout</button>
 </div>
-<div id="AdminHome-Screen" class="screen">
+
+<div id="AdminHome-Screen" class="screen" onshow="AdminHome.onLoad()">
   <div id="AdminHome-Screen-AdminInfo" class="info-box">
     <div id="AdminHome-Screen-AdminInfo-BoatRentals" class="optionbox">
       <div id="AdminHome-Screen-AdminInfo-BoatRentals-Title" class="optionbox-title">Rentals</div>

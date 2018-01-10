@@ -5,10 +5,6 @@
 <script>
   BookingTime.availableSlots = {{.AvailableDates}};
   BookingTime.bookingSettings = {{.BookingSettings}};
-  
-  $(document).ready(function() {
-    BookingTime.onLoad();
-  });
 </script>
 
 <div id="BookingTime-Screen-Description" class="screen-description info-box">
@@ -16,7 +12,7 @@
   Choose a day and time of your reservation
   <button id="BookingTime-Screen-Description-NextButton" class="screen-description-next">Location</button>
 </div>
-<div id="BookingTime-Screen" class="screen">
+<div id="BookingTime-Screen" class="screen" onshow="BookingTime.onLoad()">
   <div id="BookingTime-Screen-SelectionPanel" class="info-box">
     <div id="BookingTime-Screen-SelectionPanel-Calendar"></div>
     <div id="BookingTime-Screen-SelectionPanel-TimeFrame" class="optionbox">

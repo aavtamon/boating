@@ -2,17 +2,11 @@
 <script src="screens/reservation_retrieval.js"></script>
 <script src="screens/screen_utils.js"></script>
 
-<script>
-  $(document).ready(function() {
-    ReservationRetrieval.onLoad();
-  });
-</script>
-
 
 <div class="screen-description info-box">
   Retrieve your reservation
 </div>
-<form id="ReservationRetrieval-Screen" class="screen" action="javascript:ReservationRetrieval.retrieve();">
+<form id="ReservationRetrieval-Screen" class="screen" action="javascript:ReservationRetrieval.retrieve();" onshow="ReservationRetrieval.onLoad()">
   {{if .Reservation }}
     {{if eq .Reservation.OwnerAccountId ""}}
       <div class="info-box">

@@ -52,14 +52,21 @@
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Location-Label,
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Label,
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Label,
-#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Label,
-#OwnerHome-Screen-Statistics-NumberOfRentals-Label,
-#OwnerHome-Screen-Statistics-Earnings-Label {
+#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Label {
   display: inline-block;
   
   width: 100px;
   margin-right: 50px;
 }
+
+#OwnerHome-Screen-Statistics-NumberOfRentals-Label,
+#OwnerHome-Screen-Statistics-Earnings-Label {
+  display: inline-block;
+  
+  width: 500px;
+  margin-left: 50px;
+}
+
 
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Value,
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Time-Value,
@@ -74,9 +81,3 @@
   
   font-weight: bold;
 }
-
-#OwnerHome-Screen-Statistics-NumberOfRentals-Value,
-#OwnerHome-Screen-Statistics-Earnings-Value {
-  float: right;
-}
-
