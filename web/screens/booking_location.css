@@ -1,11 +1,7 @@
-#BookingLocation-Screen {
-	height: 100%;
-}
-
 #BookingLocation-Screen-SelectionPanel {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 300px;
 }
 
 #BookingLocation-Screen-SelectionPanel-LocationMap {
