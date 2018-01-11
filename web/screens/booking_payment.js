@@ -60,7 +60,7 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Please review our cancellation policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Please press OK if you are good to proceed.", function(action) {
+        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Press OK to agree and proceed with the reservaion.<br>Press Cancel if you disagree with this policy, and your reservation will not be processed.", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);
@@ -158,16 +158,18 @@ BookingPayment = {
  
   
   _getCancellationPolicy: function() {
-    var policy = "<center><h1>Cancellation Policy</h1></center>&nbsp;&nbsp;We allow free cancellation " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours or more prior to your planned departure.<br>If you cancel in less than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours, the following fees apply:<br><ul>";
+    var policy = "<center><h1>Cancellation Policy</h1></center>You may cancel your reservation and receive a full refund if you cancel more than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours before your departure.<br><br>The following fees apply if cancelling the reservation less than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours in advance of the departure:<br><ul>";
     
     
     for (var index in Backend.getBookingConfiguration().cancellation_fees) {
       var fee = Backend.getBookingConfiguration().cancellation_fees[index];
-      policy += "<li>" + fee.range_min + " - " + fee.range_max + " hours: $" + fee.price + " dollars</li>"
+      policy += "<li>" + ScreenUtils.pad(fee.range_max, 2, "0") + " - " + ScreenUtils.pad(fee.range_min, 2, "0") + " hours: $" + fee.price + " dollars</li>"
     }
     
-    policy += "</ul><br>&nbsp;&nbsp;Please also note, that we can cancel your trip due to inclement weather.<br>In this case you will be refunded in full."
-    + "<br>We hope though, that the weather will be great and you will enjoy your trip."
+    policy += "</ul><br>The fees will not exceed the amount you paid for the reservation.<br><br>"
+    
+    policy += "&nbsp;&nbsp;Please note, that should there be inclement weather we may cancel your reservation.<br>Should this occur, you will be refunded in full."
+    + "<br>However, we hope the weather will be perfect and you will enjoy your trip."
     
     return policy;
   },

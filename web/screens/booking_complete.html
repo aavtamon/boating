@@ -11,14 +11,14 @@
 </script>
 
 <div id="BookingComplete-Screen-Description" class="screen-description info-box">
-  Your reservation is successfully placed
+  Congratulations! Your Reservation Has Been Placed
 </div>
 <div id="BookingComplete-Screen" class="screen" onshow="BookingComplete.onLoad()">
   <div id="BookingComplete-Screen-ReservationSummary" class="info-box">
     <div>
-      Your reservation has been placed, your confirmation number is <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>.
+      Your confirmation number for this reservation is <a href="#reservation_update?id={{.Reservation.Id}}">{{.Reservation.Id}}</a>.
       <br>
-      You will soon be receiving an email at <b>{{.Reservation.Email}}</b> which contains this confirmation number and details regarding your reservation.
+      An email has been sent to <b>{{.Reservation.Email}}</b>. This email will contain the details regarding your reservation including this  reservation id.
       <br>
       <br>
       If you do not receive an email, or would like your reservation details sent to another email address, please enter the secondary email address in the box below, and click on the  <b>Send</b> button.
@@ -30,10 +30,9 @@
     </div>
   </div>  
   <div id="BookingComplete-Screen-Cancellation" class="info-box">
-    If you find it necesesary to cancel your reservation, please go to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a>, and use your confirmation number to access the reservation. You can also use the link in the confirmation email.
+    If you find it necesesary to cancel your reservation, please go to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a>, and use your confirmation number to access the reservation.
     <br>
-    <br>
-    You can cancel your reservation without penalty 48 hours before the reservation date. After that, cancellation fees will apply.
+    You can also use the link in the confirmation email.
   </div>
   <div id="BookingComplete-Screen-SafetyTest" class="info-box">
     GA State law requires all boaters to take a safety training course and pass the exam in order to be allowed to operate a motor boat.

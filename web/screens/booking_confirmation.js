@@ -25,16 +25,16 @@ BookingConfirmation = {
     reservationContext.adult_count = reservationContext.adult_count || 1;
     reservationContext.children_count = reservationContext.children_count || 0;
     
-    var maximumCapacity = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].maximum_capacity;
-    
-    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number").html(maximumCapacity);
+    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
+    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number").html(boat.maximum_capacity);
+    $("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName").html(boat.name);
 
 
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, maximumCapacity);
-    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, maximumCapacity - reservationContext.adult_count);
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, boat.maximum_capacity);
+    this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, boat.maximum_capacity - reservationContext.adult_count);
         
     ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
-      var remainder = maximumCapacity - value;
+      var remainder = boat.maximum_capacity - value;
       
       this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
     }.bind(this), null, function(value) {

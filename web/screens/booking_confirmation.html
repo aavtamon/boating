@@ -4,15 +4,15 @@
 
 
 <div id="BookingConfirmation-Screen-Description" class="screen-description info-box">
-  <button id="BookingConfirmation-Screen-Description-BackButton" class="screen-description-back">Location</button>
-  Provide information about the riders
+  <button id="BookingConfirmation-Screen-Description-BackButton" class="screen-description-back">Select Departure Location</button>
+  Passenger Information
   <button id="BookingConfirmation-Screen-Description-NextButton" class="screen-description-next">Payment</button>
 </div>
 <form id="BookingConfirmation-Screen" class="screen" onshow="BookingConfirmation.onLoad()">
   <div id="BookingConfirmation-Screen-AdditionalInformation" class="info-box">
     <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note">
-        Please note that the maximum capacity of your boat is <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b> (driver included), it is against the law to exceed the allowed limit.
+        Please note, that the maximum capacity of <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName"></b> is <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b>. This includes all passengers and crew members. Keep in mind, it is unlawful to exceed the specified limit.
       </div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults">
@@ -32,15 +32,19 @@
   
   <div id="BookingConfirmation-Screen-ContactInformation" class="info-box">
     <div id="BookingConfirmation-Screen-ContactInformation-Description">
-      Please provide information about the primary renter:
+      Please Provide Information About The Primary Renter:
     </div>
     <p>
-      Please note that the primary renter must be 25 years old or older, and possess a valid state issued driver's licence.
+      Please note that the primary renter must be 25 years of age or older, and must possess a valid state issued driver's licence.
+      <br>
+      A state-issued ID card will not be accepted. The name on the driver's license must match the name on your credit card.
+      <br>
+      We will need to make a copy of your driver's license when the boat is picked up. State law requires the operator of the boat to have valid ID at all times while operating the boat.
     </p>
     <div id="BookingConfirmation-Screen-ContactInformation-DL" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-DL-Age">
         <input type="checkbox" id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">
-        <label id="BookingConfirmation-Screen-ContactInformation-DL-Age-Label" for="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">I certify that the primary ren ter is 25 or older</label>
+        <label id="BookingConfirmation-Screen-ContactInformation-DL-Age-Label" for="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">I certify that as the primary renter, I am 25 years of age or older</label>
       </div>
       
       <div id="BookingConfirmation-Screen-ContactInformation-DL-License">
@@ -74,8 +78,8 @@
       </div>
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-Note">
         * We recommend that you use your <b>mobile</b> phone number as your primary contact number.
-        In this case, we will be able to send you status updates regarding your reservation, and you will be able to track the location of the boat on the day of pickup.
-        We will not share your phone number, and it will be removed from our records after completion of your trip. 
+        We will text you updates regarding your reservation using this number.
+        We will delete your personal information upon completion of your trip.
       </div>
     </div>
   </div>

@@ -107,8 +107,10 @@ html, body {
 #Main-Popup-Frame {
   position: absolute;
   width: 50%;
-  top: 20%;
+  max-height: 80%;
+  top: 10%;
   left: 25%;
+  overflow: scroll;
   
   border: ridge;
   
@@ -117,7 +119,6 @@ html, body {
 #Main-Popup-Frame-Title {
   text-align: center;
   padding: 1px;
-
   
   border-bottom: solid 1px black;
   

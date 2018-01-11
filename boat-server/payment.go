@@ -247,7 +247,6 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
 
     params := &stripe.ChargeParams {
       Amount: depositAmount * 100,
-      NoCapture: true,
       Currency: "usd",
       Desc: "Security deposit for #" + string(request.ReservationId),
     }

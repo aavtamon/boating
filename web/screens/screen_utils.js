@@ -263,6 +263,18 @@ ScreenUtils = {
   },
   
   
+  pad: function(value, padding, pad) {
+    var result = "";
+    
+    pad = pad || "&nbsp;";
+    
+    for (var i = padding - new String(value).length; i > 0; i--) {
+      result += pad;
+    }
+    
+    return result + value;
+  },
+  
   
   isValid: function(value) {
     return value != null && value != "";
