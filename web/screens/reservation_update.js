@@ -65,7 +65,7 @@ ReservationUpdate = {
 
     var refund = ReservationUpdate.reservationCost;
 
-    var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentDate) / 1000 / 60 / 60);
+    var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentTime) / 1000 / 60 / 60);
 
     for (var index in Backend.getBookingConfiguration().cancellation_fees) {
       var fee = Backend.getBookingConfiguration().cancellation_fees[index];

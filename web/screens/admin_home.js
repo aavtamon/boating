@@ -92,7 +92,7 @@ AdminHome = {
         $(".rentals").removeClass("selected");
         $(event.target).addClass("selected");
 
-        this._showSlotDetails(event.target);
+        this._showRentalDetails(event.target);
       }.bind(this));
       
       if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
@@ -149,7 +149,7 @@ AdminHome = {
   },
   
   
-  _showSlotDetails: function(rentalElement) {
+  _showRentalDetails: function(rentalElement) {
     this._selectedRentalElement = rentalElement;
     rental = rentalElement._rental;
     
@@ -158,8 +158,23 @@ AdminHome = {
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Duration-Value").html(ScreenUtils.getBookingDuration(rental.slot.duration));
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].name);
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
+
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
+    reservationId = "";
+    if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
+      reservationId = rentalElement._reservationId;
+    } else {
+      reservationId = "<a href='#reservation_retrieval?id=" + rentalElement._reservationId + "&name=" + rental.last_name + "&action=reservation_update'>" + rentalElement._reservationId + "</a>";
+    }
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(reservationId);
+    
+    var safetyTest = "";
+    if (rental.safety_test != null) {
+      safetyTest = "valid thru " + ScreenUtils.getBookingDate(rental.safety_test.expiration_date);
+    } else {
+      safetyTest = "<a href='#reservation_retrieval?id=" + rentalElement._reservationId + "&name=" + rental.last_name + "&action=safety_tips'>Not taken!</a>";
+    }
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Value").html(safetyTest);
 
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").show();
@@ -174,5 +189,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").show();
     }
+    
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").prop('disabled', rental.safety_test == null);
   },
 }

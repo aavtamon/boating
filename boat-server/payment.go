@@ -7,6 +7,7 @@ import "fmt"
 import "strings"
 import "io"
 import "io/ioutil"
+import "time"
 
 
 import "github.com/stripe/stripe-go"
@@ -247,6 +248,7 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
 
     params := &stripe.ChargeParams {
       Amount: depositAmount * 100,
+      NoCapture: true,
       Currency: "usd",
       Desc: "Security deposit for #" + string(request.ReservationId),
     }
@@ -357,10 +359,10 @@ func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
 
 
 func getNonRefundableFee(reservation *TReservation) uint64 {
-  bookingSettings := GetBookingSettings();
   bookingConfiguration := GetBookingConfiguration();
   
-  timeLeftToTrip := (reservation.Slot.DateTime - bookingSettings.CurrentDate) / 1000 / 60 / 60;
+  currentTime := time.Now().UTC().UnixNano() / int64(time.Millisecond);
+  timeLeftToTrip := (reservation.Slot.DateTime - currentTime) / 1000 / 60 / 60;
   
   for _, fee := range bookingConfiguration.CancellationFees {
     if (fee.RangeMin <= timeLeftToTrip && timeLeftToTrip < fee.RangeMax) {

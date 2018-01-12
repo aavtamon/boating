@@ -1,5 +1,5 @@
 #OwnerBooking-Screen {
-  min-width: 1250px;
+  min-width: 1150px;
 }
 
 #OwnerBooking-Screen-Description-BookButton {
@@ -12,7 +12,6 @@
 }
 
 #OwnerBooking-Screen-SelectionPanel {
-  margin-top: 20px;
   padding: 20px;
   white-space: nowrap;
 }
@@ -30,16 +29,20 @@
   margin-right: 20px;
 }
 
+#OwnerBooking-Screen-SelectionPanel-Duration {
+  width: 150px;
+}
+
 #OwnerBooking-Screen-ReservationSummary {
   height: 1.5em;
 }
 
 #OwnerBooking-Screen-Agreement {
+  margin-top: 10px;
   white-space: normal;
 }
 
 #OwnerBooking-Screen-Agreement-Link {
   font-size: 20px;
 }
-
-  
+ 

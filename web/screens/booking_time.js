@@ -1,6 +1,6 @@
 BookingTime = {
   availableSlots: null,
-  bookingSettings: null,
+  currentTime: null,
 
   _selectedDate: null,
   _selectedTime: null,
@@ -14,8 +14,19 @@ BookingTime = {
       return;
     }
     
+    
+    var schedulingBeginDate = Date.parse(Backend.getBookingConfiguration().scheduling_begin_date);
+    var schedulingEndDate = Date.parse(Backend.getBookingConfiguration().scheduling_end_date);
+
+    var locationOffset = Backend.getBookingConfiguration().locations[Backend.getReservationContext().location_id].time_zone_offset;
+    var bookingBeginDate = ScreenUtils.getDateForTime(this.currentTime + Backend.getBookingConfiguration().scheduling_begin_offset * 1000 * 60 * 60 * 24 + locationOffset * 1000 * 60 * 60).getTime();
+    if (schedulingBeginDate > bookingBeginDate) {
+      bookingBeginDate = schedulingBeginDate;
+    }
+
+  
     if (reservationContext.slot == null) {
-      this._selectedDate = this.bookingSettings.scheduling_begin_date;
+      this._selectedDate = bookingBeginDate;
       this._selectedTime = null;
       this._selectedDuration = null;
     } else {
@@ -48,8 +59,8 @@ BookingTime = {
       }.bind(this),
       
       defaultDate: ScreenUtils.getLocalTime(this._selectedDate),
-      minDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_begin_date),
-      maxDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_end_date)
+      minDate: ScreenUtils.getLocalTime(bookingBeginDate),
+      maxDate: ScreenUtils.getLocalTime(schedulingEndDate)
     });
 
     

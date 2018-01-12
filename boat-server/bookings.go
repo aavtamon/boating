@@ -9,16 +9,12 @@ import "time"
 import "fmt"
 
 
-type TBookingSettings struct {
-  CurrentDate int64 `json:"current_date"`;
-  SchedulingBeginDate int64 `json:"scheduling_begin_date"`;
-  SchedulingEndDate int64 `json:"scheduling_end_date"`;
-}
-
 type TRental struct {
   Slot TBookingSlot `json:"slot,omitempty"`;
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  SafetyTest *TSafetyTestResult `json:"safety_test,omitempty"`;
   Status TReservationStatus `json:"status,omitempty"`;
 }
 
@@ -36,11 +32,10 @@ type TReservationObserver struct {
 }
 
 
-var bookingSettings *TBookingSettings = nil;
 var availableSlots map[int64][]TBookingSlot = nil;
 var availableDates TAvailableDates = nil;
 var reservationObserver TReservationObserver;
-
+var currentDate time.Time;
 
 func BookingsHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Bookings Handler");
@@ -122,10 +117,6 @@ func InitializeBookings() {
   schedulePeriodicNotifications();
 }
 
-func GetBookingSettings() *TBookingSettings {
-  return bookingSettings;
-}
-
 func GetAvailableDates() TAvailableDates {
   return availableDates;
 }
@@ -165,7 +156,9 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
 
           rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
           rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
-          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;  
+          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;
+          rentalStat.Rentals[reservation.Id].LastName = reservation.LastName;
+          rentalStat.Rentals[reservation.Id].SafetyTest = FindSafetyTestResult(reservation);
           rentalStat.Rentals[reservation.Id].Status = reservation.Status;
         }
       }
@@ -183,17 +176,15 @@ func getAvailableBookingSlots(date int64) []TBookingSlot {
 
 
 func initBookingSettings() {
-  if (bookingSettings == nil) {
-    bookingSettings = new(TBookingSettings);
-  }
-
   refreshBookingAvailability();
 }
 
 func refreshBookingAvailability() {
   currentTime := time.Now().UTC();
-  currentDate := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
-  bookingSettings.CurrentDate = currentDate.UnixNano() / int64(time.Millisecond);
+  currentDate = time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
+
+  /*
+  bookingSettings.SchedulingOffset = bookingConfiguration.SchedulingBeginOffset;
 
   beginDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset);
   schedulingBeginDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingBeginDate);
@@ -208,7 +199,7 @@ func refreshBookingAvailability() {
     endDate = schedulingEndDate;
   }
   bookingSettings.SchedulingEndDate = endDate.UnixNano() / int64(time.Millisecond);
-  
+  */
 
   for locationId := range bookingConfiguration.Locations {
     for boatId := range bookingConfiguration.Locations[locationId].Boats {
@@ -245,9 +236,8 @@ func recalculateAllAvailableSlots(locationId string, boatId string) {
   availableDates = make(map[int64]int);
   availableSlots = make(map[int64][]TBookingSlot);
 
-  beginDate := time.Unix(0, bookingSettings.CurrentDate * int64(time.Millisecond));
-  for counter := bookingConfiguration.SchedulingBeginOffset; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
-    slotDate := beginDate.Add(time.Duration(counter * 24) * time.Hour);
+  for counter := bookingConfiguration.SchedulingBeginOffset - 1; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
+    slotDate := currentDate.Add(time.Duration(counter * 24) * time.Hour);
     calculateSlotsForDate(location, boat, slotDate);
   }
   

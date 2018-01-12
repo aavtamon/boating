@@ -11,7 +11,7 @@
 
 #AdminHome-Screen-AdminInfo-BoatRentals,
 #AdminHome-Screen-AdminInfo-RentalInfo {
-  height: 300px;
+  height: 320px;
 }
 
 #AdminHome-Screen-AdminInfo-BoatRentals {
@@ -20,7 +20,7 @@
 }
 
 #AdminHome-Screen-AdminInfo-RentalInfo {
-  width: 300px;
+  width: 320px;
 }
 
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Label,
@@ -29,6 +29,7 @@
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Label,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Label,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Label,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Label,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Label {
   display: inline-block;
   
@@ -42,6 +43,7 @@
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Location-Value,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Boat-Value,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value,
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Value,
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete {
   display: inline-block;
   

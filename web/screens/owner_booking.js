@@ -1,6 +1,6 @@
 OwnerBooking = {
   ownerAccount: null,
-  bookingSettings: null,
+  currentTime: null,
 
   
   onLoad: function() {
@@ -10,7 +10,16 @@ OwnerBooking = {
     }
 
 
-    this._selectedDate = this.bookingSettings.scheduling_begin_date;
+    var schedulingBeginDate = Date.parse(Backend.getBookingConfiguration().scheduling_begin_date);
+    var schedulingEndDate = Date.parse(Backend.getBookingConfiguration().scheduling_end_date);
+
+    var bookingBeginDate = ScreenUtils.getDateForTime(this.currentTime).getTime();
+    if (schedulingBeginDate > bookingBeginDate) {
+      bookingBeginDate = schedulingBeginDate;
+    }
+    
+    
+    this._selectedDate = bookingBeginDate;
     this._selectedTime = null;
     this._selectedDuration = null;
     
@@ -35,8 +44,8 @@ OwnerBooking = {
       }.bind(this),
       
       defaultDate: ScreenUtils.getLocalTime(this._selectedDate),
-      minDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_begin_date),
-      maxDate: ScreenUtils.getLocalTime(this.bookingSettings.scheduling_end_date)
+      minDate: ScreenUtils.getLocalTime(bookingBeginDate),
+      maxDate: ScreenUtils.getLocalTime(schedulingEndDate)
     });
     
     
@@ -174,7 +183,7 @@ OwnerBooking = {
     
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
-      var durationElement = $("<div class=\"optionbox-option durations\">" + ScreenUtils.getBookingDuration(slot.duration) + " - " + ScreenUtils.getBookingPrice(slot.price) + "</div>").appendTo($("#OwnerBooking-Screen-SelectionPanel-Duration-Durations"));
+      var durationElement = $("<div class=\"optionbox-option durations\">" + ScreenUtils.getBookingDuration(slot.duration) + "</div>").appendTo($("#OwnerBooking-Screen-SelectionPanel-Duration-Durations"));
       durationElement[0]._slot = slot;
       
       durationElement.click(function(event) {

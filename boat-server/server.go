@@ -18,7 +18,7 @@ const PRIVATE_KEY = "private_key.key";
 
 
 type THtmlObject struct {
-  BookingSettings *TBookingSettings;
+  CurrentTime int64;
   BookingConfiguration *TBookingConfiguration;
   AvailableDates TAvailableDates;
   Reservation *TReservation;
@@ -122,7 +122,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       htmlTemplate, _ := template.ParseFiles(pathToFile);
       
       htmlObject := THtmlObject {
-        BookingSettings: GetBookingSettings(),
+        CurrentTime: time.Now().UTC().UnixNano() / int64(time.Millisecond),
         BookingConfiguration: GetBookingConfiguration(),
         AvailableDates: GetAvailableDates(),
         

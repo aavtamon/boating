@@ -145,7 +145,7 @@ OwnerHome = {
     var numberOfRentals = 0;
     var earnedMoney = 0;
     
-    var curDate = ScreenUtils.getDateForTime(this.currentDate);
+    var curDate = ScreenUtils.getDateForTime(this.currentTime);
     curDate.setUTCDate(1);
     var begginingOfMonthMillis = curDate.getTime();
     
