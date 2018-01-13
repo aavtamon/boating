@@ -52,6 +52,7 @@ input, select, .ui-widget {
 }
 
 .screen-description {
+  position: relative;
   padding: 10px;
   text-align: center;
   white-space: nowrap;

@@ -10,6 +10,8 @@ html, body {
   height: 115px;
   padding-top: 15px;
   
+  min-width: 1100px;
+  
   text-align: center;
   white-space: nowrap;
 
@@ -65,6 +67,8 @@ html, body {
 #Main-ScreenHeader {
   height: 50px;
   padding: 10px;
+  
+  min-width: 1080px;
 }
 
 #Main-ScreenContainer {
@@ -72,6 +76,8 @@ html, body {
   padding: 10px;
   height: -webkit-calc(100% - 130px - 40px - 20px - 70px);
   height: calc(100% - 130px - 40px - 20px - 70px);
+  
+  min-width: 1080px;
 
   overflow-y: auto;
 }
