@@ -5,10 +5,10 @@
       <div style='font-size: 15px;'>
         Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        You paid ${{.Reservation.PaymentAmount}} dollars.
+        You paid ${{.Reservation.PaymentAmount}}.
       </div>
       <br>
-      Your ride is on <b>{{.ReservationDateTime}}</b>.
+      Your rental begins on <b>{{.ReservationDateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
@@ -22,9 +22,9 @@
       <br>
 
       {{if .SafetyTestResult}}
-        Our records indicate that you have a valid safety test and do not need to take it again. You are good to go.
+        Our records indicate that you have completed the required safety test. 
       {{else}}
-        You do not seem to have a safety test passed. It is mandatory to pass it in order to be able to legally operate a motor boat in Georgia. Please take the test before your ride, otherwise you will have to take it on the boat before your ride begins. If you have multuple drivers, each of them have to have a valid test.
+        Our records indicate that you have not yet completed/passed the required safety test.  This test is mandatory in order to be able to legally operate a motor boat in Georgia. Please take the test before your rental begins, otherwise you will have to complete the test on the day of the rental.  If you plan on having multiple drivers, each of person will have to complete the test.
 
         <br>
         Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link.
@@ -32,14 +32,14 @@
 
       <br>
       <br>
-      In order to speed up your checkout process, you may also want to fill out waivers in advance and bring them with you.
+      In order to speed up the checkout process, you might want to fill out waivers in advance and bring them with you.
       Please use this <a href='{{.WebReference}}/files/docs/waivers.docx' download>link</a> to get the forms.
       <br>
       <br>
-      Please also take a chance to review <a href='{{.WebReference}}/files/docs/rental-agreement.html'>Rental's agreement</a>.
+      Please also take a minute to review <a href='{{.WebReference}}/files/docs/rental-agreement.html'>Rental's agreement</a>.
       <br>
       <br>
-      IMPORTANT: We will take a security deposit in the amount of <b>${{.Boat.Deposit}}</b> dollars at the time of pickup. You must have a credit card on your name with the sufficent credit for us to secure this amount. The deposit will be refunded upon successful completion of your ride.
+      IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{.Boat.Deposit}}</b>.  Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental.
       <br>
       <br>
       Please contact us at <a href='mailto:reservations@pizboats.com?Subject=Inquery regarding reservation {{.Reservation.Id}}' target='_top'>reservations@pizboats.com</a> if you need any help.

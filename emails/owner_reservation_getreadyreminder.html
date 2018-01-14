@@ -1,10 +1,10 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>
-      Your ride is on <b>{{.ReservationDateTime}}</b>.
+      <center><h1 style='padding-top: 10px;'>Your boat rental is about to start!</h1></center>
+      Your rental is on <b>{{.ReservationDateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
-      Your reservation confirmation number is {{.Reservation.Id}}
+      The reservation confirmation number is {{.Reservation.Id}}
 
 {{template "email_footer"}}
