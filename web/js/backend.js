@@ -273,7 +273,9 @@ Backend = {
   // Account management
   
   logIn: function(username, password, callback) {
-    this._communicate("account/?username=" + username + "&password=" + password, "get", null, true, [], {
+    var passwordHash = CryptoJS.MD5("test").toString();
+    
+    this._communicate("account/?username=" + username + "&password=" + passwordHash, "get", null, true, [], {
       success: function(account) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, account);
