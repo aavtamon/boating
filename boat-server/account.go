@@ -4,6 +4,8 @@ import "net/http"
 import "encoding/json"
 import "fmt"
 import "strings"
+import "crypto/md5"
+import "encoding/hex"
 
 
 func AccountHandler(w http.ResponseWriter, r *http.Request) {
@@ -66,5 +68,11 @@ func handleLogout(w http.ResponseWriter, r *http.Request) {
 
 
 func calculateHash(password string) string {
-  return password;
+  hasher := md5.New()
+  hasher.Write([]byte(password))
+  passwordHash := hex.EncodeToString(hasher.Sum(nil))
+  
+  //fmt.Printf("PASSWORD HASH: <%s>\n", passwordHash);
+  
+  return passwordHash;
 }
