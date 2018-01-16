@@ -164,15 +164,17 @@ AdminHome = {
     if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
       reservationId = rentalElement._reservationId;
     } else {
-      reservationId = "<a href='#reservation_retrieval?id=" + rentalElement._reservationId + "&name=" + rental.last_name + "&action=reservation_update'>" + rentalElement._reservationId + "</a>";
+      reservationId = "<a href='javascript:AdminHome._loadReservationScreen(\"" + rentalElement._reservationId + "\", \"" + rental.last_name + "\", \"reservation_update\")'>" + rentalElement._reservationId + "</a>";
     }
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(reservationId);
     
     var safetyTest = "";
     if (rental.safety_test != null) {
       safetyTest = "valid thru " + ScreenUtils.getBookingDate(rental.safety_test.expiration_date);
+    } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
+      safetyTest = "Not taken!";
     } else {
-      safetyTest = "<a href='#reservation_retrieval?id=" + rentalElement._reservationId + "&name=" + rental.last_name + "&action=safety_tips'>Not taken!</a>";
+      safetyTest = "<a href='javascript:AdminHome._loadReservationScreen(\"" + rentalElement._reservationId + "\", \"" + rental.last_name + "\", \"safety_test\")'>Not taken!</a>";
     }
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Value").html(safetyTest);
 
@@ -192,4 +194,15 @@ AdminHome = {
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").prop('disabled', rental.safety_test == null);
   },
+  
+  
+  _loadReservationScreen: function(reservationId, lastName, screen) {
+    Backend.restoreReservationContext(reservationId, lastName, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.loadScreen(screen);
+      } else {
+        Main.showPopup("Operation failed", "Failed to retrieve the referenced reservation");
+      }
+    });
+  }
 }
