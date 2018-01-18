@@ -20,7 +20,7 @@
 #OwnerHome-Screen-AccountInfo-OwnerReservations, 
 #OwnerHome-Screen-AccountInfo-BoatRentals,
 #OwnerHome-Screen-AccountInfo-RentalInfo {
-  height: 300px;
+  height: 310px;
 }
 
 #OwnerHome-Screen-AccountInfo-OwnerReservations-Actions {
@@ -43,7 +43,7 @@
 }
 
 #OwnerHome-Screen-AccountInfo-RentalInfo {
-  width: 300px;
+  width: 310px;
 }
 
 #OwnerHome-Screen-AccountInfo-RentalInfo-Details-Date-Label,

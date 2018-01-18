@@ -1,3 +1,12 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  
+  background-color: #fffed7;
+}
+
+
 input, select, .ui-widget {
   border-radius: 5px;
   border-width: 3px;
@@ -49,6 +58,8 @@ input, select, .ui-widget {
 
 .screen {
   min-width: 1000px;
+  
+  font-size: 18px;
 }
 
 .screen-description {
@@ -60,6 +71,8 @@ input, select, .ui-widget {
   
   font-size: 25px;
   font-weight: bold;
+  
+  color: #062f73;
 }
 .screen-description-back, .screen-description-next {
   position: absolute;
@@ -253,6 +266,8 @@ input, select, .ui-widget {
   padding: 10px;
   
   overflow-y: auto;
+  
+  font-size: 1em;
 }
 
 .optionbox-option, .optionbox-nooption {
@@ -261,7 +276,7 @@ input, select, .ui-widget {
 
   font-family: Verdana;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1em;
   
   border-radius: 5px;
 

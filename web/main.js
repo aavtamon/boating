@@ -127,8 +127,8 @@ Main = {
     this._storeElements = [];
     this._currentScreen = screen;
     
-    $(".main-menu-item").css("font-weight", "normal");
-    $(".main-menu-item[screen~='" + screen + "']").css("font-weight", "bold");
+    $(".main-menu-item").removeClass("selected");
+    $(".main-menu-item[screen~='" + screen + "']").addClass("selected");
 
     $("#Main-ScreenHeader").empty();
     $("#Main-ScreenHeader").hide();
