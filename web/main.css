@@ -39,7 +39,6 @@
   overflow: hidden;
   text-align: center;
 
-  color: #f8fdff;
   background-color: #8c3308;
 }
 
@@ -56,6 +55,8 @@
   border-top-width: 3px;
   border-top-style: solid;
   border-top-color: #8c3308;
+  
+  color: #f8fdff;
 }
 .main-menu-item:hover {
   background-color: #ab4f23;
@@ -104,7 +105,7 @@
 
   text-align: center;
 
-  background-color: rgb(54, 84, 132);
+  background-color: #365484;
   color: white;
 }
 
@@ -116,7 +117,7 @@
   bottom: 0px;
   right: 0px;
   
-  background-color: rgba(100, 100, 100, 0.5);
+  background-color: #64646480;
 }
 #Main-Popup-Frame {
   position: absolute;
