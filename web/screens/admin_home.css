@@ -50,6 +50,7 @@
   font-weight: bold;
 }
 
-#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Button {
-  
+#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton,
+AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton {
+  font-size: 15px;
 }

@@ -66,6 +66,10 @@ input, select, .ui-widget {
   width: 15ch;
 }
 
+
+
+
+
 .screen {
   min-width: 1000px;
   
@@ -84,51 +88,25 @@ input, select, .ui-widget {
   
   color: #062f73;
 }
-.screen-description-back, .screen-description-next {
+.screen-description .standard-button {
   position: absolute;
-  display: inline-block;
-  min-width: 50px;
-  height: 30px;
-  padding: 0px 20px 0px 20px;
   
   font-size: 20px;
-  
-  background-size: 30px;
-  background-repeat: no-repeat;
-  
-  color: darkblue;
-  background-color: transparent;
-  
-  border-style: groove;
-  border-width: 1px;
-  border-radius: 5px;
-  border-color: lightblue;
 }
-.screen-description-back {
+.screen-description .standard-button.previous {
   left: 20px;
-  padding-left: 40px;
-  background-position: left;
-  text-align: right;
-  background-image: url(../imgs/left-arrow.png);
 }
-.screen-description-next {
+.screen-description .standard-button.next {
   right: 20px;
-  padding-right: 40px;
-  background-position: right;
-  text-align: left;
-  background-image: url(../imgs/right-arrow.png);
 }
-.screen-description-back:hover, .screen-description-next:hover {
-  background-color: rgba(201, 222, 242, 0.5);
+.screen-description .standard-button:hover {
+  background-color: #ffffff;
 }
-.screen-description-back:active, .screen-description-next:active {
-  border-style: inset;
-  background-color: rgb(201, 222, 242);
+.screen-description .standard-button:active {
+  background-color: #fbf9ad;
 }
-.screen-description-back:disabled, .screen-description-next:disabled {
-  opacity: 0.5;
-  background-color: transparent;
-}
+
+
 
 
 .screen-summary {
@@ -142,10 +120,7 @@ input, select, .ui-widget {
   font-size: 25px;
   line-height: 35px;
   
-  border-radius: 10px;
-  
-  background-color: #f7b742;
-  color: #074b8c;
+  color: #062f73;
 }
 
 
@@ -173,65 +148,16 @@ input, select, .ui-widget {
 }
 
 
-/*
-.titled-box {
-  font-size: 15px;
-  margin-top: 20px;
-
-  border-width: 2px;
-  border-style: groove;
-  padding: 10px;
-}
-
-.titled-box .title {
-  display: inline-block;
-  margin-left: 50px;
-  margin-top: -45px;
-  padding: 5px;
-  vertical-align: middle;
-
-  font-family: Verdana;
-  font-size: 20px;
-  font-weight: bold;
-
-  background-color: rgb(255, 234, 191);
-}
-*/
-
-.standard-button {
-  display: inline-block;
-  min-width: 100px;
-  padding: 5px 10px 5px 10px;
-  vertical-align: top;
-
-  text-align: center;
-  
-  font:inherit;
-
-  color: darkblue;
-  background-color: transparent;
-  
-  border-style: groove;
-  border-width: 1px;
-  border-radius: 5px;
-  border-color: lightblue;
-}
-.standard-button:hover {
-  background-color: rgba(201, 222, 242, 0.5);
-}
-.standard-button:active {
-  border-style: inset;
-  background-color: rgb(201, 222, 242);
-}
-.standard-button:disabled {
-  opacity: 0.5;
-  background-color: transparent;
-}
-
-
 .invalid {
   border-color: red;
 }
+
+
+
+
+  
+
+
 
 
 
@@ -253,7 +179,9 @@ input, select, .ui-widget {
 
   background-color: #fffee9;
 }
+
 .optionbox-title {
+  position: relative;
   height: 39px;
   line-height: 39px;
   text-align: center;
@@ -270,6 +198,21 @@ input, select, .ui-widget {
   color: #f8fdff;
   background-color: #ea8a38;
 }
+.optionbox-title .standard-button {
+  position: absolute;
+  margin-top: 5px;
+  vertical-align: middle;
+  
+  background-color: transparent;
+}
+.optionbox-title .standard-button.previous {
+  left: 10px;
+}
+.optionbox-title .standard-button.next {
+  right: 10px;
+}
+
+
 .optionbox-content {
   height: calc(100% - 20px - 45px);
   padding: 10px;
@@ -311,4 +254,59 @@ input, select, .ui-widget {
 .optionbox-optiongroup .optionbox-nooption {
   margin-left: 20px;
 }
+
+
+
+
+.standard-button {
+  display: inline-block;
+  
+  height: 30px;
+  padding: 0px 20px 0px 20px;
+  min-width: 50px;
+  
+  font-size: inherit;
+
+  background-size: 30px;
+  background-repeat: no-repeat;
+  
+  color: #8c3308;
+  background-color: #fffed8;
+  
+  border-style: groove;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: #8b3408;
+}
+.standard-button:hover {
+  background-color: #ffffff;
+}
+.standard-button:active {
+  border-style: inset;
+  background-color: #fbf9b1;
+}
+.standard-button:disabled {
+  opacity: 0.5;
+  background-color: transparent;
+}
+
+.standard-button.next {
+  padding-right: 40px;
+  background-position: right;
+  text-align: left;
+  background-image: url(../imgs/right-arrow.png);
+}
+
+.standard-button.previous {
+  padding-left: 40px;
+  background-position: left;
+  text-align: right;
+  background-image: url(../imgs/left-arrow.png);
+}
+
+.standard-button.no-text {
+  padding: 0px;
+  min-width: 35px;
+}
+
 

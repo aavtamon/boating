@@ -1,4 +1,5 @@
 #BookingBoat-Screen-SelectionPanel {
+  margin-top: 20px;
   white-space: nowrap;
   text-align: center;
 }
@@ -11,21 +12,6 @@
   margin-right: 50px;
 }
 
-#BookingBoat-Screen-SelectionPanel-BoatPictures-Title {
-  position: relative;
-}
-#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton,
-#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton {
-  top: 5px;
-  padding: 0px;
-  min-width: 35px;
-}
-#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton {
-  left: 10px;
-}
-#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton {
-  right: 10px;
-}
 #BookingBoat-Screen-SelectionPanel-BoatPictures-Picture {
   width: 100%;
   height: 150px;

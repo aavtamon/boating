@@ -94,7 +94,7 @@ BookingBoat = {
     if (reservationContext.boat_id != null) {
       $("#BookingBoat-Screen-Description-NextButton").prop("disabled", false);
       
-      $("#BookingBoat-Screen-ReservationSummary").html("You selected " + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].name);
+      $("#BookingBoat-Screen-ReservationSummary").html("You selected <b>" + Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id].name) + "</b>";
     } else {
       $("#BookingBoat-Screen-Description-NextButton").prop("disabled", true);
       $("#BookingBoat-Screen-ReservationSummary").html("Select a boat for your ride");
