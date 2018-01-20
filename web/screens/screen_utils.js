@@ -98,7 +98,11 @@ ScreenUtils = {
   },
   
   
+  
+  
   phoneInput: function(phoneElement, dataModel, dataModelProperty, changeCallback, validationMethod) {
+    $(phoneElement).addClass("input-field");
+    
     phoneElement._setPhone = function(phone) {
       dataModel[dataModelProperty] = phone;
       this.value = ScreenUtils.formatPhoneNumber(phone);
@@ -153,13 +157,46 @@ ScreenUtils = {
       return validationMethod == null ? true : validationMethod(dataModel[dataModelProperty]);
     }
     
-    
-    
 
     phoneElement._setPhone(dataModel[dataModelProperty] || "");
   },
   
+  checkbox: function(checkboxElement, dataModel, dataModelProperty, changeCallback) {
+    $(checkboxElement).addClass("checkbox");
+    $(checkboxElement).addClass("input-field");
+    
+    forLabel = $(checkboxElement).parent().find("label[for=" + $(checkboxElement).attr("id") + "]");
+    if (forLabel.length == 1) {
+      forLabel.css("user-select", "none");
+      forLabel.click(function() {
+        $(checkboxElement).click();
+      })
+    }
+    
+    $(checkboxElement).click(function() {
+      if ($(checkboxElement).hasClass("checked")) {
+        $(checkboxElement).removeClass("checked");
+        dataModel[dataModelProperty] = false;
+      } else {
+        $(checkboxElement).addClass("checked");
+        dataModel[dataModelProperty] = true;
+      }
+      
+      if (changeCallback) {
+        changeCallback(dataModel[dataModelProperty]);
+      }      
+    });
+    
+    if (dataModel[dataModelProperty] == null) {
+      dataModel[dataModelProperty] = false;
+    } else if (dataModel[dataModelProperty] == true) {
+      $(checkboxElement).addClass("checked");
+    }
+  },
+  
   dataModelInput: function(inputElement, dataModel, dataModelProperty, changeCallback, validationMethod, valueConverter) {
+    $(inputElement).addClass("input-field");
+    
     function _assingValue() {
       if (valueConverter) {
         dataModel[dataModelProperty] = valueConverter(inputElement.value);

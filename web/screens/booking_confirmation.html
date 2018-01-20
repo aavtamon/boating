@@ -12,7 +12,9 @@
   <div id="BookingConfirmation-Screen-AdditionalInformation" class="info-box">
     <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note">
-        Please note, that the maximum capacity of <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName"></b> is <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b>. This includes all passengers and crew members. Keep in mind, it is unlawful to exceed the specified limit.
+        Please note, that the maximum capacity of <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName"></b> is <b id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b>.
+        <br>
+        This includes all passengers and crew members. Keep in mind, it is unlawful to exceed the specified limit.
       </div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
       <div id="BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults">
@@ -43,7 +45,8 @@
     </p>
     <div id="BookingConfirmation-Screen-ContactInformation-DL" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-DL-Age">
-        <input type="checkbox" id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">
+        <!--input type="checkbox" id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox"-->
+        <div id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox" />
         <label id="BookingConfirmation-Screen-ContactInformation-DL-Age-Label" for="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">I certify that as the primary renter, I am 25 years of age or older</label>
       </div>
       
@@ -65,16 +68,16 @@
     </div>
     <div id="BookingConfirmation-Screen-ContactInformation-Email" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-Email-Label">Email:</div>
-      <input type="text" name="email" id="BookingConfirmation-Screen-ContactInformation-Email-Input" required>
+      <input type="email" name="email" id="BookingConfirmation-Screen-ContactInformation-Email-Input" required>
     </div>
     <div id="BookingConfirmation-Screen-ContactInformation-Phone" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone">
         <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label">Primary/mobile phone*:</div>
-        <input type="text" name="phone" id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input" class="phone-input" required>
+        <input type="tel" name="phone" id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input" class="phone-input" required>
       </div>
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone">
         <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label">Alternative phone:</div>
-        <input type="text" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input" class="phone-input">
+        <input type="tel" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input" class="phone-input">
       </div>
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-Note">
         * We recommend that you use your <b>mobile</b> phone number as your primary contact number.

@@ -7,13 +7,16 @@ html, body {
 }
 
 
-input, select, .ui-widget {
+.ui-widget {
   border-radius: 5px;
-  border-width: 3px;
+  border-width: 1px;
   border-style: solid;
-  border-color: azure;
+  border-color: #8b3408;
   
   font: inherit;
+  
+  color: #000000;
+  background-color: #f8f8f8;
 }
 
 .ui-widget {
@@ -53,7 +56,7 @@ input, select, .ui-widget {
 .ui-datepicker .ui-state-default {
   border-color: #ffffff;
   color: #1c94c4;
-  background-color: #f3ded3;
+  background-color: #f5d989;
 }
 .ui-datepicker .ui-state-active {
   border-color: #ffffff;
@@ -61,12 +64,60 @@ input, select, .ui-widget {
   background-color: #8c3308;
 }
 
+/*
+.ui-datepicker .ui-widget-header .ui-icon.ui-icon-circle-triangle-e {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  left: 0px;
+  top: 0px;
+  background-image: url(../imgs/left-arrow.png);
+  background-size: contain;
+  background-position: center;
+  
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #8b3408;
+}
+*/
 
 .phone-input {
   width: 15ch;
 }
 
+.input-field {
+  padding: 1px 5px 1px 5px;
+  
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #8b3408;
+  
+  font: inherit;
+  
+  user-select: none;
+  
+  color: #000000;
+  background-color: #f8f8f8;
+}
 
+
+.checkbox {
+  display: inline-block;
+  padding: 0px;
+  width: 1em;
+  height: 1em;
+  margin-right: 5px;
+  
+  vertical-align: top;
+}
+.checkbox.checked {
+  background-image: url(../imgs/check.png);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+}
 
 
 
@@ -155,12 +206,6 @@ input, select, .ui-widget {
 
 
 
-  
-
-
-
-
-
 
 .optionbox {
   display: inline-block;
@@ -212,7 +257,6 @@ input, select, .ui-widget {
   right: 10px;
 }
 
-
 .optionbox-content {
   height: calc(100% - 20px - 45px);
   padding: 10px;
@@ -241,7 +285,7 @@ input, select, .ui-widget {
   color: #8c3308;
 }
 .optionbox-option:hover {
-  background-color: azure;
+  background-color: #f5d989;
 }
 
 .optionbox-optiongroup-title {

@@ -7,8 +7,7 @@
   padding-bottom: 5px;
 }
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note {
-  font-size: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Title {
   display: inline-block;
@@ -145,13 +144,6 @@
   margin-right: 50px;
 }
 
-#BookingConfirmation-Screen-ContactInformation-Phone-Note,
-#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName {
-  margin-top: 10px;
-  font-size: 15px;
-  
-  white-space: normal;
-}
 
 #BookingConfirmation-Screen-Agreement {
   font-size: 20px;

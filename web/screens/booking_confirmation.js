@@ -17,10 +17,6 @@ BookingConfirmation = {
     });
 
     
-    if (Backend.getTemporaryData().ageCertification == null) {
-      Backend.getTemporaryData().ageCertification = false;
-    }
-    
   
     reservationContext.adult_count = reservationContext.adult_count || 1;
     reservationContext.children_count = reservationContext.children_count || 0;
@@ -54,26 +50,15 @@ BookingConfirmation = {
     for (var name in extras) {
       var extra = extras[name];
       var extraId = "BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras-" + name;
-      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<input type="checkbox" id="' + extraId + '">');
+      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<div id="' + extraId + '">');
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+$' + extra.price + ')</label>');
       
-      if (reservationContext.extras[name] == null) {
-        reservationContext.extras[name] = false;
-      }
-      
-      $("#" + extraId).prop("checked", reservationContext.extras[name]);
-      
-      $("#" + extraId).change(function(name) {
-        reservationContext.extras[name] = this.is(':checked');
-      }.bind($("#" + extraId), name));
+      ScreenUtils.checkbox($("#" + extraId)[0], reservationContext.extras, name);
     }
 
     
     
-    $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").prop("checked", Backend.getTemporaryData().ageCertification);
-    
-    $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").change(function() {
-      Backend.getTemporaryData().ageCertification = $("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox").is(':checked');
+    ScreenUtils.checkbox($("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox")[0], Backend.getTemporaryData(), "age_certification", function() {
       this._canProceedToNextStep();
     }.bind(this));
     
@@ -124,7 +109,7 @@ BookingConfirmation = {
     
     var reservationComplete = true;
 
-    var valid = Backend.getTemporaryData().ageCertification && ScreenUtils.isValidLicense(reservationContext.dl_number)
+    var valid = Backend.getTemporaryData().age_certification && ScreenUtils.isValidLicense(reservationContext.dl_number)
                 && ScreenUtils.isValid(reservationContext.first_name) && ScreenUtils.isValid(reservationContext.last_name)
                 && ScreenUtils.isValidEmail(reservationContext.email)
                 && ScreenUtils.isValidPhone(reservationContext.primary_phone)

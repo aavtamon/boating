@@ -17,6 +17,7 @@ BookingLocation = {
       Main.loadScreen("booking_confirmation");
     });
     
+    
     this._initMap();
     
     this._canProceedToNextStep();
