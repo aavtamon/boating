@@ -108,15 +108,15 @@
     },
 
     "TestQuestion_10": {
-      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxx?",
+      "text": "Who can legally operate a boat in Georgia?",
       "options_format": "vertical",
       "options": {
-        "TestQuestion_10-option1": "No one is required to wear a life jacket as they are for emergency use only.",
-        "TestQuestion_10-option2": "Only those passengers that cannot swim.",
-        "TestQuestion_10-option3": "Everyone must wear a life jacket.",
-        "TestQuestion_10-option4": "Anyone under the age of 13 years."
+        "TestQuestion_10-option1": "Anyone over the age of 21",
+        "TestQuestion_10-option2": "Anyone over the age of 14, provided the have completed the required boating course/exam",
+        "TestQuestion_10-option3": "Anyone over the age of 16, provided the have completed the required boating course/exam"
+        
       },
-      "answer_option_id": "TestQuestion_10-option4"
+      "answer_option_id": "TestQuestion_10-option3"
     },
 
 	"TestQuestion_11": {
@@ -277,15 +277,13 @@
     },
 
     "TestQuestion_25": {
-      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx?",
-      "options_format": "vertical",
+      "text": "The max legal blood alcohol limit for the operator of a boat in Georgia is 0.08%?",
+      "options_format": "horizontal",
       "options": {
-        "TestQuestion_25-option1": "No one is required to wear a life jacket as they are for emergency use only.",
-        "TestQuestion_25-option2": "Only those passengers that cannot swim.",
-        "TestQuestion_25-option3": "Everyone must wear a life jacket.",
-        "TestQuestion_25-option4": "Anyone under the age of 13 years."
+        "TestQuestion_25-option1": "True",
+        "TestQuestion_25-option2": "False"
       },
-      "answer_option_id": "TestQuestion_25-option4"
+      "answer_option_id": "TestQuestion_25-option1"
     }
   }
 }
