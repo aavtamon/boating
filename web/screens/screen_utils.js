@@ -165,23 +165,32 @@ ScreenUtils = {
     $(checkboxElement).addClass("checkbox");
     $(checkboxElement).addClass("input-field");
     
+    $(checkboxElement).attr("unselectable", "on");
+    $(checkboxElement).attr("autocomplete", "false");
+    $(checkboxElement).mouseenter(function() {
+      return false;
+    });
+    $(checkboxElement).mousedown(function() {
+      return false;
+    });
+    
     forLabel = $(checkboxElement).parent().find("label[for=" + $(checkboxElement).attr("id") + "]");
     if (forLabel.length == 1) {
       forLabel.css("user-select", "none");
-      forLabel.click(function() {
-        $(checkboxElement).click();
-      })
     }
     
     $(checkboxElement).click(function() {
       if ($(checkboxElement).hasClass("checked")) {
         $(checkboxElement).removeClass("checked");
         dataModel[dataModelProperty] = false;
+        $(checkboxElement).val("");
       } else {
         $(checkboxElement).addClass("checked");
         dataModel[dataModelProperty] = true;
+        $(checkboxElement).val("true");
       }
       
+      $(checkboxElement).valid();
       if (changeCallback) {
         changeCallback(dataModel[dataModelProperty]);
       }      
@@ -191,6 +200,7 @@ ScreenUtils = {
       dataModel[dataModelProperty] = false;
     } else if (dataModel[dataModelProperty] == true) {
       $(checkboxElement).addClass("checked");
+      $(checkboxElement).val("true");
     }
   },
   

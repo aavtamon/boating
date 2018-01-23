@@ -33,7 +33,7 @@
   </div>
   
   <div id="BookingConfirmation-Screen-ContactInformation" class="info-box">
-    <div id="BookingConfirmation-Screen-ContactInformation-Description">
+    <div id="BookingConfirmation-Screen-ContactInformation-Title">
       Please Provide Information About The Primary Renter:
     </div>
     <p>
@@ -46,14 +46,14 @@
     <div id="BookingConfirmation-Screen-ContactInformation-DL" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-DL-Age">
         <!--input type="checkbox" id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox"-->
-        <div id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox" />
+        <input id="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox" required />
         <label id="BookingConfirmation-Screen-ContactInformation-DL-Age-Label" for="BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox">I certify that as the primary renter, I am 25 years of age or older</label>
       </div>
       
       <div id="BookingConfirmation-Screen-ContactInformation-DL-License">
         <div id="BookingConfirmation-Screen-ContactInformation-DL-License-Label">DL#:</div>
         <select id="BookingConfirmation-Screen-ContactInformation-DL-License-State-Input"></select>
-        <input type="text" id="BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input" required>
+        <input type="text" name="state-id" id="BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input" required>
       </div>
     </div>
     <div id="BookingConfirmation-Screen-ContactInformation-Name" class="info-box-row">
@@ -73,11 +73,11 @@
     <div id="BookingConfirmation-Screen-ContactInformation-Phone" class="info-box-row">
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone">
         <div id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Label">Primary/mobile phone*:</div>
-        <input type="tel" name="phone" id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input" class="phone-input" required>
+        <input type="tel" name="phone" id="BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input" minlength="10" maxlength="10" required>
       </div>
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone">
         <div id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Label">Alternative phone:</div>
-        <input type="tel" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input" class="phone-input">
+        <input type="tel" name="alternative-phone" id="BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input" minlength="10" maxlength="10">
       </div>
       <div id="BookingConfirmation-Screen-ContactInformation-Phone-Note">
         * We recommend that you use your <b>mobile</b> phone number as your primary contact number.
@@ -86,6 +86,7 @@
       </div>
     </div>
   </div>
+  <input id="BookingConfirmation-Screen-SubmitButton" type=submit hidden />
   
   <div id="BookingConfirmation-Screen-Agreement" class="info-box">
     Please review our <a href="files/docs/rental-agreement.html" target="_blank">Renter's Agreement</a>

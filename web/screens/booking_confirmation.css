@@ -72,12 +72,16 @@
 }
 
 
-#BookingConfirmation-Screen-ContactInformation-Description {
+#BookingConfirmation-Screen-ContactInformation-Title {
+  margin-top: 30px;
   margin-bottom: 20px;
   
   text-align: center;
+
+  font-size: 25px;
+  font-weight: bold;
   
-  font-size: 20px;
+  color: #062f73;
 }
 
 #BookingConfirmation-Screen-ContactInformation-DL-Age,
@@ -87,6 +91,7 @@
 #BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone,
 #BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone {
   display: inline-block;
+  vertical-align: top;
 }
 
 #BookingConfirmation-Screen-ContactInformation-DL-Age {
