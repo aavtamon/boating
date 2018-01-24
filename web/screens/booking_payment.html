@@ -61,12 +61,12 @@
     <div id="BookingPayment-Screen-PaymentInformation">
       <div id="BookingPayment-Screen-PaymentInformation-Name" class="info-box-row">
         <div id="BookingPayment-Screen-PaymentInformation-Name-Label">Name on the card:</div>
-        <input type="text" id="BookingPayment-Screen-PaymentInformation-Name-Input">
+        <input type="text" id="BookingPayment-Screen-PaymentInformation-Name-Input" required>
       </div>
       <div id="BookingPayment-Screen-PaymentInformation-Address" class="info-box-row">
         <div id="BookingPayment-Screen-PaymentInformation-Address-Street">
           <div id="BookingPayment-Screen-PaymentInformation-Address-Street-Label">Street address:</div>
-          <input type="text" name="address" id="BookingPayment-Screen-PaymentInformation-Address-Street-Input">
+          <input type="text" name="address" id="BookingPayment-Screen-PaymentInformation-Address-Street-Input" required>
         </div>
         <div id="BookingPayment-Screen-PaymentInformation-Address-Additional">
           <div id="BookingPayment-Screen-PaymentInformation-Address-Additional-Label">Additional address:</div>
@@ -76,7 +76,7 @@
       <div id="BookingPayment-Screen-PaymentInformation-Area" class="info-box-row">
         <div id="BookingPayment-Screen-PaymentInformation-Area-City">
           <div id="BookingPayment-Screen-PaymentInformation-Area-City-Label">City:</div>
-          <input type="text" name="city" id="BookingPayment-Screen-PaymentInformation-Area-City-Input">
+          <input type="text" name="city" id="BookingPayment-Screen-PaymentInformation-Area-City-Input" required>
         </div>
         <div id="BookingPayment-Screen-PaymentInformation-Area-State">
           <div id="BookingPayment-Screen-PaymentInformation-Area-State-Label">State:</div>
@@ -93,6 +93,7 @@
       </div>
     </div>
   </div>
+  <input id="BookingPayment-Screen-SubmitButton" type=submit hidden />
   
   <div id="BookingPayment-Screen-CancellationPolicy" class="info-box">
     Please review our <a id="BookingPayment-Screen-CancellationPolicy-Link">Cancellation Policy</a> before placing your reservation.

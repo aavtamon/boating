@@ -16,6 +16,15 @@ BookingPayment = {
       Main.loadScreen("booking_confirmation");
     });
     
+    $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
+      if (Backend.getTemporaryData().paymentInfo.card_ready) {
+        $("#BookingPayment-Screen-SubmitButton").click();
+      } else {
+        $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("Please provide credit card information.");
+      }
+    });
+
+    
     
     if (Backend.getTemporaryData().paymentInfo == null) {
       Backend.getTemporaryData().paymentInfo = {card_ready: false, name: reservationContext.first_name + " " + reservationContext.last_name};
@@ -51,25 +60,10 @@ BookingPayment = {
       }
       
       Backend.getTemporaryData().paymentInfo.card_ready = event.complete;
-      this._canProceedToNextStep();
     }.bind(this));
     
     
     
-    $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
-      if (this._cancellationPolicyAccepted) {
-        this._pay(stripe, card);
-      } else {
-        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Press OK to agree and proceed with the reservaion.<br>Press Cancel if you disagree with this policy, and your reservation will not be processed.", function(action) {
-          if (action == Main.ACTION_OK) {
-            this._cancellationPolicyAccepted = true;
-            this._pay(stripe, card);
-          }
-        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
-      }
-    }.bind(this));
-    
-
     $("#BookingPayment-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(reservationContext.slot.time) + " " + ScreenUtils.getBookingTime(reservationContext.slot.time));
     $("#BookingPayment-Screen-ReservationSummary-Duration-Value").html(ScreenUtils.getBookingDuration(reservationContext.slot.duration));
 
@@ -92,20 +86,28 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + encludedExtrasAndPrice[1]));
     
     
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));
-
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Street-Input")[0], paymentInfo, "street_address", this._canProceedToNextStep.bind(this));
-
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Address-Additional-Input")[0], paymentInfo, "additional_address", this._canProceedToNextStep.bind(this));
-    
-    ScreenUtils.dataModelInput($("#BookingPayment-Screen-PaymentInformation-Area-City-Input")[0], paymentInfo, "city", this._canProceedToNextStep.bind(this));
-
-    ScreenUtils.stateSelect($("#BookingPayment-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-PaymentInformation-Name-Input", paymentInfo, "name");
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-PaymentInformation-Address-Street-Input", paymentInfo, "street_address");
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-PaymentInformation-Address-Additional-Input", paymentInfo, "additional_address");
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-PaymentInformation-Area-City-Input", paymentInfo, "city");
+    ScreenUtils.stateSelect("#BookingPayment-Screen-PaymentInformation-Area-State-Input", paymentInfo, "state");
     
     
     $("#BookingPayment-Screen-CancellationPolicy-Link").attr("href", "javascript:BookingPayment._showCancellationPolicy()");
     
-    this._canProceedToNextStep();
+    
+    ScreenUtils.form("#BookingPayment-Screen", null, function() {
+      if (this._cancellationPolicyAccepted) {
+        this._pay(stripe, card);
+      } else {
+        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Press OK to agree and proceed with the reservaion.<br>Press Cancel if you disagree with this policy, and your reservation will not be processed.", function(action) {
+          if (action == Main.ACTION_OK) {
+            this._cancellationPolicyAccepted = true;
+            this._pay(stripe, card);
+          }
+        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
+      }
+    }.bind(this));
   },
   
   
@@ -176,15 +178,5 @@ BookingPayment = {
   
   _showCancellationPolicy: function() {
     Main.showMessage("Cancellation Policy", this._getCancellationPolicy());
-  },
-  
-  
-  _canProceedToNextStep: function() {
-    var reservationContext = Backend.getReservationContext();
-    var paymentInfo = Backend.getTemporaryData().paymentInfo;
-        
-    var valid = ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city) && (paymentInfo.card_ready == true);
-         
-    $("#BookingPayment-Screen-Description-ConfirmButton").prop("disabled", !valid);
   },
 }

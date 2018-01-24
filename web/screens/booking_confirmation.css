@@ -1,5 +1,6 @@
 #BookingConfirmation-Screen-AdditionalInformation {
   font-size: 20px;
+  margin-bottom: 30px;
 }
 
 #BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople {
@@ -72,8 +73,9 @@
 }
 
 
-#BookingConfirmation-Screen-ContactInformation-Title {
-  margin-top: 30px;
+#BookingConfirmation-Screen-ContactInformation-Title,
+#BookingConfirmation-Screen-AdditionalInformation-Title {
+  margin-top: 10px;
   margin-bottom: 20px;
   
   text-align: center;

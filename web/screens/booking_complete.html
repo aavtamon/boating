@@ -11,7 +11,7 @@
 </script>
 
 <div class="screen-description">
-  Congratulations! Your Reservation Has Been Placed
+  Congratulations! Your Reservation Has Been Placed.
 </div>
 <div id="BookingComplete-Screen" class="screen" onshow="BookingComplete.onLoad()">
   <div id="BookingComplete-Screen-ReservationSummary" class="info-box">
@@ -35,7 +35,8 @@
     You can also use the link in the confirmation email.
   </div>
   <div id="BookingComplete-Screen-SafetyTest" class="info-box">
-    GA State law requires all boaters to take a safety training course and pass the exam in order to be allowed to operate a motor boat.
+    <a href="#safety_tips" id="BookingComplete-Screen-SafetyTest-Title">Mandatory Safety Test</a>
+    GA State law <b>requires</b> all boaters to take a safety training course and pass the exam in order to be allowed to operate a motor boat.
     <br>
     {{if .SafetyTestStatus}}
       Our records indicate that you have passed a safery test that is still valid. You are good to go!

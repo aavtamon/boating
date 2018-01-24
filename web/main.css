@@ -153,10 +153,17 @@
   
   text-align: center;
 }
-#Main-Popup-Frame-Buttons-OK, #Main-Popup-Frame-Buttons-Cancel {
+#Main-Popup-Frame-Buttons-OK,
+#Main-Popup-Frame-Buttons-Cancel {
   margin-right: 20px;
   
   font-size: 15px;
+  
+  color: #f1ffff;
+}
+#Main-Popup-Frame-Buttons-OK:active,
+#Main-Popup-Frame-Buttons-Cancel:active {
+  color: #c5f9f9;
 }
 
 

@@ -99,7 +99,7 @@ ScreenUtils = {
   
   
   
-  
+  /*
   phoneInput: function(phoneElement, dataModel, dataModelProperty, changeCallback, validationMethod) {
     $(phoneElement).addClass("input-field");
     
@@ -160,6 +160,7 @@ ScreenUtils = {
 
     phoneElement._setPhone(dataModel[dataModelProperty] || "");
   },
+  */
   
   checkbox: function(checkboxElement, dataModel, dataModelProperty, changeCallback) {
     $(checkboxElement).addClass("checkbox");
@@ -209,15 +210,15 @@ ScreenUtils = {
     
     function _assingValue() {
       if (valueConverter) {
-        dataModel[dataModelProperty] = valueConverter(inputElement.value);
+        dataModel[dataModelProperty] = valueConverter($(inputElement).val());
       } else {
-        dataModel[dataModelProperty] = inputElement.value;
+        dataModel[dataModelProperty] = $(inputElement).val();
       }
     }
     
     if (dataModel[dataModelProperty] != null) {
-      inputElement.value = dataModel[dataModelProperty];
-    } else if (inputElement.value != null) {
+      $(inputElement).val(dataModel[dataModelProperty]);
+    } else if ($(inputElement).val() != null) {
       _assingValue();
     }
 
@@ -232,7 +233,7 @@ ScreenUtils = {
         }        
       }
       if (changeCallback) {
-        changeCallback(inputElement.value);
+        changeCallback($(inputElement).val());
       }      
     });
     
@@ -299,6 +300,23 @@ ScreenUtils = {
     this.dataModelInput(stateElement, dataModel, dataModelProperty, changeCallback);
   },
   
+  form: function(formElement, rules, submitHandler) {
+    $(formElement).validate({
+      errorClass: "input-field-error",
+      
+      errorPlacement: function(error, element) {
+        error.appendTo(element.parent());
+      },
+      
+      rules: rules,
+      
+      submitHandler: function(form) {
+        if (submitHandler) {
+          submitHandler();
+        }
+      },
+    });
+  },
   
 
   getUTCMillis: function(localTime) {

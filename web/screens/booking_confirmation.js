@@ -29,7 +29,7 @@ BookingConfirmation = {
     this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", 1, boat.maximum_capacity);
     this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, boat.maximum_capacity - reservationContext.adult_count);
         
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector")[0], reservationContext, "adult_count", function(value) {
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector", reservationContext, "adult_count", function(value) {
       var remainder = boat.maximum_capacity - value;
       
       this._fillSelectorValues("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", 0, remainder);
@@ -37,7 +37,7 @@ BookingConfirmation = {
       return parseInt(value);
     });
         
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector")[0], reservationContext, "children_count", null, null, function(value) {
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-AdditionalInformation-NumberOfPeople-Children-Selector", reservationContext, "children_count", null, null, function(value) {
       return parseInt(value);
     });
     
@@ -58,38 +58,18 @@ BookingConfirmation = {
 
     
     
-    ScreenUtils.checkbox($("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox")[0], Backend.getTemporaryData(), "age_certification");
-    
-    ScreenUtils.stateSelect($("#BookingConfirmation-Screen-ContactInformation-DL-License-State-Input")[0], reservationContext, "dl_state");
-    
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input")[0], reservationContext, "dl_number");
-    
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input")[0], reservationContext, "first_name");
-    
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Name-LastName-Input")[0], reservationContext, "last_name");
-
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Email-Input")[0], reservationContext, "email");
-    
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input")[0], reservationContext, "primary_phone");
-
-    ScreenUtils.dataModelInput($("#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input")[0], reservationContext, "alternative_phone");
+    ScreenUtils.checkbox("#BookingConfirmation-Screen-ContactInformation-DL-Age-Checkbox", Backend.getTemporaryData(), "age_certification");
+    ScreenUtils.stateSelect("#BookingConfirmation-Screen-ContactInformation-DL-License-State-Input", reservationContext, "dl_state");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-DL-License-Number-Input", reservationContext, "dl_number");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Name-FirstName-Input", reservationContext, "first_name");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Name-LastName-Input", reservationContext, "last_name");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Email-Input", reservationContext, "email");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Phone-PrimaryPhone-Input", reservationContext, "primary_phone");
+    ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input", reservationContext, "alternative_phone");
     
     
-    
-    $("#BookingConfirmation-Screen").validate({
-      errorClass: "input-field-error",
-      
-      errorPlacement: function(error, element) {
-        error.appendTo(element.parent());
-      },
-      
-      rules: {
-      },
-      
-      submitHandler: function(form) {
-        Main.loadScreen("booking_payment");
-      },
-      
+    ScreenUtils.form("#BookingConfirmation-Screen", null, function() {
+      Main.loadScreen("booking_payment");
     });
   },
   
