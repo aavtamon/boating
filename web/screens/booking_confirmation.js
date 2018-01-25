@@ -68,7 +68,7 @@ BookingConfirmation = {
     ScreenUtils.dataModelInput("#BookingConfirmation-Screen-ContactInformation-Phone-AlternativePhone-Input", reservationContext, "alternative_phone");
     
     
-    ScreenUtils.form("#BookingConfirmation-Screen", null, function() {
+    ScreenUtils.form("#BookingConfirmation-Screen", {"id-number": {minlength: 7, maxlength: 15}}, function() {
       Main.loadScreen("booking_payment");
     });
   },

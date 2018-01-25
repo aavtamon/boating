@@ -26,6 +26,11 @@ BookingTime = {
 
   
     if (reservationContext.slot == null) {
+      
+      while (BookingTime.availableSlots[bookingBeginDate] == 0 && bookingBeginDate < schedulingEndDate) {
+        bookingBeginDate += 24 * 60 * 60 * 1000;
+      }
+      
       this._selectedDate = bookingBeginDate;
       this._selectedTime = null;
       this._selectedDuration = null;
