@@ -15,6 +15,10 @@
   vertical-align: top;
 }
 
+#Home-Screen-Advantages {
+  margin-top: 30px;
+}
+
 #Home-Screen-BoatPicture {
   display: inline-block;
   width: 300px;
@@ -26,7 +30,7 @@
 #Home-Screen-TubingPicture {
   display: inline-block;
   width: 300px;
-  margin-top: 10px;  
+  margin-top: 30px;
   margin-right: 40px;
   
   vertical-align: top;
@@ -35,7 +39,7 @@
 #Home-Screen-ThingsToDo {
   display: inline-block;
   width: calc(100% - 350px);
-  margin-top: 10px;
+  margin-top: 20px;
   
   vertical-align: top;
 }
