@@ -100,7 +100,7 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Press OK to agree and proceed with the reservaion.<br>Press Cancel if you disagree with this policy, and your reservation will not be processed.", function(action) {
+        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + "<br><br>&nbsp;&nbsp;Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);
@@ -112,7 +112,7 @@ BookingPayment = {
   
   
   _pay: function(stripe, card) {
-    Main.showPopup("Payment Processing", "Your payment is being processed.<br>Do not refresh or close your browser");
+    Main.showPopup("Payment Processing", '<center style="font-size: 20px;">Your payment is being processed.<br>Do not refresh or close your browser</center>');
 
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
     
@@ -160,7 +160,7 @@ BookingPayment = {
  
   
   _getCancellationPolicy: function() {
-    var policy = "<center><h1>Cancellation Policy</h1></center>You may cancel your reservation and receive a full refund if you cancel more than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours before your departure.<br><br>The following fees apply if cancelling the reservation less than " + Backend.getBookingConfiguration().cancellation_fees[0].range_max + " hours in advance of the departure:<br><ul>";
+    var policy = '<center style="font-size: 30px; font-weight: bold; margin-bottom: 20px;">Cancellation Policy</center>You may cancel your reservation and receive a full refund if you cancel more than ' + Backend.getBookingConfiguration().cancellation_fees[0].range_max + ' hours before your departure.<br><br>The following fees apply if cancelling the reservation less than ' + Backend.getBookingConfiguration().cancellation_fees[0].range_max + ' hours in advance of the departure:<br><ul>';
     
     
     for (var index in Backend.getBookingConfiguration().cancellation_fees) {

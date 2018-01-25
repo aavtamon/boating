@@ -4,6 +4,8 @@
 
 #ReservationRetrieval-Screen-Reservation-Details {
   display: inline-block;
+  
+  vertical-align: top;
 }
 
 #ReservationRetrieval-Screen-Reservation-Details-Id-Input {
@@ -23,10 +25,12 @@
   max-width: 300px;
 }
 #ReservationRetrieval-Screen-Reservation-Status {
+  vertical-align: top;
   color: red;
 }
 
 #ReservationRetrieval-Screen-Reservation-ButtonPanel {
+  width: 200px;
   margin-top: 20px;
-  margin-left: 110px;
+  margin-left: 100px;
 }

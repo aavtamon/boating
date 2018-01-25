@@ -174,7 +174,7 @@ AdminHome = {
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
       safetyTest = "Not taken!";
     } else {
-      safetyTest = "<a href='javascript:AdminHome._loadReservationScreen(\"" + rentalElement._reservationId + "\", \"" + rental.last_name + "\", \"safety_test\")'>Not taken!</a>";
+      safetyTest = "<a href='javascript:AdminHome._loadReservationScreen(\"" + rentalElement._reservationId + "\", \"" + rental.last_name + "\", \"safety_tips\")'>Not taken!</a>";
     }
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Value").html(safetyTest);
 
