@@ -6,7 +6,7 @@ Utils = {
         
     var results = regex.exec(url);
     if (!results) {
-      return null;
+      return "";
     }
     
     if (!results[2]) {

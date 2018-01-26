@@ -1,7 +1,14 @@
 ReservationRetrieval = {
   onLoad: function() {
-    $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val(Utils.getQueryParameterByName("id"));
-    $("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input").val(Utils.getQueryParameterByName("name"));
+    var id = Utils.getQueryParameterByName("id");
+    var lastName = Utils.getQueryParameterByName("name");
+    
+    if (id != "") {
+      $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val(id);
+    }
+    if (lastName != "") {
+      $("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input").val(lastName);
+    }
 
     $("#ReservationRetrieval-Screen-Reservation-Status").hide();
     $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").focus();
