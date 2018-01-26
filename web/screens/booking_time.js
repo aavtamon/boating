@@ -24,9 +24,7 @@ BookingTime = {
       bookingBeginDate = schedulingBeginDate;
     }
 
-  
     if (reservationContext.slot == null) {
-      
       while (BookingTime.availableSlots[bookingBeginDate] == 0 && bookingBeginDate < schedulingEndDate) {
         bookingBeginDate += 24 * 60 * 60 * 1000;
       }

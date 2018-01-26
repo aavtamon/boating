@@ -165,6 +165,7 @@ ScreenUtils = {
   checkbox: function(checkboxElement, dataModel, dataModelProperty, changeCallback) {
     $(checkboxElement).addClass("checkbox");
     $(checkboxElement).addClass("input-field");
+    $(checkboxElement).css("user-select", "none");
     
     $(checkboxElement).attr("unselectable", "on");
     $(checkboxElement).attr("autocomplete", "false");

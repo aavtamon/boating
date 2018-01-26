@@ -93,6 +93,8 @@ html, body {
   
   font: inherit;
   
+  -webkit-user-select: none;
+  -moz-user-select: none;
   user-select: none;
   
   color: #000000;
@@ -122,7 +124,6 @@ label.input-field-error {
   
   color: transparent;
   outline: none;
-  user-select: none;
 }
 .checkbox.checked {
   background-image: url(../imgs/check.png);
