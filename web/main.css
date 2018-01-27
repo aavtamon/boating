@@ -112,7 +112,7 @@
 }
 
 #Main-Popup {
-  position: absolute;
+  position: fixed;
   display: none;
   top: 0px;
   left: 0px;
