@@ -248,7 +248,7 @@ func recalculateAllAvailableSlots(locationId string, boatId string) {
 func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time) {
   dateMs := date.UnixNano() / int64(time.Millisecond);
   
-  fmt.Printf("Recalculating slots for location %s and boat %s. Date=%d\n", location.Name, boat.Name, dateMs);
+  //fmt.Printf("Recalculating slots for location %s and boat %s. Date=%d\n", location.Name, boat.Name, dateMs);
 
   result := []TBookingSlot{};
   
@@ -280,7 +280,7 @@ func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time)
 
   availableDates[dateMs] = len(result);
   
-  fmt.Println("******");
+  //fmt.Println("******");
 }
 
 func isBooked(slot TBookingSlot) bool {

@@ -45,7 +45,7 @@ func handleGetAccount(w http.ResponseWriter, r *http.Request) {
     return;
   }
 
-  if (account.Token != calculateHash(password)) {
+  if (account.Token != calculateHash(password, account.LastName)) {
     w.WriteHeader(http.StatusUnauthorized);
     w.Write([]byte("Wrong user name or password"));
 
@@ -67,10 +67,10 @@ func handleLogout(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func calculateHash(password string) string {
-  hasher := md5.New()
-  hasher.Write([]byte(password))
-  passwordHash := hex.EncodeToString(hasher.Sum(nil))
+func calculateHash(password string, salt string) string {
+  hasher := md5.New();
+  hasher.Write([]byte(password));
+  passwordHash := hex.EncodeToString(hasher.Sum([]byte(salt)));
   
   //fmt.Printf("PASSWORD HASH: <%s>\n", passwordHash);
   
