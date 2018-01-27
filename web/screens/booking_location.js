@@ -44,6 +44,11 @@ BookingLocation = {
         center: centerLocation
       });
       
+      google.maps.event.addListenerOnce(this._mapHolder._map, 'idle', function() {
+        google.maps.event.trigger(this._mapHolder._map, 'resize');
+      }.bind(this));
+
+      
       
       this._mapHolder._markers = [];
       for (var locationId in rentalLocation.pickup_locations) {
