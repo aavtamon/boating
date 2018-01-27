@@ -151,6 +151,9 @@
   margin-right: 50px;
 }
 
+#BookingConfirmation-Screen-ContactInformation-Phone-Note {
+  white-space: normal;
+}
 
 #BookingConfirmation-Screen-Agreement {
   font-size: 20px;
