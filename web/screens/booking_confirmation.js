@@ -50,10 +50,10 @@ BookingConfirmation = {
     for (var name in extras) {
       var extra = extras[name];
       var extraId = "BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras-" + name;
-      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<div id="' + extraId + '">');
+      $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<input id="' + extraId + '"/>');
       $("#BookingConfirmation-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+$' + extra.price + ')</label>');
       
-      ScreenUtils.checkbox($("#" + extraId)[0], reservationContext.extras, name);
+      ScreenUtils.checkbox("#" + extraId, reservationContext.extras, name);
     }
 
     
