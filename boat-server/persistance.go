@@ -6,6 +6,7 @@ import "encoding/json"
 import "time"
 import "math/rand"
 import "sync"
+import "strings"
 
 
 const PERSISTENCE_DATABASE_FILE_NAME = "persistence_db.json";
@@ -151,12 +152,22 @@ func InitializePersistance() {
 
 
 func GetReservation(reservationId TReservationId) *TReservation {
-  return persistenceDb.Reservations[reservationId];
+  reservation := persistenceDb.Reservations[reservationId];
+  
+  if (reservation == nil) {
+    return nil;
+  }
+  
+  if (reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+    return reservation;
+  }
+
+  return nil;
 }
 
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && reservation.LastName == lastName &&
+    if (reservationId == resId && strings.EqualFold(reservation.LastName, lastName) &&
         reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
       return reservation;
     }
