@@ -16,6 +16,10 @@ ReservationRetrieval = {
     if ($("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val() != "" && $("#ReservationRetrieval-Screen-Reservation-Details-LastName-Input").val() != "") {
       this.retrieve();
     }
+    
+    $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").change(function() {
+      $("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val($("#ReservationRetrieval-Screen-Reservation-Details-Id-Input").val().toUpperCase());
+    })
   },
   
   retrieve: function() {
