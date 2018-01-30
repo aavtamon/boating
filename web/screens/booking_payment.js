@@ -13,7 +13,7 @@ BookingPayment = {
     }
     
     $("#BookingPayment-Screen-Description-BackButton").click(function() {
-      Main.loadScreen("booking_confirmation");
+      Main.loadScreen("booking_renters");
     });
     
     $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {

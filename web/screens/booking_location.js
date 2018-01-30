@@ -14,7 +14,7 @@ BookingLocation = {
     });
 
     $("#BookingLocation-Screen-Description-NextButton").click(function() {
-      Main.loadScreen("booking_confirmation");
+      Main.loadScreen("booking_renters");
     });
     
     

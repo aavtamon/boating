@@ -1,0 +1,97 @@
+<link rel="stylesheet" href="screens/booking_renters.css">
+<script src="screens/booking_renters.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+
+<div id="BookingRenters-Screen-Description" class="screen-description">
+  <button id="BookingRenters-Screen-Description-BackButton" class="standard-button previous">Select Departure Location</button>
+  Passenger Information
+  <button id="BookingRenters-Screen-Description-NextButton" class="standard-button next">Payment</button>
+</div>
+<form id="BookingRenters-Screen" class="screen" onshow="BookingRenters.onLoad()">
+  <div id="BookingRenters-Screen-AdditionalInformation" class="info-box">
+    <div id="BookingRenters-Screen-AdditionalInformation-Title">
+      Please Provide Information About The Crew:
+    </div>
+    <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople" class="info-box-row">
+      <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Note">
+        Please note, that the maximum capacity of <b id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Note-BoatName"></b> is <b id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Note-Number"></b>.
+        <br>
+        This includes all passengers and crew members. Keep in mind, it is unlawful to exceed the specified limit.
+      </div>
+      <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Title">Riders:</div>
+      <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults">
+        <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults-Title">Number of adults:</div>
+        <select id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector"></select> 
+      </div>
+      <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children">
+        <div id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children-Title">Number of children (under 50 lb):</div>
+        <select id="BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children-Selector"></select> 
+      </div>
+    </div>
+    <div id="BookingRenters-Screen-AdditionalInformation-Equipment" class="info-box-row">
+      <div id="BookingRenters-Screen-AdditionalInformation-Equipment-Title">Addtional Equipment:</div>
+      <div id="BookingRenters-Screen-AdditionalInformation-Equipment-Extras"></div>
+    </div>
+  </div>
+  
+  <div id="BookingRenters-Screen-ContactInformation" class="info-box">
+    <div id="BookingRenters-Screen-ContactInformation-Title">
+      Please Provide Information About The Primary Renter:
+    </div>
+    <p>
+      Please note that the primary renter must be 25 years of age or older, and must possess a valid state issued driver's licence.
+      <br>
+      A state-issued ID card will not be accepted. The name on the driver's license must match the name on your credit card.
+      <br>
+      We will need to make a copy of your driver's license when the boat is picked up. State law requires the operator of the boat to have valid ID at all times while operating the boat.
+    </p>
+    <div id="BookingRenters-Screen-ContactInformation-DL" class="info-box-row">
+      <div id="BookingRenters-Screen-ContactInformation-DL-Age">
+        <!--input type="checkbox" id="BookingRenters-Screen-ContactInformation-DL-Age-Checkbox"-->
+        <input id="BookingRenters-Screen-ContactInformation-DL-Age-Checkbox" required />
+        <label id="BookingRenters-Screen-ContactInformation-DL-Age-Label" for="BookingRenters-Screen-ContactInformation-DL-Age-Checkbox">I certify that as the primary renter, I am 25 years of age or older</label>
+      </div>
+      
+      <div id="BookingRenters-Screen-ContactInformation-DL-License">
+        <div id="BookingRenters-Screen-ContactInformation-DL-License-Label">DL#:</div>
+        <select id="BookingRenters-Screen-ContactInformation-DL-License-State-Input"></select>
+        <input type="text" name="id-number" id="BookingRenters-Screen-ContactInformation-DL-License-Number-Input" required>
+      </div>
+    </div>
+    <div id="BookingRenters-Screen-ContactInformation-Name" class="info-box-row">
+      <div id="BookingRenters-Screen-ContactInformation-Name-FirstName">
+        <div id="BookingRenters-Screen-ContactInformation-Name-FirstName-Label">First Name:</div>
+        <input type="text" name="first-name" id="BookingRenters-Screen-ContactInformation-Name-FirstName-Input" required>
+      </div>
+      <div id="BookingRenters-Screen-ContactInformation-Name-LastName">
+        <div id="BookingRenters-Screen-ContactInformation-Name-LastName-Label">Last Name:</div>
+        <input type="text" name="last-name" id="BookingRenters-Screen-ContactInformation-Name-LastName-Input" required>
+      </div>
+    </div>
+    <div id="BookingRenters-Screen-ContactInformation-Email" class="info-box-row">
+      <div id="BookingRenters-Screen-ContactInformation-Email-Label">Email:</div>
+      <input type="email" name="email" id="BookingRenters-Screen-ContactInformation-Email-Input" required>
+    </div>
+    <div id="BookingRenters-Screen-ContactInformation-Phone" class="info-box-row">
+      <div id="BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone">
+        <div id="BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone-Label">Primary/mobile phone*:</div>
+        <input type="tel" name="phone" id="BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone-Input" required>
+      </div>
+      <div id="BookingRenters-Screen-ContactInformation-Phone-AlternativePhone">
+        <div id="BookingRenters-Screen-ContactInformation-Phone-AlternativePhone-Label">Alternative phone:</div>
+        <input type="tel" name="alternative-phone" id="BookingRenters-Screen-ContactInformation-Phone-AlternativePhone-Input">
+      </div>
+      <div id="BookingRenters-Screen-ContactInformation-Phone-Note">
+        * We recommend that you use your <b>mobile</b> phone number as your primary contact number.
+        We will text you updates regarding your reservation using this number.
+        We will delete your personal information upon completion of your trip.
+      </div>
+    </div>
+  </div>
+  <input id="BookingRenters-Screen-SubmitButton" type=submit hidden />
+  
+  <div id="BookingRenters-Screen-Agreement" class="info-box">
+    Please review our <a href="files/docs/rental-agreement.html" target="_blank">Renter's Agreement</a>
+  </div>
+</form>

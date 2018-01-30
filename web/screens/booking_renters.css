@@ -1,0 +1,162 @@
+#BookingRenters-Screen-AdditionalInformation {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople {
+  white-space: nowrap;
+  padding-bottom: 5px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Note {
+  margin-bottom: 20px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Title {
+  display: inline-block;
+  width: 150px;
+  margin-right: 20px;
+  
+  vertical-align: middle;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults {
+  display: inline-block;
+  margin-right: 20px;
+
+  vertical-align: middle;
+
+  font-size: 15px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults-Title {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  
+  font-weight: bold;
+
+  font-size: 17px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Adults-Selector {
+  display: inline-block;
+  width: 100px;
+  vertical-align: middle;
+  font: inherit;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children {
+  display: inline-block;
+
+  vertical-align: middle;
+
+  font-size: 15px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children-Title {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  
+  font-weight: bold;
+
+  font-size: 17px;
+}
+#BookingRenters-Screen-AdditionalInformation-NumberOfPeople-Children-Selector {
+  display: inline-block;
+  width: 100px;
+  vertical-align: middle;
+  font: inherit;
+}
+
+#BookingRenters-Screen-AdditionalInformation-Equipment-Title {
+  display: inline-block;
+  margin-right: 100px;
+  margin-bottom: 5px;
+}
+#BookingRenters-Screen-AdditionalInformation-Equipment-Extras {
+  display: inline-block;
+}
+
+
+#BookingRenters-Screen-ContactInformation-Title,
+#BookingRenters-Screen-AdditionalInformation-Title {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  
+  text-align: center;
+
+  font-size: 25px;
+  font-weight: bold;
+  
+  color: #062f73;
+}
+
+#BookingRenters-Screen-ContactInformation-DL-Age,
+#BookingRenters-Screen-ContactInformation-DL-License,
+#BookingRenters-Screen-ContactInformation-Name-FirstName,
+#BookingRenters-Screen-ContactInformation-Name-LastName,
+#BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone,
+#BookingRenters-Screen-ContactInformation-Phone-AlternativePhone {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#BookingRenters-Screen-ContactInformation-DL-Age {
+  margin-right: 100px;
+}
+
+#BookingRenters-Screen-ContactInformation-DL-Age-Label,
+#BookingRenters-Screen-ContactInformation-DL-License-Label,
+#BookingRenters-Screen-ContactInformation-Name-FirstName-Label,
+#BookingRenters-Screen-ContactInformation-Name-LastName-Label,
+#BookingRenters-Screen-ContactInformation-Email-Label,
+#BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone-Label,
+#BookingRenters-Screen-ContactInformation-Phone-AlternativePhone-Label {
+  display: inline-block;
+  margin-right: 20px;
+  
+  font-weight: bold;
+}
+#BookingRenters-Screen-ContactInformation-Phone-AlternativePhone-Label {
+  font-weight: normal;
+}
+
+
+#BookingRenters-Screen-ContactInformation-DL-License-Number-Input,
+#BookingRenters-Screen-ContactInformation-DL-License-State-Input,
+#BookingRenters-Screen-ContactInformation-Name-FirstName-Input,
+#BookingRenters-Screen-ContactInformation-Name-LastName-Input,
+#BookingRenters-Screen-ContactInformation-Email-Input {
+  display: inline-block;
+  width: 300px;
+  
+  margin-right: 50px;
+  margin-bottom: 5px;
+}
+
+#BookingRenters-Screen-ContactInformation-DL-License-State-Input {
+  width: 70px;
+  margin-right: 10px;
+}
+#BookingRenters-Screen-ContactInformation-DL-License-Number-Input {
+  width: 200px;
+}
+
+#BookingRenters-Screen-ContactInformation-Name-LastName-Input {
+  width: 350px;  
+}
+
+#BookingRenters-Screen-ContactInformation-Email-Input {
+  width: 400px;
+}
+
+#BookingRenters-Screen-ContactInformation-Phone-PrimaryPhone-Input,
+#BookingRenters-Screen-ContactInformation-Phone-AlternativePhone-Input {
+  margin-bottom: 5px;
+  margin-right: 50px;
+}
+
+#BookingRenters-Screen-ContactInformation-Phone-Note {
+  white-space: normal;
+}
+
+#BookingRenters-Screen-Agreement {
+  font-size: 20px;
+
+  text-align: center;
+}
