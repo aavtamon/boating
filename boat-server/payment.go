@@ -184,12 +184,12 @@ func refundReservation(reservation *TReservation) bool {
   
   refundAmount := reservation.PaymentAmount;
   
-  if (cancellationFee > 0) {
-    refundAmount = (reservation.PaymentAmount - cancellationFee);
-    if (refundAmount < 0) {
-      refundAmount = 0;
-    }
+  if (reservation.PaymentAmount > cancellationFee) {
+    refundAmount = reservation.PaymentAmount - cancellationFee;
+  } else {
+    refundAmount = 0;
   }
+  fmt.Printf("Original payment = %d, refund amount = %d\n", reservation.PaymentAmount, refundAmount);
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
@@ -364,11 +364,21 @@ func getNonRefundableFee(reservation *TReservation) uint64 {
   currentTime := time.Now().UTC().UnixNano() / int64(time.Millisecond);
   timeLeftToTrip := (reservation.Slot.DateTime - currentTime) / 1000 / 60 / 60;
   
+  var matchingFee *TPricedRange = nil;
   for _, fee := range bookingConfiguration.CancellationFees {
     if (fee.RangeMin <= timeLeftToTrip && timeLeftToTrip < fee.RangeMax) {
-      return fee.Price;
+      matchingFee = &fee;
+      break;
+    } else {
+      if (matchingFee == nil || fee.RangeMin < matchingFee.RangeMin) {
+        matchingFee = &fee; 
+      }
     }
   }
-  
-  return 0;
+
+  if (timeLeftToTrip < matchingFee.RangeMax) {
+    return matchingFee.Price;
+  } else {
+    return 0;
+  }
 }

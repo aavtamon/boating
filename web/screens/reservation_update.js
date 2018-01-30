@@ -67,20 +67,29 @@ ReservationUpdate = {
 
     var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentTime) / 1000 / 60 / 60);
 
+    var matchingFee = null;
     for (var index in Backend.getBookingConfiguration().cancellation_fees) {
       var fee = Backend.getBookingConfiguration().cancellation_fees[index];
       if (fee.range_min <= hoursLeftToTrip && hoursLeftToTrip < fee.range_max) {
-        cancellationMessage += "<br>Since you are cancelling within less than " + fee.range_max + " hours, according to our policy, you will be imposed a fee of $" + fee.price + " dollars. This non-refundable fee will be deducted from the refund.";
-
-        refund -= fee.price;
-        if (refund < 0) {
-          refund =   0;
-        }
+        matchingFee = fee;
 
         break;
+      } else {
+        if (matchingFee == null || fee.range_min < matchingFee.range_min) {
+          matchingFee = fee;
+        }
       }
     }
+    
+    if (hoursLeftToTrip < matchingFee.range_max) {
+      cancellationMessage += "<br>Since you are cancelling within less than " + matchingFee.range_max + " hours, according to our policy, you will be imposed a fee of $" + matchingFee.price + " dollars. This non-refundable fee will be deducted from the refund.";
 
+      refund -= matchingFee.price;
+      if (refund < 0) {
+        refund = 0;
+      }
+    }
+    
     cancellationMessage += "<br>A refund in the amount of $" + refund + " dollars will be issued to your original payment method.";
 
     Main.showMessage("Confirm Cancelation", cancellationMessage, function(action) {
@@ -99,7 +108,8 @@ ReservationUpdate = {
 
 
               Main.showMessage("Cancelled", "Your reservation was successfully cancelled, and your original payment method was refunded. You should expect to see your funds in the next 5 business days", function() {
-                Main.loadScreen("home");
+                //Main.loadScreen("home");
+                history.back();
               });
             });
           } else {
