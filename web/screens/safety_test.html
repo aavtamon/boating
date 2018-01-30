@@ -30,12 +30,12 @@
   </div>
   <div id="SafetyTest-Screen-TestPassed" class="info-box">
     <div id="SafetyTest-Screen-TestPassed-Score"></div>
-    <div id="SafetyTest-Screen-TestPassed-Email" class="">
+    <form id="SafetyTest-Screen-TestPassed-Email" class="">
       <div id="SafetyTest-Screen-TestPassed-Email-Description">We can email you the test results</div>
       <div id="SafetyTest-Screen-TestPassed-Email-Label">Email:</div>
-      <input type="text" id="SafetyTest-Screen-TestPassed-Email-Input">
-      <button id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button">Send Confirmation Email</button>
-    </div>
+      <input type="email" name="email" id="SafetyTest-Screen-TestPassed-Email-Input" required>
+      <input type="submit" id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button" value="Send Confirmation Email" />
+    </form>
   </div>
   
   <div id="SafetyTest-Screen-TestFailed" class="info-box">

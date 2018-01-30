@@ -342,6 +342,7 @@ ScreenUtils = {
   },
   
   
+/*  
   isValid: function(value) {
     return value != null && value != "";
   },
@@ -375,4 +376,5 @@ ScreenUtils = {
     var licenseRE = /^[0-9]{8,12}$/;
     return value != null && licenseRE.test(value);
   }
+*/  
 }

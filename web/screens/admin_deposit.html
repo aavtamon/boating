@@ -33,12 +33,12 @@
     <div id="AdminDeposit-Screen-PaymentInformation">
       <div id="AdminDeposit-Screen-PaymentInformation-Name" class="info-box-row">
         <div id="AdminDeposit-Screen-PaymentInformation-Name-Label">Name on the card:</div>
-        <input type="text" id="AdminDeposit-Screen-PaymentInformation-Name-Input">
+        <input type="text" id="AdminDeposit-Screen-PaymentInformation-Name-Input" />
       </div>
       <div id="AdminDeposit-Screen-PaymentInformation-Address" class="info-box-row">
         <div id="AdminDeposit-Screen-PaymentInformation-Address-Street">
           <div id="AdminDeposit-Screen-PaymentInformation-Address-Street-Label">Street address:</div>
-          <input type="text" name="address" id="AdminDeposit-Screen-PaymentInformation-Address-Street-Input">
+          <input type="text" name="address" id="AdminDeposit-Screen-PaymentInformation-Address-Street-Input" required />
         </div>
         <div id="AdminDeposit-Screen-PaymentInformation-Address-Additional">
           <div id="AdminDeposit-Screen-PaymentInformation-Address-Additional-Label">Additional address:</div>
@@ -48,7 +48,7 @@
       <div id="AdminDeposit-Screen-PaymentInformation-Area" class="info-box-row">
         <div id="AdminDeposit-Screen-PaymentInformation-Area-City">
           <div id="AdminDeposit-Screen-PaymentInformation-Area-City-Label">City:</div>
-          <input type="text" name="city" id="AdminDeposit-Screen-PaymentInformation-Area-City-Input">
+          <input type="text" name="city" id="AdminDeposit-Screen-PaymentInformation-Area-City-Input" required />
         </div>
         <div id="AdminDeposit-Screen-PaymentInformation-Area-State">
           <div id="AdminDeposit-Screen-PaymentInformation-Area-State-Label">State:</div>
@@ -57,9 +57,11 @@
       </div>
       <div id="AdminDeposit-Screen-PaymentInformation-CreditCard" class="info-box-row">
         <div id="AdminDeposit-Screen-PaymentInformation-CreditCard-Label">Credit card information:</div>
-        <div id="AdminDeposit-Screen-PaymentInformation-CreditCard-Input"></div>
+        <div id="AdminDeposit-Screen-PaymentInformation-CreditCard-Input" class="input-field"></div>
         <div id="AdminDeposit-Screen-PaymentInformation-CreditCard-Status"></div>
       </div>
     </div>
   </div>
+  
+  <input id="AdminDeposit-Screen-SubmitButton" type="submit" hidden />
 </form>

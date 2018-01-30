@@ -38,14 +38,14 @@
       <div id="OwnerReservationUpdate-Screen-ReservationSummary-Boat-Title">Boat:</div>
       <div id="OwnerReservationUpdate-Screen-ReservationSummary-Boat-Value"></div>
     </div>
-    <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
+    <form id="OwnerReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
       <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Description">
         You can email this information if you lost or did not receive the original confirmation email.
       </div>
       <div id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Label">Email:</div>
-      <input type="text" id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Input">
-      <button id="OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton" class="standard-button">Send</button>
-    </div>
+      <input type="email" name="email" id="OwnerReservationUpdate-Screen-ReservationSummary-Email-Input" required>
+      <input type="submit" id="OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton" class="standard-button" value="Send" />
+    </form>
   </div>  
   <div id="OwnerReservationUpdate-Screen-ButtonsPanel">
     <button id="OwnerReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>

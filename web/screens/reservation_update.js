@@ -1,71 +1,64 @@
 ReservationUpdate = {
-  reservationId: null,
-  reservationDateTime: null,
-  reservationLocationId: null,
-  reservationBoatId: null,
-  reservationPickupLocationId: null,
-  reservationCost: null,
-  reservationEmail: null,
-  reservationExtras: null,
+  reservation: null,
   currentDate: null,
-  extras: null,
+  adminAccount: null,
   
   onLoad: function() {
-    if (!this.reservationId) {
+    if (!this.reservation) {
       Main.loadScreen("home");
       
       return;
     }
     
-    $("#ReservationUpdate-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(this.reservationDateTime) + " " + ScreenUtils.getBookingTime(this.reservationDateTime));
+    $("#ReservationUpdate-Screen-ReservationSummary-DateTime-Value").html(ScreenUtils.getBookingDate(this.reservation.slot.time) + " " + ScreenUtils.getBookingTime(this.reservation.slot.time));
     
-    var boat = Backend.getBookingConfiguration().locations[this.reservationLocationId].boats[this.reservationBoatId];
+    var boat = Backend.getBookingConfiguration().locations[this.reservation.location_id].boats[this.reservation.boat_id];
     $("#ReservationUpdate-Screen-ReservationSummary-Boat-Value").html(boat.name);
     
-    var location = Backend.getBookingConfiguration().locations[this.reservationLocationId].pickup_locations[this.reservationPickupLocationId];
+    var location = Backend.getBookingConfiguration().locations[this.reservation.location_id].pickup_locations[this.reservation.pickup_location_id];
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#ReservationUpdate-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
 
     
-    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(this.reservationExtras, Backend.getBookingConfiguration().locations[this.reservationLocationId].extras);
+    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(this.reservation.extras, Backend.getBookingConfiguration().locations[this.reservation.location_id].extras);
     $("#ReservationUpdate-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
     
     
-    var emailData = {email: this.reservationEmail};
-    
-    $("#ReservationUpdate-Screen-ReservationSummary-Email-SendButton").click(function() {
-      Backend.sendConfirmationEmail(emailData.email, function(status) {
-        if (status == Backend.STATUS_SUCCESS) {
-          Main.showMessage("Confirmation email sent", "The email was sent to <b>" + emailData.email + "</b>");
-        } else if (status == Backend.STATUS_NOT_FOUND) {
-          Main.showMessage("Not Successful", "For some reason we don't see your reservation. Please try to pull it again.");
-        } else {
-          Main.showMessage("Not Successful", "An error occured. Please try again");
-        }
-      });
-    }.bind(this));
-    
-    ScreenUtils.dataModelInput($("#ReservationUpdate-Screen-ReservationSummary-Email-Input")[0], emailData, "email", function(value) {
-      $("#ReservationUpdate-Screen-ReservationSummary-Email-SendButton").prop("disabled", !ScreenUtils.isValidEmail(value));
-    }, ScreenUtils.isValidEmail);
-    
+    $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val(this.reservation.email);
     
     
     $("#ReservationUpdate-Screen-ButtonsPanel-CancelButton").click(function() {
       this._cancelReservation();
-    }.bind(this));    
+    }.bind(this));
+    
+    
+    ScreenUtils.form("#ReservationUpdate-Screen-ReservationSummary-Email", null, this._sendEmail);    
   },
   
+
+  _sendEmail: function() {
+    var email = $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val();
+    
+    Backend.sendConfirmationEmail(email, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
+      } else if (status == Backend.STATUS_NOT_FOUND) {
+        Main.showMessage("Not Successful", "For some reason we don't see your reservation. Please try to pull it again.");
+      } else {
+        Main.showMessage("Not Successful", "An error occured. Please try again");
+      }
+    });
+  }
   
   
   _cancelReservation: function() {
-    var cancellationMessage = "Do you really want to cancel your reservation <b>" + ReservationUpdate.reservationId + "</b>";
+    var cancellationMessage = "Do you really want to cancel your reservation <b>" + ReservationUpdate.reservation.id + "</b>";
 
-    var refund = ReservationUpdate.reservationCost;
+    var refund = ReservationUpdate.reservation.payment_amount;
 
-    var hoursLeftToTrip = Math.floor((ReservationUpdate.reservationDateTime - ReservationUpdate.currentTime) / 1000 / 60 / 60);
+    var hoursLeftToTrip = Math.floor((ReservationUpdate.reservation.slot.time - ReservationUpdate.currentTime) / 1000 / 60 / 60);
 
     var matchingFee = null;
     for (var index in Backend.getBookingConfiguration().cancellation_fees) {
@@ -98,18 +91,18 @@ ReservationUpdate = {
 
         Backend.refundReservation(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
-            Backend.cancelReservation(ReservationUpdate.reservationId, function(status) {
+            Backend.cancelReservation(ReservationUpdate.reservation.Id, function(status) {
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.resetReservationContext();
               } else {
-                console.error("Refund issued but the reservation is not removed: " + ReservationUpdate.reservationId);
+                console.error("Refund issued but the reservation is not removed: " + ReservationUpdate.reservation.Id);
                 //TODO: Handle it!
               }
 
 
               Main.showMessage("Cancelled", "Your reservation was successfully cancelled, and your original payment method was refunded. You should expect to see your funds in the next 5 business days", function() {
-                //Main.loadScreen("home");
-                history.back();
+                Main.loadScreen("home");
+                //history.back();
               });
             });
           } else {
@@ -118,5 +111,5 @@ ReservationUpdate = {
         });
       }
     }, Main.DIALOG_TYPE_CONFIRMATION);
-  }
+  },
 }

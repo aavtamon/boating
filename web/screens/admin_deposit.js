@@ -48,32 +48,38 @@ AdminDeposit = {
       }
       
       Backend.getTemporaryData().paymentInfo.card_ready = event.complete;
-      this._canProceedToNextStep();
     }.bind(this));
     
     
     
     $("#AdminDeposit-Screen-Description-ConfirmButton").click(function() {
-      this._pay(stripe, card);
-    }.bind(this));
-    
+      if (Backend.getTemporaryData().paymentInfo.card_ready) {
+        $("#AdminDeposit-Screen-SubmitButton").click();
+      } else {
+        $("#AdminDeposit-Screen-PaymentInformation-CreditCard-Status").html("Please provide credit card information.");
+      }
+    });
 
+    
     var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
     $("#AdminDeposit-Screen-ReservationSummary-Boat-Value").html(boat.name);
     $("#AdminDeposit-Screen-ReservationSummary-Deposit-Value").html(ScreenUtils.getBookingPrice(boat.deposit));
     
     
-    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Name-Input")[0], paymentInfo, "name");
 
-    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Address-Street-Input")[0], paymentInfo, "street_address", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Address-Street-Input")[0], paymentInfo, "street_address");
 
-    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Address-Additional-Input")[0], paymentInfo, "additional_address", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Address-Additional-Input")[0], paymentInfo, "additional_address");
     
-    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Area-City-Input")[0], paymentInfo, "city", this._canProceedToNextStep.bind(this));
+    ScreenUtils.dataModelInput($("#AdminDeposit-Screen-PaymentInformation-Area-City-Input")[0], paymentInfo, "city");
 
-    ScreenUtils.stateSelect($("#AdminDeposit-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state", this._canProceedToNextStep.bind(this));
+    ScreenUtils.stateSelect($("#AdminDeposit-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state");
+
     
-    this._canProceedToNextStep();
+    ScreenUtils.form("#AdminDeposit-Screen", null, function() {
+      this._pay(stripe, card);
+    }.bind(this));
   },
   
   

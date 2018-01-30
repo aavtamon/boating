@@ -17,32 +17,32 @@ OwnerReservationUpdate = {
     var boat = Backend.getBookingConfiguration().locations[this.reservationLocationId].boats[this.reservationBoatId];
     $("#OwnerReservationUpdate-Screen-ReservationSummary-Boat-Value").html(boat.name);
     
-    var emailData = {email: this.ownerAccountEmail};
+    $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input").val(this.ownerAccountEmail);
+    
+    
+    $("#OwnerReservationUpdate-Screen-ButtonsPanel-CancelButton").click(function() {
+      this._cancelReservation();
+    }.bind(this));
+
+    
+    ScreenUtils.form("#OwnerReservationUpdate-Screen-ReservationSummary-Email", null, this._sendEmail);    
+  },
+  
+  _sendEmail: function() {
+    var email = $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
     $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton").click(function() {
-      Backend.sendConfirmationEmail(emailData.email, function(status) {
+      Backend.sendConfirmationEmail(email, function(status) {
         if (status == Backend.STATUS_SUCCESS) {
-          Main.showMessage("Confirmation email sent", "The email was sent to <b>" + emailData.email + "</b>");
+          Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
         } else if (status == Backend.STATUS_NOT_FOUND) {
           Main.showMessage("Not Successful", "For some reason we don't see your reservation. Please try to pull it again.");
         } else {
           Main.showMessage("Not Successful", "An error occured. Please try again");
         }
       });
-    }.bind(this));
-    
-    ScreenUtils.dataModelInput($("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input")[0], emailData, "email", function(value) {
-      $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton").prop("disabled", !ScreenUtils.isValidEmail(value));
-    }, ScreenUtils.isValidEmail);
-    
-    
-    
-    $("#OwnerReservationUpdate-Screen-ButtonsPanel-CancelButton").click(function() {
-      this._cancelReservation();
-    }.bind(this));    
-  },
-  
-  
+    });    
+  }
   
   _cancelReservation: function() {
     var cancellationMessage = "Do you really want to cancel your reservation <b>" + OwnerReservationUpdate.reservationId + "</b>?";
