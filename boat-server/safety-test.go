@@ -138,8 +138,8 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
     }
 
     testResult := &TSafetyTestResult {
-      PassDate: time.Now().UTC().Unix(),
-      ExpirationDate: time.Now().UTC().AddDate(0, 0, testSuite.ValidityPeriod).Unix(),
+      PassDate: time.Now().UTC().UnixNano() / int64(time.Millisecond),
+      ExpirationDate: time.Now().UTC().AddDate(0, 0, testSuite.ValidityPeriod).UnixNano() / int64(time.Millisecond),
       LastName: reservation.LastName,
       Score: passedTests,
       SuiteId: suiteId,

@@ -11,7 +11,7 @@ SafetyTest = {
       return;
     }
     
-    
+
     $("#SafetyTest-Screen-Description-BackButton").click(function() {
       Main.loadScreen("safety_tips");
     }.bind(this));
@@ -46,7 +46,7 @@ SafetyTest = {
   },
   
 
-  _populateSafetySuite = function() {
+  _populateSafetySuite: function() {
     var testsHtml = "";
 
     for (var testId in this._suite.tests) {
@@ -81,7 +81,7 @@ SafetyTest = {
   },
     
 
-  _retrieveTestSuite = function() {
+  _retrieveTestSuite: function() {
     $("#SafetyTest-Screen-SafetyTestPanel").show();
     $("#SafetyTest-Screen-TestPassed").hide();
     $("#SafetyTest-Screen-TestFailed").hide();
@@ -98,7 +98,7 @@ SafetyTest = {
     }.bind(this));
   },
 
-  _verifyTestResults = function(checkedTestResult) {
+  _verifyTestResults: function(checkedTestResult) {
     $("#SafetyTest-Screen-SafetyTestPanel").hide();
 
     var numOfCorrectTests = 0;
@@ -127,16 +127,14 @@ SafetyTest = {
   _sendEmail: function() {
     var email = $("#SafetyTest-Screen-TestPassed-Email-Input").val();
     
-    $("#SafetyTest-Screen-TestPassed-Email-SendButton").click(function() {
-      Backend.sendConfirmationEmail(email, function(status) {
-        if (status == Backend.STATUS_SUCCESS) {
-          Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
-        } else if (status == Backend.STATUS_NOT_FOUND) {
-          Main.showMessage("Not Successful", "For some reason we don't see your reservation. Please try to pull it again.");
-        } else {
-          Main.showMessage("Not Successful", "An error occured. Please try again");
-        }
-      });
+    Backend.sendConfirmationEmail(email, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.showMessage("Confirmation email sent", "We resent your reservation to the provided email <b>" + email + "</b><br>The email will indicate that you passed the safety training.");
+      } else if (status == Backend.STATUS_NOT_FOUND) {
+        Main.showMessage("Not Successful", "For some reason the email was not sent. Please try again.");
+      } else {
+        Main.showMessage("Not Successful", "An error occured. Please try again");
+      }
     });
   }
 }

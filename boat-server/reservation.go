@@ -102,6 +102,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
 
       reservation.Status = RESERVATION_STATUS_BOOKED;
       reservationId = SaveReservation(reservation);
+      existingReservation = GetReservation(reservationId);
       
       NotifyReservationBooked(reservationId);
     } else {
@@ -113,9 +114,9 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
     }
 
 
-    reservation = GetReservation(reservationId);
-    if (reservation != nil) {
-      storedReservation, _ := json.Marshal(reservation);
+    
+    if (existingReservation != nil) {
+      storedReservation, _ := json.Marshal(existingReservation);
       w.WriteHeader(http.StatusOK);
       w.Write(storedReservation);
 

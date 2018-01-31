@@ -77,14 +77,12 @@ AdminDeposit = {
     ScreenUtils.stateSelect($("#AdminDeposit-Screen-PaymentInformation-Area-State-Input")[0], paymentInfo, "state");
 
     
-    ScreenUtils.form("#AdminDeposit-Screen", null, function() {
-      this._pay(stripe, card);
-    }.bind(this));
+    ScreenUtils.form("#AdminDeposit-Screen", null, this._pay.bind(this, stripe, card));
   },
   
   
   _pay: function(stripe, card) {
-    Main.showPopup("Deposit Processing", "Deposit is being processed.<br>Do not refresh or close your browser");
+    Main.showPopup("Deposit Processing", '<center style="font-size: 20px;">Your deposit is being processed.<br>Do not refresh or close your browser</center>');
 
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
     
@@ -122,15 +120,5 @@ AdminDeposit = {
         });
       }
     });    
-  },
-
-  
-  _canProceedToNextStep: function() {
-    var reservationContext = Backend.getReservationContext();
-    var paymentInfo = Backend.getTemporaryData().paymentInfo;
-        
-    var valid = ScreenUtils.isValid(paymentInfo.name) && ScreenUtils.isValid(paymentInfo.street_address) && ScreenUtils.isValid(paymentInfo.city) && (paymentInfo.card_ready == true);
-         
-    $("#AdminDeposit-Screen-Description-ConfirmButton").prop("disabled", !valid);
   },
 }

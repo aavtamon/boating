@@ -72,12 +72,12 @@
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{.Reservation.PaymentAmount}} dollars</div>
     </div>
-    <form id="ReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row">
+    <form id="ReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row" action="">
       <div id="ReservationUpdate-Screen-ReservationSummary-Email-Description">
         You can email this information if you lost or did not receive the original confirmation email.
       </div>
       <div id="ReservationUpdate-Screen-ReservationSummary-Email-Label">Email:</div>
-      <input id="ReservationUpdate-Screen-ReservationSummary-Email-Input" type="email" name="email" class="input-field" required>
+      <input type="email" name="email" id="ReservationUpdate-Screen-ReservationSummary-Email-Input" class="input-field" required>
       <input id="ReservationUpdate-Screen-ReservationSummary-Email-SendButton" type="submit" class="standard-button" value="Send" />
     </form>
   </div>  

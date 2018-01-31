@@ -31,17 +31,15 @@ OwnerReservationUpdate = {
   _sendEmail: function() {
     var email = $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
-    $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-SendButton").click(function() {
-      Backend.sendConfirmationEmail(email, function(status) {
-        if (status == Backend.STATUS_SUCCESS) {
-          Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
-        } else if (status == Backend.STATUS_NOT_FOUND) {
-          Main.showMessage("Not Successful", "For some reason we don't see your reservation. Please try to pull it again.");
-        } else {
-          Main.showMessage("Not Successful", "An error occured. Please try again");
-        }
-      });
-    });    
+    Backend.sendConfirmationEmail(email, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
+      } else if (status == Backend.STATUS_NOT_FOUND) {
+        Main.showMessage("Not Successful", "For some reason the email was not sent. Please try again.");
+      } else {
+        Main.showMessage("Not Successful", "An error occured. Please try again");
+      }
+    });
   }
   
   _cancelReservation: function() {

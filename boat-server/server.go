@@ -102,7 +102,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   }
   
 
-  fmt.Printf("***** Loading page %s *****\n", pageReference);
+  //fmt.Printf("***** Loading page %s *****\n", pageReference);
 
   pathToFile := RuntimeRoot + "/" + WEB_ROOT + "/" + pageReference;
   _, err := os.Stat(pathToFile);
@@ -111,7 +111,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   }
 
   
-  fmt.Printf("Path to resource = %s\n", pathToFile);
+  //fmt.Printf("Path to resource = %s\n", pathToFile);
   _, err = os.Stat(pathToFile);
   if (os.IsNotExist(err)) {
     w.WriteHeader(http.StatusNotFound);
@@ -138,7 +138,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
       
       htmlTemplate.Execute(w, htmlObject);
     } else {
-      fmt.Printf("Serving file %s\n", pathToFile);
+      //fmt.Printf("Serving file %s\n", pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);
       
       mimeType := "text/plain";
@@ -159,7 +159,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     }
   }
   
-  fmt.Println("---------");
+  //fmt.Println("---------");
 }
 
 
