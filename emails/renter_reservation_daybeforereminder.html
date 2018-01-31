@@ -3,10 +3,10 @@
       <center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Your reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
       </div>
       <br>
-      Your rental will begin on <b>{{.ReservationDateTime}}</b>.
+      Your rental will begin on: <b>{{.ReservationDateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
