@@ -3,11 +3,11 @@
       <center><h1 style='padding-top: 10px;'>Reservation Cancelled - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        Refunded amount ${{.Reservation.RefundAmount}} dollars.
+        Refunded amount: ${{.Reservation.RefundAmount}}.
         <br>
-        Originally paid amount ${{.Reservation.PaymentAmount}} dollars.
+        Original Deposit: ${{.Reservation.PaymentAmount}}.
       </div>
 
 {{template "email_footer"}}

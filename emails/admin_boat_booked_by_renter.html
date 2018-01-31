@@ -5,10 +5,10 @@
       <div style='font-size: 15px;'>
         Reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        Amount paid ${{.Reservation.PaymentAmount}} dollars.
+        Amount paid: ${{.Reservation.PaymentAmount}}.
       </div>
       <br>
-      The rental is on <b>{{.ReservationDateTime}}</b>.
+      The rental is on: <b>{{.ReservationDateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>

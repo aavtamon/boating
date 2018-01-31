@@ -1,12 +1,12 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>
+      <center><h1 style='padding-top: 10px;'>Your boat rental is about to begin!</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Your reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
       </div>
       <br>
-      Your rental begins on <b>{{.ReservationDateTime}}</b>.
+      Your rental begins on: <b>{{.ReservationDateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
@@ -21,7 +21,7 @@
       We hope to see you soon!
 
       {{if not .SafetyTestResult}}
-        Our records indicate that you have not yet completed the required safety test.  Please complete the test before your rental begins, otherwise you will have to complete the test before you can take the boat. If you have plan on having multiple drivers, each person will have to complete the test.
+        Our records indicate that you have not yet completed the required safety test.  Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (before you can take the boat). If you have plan on having multiple boat operators, each person will have to complete the test.
         <br>
         Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link.
       {{end}}
