@@ -147,7 +147,7 @@
 #Main-Popup-Frame-Message {
   padding: 10px;
   
-  font-size: 16px;
+  font-size: 20px;
 }
 #Main-Popup-Frame-Buttons {
   margin-top: 10px;
@@ -155,8 +155,9 @@
   
   text-align: center;
 }
-#Main-Popup-Frame-Buttons-OK,
-#Main-Popup-Frame-Buttons-Cancel {
+#Main-Popup-Frame-Buttons-1,
+#Main-Popup-Frame-Buttons-2,
+#Main-Popup-Frame-Buttons-3 {
   margin-right: 20px;
   
   font-size: 15px;

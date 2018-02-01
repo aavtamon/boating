@@ -118,6 +118,8 @@ const RESERVATION_STATUS_BOOKED TReservationStatus = "booked";
 const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
 const RESERVATION_STATUS_DEPOSITED TReservationStatus = "deposited";
 const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
+const RESERVATION_STATUS_ACCIDENT TReservationStatus = "accident";
+
 
 
 const PAYMENT_STATUS_PAYED TPaymentStatus = "payed";

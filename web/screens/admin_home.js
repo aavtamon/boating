@@ -32,10 +32,41 @@ AdminHome = {
     }.bind(this));
     
     
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").click(function() {
+      if (this._selectedRentalElement != null) {
+        Main.showPopup("Updating...", "Reservation status is being updated.");
+        
+        Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+          if (status == Backend.STATUS_SUCCESS) {
+            Main.showMessage("Accident Settled?", "Are you sure you want to mark this accident settled?", function(action) {
+              if (action == Main.ACTION_YES) {
+                Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
+
+                Backend.saveReservation(function(status) {
+                  if (status == Backend.STATUS_SUCCESS) {
+                    Main.hidePopup();
+                    this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                    Backend.resetReservationContext();
+
+                    this._showRentals();
+                  } else {
+                    Main.showMessage("Update Not Successful", "Reservation can not be updated.");
+                  }
+                }.bind(this));
+              }
+            }.bind(this), Main.DIALOG_TYPE_YESNO);
+          } else {
+            Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
+          }
+        }.bind(this));
+      }
+    }.bind(this));
+    
+    
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
       if (this._selectedRentalElement != null) {
-        Main.showMessage("Successful Rental Completion", "By clicking OK you certify that the boat was returned in the original condition, no any accidents occured, and that the deposit can be released in full.", function(action) {
-          if (action == Main.ACTION_OK) {
+        Main.showMessage("Complete Rental", "Was this ride complete without any accidents?<br>Can deposit be returned in full?", function(action) {
+          if (action == Main.ACTION_YES) {
             Main.showPopup("Updating...", "Reservation status is being updated.");
 
             Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
@@ -63,8 +94,32 @@ AdminHome = {
                 Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
               }
             }.bind(this));
+          } else if (action == Main.ACTION_NO) {
+            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+              if (status == Backend.STATUS_SUCCESS) {
+                Main.showMessage("Accident During Rental?", "Are you sure you want to withheld deposit for this rental?", function(action) {
+                  if (action == Main.ACTION_YES) {
+                    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_ACCIDENT;
+
+                    Backend.saveReservation(function(status) {
+                      if (status == Backend.STATUS_SUCCESS) {
+                        Main.hidePopup();
+                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                        Backend.resetReservationContext();
+
+                        this._showRentals();
+                      } else {
+                        Main.showMessage("Update Not Successful", "Reservation can not be updated.");
+                      }
+                    }.bind(this));
+                  }
+                }.bind(this), Main.DIALOG_TYPE_YESNO);
+              } else {
+                Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
+              }
+            }.bind(this));
           }
-        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
+        }.bind(this), Main.DIALOG_TYPE_YESNO);
       }
     }.bind(this));
     
@@ -78,6 +133,7 @@ AdminHome = {
     
     var upcomingRentals = [];
     var inprocessRentals = [];
+    var accidentRentals = [];
     var completedRentals = [];
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
@@ -99,6 +155,8 @@ AdminHome = {
         upcomingRentals.push(rentalOption[0]);
       } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
         inprocessRentals.push(rentalOption[0]);
+      } else if (rental.status == Backend.RESERVATION_STATUS_ACCIDENT) {
+        accidentRentals.push(rentalOption[0]);
       } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
         completedRentals.push(rentalOption[0]);
       } else {
@@ -113,12 +171,17 @@ AdminHome = {
     
     upcomingRentals.sort(sortFunction);
     inprocessRentals.sort(sortFunction);
+    accidentRentals.sort(sortFunction);
     completedRentals.sort(sortFunction);
 
     
     var upcomingRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Upcoming rentals</div></div>").appendTo(optionsSelector);
     var inprocessRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">In-process rentals</div></div>").appendTo(optionsSelector);
+    if (accidentRentals.length > 0) {
+      var accidentRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title highlight\">Accident rentals</div></div>").appendTo(optionsSelector);
+    }
     var completedRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Completed rentals</div></div>").appendTo(optionsSelector);
+    
     
     for (var i in upcomingRentals) {
       $(upcomingRentals[i]).appendTo(upcomingRentalsGroup);
@@ -126,6 +189,10 @@ AdminHome = {
     
     for (var i in inprocessRentals) {
       $(inprocessRentals[i]).appendTo(inprocessRentalsGroup);
+    }
+    
+    for (var i in accidentRentals) {
+      $(accidentRentals[i]).appendTo(accidentRentalsGroup);
     }
     
     for (var i in completedRentals) {
@@ -181,14 +248,22 @@ AdminHome = {
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").show();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
     } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").show();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+    } else if (rental.status == Backend.RESERVATION_STATUS_ACCIDENT) {
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").show();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").show();
     }
     

@@ -118,7 +118,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Printf("Requested resource %s does not exist\n", pathToFile);
   } else {
     if (strings.HasSuffix(pathToFile, ".html")) {
-      fmt.Printf("Serving page %s\n", pathToFile);
+      //fmt.Printf("Serving page %s\n", pathToFile);
       htmlTemplate, _ := template.ParseFiles(pathToFile);
       
       htmlObject := THtmlObject {

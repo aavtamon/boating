@@ -112,7 +112,7 @@ BookingPayment = {
   
   
   _pay: function(stripe, card) {
-    Main.showPopup("Payment Processing", '<center style="font-size: 20px;">Your payment is being processed.<br>Do not refresh or close your browser</center>');
+    Main.showPopup("Payment Processing", '<center>Your payment is being processed.<br>Do not refresh or close your browser</center>');
 
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
     

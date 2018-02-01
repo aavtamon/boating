@@ -82,7 +82,7 @@ AdminDeposit = {
   
   
   _pay: function(stripe, card) {
-    Main.showPopup("Deposit Processing", '<center style="font-size: 20px;">Your deposit is being processed.<br>Do not refresh or close your browser</center>');
+    Main.showPopup("Deposit Processing", '<center>Your deposit is being processed.<br>Do not refresh or close your browser</center>');
 
     var paymentInfo = Backend.getTemporaryData().paymentInfo;
     

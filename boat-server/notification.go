@@ -60,6 +60,27 @@ func NotifyReservationCancelled(reservationId TReservationId) {
   }
 }
 
+func NotifyReservationUpdated(reservationId TReservationId) {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return;
+  }
+  
+  isRenterReservation := reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID;
+  if (isRenterReservation) {
+    if (reservation.Status == RESERVATION_STATUS_ACCIDENT) {
+      emailRenterDepositWithheld(reservation);
+      textRenterDepositWithheld(reservation);
+
+      emailAdminDepositWithheld(reservation);
+    } else {
+      // We do not notify about completion in normal case, we notify that the deposit is returned
+    }
+  } else {
+    // We do not notify owner about completion.
+  }
+}
+
 func NotifyReservationPaid(reservationId TReservationId) {
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
@@ -209,6 +230,12 @@ func emailRenterDepositRefunded(reservation *TReservation) bool {
   return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit released for %s", reservation.Id), reservation, "renter_deposit_refunded.html");
 }
 
+func emailRenterDepositWithheld(reservation *TReservation) bool {
+  fmt.Printf("Sending deposit-withheld email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit withheld for %s", reservation.Id), reservation, "renter_deposit_withheld.html");
+}
+
 func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
   fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
   
@@ -312,6 +339,19 @@ func emailAdminDepositRefunded(reservation *TReservation) bool {
   return true;
 }
 
+func emailAdminDepositWithheld(reservation *TReservation) bool {
+  fmt.Printf("Sending admin deposit-withheld email for reservation %s\n", reservation.Id);
+  
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Attention: Deposit withheld", reservation, "admin_deposit_withheld.html");
+    }
+  }
+  
+  return true;
+}
+
 
 func textOwnerReservationBooked(reservation *TReservation) bool {
   if (reservation.PrimaryPhone == "") {
@@ -371,6 +411,16 @@ func textRenterDepositRefunded(reservation *TReservation) bool {
   fmt.Printf("Texting deposit refunded for reservation %s\n", reservation.Id);
   
   return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your security deposit of $%d for reservation %s is released and should be available on your account soon", reservation.DepositAmount, reservation.Id));
+}
+
+func textRenterDepositWithheld(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting deposit withheld for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your ride %s is complete but we had to withheld your security deposit ($%d). We will follow up with you on that", reservation.Id, reservation.DepositAmount));
 }
 
 func textOwnerDayBeforeReminder(reservation *TReservation) bool {

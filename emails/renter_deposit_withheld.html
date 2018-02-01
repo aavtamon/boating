@@ -1,0 +1,17 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Security Deposit Withheld - {{.Reservation.Id}}</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        There was an accedent while you rented the boat. Therefore we had to withheld your security deposit (${{.Reservation.DepositAmount}}). We will contact you soon to follow up on this case and settle damage expenses.
+      </div>
+      <br>
+      <br>
+      Your ride is complete but we will need to follow up with you regarding the accedent. Please expect a call from us soon.
+      <br>
+      Please contact us at <a href='mailto:reservations@pizboats.com' target='_top'>reservations@pizboats.com</a> if you have any questions.
+      <br>
+      <br>
+      If you have any comments or suggestions about the boat you rented, please contact us at <a href='mailto:support@piztec.com' target='_top'>support@piztec.com</a> 
+
+{{template "email_footer"}}

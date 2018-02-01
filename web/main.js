@@ -1,5 +1,7 @@
 Main = {
   ACTION_OK: "ok",
+  ACTION_YES: "yes",
+  ACTION_NO: "no",
   ACTION_CANCEL: "cancel",
   
   DIALOG_TYPE_CONFIRMATION: "confirmation",
@@ -70,26 +72,45 @@ Main = {
     
     $("#Main-Popup").show();
     
-    if (dialogType == Main.DIALOG_TYPE_YESNO) {
-      $("#Main-Popup-Frame-Buttons-OK").html("Yes");
-      $("#Main-Popup-Frame-Buttons-Cancel").html("No");
-    } else {
-      $("#Main-Popup-Frame-Buttons-OK").html("OK");
-      $("#Main-Popup-Frame-Buttons-Cancel").html("Cancel");
-    }
-    
-    $("#Main-Popup-Frame-Buttons-OK").show();
-    $("#Main-Popup-Frame-Buttons-OK").unbind("click");
-    $("#Main-Popup-Frame-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
-
     if (dialogType == Main.DIALOG_TYPE_INFORMATION) {
-      $("#Main-Popup-Frame-Buttons-Cancel").hide();
-      $("#Main-Popup-Frame-Buttons-OK").focus();
-    } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION || dialogType == Main.DIALOG_TYPE_YESNO) {
-      $("#Main-Popup-Frame-Buttons-Cancel").show();
-      $("#Main-Popup-Frame-Buttons-Cancel").unbind("click");
-      $("#Main-Popup-Frame-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
-      $("#Main-Popup-Frame-Buttons-Cancel").focus();
+      $("#Main-Popup-Frame-Buttons-1").html("OK");
+      $("#Main-Popup-Frame-Buttons-1").show();
+      $("#Main-Popup-Frame-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Popup-Frame-Buttons-1").focus();
+
+      $("#Main-Popup-Frame-Buttons-2").hide();
+      $("#Main-Popup-Frame-Buttons-3").hide();
+    } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
+      $("#Main-Popup-Frame-Buttons-1").html("OK");
+      $("#Main-Popup-Frame-Buttons-1").show();
+      $("#Main-Popup-Frame-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
+
+      $("#Main-Popup-Frame-Buttons-2").hide();
+      
+      $("#Main-Popup-Frame-Buttons-3").html("Cancel");
+      $("#Main-Popup-Frame-Buttons-3").show();
+      $("#Main-Popup-Frame-Buttons-3").unbind("click");
+      $("#Main-Popup-Frame-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Popup-Frame-Buttons-3").focus();
+    } else if (dialogType == Main.DIALOG_TYPE_YESNO) {
+      $("#Main-Popup-Frame-Buttons-1").html("Yes");
+      $("#Main-Popup-Frame-Buttons-1").show();
+      $("#Main-Popup-Frame-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_YES));
+      $("#Main-Popup-Frame-Buttons-1").focus();
+      
+      $("#Main-Popup-Frame-Buttons-2").html("No");
+      $("#Main-Popup-Frame-Buttons-2").show();
+      $("#Main-Popup-Frame-Buttons-2").unbind("click");
+      $("#Main-Popup-Frame-Buttons-2").click(onClick.bind(this, Main.ACTION_NO));
+
+      $("#Main-Popup-Frame-Buttons-3").html("Cancel");
+      $("#Main-Popup-Frame-Buttons-3").show();
+      $("#Main-Popup-Frame-Buttons-3").unbind("click");
+      $("#Main-Popup-Frame-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Popup-Frame-Buttons-3").focus();
     }
   },
   

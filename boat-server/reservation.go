@@ -38,7 +38,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
     queryReservationId, hasReservationId := queryParams["reservation_id"];
     queryLastName, hasLastName := queryParams["last_name"];
 
-    fmt.Printf("Restoring reservation for %s and %s\n", queryParams["reservation_id"], queryParams["last_name"]);
+    fmt.Printf("Restoring reservation %s for %s\n", queryParams["reservation_id"], queryParams["last_name"]);
 
     if (hasReservationId) {
       reservationId := TReservationId(queryReservationId);
@@ -93,6 +93,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
   if (reservation != nil) {
     existingReservation := GetReservation(reservationId);
     if (existingReservation == nil) {
+    
       if (isBooked(reservation.Slot)) {
         w.WriteHeader(http.StatusConflict);
         return;
@@ -107,9 +108,12 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       NotifyReservationBooked(reservationId);
     } else {
       // TODO: may need better validation
-      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_COMPLETED) {
+      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_ACCIDENT || reservation.Status == RESERVATION_STATUS_COMPLETED) {
+      
         existingReservation.Status = reservation.Status;
         SaveReservation(existingReservation);
+        
+        NotifyReservationUpdated(reservationId);
       }
     }
 

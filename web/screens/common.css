@@ -306,6 +306,9 @@ label.input-field-error {
   font-style: italic;
   color: #1c94c4;
 }
+.optionbox-optiongroup-title.highlight {
+  color: #ff0000;
+}
 
 .optionbox-optiongroup .optionbox-option,
 .optionbox-optiongroup .optionbox-nooption {
