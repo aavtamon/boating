@@ -167,6 +167,9 @@ label.input-field-error {
 .screen-description .standard-button:hover {
   background-color: #ffffff;
 }
+.screen-description .standard-button:disabled {
+  background-color: transparent;
+}
 .screen-description .standard-button:active {
   background-color: #fbf9ad;
 }
