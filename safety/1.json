@@ -203,7 +203,6 @@
         "TestQuestion_18-option1": "Steer to the port (left) side of the boat you are over taking.",
         "TestQuestion_18-option2": "Steer to the starboard (right) side of the boat you are over taking.",
         "TestQuestion_18-option3": "Steer either to the port (left), or starboard (right) side of the boat you are over taking",
-        "TestQuestion_18-option4": "All of the above"
       },
       "answer_option_id": "TestQuestion_18-option1"
     },
