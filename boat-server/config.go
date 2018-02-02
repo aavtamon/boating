@@ -7,6 +7,7 @@ import "encoding/json"
 
 const SYSTEM_CONFIG_FILE_NAME = "system_configuration.json";
 const BOOKING_CONFIG_FILE_NAME = "boat-server/booking_configuration.json";
+const GENERAL_PARAMS_FILE_NAME = "boat-server/general_params.json";
 
 
 
@@ -118,14 +119,22 @@ type TSystemConfiguration struct {
 }
 
 
+type TGeneralParams struct {
+  ReservationEmail string `json:"reservation_email"`;
+  SupportEmail string `json:"support_email"`;
+}
+
+
 
 var bookingConfiguration *TBookingConfiguration;
 var systemConfiguration *TSystemConfiguration;
+var generalParams *TGeneralParams;
 
 
 func InitializeSystemConfig() {
   readSystemConfiguration();
   readBookingConfiguration();
+  readGeneralParams();
 }
 
 
@@ -136,6 +145,10 @@ func GetSystemConfiguration() *TSystemConfiguration {
 
 func GetBookingConfiguration() *TBookingConfiguration {
   return bookingConfiguration;
+}
+
+func GetGeneralParams() *TGeneralParams {
+  return generalParams;
 }
 
 
@@ -172,3 +185,17 @@ func readBookingConfiguration() {
   }
 }
 
+func readGeneralParams() {
+  paramsByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GENERAL_PARAMS_FILE_NAME);
+  if (err == nil) {
+    generalParams = &TGeneralParams{};
+    err := json.Unmarshal(paramsByteArray, generalParams);
+    if (err != nil) {
+      fmt.Println("Persistance: failed to parse general params file", err);
+    } else {
+      fmt.Println("Persistance: general params are read");
+    }
+  } else {
+    fmt.Println("Persistance: failed to read general params", err);
+  }
+}

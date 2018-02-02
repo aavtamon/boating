@@ -6,11 +6,11 @@
         Your security deposit of ${{.Reservation.DepositAmount}} has been refunded and should appear on your credit card in about 5 days.  
       </div>
       <br>
-      Please contact us at <a href='mailto:reservations@pizboats.com' target='_top'>reservations@pizboats.com</a> if you have any questions.
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
       <br>
       <br>
       With this transaction, your boat rental is complete. We hope you enjoyed it, and we would be happy to see you again.
       <br>
-      If you have any comments or suggestions about the boat you rented, please contact us at <a href='mailto:support@piztec.com' target='_top'>support@piztec.com</a> 
+      If you have any comments or suggestions about the boat you rented, please contact us at <a href='mailto:{{.GeneralParams.SupportEmail}}' target='_top'>{{.GeneralParams.SupportEmail}}</a> 
 
 {{template "email_footer"}}

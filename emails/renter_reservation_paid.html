@@ -42,7 +42,7 @@
       IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{.Boat.Deposit}}</b>.  Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental.
       <br>
       <br>
-      Please contact us at <a href='mailto:reservations@pizboats.com?Subject=Inquery regarding reservation {{.Reservation.Id}}' target='_top'>reservations@pizboats.com</a> if you need any help.
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}?Subject=Inquery regarding reservation {{.Reservation.Id}}' target='_top{{.GeneralParams.ReservationEmail}}</a> if you need any help.
       <br>
       We look forward to seeing you soon!
 
