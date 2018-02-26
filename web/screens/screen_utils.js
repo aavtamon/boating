@@ -278,7 +278,7 @@ ScreenUtils = {
     $(stateElement).append("<option value='NV'>NV</option>");
     $(stateElement).append("<option value='NH'>NH</option>");
     $(stateElement).append("<option value='NJ'>NJ</option>");
-    $(stateElement).append("<option value='MN'>MN</option>");
+    $(stateElement).append("<option value='NM'>NM</option>");
     $(stateElement).append("<option value='NY'>NY</option>");
     $(stateElement).append("<option value='NC'>NC</option>");
     $(stateElement).append("<option value='ND'>ND</option>");
@@ -297,6 +297,7 @@ ScreenUtils = {
     $(stateElement).append("<option value='WA'>WA</option>");
     $(stateElement).append("<option value='WI'>WI</option>");
     $(stateElement).append("<option value='WV'>WV</option>");
+    $(stateElement).append("<option value='WY'>WY</option>");
     
     this.dataModelInput(stateElement, dataModel, dataModelProperty, changeCallback);
   },

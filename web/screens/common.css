@@ -93,10 +93,6 @@ html, body {
   
   font: inherit;
   
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  
   color: #000000;
   background-color: #f8f8f8;
 }
