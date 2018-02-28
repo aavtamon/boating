@@ -176,7 +176,7 @@ ScreenUtils = {
       return false;
     });
     
-    forLabel = $(checkboxElement).parent().find("label[for=" + $(checkboxElement).attr("id") + "]");
+    forLabel = $(checkboxElement).parent().find("[for=" + $(checkboxElement).attr("id") + "]");
     if (forLabel.length == 1) {
       forLabel.css("user-select", "none");
     }

@@ -1,3 +1,7 @@
+#BookingRenters-Screen {
+  min-width: 1300px;
+}
+
 #BookingRenters-Screen-AdditionalInformation {
   font-size: 20px;
   margin-bottom: 30px;
@@ -97,7 +101,11 @@
 }
 
 #BookingRenters-Screen-ContactInformation-DL-Age {
-  margin-right: 100px;
+  margin-right: 50px;
+  vertical-align: middle;
+}
+#BookingRenters-Screen-ContactInformation-DL-License {
+  vertical-align: middle;
 }
 
 #BookingRenters-Screen-ContactInformation-DL-Age-Label,
