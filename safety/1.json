@@ -22,7 +22,7 @@
         "TestQuestion_2-option3": "Red",
         "TestQuestion_2-option4": "Yellow with a black diamond"
       },
-      "answer_option_id": "TestQuestion_1-option3"
+      "answer_option_id": "TestQuestion_2-option3"
     },
    
     "TestQuestion_3": {
@@ -183,7 +183,7 @@
         "TestQuestion_16-option1": "True",
         "TestQuestion_16-option2": "False"
       },
-      "answer_option_id": "TestQuestion_16-option2"
+      "answer_option_id": "TestQuestion_16-option1"
     },
 
     "TestQuestion_17": {
@@ -202,7 +202,8 @@
       "options": {
         "TestQuestion_18-option1": "Steer to the port (left) side of the boat you are over taking.",
         "TestQuestion_18-option2": "Steer to the starboard (right) side of the boat you are over taking.",
-        "TestQuestion_18-option3": "Steer either to the port (left), or starboard (right) side of the boat you are over taking"
+        "TestQuestion_18-option3": "Steer either to the port (left), or starboard (right) side of the boat you are over taking",
+        "TestQuestion_18-option4": "All of the above"
       },
       "answer_option_id": "TestQuestion_18-option1"
     },
@@ -244,14 +245,13 @@
     },
 
     "TestQuestion_22": {
-      "text": "When is it safe to ride on the gunwales, stern or outside the rail of the boat?",
-      "options_format": "vertical",
+      "text": "Parents are responsible for making sure their children are wearing the correct sized life jacket?",
+      "options_format": "horizontal",
       "options": {
-        "TestQuestion_22-option1": "Anytime, provided the passenger is wearing a life jacket.",
-        "TestQuestion_22-option2": "Anytime, provided the passenger is over the age of 18.",
-        "TestQuestion_22-option3": "When the boat is stopped, and then engine is off."
+        "TestQuestion_22-option1": "True",
+        "TestQuestion_22-option2": "False"
       },
-      "answer_option_id": "TestQuestion_22-option3"
+      "answer_option_id": "TestQuestion_22-option1"
     },
 
     "TestQuestion_23": {
