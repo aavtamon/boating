@@ -18,6 +18,7 @@ type TReservationEmailObject struct {
   ReservationDateTime string;
   PickupLocation TPickupLocation;
   Boat TBoat;
+  GeneralParams *TGeneralParams;
   
   SafetyTestResult *TSafetyTestResult;
 }
@@ -479,6 +480,7 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
     Boat: GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId],
 //    OwnerAccount: GetOwnerAccount(reservation.OwnerAccountId),
     SafetyTestResult: FindSafetyTestResult(reservation),
+    GeneralParams: GetGeneralParams(),
   }
   
   buf := new(bytes.Buffer);
