@@ -2,9 +2,10 @@ BookingBoat = {
   _currentImageIndex: 0,
   
   onLoad: function() {
-    if (Backend.isPayedReservation()) {
+    if (Backend.isPayedReservation() || Backend.getReservationContext().owner_account_id != "") {
       Backend.resetReservationContext();
     }
+
     //TODO: replace with proper location selection
     Backend.getReservationContext().location_id = "lanier";
     
