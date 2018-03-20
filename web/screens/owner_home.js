@@ -36,6 +36,7 @@ OwnerHome = {
     
     var upcomingRentals = [];
     var inprocessRentals = [];
+    var accidentRentals = [];
     var completedRentals = [];
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
@@ -57,6 +58,8 @@ OwnerHome = {
         upcomingRentals.push(rentalOption[0]);
       } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
         inprocessRentals.push(rentalOption[0]);
+      } else if (rental.status == Backend.RESERVATION_STATUS_ACCIDENT) {
+        accidentRentals.push(rentalOption[0]);
       } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
         completedRentals.push(rentalOption[0]);
       } else {
@@ -69,11 +72,13 @@ OwnerHome = {
     };
     upcomingRentals.sort(sortingRule);
     inprocessRentals.sort(sortingRule);
+    accidentRentals.sort(sortingRule);
     completedRentals.sort(sortingRule);
 
     
     var upcomingRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Upcoming rentals</div></div>").appendTo(optionsSelector);
     var inprocessRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">In-process rentals</div></div>").appendTo(optionsSelector);
+    var accidentRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Accident rentals</div></div>").appendTo(optionsSelector);
     var completedRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Completed rentals</div></div>").appendTo(optionsSelector);
     
     for (var i in upcomingRentals) {
@@ -83,7 +88,11 @@ OwnerHome = {
     for (var i in inprocessRentals) {
       $(inprocessRentals[i]).appendTo(inprocessRentalsGroup);
     }
-    
+
+    for (var i in accidentRentals) {
+      $(accidentRentals[i]).appendTo(accidentRentalsGroup);
+    }
+
     for (var i in completedRentals) {
       $(completedRentals[i]).appendTo(completedRentalsGroup);
     }
@@ -98,6 +107,9 @@ OwnerHome = {
     }
     if (inprocessRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(inprocessRentalsGroup);
+    }
+    if (accidentRentalsGroup.children().length == 1) {
+      $("<div class=\"optionbox-nooption\">None</div>").appendTo(accidentRentalsGroup);
     }
     if (completedRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(completedRentalsGroup);

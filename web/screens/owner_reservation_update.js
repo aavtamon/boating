@@ -27,7 +27,7 @@ OwnerReservationUpdate = {
     
     ScreenUtils.form("#OwnerReservationUpdate-Screen-ReservationSummary-Email", null, this._sendEmail);    
   },
-  
+
   _sendEmail: function() {
     var email = $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
@@ -40,7 +40,7 @@ OwnerReservationUpdate = {
         Main.showMessage("Not Successful", "An error occured. Please try again");
       }
     });
-  }
+  },
   
   _cancelReservation: function() {
     var cancellationMessage = "Do you really want to cancel your reservation <b>" + OwnerReservationUpdate.reservationId + "</b>?";
