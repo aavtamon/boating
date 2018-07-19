@@ -36,6 +36,10 @@ var availableSlots map[int64][]TBookingSlot = nil;
 var availableDates TAvailableDates = nil;
 var reservationObserver TReservationObserver;
 var currentDate time.Time;
+var schedulingBeginDate time.Time;
+var schedulingEndDate time.Time;
+
+
 
 func BookingsHandler(w http.ResponseWriter, r *http.Request) {
   log.Println("Bookings Handler");
@@ -176,6 +180,19 @@ func getAvailableBookingSlots(date int64) []TBookingSlot {
 
 
 func initBookingSettings() {
+  beginDate, err := time.Parse("2 Jan 2006", bookingConfiguration.SchedulingBeginDate);
+  if (err != nil) {
+    log.Fatal("Scheduling begin date is malformed:", err);
+  }
+  schedulingBeginDate = beginDate;
+
+  endDate, err := time.Parse("2 Jan 2006", bookingConfiguration.SchedulingEndDate);
+  if (err != nil) {
+    log.Fatal("Scheduling end date is malformed:", err);
+  }
+  schedulingEndDate = endDate;
+
+
   refreshBookingAvailability();
 }
 
@@ -183,23 +200,6 @@ func refreshBookingAvailability() {
   currentTime := time.Now().UTC();
   currentDate = time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, time.UTC);
 
-  /*
-  bookingSettings.SchedulingOffset = bookingConfiguration.SchedulingBeginOffset;
-
-  beginDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingBeginOffset);
-  schedulingBeginDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingBeginDate);
-  if (err == nil && schedulingBeginDate.After(beginDate)) {
-    beginDate = schedulingBeginDate;
-  }
-  bookingSettings.SchedulingBeginDate = beginDate.UnixNano() / int64(time.Millisecond);
-  
-  endDate := currentDate.AddDate(0, 0, bookingConfiguration.SchedulingEndOffset);
-  schedulingEndDate, err := time.Parse("2006-Jan-2", bookingConfiguration.SchedulingEndDate);
-  if (err == nil && schedulingEndDate.Before(endDate)) {
-    endDate = schedulingEndDate;
-  }
-  bookingSettings.SchedulingEndDate = endDate.UnixNano() / int64(time.Millisecond);
-  */
 
   for locationId := range bookingConfiguration.Locations {
     for boatId := range bookingConfiguration.Locations[locationId].Boats {
@@ -238,7 +238,12 @@ func recalculateAllAvailableSlots(locationId string, boatId string) {
 
   for counter := bookingConfiguration.SchedulingBeginOffset - 1; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
     slotDate := currentDate.Add(time.Duration(counter * 24) * time.Hour);
-    calculateSlotsForDate(location, boat, slotDate);
+
+    if (slotDate.Before(schedulingBeginDate) || slotDate.After(schedulingEndDate)) {
+      // skipping slot
+    } else {
+      calculateSlotsForDate(location, boat, slotDate);
+    }
   }
   
     
