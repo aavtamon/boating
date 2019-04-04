@@ -28,7 +28,7 @@
           ],
           "engine": "140h/p",
           "mileage": 10,
-          "maximum_capacity": 10,
+          "maximum_capacity": 16,
           "rate": [
             {"range_min": 2, "range_max": 2, "price": 150},
             {"range_min": 4, "range_max": 4, "price": 250},
