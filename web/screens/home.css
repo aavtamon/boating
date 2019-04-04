@@ -2,6 +2,27 @@
   margin-top: 10px;
 }
 
+/*THIS IS TEMPORARY*/
+#Home-Screen-NotProduction {
+  position: fixed;
+  width: 50%;
+  left: 25%;
+  top: 25%;
+  padding: 20px 20px 20px 20px;
+  
+  text-align: center;
+  font-size: 30px;
+  
+  color: blue;
+  background: white;
+  
+  border-color: blue;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+}
+/*END OF TEMPORARY*/
+
 #Home-Screen-Welcome {
   padding: 0px;
   margin-top: -5px;

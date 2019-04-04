@@ -9,8 +9,6 @@ import "encoding/hex"
 
 
 func AccountHandler(w http.ResponseWriter, r *http.Request) {
-  fmt.Println("Account Handler: request method=" + r.Method);
-  
   if (r.Method == http.MethodGet) {
     if (strings.HasSuffix(r.URL.Path, "/logout")) {
       handleLogout(w, r);
