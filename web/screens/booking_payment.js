@@ -100,12 +100,14 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Please Review Our Cancellation Policy", this._getCancellationPolicy() + '<br><br><div style="font-size: 16px;">&nbsp;&nbsp;Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>', function(action) {
+        Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndServces'></div><br><div style='font-size: 16px;'>Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);
           }
         }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
+        
+        $("#BookingPayment-TermsAndServces").load("files/docs/terms-and-services.html");
       }
     }.bind(this));
   },
@@ -159,24 +161,8 @@ BookingPayment = {
   },
  
   
-  _getCancellationPolicy: function() {
-    var policy = '<center style="font-size: 30px; font-weight: bold; margin-bottom: 20px;">Cancellation Policy</center><div style="font-size: 16px;">You may cancel your reservation and receive a full refund if you cancel more than ' + Backend.getBookingConfiguration().cancellation_fees[0].range_max + ' hours before your departure.<br><br>The following fees apply if cancelling the reservation less than ' + Backend.getBookingConfiguration().cancellation_fees[0].range_max + ' hours in advance of the departure:<br><ul>';
-    
-    
-    for (var index in Backend.getBookingConfiguration().cancellation_fees) {
-      var fee = Backend.getBookingConfiguration().cancellation_fees[index];
-      policy += "<li>" + ScreenUtils.pad(fee.range_max, 2, "0") + " - " + ScreenUtils.pad(fee.range_min, 2, "0") + " hours: $" + fee.price + " dollars</li>"
-    }
-    
-    policy += "</ul><br>The fees will not exceed the amount you paid for the reservation.<br><br>"
-    
-    policy += "&nbsp;&nbsp;Please note, that should there be inclement weather we may cancel your reservation.<br>Should this occur, you will be refunded in full."
-    + "<br>However, we hope the weather will be perfect and you will enjoy your trip.</div>"
-    
-    return policy;
-  },
-  
   _showCancellationPolicy: function() {
-    Main.showMessage("Cancellation Policy", this._getCancellationPolicy());
+    Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndServces'></div>");
+    $("#BookingPayment-TermsAndServces").load("files/docs/terms-and-services.html");
   },
 }

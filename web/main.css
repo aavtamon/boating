@@ -127,7 +127,6 @@
   max-height: 80%;
   top: 10%;
   left: 25%;
-  overflow: scroll;
   
   border: ridge;
   
@@ -144,28 +143,31 @@
   
   font-size: 20px;
 }
-#Main-Popup-Frame-Message {
+#Main-Popup-Frame-Content {
   padding: 10px;
-  
+  max-height: 500px;
+  overflow-y: scroll;
+}
+#Main-Popup-Frame-Content-Message {
   font-size: 18px;
 }
-#Main-Popup-Frame-Buttons {
-  margin-top: 10px;
+#Main-Popup-Frame-Content-Buttons {
+  margin-top: 20px;
   margin-bottom: 10px;
   
   text-align: center;
 }
-#Main-Popup-Frame-Buttons-1,
-#Main-Popup-Frame-Buttons-2,
-#Main-Popup-Frame-Buttons-3 {
+#Main-Popup-Frame-Content-Buttons-1,
+#Main-Popup-Frame-Contant-Buttons-2,
+#Main-Popup-Frame-Content-Buttons-3 {
   margin-right: 20px;
   
   font-size: 15px;
   
   background-color: #f1ffff;
 }
-#Main-Popup-Frame-Buttons-OK:active,
-#Main-Popup-Frame-Buttons-Cancel:active {
+#Main-Popup-Frame-Content-Buttons-OK:active,
+#Main-Popup-Frame-Content-Buttons-Cancel:active {
   background-color: #c5f9f9;
 }
 

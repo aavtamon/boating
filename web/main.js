@@ -57,8 +57,8 @@ Main = {
   
   showMessage: function(title, message, actionListener, dialogType) {
     $("#Main-Popup-Frame-Title").html(title);
-    $("#Main-Popup-Frame-Message").html(message);
-    $("#Main-Popup-Frame-Buttons").show();
+    $("#Main-Popup-Frame-Content-Message").html(message);
+    $("#Main-Popup-Frame-Content-Buttons").show();
     
     function onClick(button) {
       $("#Main-Popup").hide();
@@ -73,44 +73,44 @@ Main = {
     $("#Main-Popup").show();
     
     if (dialogType == Main.DIALOG_TYPE_INFORMATION) {
-      $("#Main-Popup-Frame-Buttons-1").html("OK");
-      $("#Main-Popup-Frame-Buttons-1").show();
-      $("#Main-Popup-Frame-Buttons-1").unbind("click");
-      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
-      $("#Main-Popup-Frame-Buttons-1").focus();
+      $("#Main-Popup-Frame-Content-Buttons-1").html("OK");
+      $("#Main-Popup-Frame-Content-Buttons-1").show();
+      $("#Main-Popup-Frame-Content-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Popup-Frame-Content-Buttons-1").focus();
 
-      $("#Main-Popup-Frame-Buttons-2").hide();
-      $("#Main-Popup-Frame-Buttons-3").hide();
+      $("#Main-Popup-Frame-Content-Buttons-2").hide();
+      $("#Main-Popup-Frame-Content-Buttons-3").hide();
     } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
-      $("#Main-Popup-Frame-Buttons-1").html("OK");
-      $("#Main-Popup-Frame-Buttons-1").show();
-      $("#Main-Popup-Frame-Buttons-1").unbind("click");
-      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Popup-Frame-Content-Buttons-1").html("OK");
+      $("#Main-Popup-Frame-Content-Buttons-1").show();
+      $("#Main-Popup-Frame-Content-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
 
-      $("#Main-Popup-Frame-Buttons-2").hide();
+      $("#Main-Popup-Frame-Content-Buttons-2").hide();
       
-      $("#Main-Popup-Frame-Buttons-3").html("Cancel");
-      $("#Main-Popup-Frame-Buttons-3").show();
-      $("#Main-Popup-Frame-Buttons-3").unbind("click");
-      $("#Main-Popup-Frame-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
-      $("#Main-Popup-Frame-Buttons-3").focus();
+      $("#Main-Popup-Frame-Content-Buttons-3").html("Cancel");
+      $("#Main-Popup-Frame-Content-Buttons-3").show();
+      $("#Main-Popup-Frame-Content-Buttons-3").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Popup-Frame-Content-Buttons-3").focus();
     } else if (dialogType == Main.DIALOG_TYPE_YESNO) {
-      $("#Main-Popup-Frame-Buttons-1").html("Yes");
-      $("#Main-Popup-Frame-Buttons-1").show();
-      $("#Main-Popup-Frame-Buttons-1").unbind("click");
-      $("#Main-Popup-Frame-Buttons-1").click(onClick.bind(this, Main.ACTION_YES));
-      $("#Main-Popup-Frame-Buttons-1").focus();
+      $("#Main-Popup-Frame-Content-Buttons-1").html("Yes");
+      $("#Main-Popup-Frame-Content-Buttons-1").show();
+      $("#Main-Popup-Frame-Content-Buttons-1").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_YES));
+      $("#Main-Popup-Frame-Content-Buttons-1").focus();
       
-      $("#Main-Popup-Frame-Buttons-2").html("No");
-      $("#Main-Popup-Frame-Buttons-2").show();
-      $("#Main-Popup-Frame-Buttons-2").unbind("click");
-      $("#Main-Popup-Frame-Buttons-2").click(onClick.bind(this, Main.ACTION_NO));
+      $("#Main-Popup-Frame-Content-Buttons-2").html("No");
+      $("#Main-Popup-Frame-Content-Buttons-2").show();
+      $("#Main-Popup-Frame-Content-Buttons-2").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-2").click(onClick.bind(this, Main.ACTION_NO));
 
-      $("#Main-Popup-Frame-Buttons-3").html("Cancel");
-      $("#Main-Popup-Frame-Buttons-3").show();
-      $("#Main-Popup-Frame-Buttons-3").unbind("click");
-      $("#Main-Popup-Frame-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
-      $("#Main-Popup-Frame-Buttons-3").focus();
+      $("#Main-Popup-Frame-Content-Buttons-3").html("Cancel");
+      $("#Main-Popup-Frame-Content-Buttons-3").show();
+      $("#Main-Popup-Frame-Content-Buttons-3").unbind("click");
+      $("#Main-Popup-Frame-Content-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Popup-Frame-Content-Buttons-3").focus();
     }
   },
   
