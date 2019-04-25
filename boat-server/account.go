@@ -2,7 +2,6 @@ package main
 
 import "net/http"
 import "encoding/json"
-import "fmt"
 import "strings"
 import "crypto/md5"
 import "encoding/hex"
@@ -60,7 +59,9 @@ func handleGetAccount(w http.ResponseWriter, r *http.Request) {
 
 func handleLogout(w http.ResponseWriter, r *http.Request) {
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  *Sessions[TSessionId(sessionCookie.Value)].AccountId = NO_OWNER_ACCOUNT_ID;
+  sessionId := TSessionId(sessionCookie.Value);
+  *Sessions[sessionId].AccountId = NO_OWNER_ACCOUNT_ID;
+  delete(Sessions, sessionId);
   w.WriteHeader(http.StatusOK);
 }
 

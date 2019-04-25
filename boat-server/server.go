@@ -11,6 +11,8 @@ import "net/http"
 import "math/rand"
 import "time"
 
+const MAX_NUMBER_OF_KEPT_SESSIONS = 100;
+const SESSION_MAX_LIFE = 30;
 
 const WEB_ROOT = "web";
 const CERTIFICATE_FILE = "certificate.cer";
@@ -33,6 +35,7 @@ type TSession struct {
   ReservationId *TReservationId;
   AccountId *TOwnerAccountId;
   SafetySuiteId *TSafetySuiteId;
+  LastAccessed *time.Time;
 }
 
 type TSessionId string;
@@ -78,31 +81,46 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   if (pageReference == "") {
     pageReference = "index.html";
   }
-  
-  var sessionIdValue string = "";
+
+
   sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  if (sessionCookie == nil) {
-    sessionIdValue = generateSessionId();
-
-    fmt.Printf("New session detected. Assigned id = %s\n", sessionIdValue);
-
-
-    sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: sessionIdValue};
-    http.SetCookie(w, sessionCookie);
-  } else {
-    sessionIdValue = sessionCookie.Value;
+  if (sessionCookie != nil) {
+    sessionId := TSessionId(sessionCookie.Value);
+    session, hasSession := Sessions[sessionId];
+    if (hasSession) {
+      sessionTimePlusInactivity := session.LastAccessed.Add(SESSION_MAX_LIFE * time.Minute);
+      if (sessionTimePlusInactivity.Before(time.Now())) {
+        delete(Sessions, sessionId);
+        
+        sessionCookie = nil; //we will need to regenerate the cookie
+      }
+    } else {
+      sessionCookie = nil; //we will need to regenerate the cookie
+    }
   }
   
-  sessionId := TSessionId(sessionIdValue);
+  if (sessionCookie == nil) {
+    sessionCookie = &http.Cookie{Name: SESSION_ID_COOKIE, Value: generateSessionId(), Path: "/"};
+    http.SetCookie(w, sessionCookie);
+  }
+  
+  sessionId := TSessionId(sessionCookie.Value);
   _, hasSession := Sessions[sessionId];
   if (!hasSession) {
+    fmt.Printf("New session detected. Assigned id = %s\n", sessionId);
+
     initialReservationId := NO_RESERVATION_ID;
     initialAccountId := NO_OWNER_ACCOUNT_ID;
     initialSuiteId := NO_SAFETY_SUITE_ID;
-    Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId, SafetySuiteId: &initialSuiteId};
+    lastAccessed := time.Now();
+    
+    Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId, SafetySuiteId: &initialSuiteId, LastAccessed: &lastAccessed};
+  } else {
+    *Sessions[sessionId].LastAccessed = time.Now();
   }
   
-
+  removeOldSessions();
+  
   //fmt.Printf("***** Loading page %s *****\n", pageReference);
 
   pathToFile := RuntimeRoot + "/" + WEB_ROOT + "/" + pageReference;
@@ -178,6 +196,26 @@ func generateSessionId() string {
   return string(bytes[:]);
 }
 
+
+func removeOldSessions() {
+  if (len(Sessions) <= MAX_NUMBER_OF_KEPT_SESSIONS) {
+    return;
+  }
+
+  now := time.Now();
+  for sessionId, session := range Sessions {
+      sessionTimePlusInactivity := session.LastAccessed.Add(SESSION_MAX_LIFE * time.Minute);
+      if (sessionTimePlusInactivity.Before(now)) {
+        delete(Sessions, sessionId);
+        
+        fmt.Printf("Session %s was removed as obsolete\n", sessionId);
+      }
+  }
+  
+  if (len(Sessions) > MAX_NUMBER_OF_KEPT_SESSIONS) {
+    fmt.Printf("WARNING: no sessions were removed by the session reduction cycle. Number of active sessions %d\n", len(Sessions));
+  }  
+}
 
 
 func main() {
