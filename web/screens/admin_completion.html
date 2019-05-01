@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="screens/admin_completion.css">
+<script src="screens/admin_completion.js"></script>
+<script src="screens/screen_utils.js"></script>
+
+
+<div id="AdminCompletion-Screen-Description" class="screen-description">
+  <button id="AdminCompletion-Screen-Description-BackButton" class="standard-button previous">Dashboard</button>
+  Rental Completion & Deposit Return
+  <button id="AdminCompletion-Screen-Description-ConfirmButton" class="standard-button next">Complete Rental</button>
+</div>
+
+<div id="AdminCompletion-Screen" class="screen" onshow="AdminCompletion.onLoad()">
+  <div id="AdminCompletion-Screen-ReservationSummary" class="info-box">
+    <div id="AdminCompletion-Screen-ReservationSummary-Reservation" class="info-box-row">
+      <div id="AdminCompletion-Screen-ReservationSummary-Reservation-Title">Reservation:</div>
+      <div id="AdminCompletion-Screen-ReservationSummary-Reservation-Value">{{.Reservation.Id}}</div>
+    </div>
+    <div id="AdminCompletion-Screen-ReservationSummary-Name" class="info-box-row">
+      <div id="AdminCompletion-Screen-ReservationSummary-Name-Title">Primary Renter:</div>
+      <div id="AdminCompletion-Screen-ReservationSummary-Name-Value">{{.Reservation.FirstName}} {{.Reservation.LastName}}</div>
+    </div>
+    <div id="AdminCompletion-Screen-ReservationSummary-Boat" class="info-box-row">
+      <div id="AdminCompletion-Screen-ReservationSummary-Boat-Title">Boat:</div>
+      <div id="AdminCompletion-Screen-ReservationSummary-Boat-Value"></div>
+    </div>
+    <div id="AdminCompletion-Screen-ReservationSummary-Deposit" class="info-box-row">
+      <div id="AdminCompletion-Screen-ReservationSummary-Deposit-Title">Deposit:</div>
+      <div id="AdminCompletion-Screen-ReservationSummary-Deposit-Value"></div>
+    </div>
+  </div>  
+  
+  <div class="info-box">
+    <div id="AdminCompletion-Screen-FuelUsage" class="info-box-row">
+      <div id="AdminCompletion-Screen-FuelUsage-Label">Fuel Usage:</div>
+      <select name="fuel" id="AdminCompletion-Screen-FuelUsage-Input">
+        <option value='25'>less than 25%</option>
+        <option value='50'>beteen 25% and 50%</option>
+        <option value='75'>beteen 50% and 75%</option>
+        <option value='100'>more than 75%</option>
+      </select>
+    </div>
+  
+    <div id="AdminCompletion-Screen-AccidentStatus" class="info-box-row">
+      <div id="AdminCompletion-Screen-AccidentStatus-Label">Any incidents:</div>
+      <select name="fuel" id="AdminCompletion-Screen-AccidentStatus-Input">
+        <option value='no'>No</option>
+        <option value='yes'>Yes</option>
+      </select>
+      <textarea id="AdminCompletion-Screen-AccidentDescription"></textarea>
+    </div>
+  </div>
+  
+  <div class="info-box">
+    <div id="AdminCompletion-Screen-TotalRefund" class="info-box-row">
+      <div id="AdminCompletion-Screen-TotalRefund-Label">Total back to customer:</div>
+      <div name="fuel" id="AdminCompletion-Screen-TotalRefund-Value"></div>
+    </div>
+  </div>
+</div>

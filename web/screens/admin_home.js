@@ -62,7 +62,19 @@ AdminHome = {
       }
     }.bind(this));
     
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
+      Main.showPopup("Pulling Reservation", "Pulling the reservation...");
+      Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+        Main.hidePopup();
+        if (status == Backend.STATUS_SUCCESS) {
+          Main.loadScreen("admin_completion");
+        } else {
+          Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
+        }
+      }.bind(this));
+    }.bind(this));
     
+    /*
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
       if (this._selectedRentalElement != null) {
         Main.showMessage("Complete Rental", "Was this ride complete without any accidents?<br>Can deposit be returned in full?", function(action) {
@@ -122,10 +134,11 @@ AdminHome = {
         }.bind(this), Main.DIALOG_TYPE_YESNO);
       }
     }.bind(this));
-    
+  */  
     
     this._showRentals();
   },
+  
   
   _showRentals: function() {
     var optionsSelector = $("#AdminHome-Screen-AdminInfo-BoatRentals-Rentals");

@@ -9,6 +9,8 @@
     {"range_min": 4, "range_max": 24, "price": 150},
     {"range_min": 0, "range_max": 4, "price": 200}
   ],
+
+  "gas_price": 3.00,
   
   "locations": {
     "lanier": {
@@ -19,8 +21,8 @@
       "duration": 2,
       "service_interval": 1,
       "boats": {
-        "lanier-queen": {
-          "name": "Lanier Queen",
+        "ana": {
+          "name": "Ana",
           "type": "Pantoon 24ft",
           "images": [
             {"name": "", "url": "files/images/boat-picture.jpg", "description": "Nice and powerful boat.<br>Good for surfing the lake with your party."},
@@ -29,6 +31,7 @@
           "engine": "140h/p",
           "mileage": 10,
           "maximum_capacity": 16,
+          "tank_size": 32,
           "rate": [
             {"range_min": 2, "range_max": 2, "price": 150},
             {"range_min": 4, "range_max": 4, "price": 250},
