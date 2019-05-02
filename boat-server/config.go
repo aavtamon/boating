@@ -50,7 +50,7 @@ type TBoat struct {
   Type string `json:"type"`;
   Engine string `json:"engine"`;
   Mileage int `json:"mileage"`;
-  Tank int `json:"tank_size"`;
+  TankSize int `json:"tank_size"`;
   MaximumCapacity int `json:"maximum_capacity"`;
   Rate []TPricedRange `json:"rate"`;
   Images []TImageResource `json:"images"`;
@@ -84,7 +84,7 @@ type TBookingConfiguration struct {
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
   CancellationFees []TPricedRange `json:"cancellation_fees"`;
   Locations map[string]TRentalLocation `json:"locations"`;
-  GasPrice float32 `json:"gas_price"`;
+  GasPrice float64 `json:"gas_price"`;
 }
 
 

@@ -5,6 +5,7 @@ AdminCompletion = {
     var reservationContext = Backend.getReservationContext();
 
     if (reservationContext.status != Backend.RESERVATION_STATUS_DEPOSITED) {
+      Backend.resetReservationContext();
       Main.loadScreen("admin_home");
       
       return;
@@ -22,6 +23,35 @@ AdminCompletion = {
     $("#AdminCompletion-Screen-AccidentStatus-Input").change(this.updateTotalRefund);
     
     $("#AdminCompletion-Screen-Description-ConfirmButton").click(function() {
+        Main.showMessage("Complete Rental", "Are you sure - complete rental and refund back " + ScreenUtils.getBookingPrice(this.totalRefund) + "?", function(action) {
+          if (action == Main.ACTION_YES) {
+            Main.showPopup("Updating...", "Reservation status is being updated.");
+      
+            Backend.getReservationContext().fuel_usage = $("#AdminCompletion-Screen-FuelUsage-Input").val();
+            Backend.saveReservation(function(status) {
+              if (status == Backend.STATUS_SUCCESS) {
+                Backend.refundDeposit(function(status) {
+                  if (status == Backend.STATUS_SUCCESS) {
+                    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
+
+                    Backend.saveReservation(function(status) {
+                      if (status == Backend.STATUS_SUCCESS) {
+                        Main.hidePopup();
+                        Backend.resetReservationContext();
+                      } else {
+                        Main.showMessage("Update Not Successful", "Reservation can not be completed.");
+                      }
+                    }.bind(this));
+                  } else {
+                    Main.showMessage("Deposit Refund Not Successful", "Deposit was not refunded.");
+                  }
+                }.bind(this));  
+              } else {
+                Main.showMessage("Update Not Successful", "Fuel usage can not be updated.");
+              }
+            }.bind(this));
+          }
+        });
     });
     
     this.updateTotalRefund();
@@ -31,11 +61,11 @@ AdminCompletion = {
     var reservationContext = Backend.getReservationContext();
     var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
     
-    totalRefund = 0;
+    this.totalRefund = 0;
     var totalRefundString = "";
     var hadAccident = $("#AdminCompletion-Screen-AccidentStatus-Input").val() == "yes";
     if (!hadAccident) {
-      totalRefund = boat.deposit - Math.round(Backend.getBookingConfiguration().gas_price * boat.tank_size * $("#AdminCompletion-Screen-FuelUsage-Input").val() / 100);
+      this.totalRefund = boat.deposit - Math.round(Backend.getBookingConfiguration().gas_price * boat.tank_size * $("#AdminCompletion-Screen-FuelUsage-Input").val() / 100);
       totalRefundString = ScreenUtils.getBookingPrice(boat.deposit) + " - (" +  ScreenUtils.getBookingPrice(Backend.getBookingConfiguration().gas_price) + " per gallon * " + $("#AdminCompletion-Screen-FuelUsage-Input").val() + "% of tank * " + boat.tank_size + " gallons) = " + ScreenUtils.getBookingPrice(totalRefund);
     } else {
       totalRefundString = "$0 - ATTENTION: No Refund!!!";

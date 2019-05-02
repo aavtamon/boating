@@ -299,13 +299,15 @@ func refundDeposit(reservation *TReservation) bool {
   }
 
   depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
+  fuelUsed := float64(bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].TankSize * reservation.FuelUsage / 100);
+  fuelAmount := uint64(bookingConfiguration.GasPrice * fuelUsed);
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.RefundParams {
       Charge: reservation.ChargeId,
-      Amount: depositAmount * 100,
+      Amount: (depositAmount - fuelAmount) * 100,
     }
 
   
@@ -321,6 +323,7 @@ func refundDeposit(reservation *TReservation) bool {
     } else {
       reservation.DepositRefundId = refund.ID;
       reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
+      reservation.FuelCharge = fuelAmount;
       SaveReservation(reservation);
 
       fmt.Printf("Deposit refund processing for reservation %s is complete successfully\n", reservation.Id);
@@ -332,6 +335,7 @@ func refundDeposit(reservation *TReservation) bool {
     
     reservation.DepositRefundId = "fake deposit refund";
     reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
+    reservation.FuelCharge = fuelAmount;
     SaveReservation(reservation);
     
     return true;
