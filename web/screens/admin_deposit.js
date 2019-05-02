@@ -4,12 +4,14 @@ AdminDeposit = {
     var reservationContext = Backend.getReservationContext();
     
     if (reservationContext.status != Backend.RESERVATION_STATUS_BOOKED) {
+      Backend.resetReservationContext();
       Main.loadScreen("admin_home");
       
       return;
     }
     
     $("#AdminDeposit-Screen-Description-BackButton").click(function() {
+      Backend.resetReservationContext();
       Main.loadScreen("admin_home");
     });
     

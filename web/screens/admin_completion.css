@@ -33,13 +33,16 @@
 #AdminCompletion-Screen-AccidentStatus-Input
 {
   display: inline-block;
-  width: 150px;
+  width: 100px;
   
   margin-right: 50px;
   margin-bottom: 5px;
   
   font-size: 20px;
   font-weight: bold;
+}
+#AdminCompletion-Screen-FuelUsage-Input {
+  width: 200px;
 }
 
 #AdminCompletion-Screen-AccidentDescription {

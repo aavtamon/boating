@@ -106,11 +106,7 @@ Main = {
       $("#Main-Popup-Frame-Content-Buttons-2").unbind("click");
       $("#Main-Popup-Frame-Content-Buttons-2").click(onClick.bind(this, Main.ACTION_NO));
 
-      $("#Main-Popup-Frame-Content-Buttons-3").html("Cancel");
-      $("#Main-Popup-Frame-Content-Buttons-3").show();
-      $("#Main-Popup-Frame-Content-Buttons-3").unbind("click");
-      $("#Main-Popup-Frame-Content-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
-      $("#Main-Popup-Frame-Content-Buttons-3").focus();
+      $("#Main-Popup-Frame-Content-Buttons-3").hide();
     }
   },
   

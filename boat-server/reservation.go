@@ -108,11 +108,20 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       NotifyReservationBooked(reservationId);
     } else {
       // TODO: may need better validation
-      if (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_ACCIDENT || reservation.Status == RESERVATION_STATUS_COMPLETED) {
       
+      reservationChanged := false;
+      if (existingReservation.Status != reservation.Status && (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_ACCIDENT || reservation.Status == RESERVATION_STATUS_COMPLETED)) {
         existingReservation.Status = reservation.Status;
+        reservationChanged = true;
+      }
+      if (existingReservation.FuelUsage != reservation.FuelUsage && (reservation.FuelUsage > 0 && reservation.FuelUsage <= 100)) {
+      
+        existingReservation.FuelUsage = reservation.FuelUsage;
+        reservationChanged = true;
+      }
+      
+      if (reservationChanged) {
         SaveReservation(existingReservation);
-        
         NotifyReservationUpdated(reservationId);
       }
     }
