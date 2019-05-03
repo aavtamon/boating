@@ -46,7 +46,7 @@ Main = {
   
   showPopup: function(title, message) {
     $("#Main-Popup-Frame-Title").html(title);
-    $("#Main-Popup-Frame-Content-Message").html(message);
+    $("#Main-Popup-Frame-Content-Message").html("<center>" + message + "</center>");
     $("#Main-Popup-Frame-Content-Buttons").hide();
     $("#Main-Popup").show();
   },

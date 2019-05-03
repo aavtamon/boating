@@ -134,7 +134,7 @@
   height: 26px;
   font-size: 20px;
   
-  border: ridge;
+  border-style: ridge;
   border-bottom: solid 1px black;
   
   background-color: rgb(122, 151, 239);
@@ -152,7 +152,7 @@
   
   background-color: azure;
   
-  border: ridge;
+  border-style: ridge;
   border-top: none;
 }
 #Main-Popup-Frame-Content-Message {

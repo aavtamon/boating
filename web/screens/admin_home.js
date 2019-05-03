@@ -19,13 +19,11 @@ AdminHome = {
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").click(function() {
       if (this._selectedRentalElement != null) {
-        Main.showPopup("Updating...", "Reservation status is being updated.");
-        
         Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
           if (status == Backend.STATUS_SUCCESS) {
             Main.loadScreen("admin_deposit");
           } else {
-            Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
+            Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
           }
         }.bind(this));
       }
@@ -34,12 +32,12 @@ AdminHome = {
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").click(function() {
       if (this._selectedRentalElement != null) {
-        Main.showPopup("Updating...", "Reservation status is being updated.");
-        
-        Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
-          if (status == Backend.STATUS_SUCCESS) {
-            Main.showMessage("Accident Settled?", "Are you sure you want to mark this accident settled?", function(action) {
-              if (action == Main.ACTION_YES) {
+        Main.showMessage("Accident Settled?", "<center>Are you sure you want to mark this accident settled?</center>", function(action) {
+          if (action == Main.ACTION_YES) {
+            Main.showPopup("Updating...", "Reservation status is being updated.");
+
+            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+              if (status == Backend.STATUS_SUCCESS) {
                 Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
 
                 Backend.saveReservation(function(status) {
@@ -50,22 +48,21 @@ AdminHome = {
 
                     this._showRentals();
                   } else {
+                    Backend.resetReservationContext();
                     Main.showMessage("Update Not Successful", "Reservation can not be updated.");
                   }
                 }.bind(this));
+              } else {
+                Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
               }
-            }.bind(this), Main.DIALOG_TYPE_YESNO);
-          } else {
-            Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
+            }.bind(this));
           }
-        }.bind(this));
+        }.bind(this), Main.DIALOG_TYPE_YESNO);
       }
     }.bind(this));
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
-      Main.showPopup("Pulling Reservation", "Pulling the reservation...");
       Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
-        Main.hidePopup();
         if (status == Backend.STATUS_SUCCESS) {
           Main.loadScreen("admin_completion");
         } else {
@@ -73,68 +70,6 @@ AdminHome = {
         }
       }.bind(this));
     }.bind(this));
-    
-    /*
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
-      if (this._selectedRentalElement != null) {
-        Main.showMessage("Complete Rental", "Was this ride complete without any accidents?<br>Can deposit be returned in full?", function(action) {
-          if (action == Main.ACTION_YES) {
-            Main.showPopup("Updating...", "Reservation status is being updated.");
-
-            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
-              if (status == Backend.STATUS_SUCCESS) {
-                Backend.refundDeposit(function(status) {
-                  if (status == Backend.STATUS_SUCCESS) {
-                    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
-
-                    Backend.saveReservation(function(status) {
-                      if (status == Backend.STATUS_SUCCESS) {
-                        Main.hidePopup();
-                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
-                        Backend.resetReservationContext();
-
-                        this._showRentals();
-                      } else {
-                        Main.showMessage("Update Not Successful", "Reservation can not be updated.");
-                      }
-                    }.bind(this));
-                  } else {
-                    Main.showMessage("Deposit Refund Not Successful", "Deposit was not refunded.");
-                  }
-                }.bind(this));
-              } else {
-                Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
-              }
-            }.bind(this));
-          } else if (action == Main.ACTION_NO) {
-            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
-              if (status == Backend.STATUS_SUCCESS) {
-                Main.showMessage("Accident During Rental?", "Are you sure you want to withheld deposit for this rental?", function(action) {
-                  if (action == Main.ACTION_YES) {
-                    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_ACCIDENT;
-
-                    Backend.saveReservation(function(status) {
-                      if (status == Backend.STATUS_SUCCESS) {
-                        Main.hidePopup();
-                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
-                        Backend.resetReservationContext();
-
-                        this._showRentals();
-                      } else {
-                        Main.showMessage("Update Not Successful", "Reservation can not be updated.");
-                      }
-                    }.bind(this));
-                  }
-                }.bind(this), Main.DIALOG_TYPE_YESNO);
-              } else {
-                Main.showMessage("Update Not Successful", "Reservation can not be retrieved.");
-              }
-            }.bind(this));
-          }
-        }.bind(this), Main.DIALOG_TYPE_YESNO);
-      }
-    }.bind(this));
-  */  
     
     this._showRentals();
   },

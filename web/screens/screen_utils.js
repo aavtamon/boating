@@ -12,7 +12,7 @@ ScreenUtils = {
   },
 
   getBookingPrice: function(price) {
-    return "$" + price;
+    return "$" + price.toFixed(2);
   },
     
   getBookingTime: function(timeMs) {

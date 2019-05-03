@@ -25,13 +25,13 @@ AdminCompletion = {
     
     $("#AdminCompletion-Screen-Description-ConfirmButton").click(function() {
       if ($("#AdminCompletion-Screen-AccidentStatus-Input").val() == "yes") {
-        Main.showMessage("Report Accident", "Are you sure - report an accident and provide NO REFUND??", function(action) {
+        Main.showMessage("Report Accident", "<center style='color: red; font-weight: bold;'>Are you sure - report an accident and provide NO REFUND?</center>", function(action) {
           if (action == Main.ACTION_YES) {
             this.reportAccident();
           }
         }.bind(this), Main.DIALOG_TYPE_YESNO);        
       } else {
-        Main.showMessage("Complete Rental", "Are you sure - complete rental and refund back " + ScreenUtils.getBookingPrice(this.totalRefund) + "?", function(action) {
+        Main.showMessage("Complete Rental", "<center>Are you sure - complete rental and refund back " + ScreenUtils.getBookingPrice(this.totalRefund) + "?</center>", function(action) {
           if (action == Main.ACTION_YES) {
             this.completeRental();
           }
@@ -46,12 +46,17 @@ AdminCompletion = {
     var reservationContext = Backend.getReservationContext();
     var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
     
+    var fuelCharge = Math.round(Backend.getBookingConfiguration().gas_price * boat.tank_size * $("#AdminCompletion-Screen-FuelUsage-Input").val() / 100);
+    
+    var fuelChargeString = ScreenUtils.getBookingPrice(Backend.getBookingConfiguration().gas_price) + " per gallon * " + $("#AdminCompletion-Screen-FuelUsage-Input").val() + "% of tank * " + boat.tank_size + " gallons = " + ScreenUtils.getBookingPrice(fuelCharge);
+    $("#AdminCompletion-Screen-FuelUsage-Charge").html(fuelChargeString);
+
     this.totalRefund = 0;
     var totalRefundString = "";
     var hadAccident = $("#AdminCompletion-Screen-AccidentStatus-Input").val() == "yes";
     if (!hadAccident) {
-      this.totalRefund = boat.deposit - Math.round(Backend.getBookingConfiguration().gas_price * boat.tank_size * $("#AdminCompletion-Screen-FuelUsage-Input").val() / 100);
-      totalRefundString = ScreenUtils.getBookingPrice(boat.deposit) + " - (" +  ScreenUtils.getBookingPrice(Backend.getBookingConfiguration().gas_price) + " per gallon * " + $("#AdminCompletion-Screen-FuelUsage-Input").val() + "% of tank * " + boat.tank_size + " gallons) = " + ScreenUtils.getBookingPrice(this.totalRefund);
+      this.totalRefund = boat.deposit - fuelCharge;
+      totalRefundString = ScreenUtils.getBookingPrice(boat.deposit) + " - " + ScreenUtils.getBookingPrice(fuelCharge) + " = " + ScreenUtils.getBookingPrice(this.totalRefund);
     } else {
       totalRefundString = "$0 - ATTENTION: No Refund!!!";
     }

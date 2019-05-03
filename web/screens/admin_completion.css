@@ -21,7 +21,8 @@
 
 #AdminCompletion-Screen-FuelUsage-Label,
 #AdminCompletion-Screen-AccidentStatus-Label,
-#AdminCompletion-Screen-TotalRefund-Label
+#AdminCompletion-Screen-TotalRefund-Label,
+#AdminCompletion-Screen-FuelUsage-Charge
 {
   display: inline-block;
   margin-right: 20px;
@@ -42,7 +43,7 @@
   font-weight: bold;
 }
 #AdminCompletion-Screen-FuelUsage-Input {
-  width: 200px;
+  width: 300px;
 }
 
 #AdminCompletion-Screen-AccidentDescription {
