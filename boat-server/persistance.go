@@ -66,7 +66,7 @@ type TReservation struct {
   
   OwnerAccountId TOwnerAccountId `json:"owner_account_id"`;
 
-  Timestamp int64 `json:"creation_timestamp,omitempty"`;
+  Timestamp int64 `json:"modification_timestamp,omitempty"`;
   
   LocationId string `json:"location_id"`;
   BoatId string `json:"boat_id"`;
@@ -365,7 +365,7 @@ func cleanObsoleteReservations() {
     }
 
     if (expiration > 0) {
-      if (reservation.Timestamp + expiration * 1000 * 60 * 60 * 24 < currentMoment) {
+      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
         delete(persistenceDb.Reservations, reservationId);
       }
     }
