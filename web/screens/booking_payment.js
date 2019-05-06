@@ -1,6 +1,6 @@
 BookingPayment = {
-  extras: null,
   _cancellationPolicyAccepted: false,
+  _promoDiscount: null,
   
   
   onLoad: function() {
@@ -23,9 +23,8 @@ BookingPayment = {
         $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("Please provide credit card information.");
       }
     });
-
     
-    
+        
     if (Backend.getTemporaryData().paymentInfo == null) {
       Backend.getTemporaryData().paymentInfo = {card_ready: false, name: reservationContext.first_name + " " + reservationContext.last_name};
     }
@@ -79,11 +78,44 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
     
+    var includedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, Backend.getBookingConfiguration().locations[reservationContext.location_id].extras);
+        $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(includedExtrasAndPrice[0] == "" ? "none" : includedExtrasAndPrice[0]);
     
-    var encludedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, Backend.getBookingConfiguration().locations[reservationContext.location_id].extras);
-    $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(encludedExtrasAndPrice[0] == "" ? "none" : encludedExtrasAndPrice[0]);
+    this._updateTotalPrice();
+    
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-ReservationSummary-PromoCode-Input", reservationContext, "promo_code");
+    
+    
+    var applyPromoCode = function() {
+      promoCode = $("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val();
+      if (promoCode == "") {
+        this._promoDiscount = null;
+        $("#BookingPayment-Screen-ReservationSummary-PromoCode-Status").html("");
+        this._updateTotalPrice();
+      } else {
+        Backend.getPromoCode($("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val(), function(status, discount) {
+          if (status == Backend.STATUS_SUCCESS) {
+            this._promoDiscount = discount;
+            $("#BookingPayment-Screen-ReservationSummary-PromoCode-Status").html("");
+          } else {
+            this._promoDiscount = null;
+            $("#BookingPayment-Screen-ReservationSummary-PromoCode-Status").html("Promo code not found");
+          }
+          this._updateTotalPrice();
+        }.bind(this));
+      }
+    }.bind(this);
+    
+    $("#BookingPayment-Screen-ReservationSummary-PromoCode-ApplyButton").click(function() {
+      applyPromoCode();
+    });
+    
+    if ($("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val() != null) {
+      applyPromoCode();
+    }
 
-    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(ScreenUtils.getBookingPrice(reservationContext.slot.price + encludedExtrasAndPrice[1]));
+    
+    
     
     
     ScreenUtils.dataModelInput("#BookingPayment-Screen-PaymentInformation-Name-Input", paymentInfo, "name");
@@ -110,6 +142,34 @@ BookingPayment = {
         $("#BookingPayment-TermsAndServces").load("files/docs/terms-and-services.html");
       }
     }.bind(this));
+  },
+  
+  
+  _updateTotalPrice: function() {
+    var reservationContext = Backend.getReservationContext();
+    var includedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, Backend.getBookingConfiguration().locations[reservationContext.location_id].extras);
+    
+    var discount = 0;
+    var totalPrice = reservationContext.slot.price + includedExtrasAndPrice[1];
+    if (this._promoDiscount != null && this._promoDiscount > 0) {
+      discount = Math.round(totalPrice * this._promoDiscount / 100);
+      totalPrice = totalPrice - discount;
+    }
+    
+    var detailsIncluded = false;
+    var totalPriceString = ScreenUtils.getBookingPrice(totalPrice);
+    if (includedExtrasAndPrice[1] != "") {
+      detailsIncluded = true;
+      totalPriceString += "&nbsp;&nbsp;&nbsp;<font style='font-weight: normal;'>[" + ScreenUtils.getBookingPrice(reservationContext.slot.price) + " boat + " + ScreenUtils.getBookingPrice(includedExtrasAndPrice[1]) + " equipment";
+    }
+    if (this._promoDiscount != null && this._promoDiscount > 0) {
+      totalPriceString += " - " + ScreenUtils.getBookingPrice(discount) + " discount";
+    }
+    if (detailsIncluded) {
+      totalPriceString += "]</font>";
+    }
+    
+    $("#BookingPayment-Screen-ReservationSummary-Price-Value").html(totalPriceString);    
   },
   
   

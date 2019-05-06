@@ -17,6 +17,12 @@ AdminHome = {
       });
     });
     
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+    
+    
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").click(function() {
       if (this._selectedRentalElement != null) {
         Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {

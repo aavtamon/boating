@@ -334,6 +334,8 @@ label.input-field-error {
   border-width: 1px;
   border-radius: 5px;
   border-color: #8b3408;
+  
+  user-select: none;
 }
 .standard-button:hover {
   background-color: #ffffff;

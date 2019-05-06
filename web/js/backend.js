@@ -243,8 +243,30 @@ Backend = {
         }
       }
     });
+  },
+  
+  getPromoCode: function(promoCode, callback) {
+    this._communicate("reservation/payment/promo?code=" + promoCode, "get", null, false, [], {
+      success: function(discount) {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS, discount);
+        }
+      }.bind(this),
+      error: function(request, status) {
+        if (callback) {
+          if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });
   },  
 
+  
   
   // Booking management
   bookingConfiguration: null,

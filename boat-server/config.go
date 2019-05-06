@@ -83,6 +83,7 @@ type TBookingConfiguration struct {
   SchedulingBeginOffset int `json:"scheduling_begin_offset"`;
   SchedulingEndOffset int `json:"scheduling_end_offset"`;
   CancellationFees []TPricedRange `json:"cancellation_fees"`;
+  PromoCodes map[string]int `json:"promo_codes"`
   Locations map[string]TRentalLocation `json:"locations"`;
   GasPrice float64 `json:"gas_price"`;
 }

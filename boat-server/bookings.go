@@ -42,8 +42,6 @@ var schedulingEndDate time.Time;
 
 
 func BookingsHandler(w http.ResponseWriter, r *http.Request) {
-  log.Println("Bookings Handler");
-  
   if (r.Method == http.MethodGet) {
     w.Header().Set("Content-Type", "application/json")
 

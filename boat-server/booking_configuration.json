@@ -9,6 +9,11 @@
     {"range_min": 4, "range_max": 24, "price": 150},
     {"range_min": 0, "range_max": 4, "price": 200}
   ],
+  
+  "promo_codes": {
+    "coworker": 50,
+    "friend": 60
+  },
 
   "gas_price": 3.00,
   

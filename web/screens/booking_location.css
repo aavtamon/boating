@@ -12,17 +12,16 @@
 #BookingLocation-Screen-SelectionPanel-CenterButton {
   position: absolute;
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
   right: 10px;
-  top: 10px;
+  top: 65px;
+  
+  box-shadow: 1px 1px lightgray;
+  
+  border-radius: 2px;
 
   cursor: pointer;
-
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: grey;
 
   background-color: white;
   background-image: url(../imgs/center.png);

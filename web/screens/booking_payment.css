@@ -8,7 +8,8 @@
 #BookingPayment-Screen-ReservationSummary-Boat-Title,
 #BookingPayment-Screen-ReservationSummary-Group-Title,
 #BookingPayment-Screen-ReservationSummary-Extras-Title,
-#BookingPayment-Screen-ReservationSummary-Price-Title {
+#BookingPayment-Screen-ReservationSummary-Price-Title,
+#BookingPayment-Screen-ReservationSummary-PromoCode-Title {
   display: inline-block;
   width: 450px;
 }
@@ -17,18 +18,37 @@
 #BookingPayment-Screen-ReservationSummary-Boat-Value,
 #BookingPayment-Screen-ReservationSummary-Group-Value,
 #BookingPayment-Screen-ReservationSummary-Extras-Value,
-#BookingPayment-Screen-ReservationSummary-Price-Value {
+#BookingPayment-Screen-ReservationSummary-Price-Value,
+#BookingPayment-Screen-ReservationSummary-PromoCode-Input {
   display: inline-block;
   width: 200px;
 
   font-weight: bold;
 }
 
+#BookingPayment-Screen-ReservationSummary-PromoCode-Input {
+  width: 200px;
+  margin-bottom: 5px;
+}
+
+#BookingPayment-Screen-ReservationSummary-PromoCode-ApplyButton {
+  height: 23px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+#BookingPayment-Screen-ReservationSummary-PromoCode-Status {
+  display: inline-block;
+  margin-left: 20px;
+  
+  color: red;
+}
+
+
 #BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Title,
 #BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Title,
 #BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Title,
-#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Title
-{
+#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Title {
   display: inline-block;
   width: 430px;
   margin-left: 20px;
@@ -47,8 +67,7 @@
 #BookingPayment-Screen-PaymentInformation-Address-Street,
 #BookingPayment-Screen-PaymentInformation-Address-Additional,
 #BookingPayment-Screen-PaymentInformation-Area-City,
-#BookingPayment-Screen-PaymentInformation-Area-State
-{
+#BookingPayment-Screen-PaymentInformation-Area-State {
   display: inline-block;
 }
 
@@ -58,8 +77,7 @@
 #BookingPayment-Screen-PaymentInformation-Address-Additional-Label,
 #BookingPayment-Screen-PaymentInformation-Area-City-Label,
 #BookingPayment-Screen-PaymentInformation-Area-State-Label,
-#BookingPayment-Screen-PaymentInformation-CreditCard-Label
-{
+#BookingPayment-Screen-PaymentInformation-CreditCard-Label {
   display: inline-block;
   margin-right: 20px;
   
@@ -73,15 +91,13 @@
 #BookingPayment-Screen-PaymentInformation-Address-Street-Input,
 #BookingPayment-Screen-PaymentInformation-Address-Additional-Input,
 #BookingPayment-Screen-PaymentInformation-Area-City-Input,
-#BookingPayment-Screen-PaymentInformation-CreditCard-Input
-{
+#BookingPayment-Screen-PaymentInformation-CreditCard-Input {
   display: inline-block;
   width: 300px;
   
   margin-right: 50px;
   margin-bottom: 5px;
 }
-
 
 #BookingPayment-Screen-PaymentInformation-Name-Input {
   width: 400px;

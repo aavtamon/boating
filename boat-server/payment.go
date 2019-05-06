@@ -8,6 +8,7 @@ import "strings"
 import "io"
 import "io/ioutil"
 import "time"
+import "strconv"
 
 
 import "github.com/stripe/stripe-go"
@@ -23,9 +24,34 @@ type TPaymentRequest struct {
 
 
 func PaymentHandler(w http.ResponseWriter, r *http.Request) {
-  log.Println("Payment Handler: request method=" + r.Method);
-  
-  if (r.Method == http.MethodPut) {
+  if (r.Method == http.MethodGet) {
+    if (strings.HasSuffix(r.URL.Path, "/promo")) {
+      if (r.URL.RawQuery != "") {
+        queryParams := parseQuery(r);
+
+        promoCode, hasPromoCode := queryParams["code"];
+        if (hasPromoCode && len(promoCode) > 0) {
+          bookingConfiguration := GetBookingConfiguration();
+          discount, hasDiscount := bookingConfiguration.PromoCodes[promoCode];
+          
+          if (hasDiscount) {
+            w.WriteHeader(http.StatusOK);
+            w.Write([]byte(strconv.Itoa(discount)));
+          } else {
+            w.WriteHeader(http.StatusNotFound);          
+          }
+        } else {
+          w.WriteHeader(http.StatusBadRequest);
+          w.Write([]byte("Promo code not specified\n"))
+        }
+      } else {
+        w.WriteHeader(http.StatusBadRequest);
+        w.Write([]byte("Promo code not specified\n"))
+      }
+    } else {
+      w.WriteHeader(http.StatusBadRequest);
+    }
+  } else if (r.Method == http.MethodPut) {
     request := parsePaymentRequest(r.Body);
     if (request == nil) {
       w.WriteHeader(http.StatusInternalServerError);
@@ -115,12 +141,20 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     return false;
   }
 
-  paidAmount := reservation.Slot.Price; //TODO apply discounts in the future
+  paidAmount := reservation.Slot.Price;
   
   bookingConfiguration := GetBookingConfiguration();
   for extraId, included := range reservation.Extras {
     if (included) {
       paidAmount += bookingConfiguration.Locations[reservation.LocationId].Extras[extraId].Price;
+    }
+  }
+  
+  if (reservation.PromoCode != "") {
+    discount, hasPromoCode := bookingConfiguration.PromoCodes[reservation.PromoCode];
+    if (hasPromoCode) {
+      discountAmount := uint64(paidAmount * uint64(discount) / 100);
+      paidAmount = paidAmount - discountAmount;
     }
   }
 
