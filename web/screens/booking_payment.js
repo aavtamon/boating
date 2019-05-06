@@ -158,9 +158,12 @@ BookingPayment = {
     
     var detailsIncluded = false;
     var totalPriceString = ScreenUtils.getBookingPrice(totalPrice);
-    if (includedExtrasAndPrice[1] != "") {
+    if (includedExtrasAndPrice[1] != "" || this._promoDiscount != null && this._promoDiscount > 0) {
       detailsIncluded = true;
-      totalPriceString += "&nbsp;&nbsp;&nbsp;<font style='font-weight: normal;'>[" + ScreenUtils.getBookingPrice(reservationContext.slot.price) + " boat + " + ScreenUtils.getBookingPrice(includedExtrasAndPrice[1]) + " equipment";
+      totalPriceString += "&nbsp;&nbsp;&nbsp;<font style='font-weight: normal;'>[" + ScreenUtils.getBookingPrice(reservationContext.slot.price) + " boat";
+    }
+    if (includedExtrasAndPrice[1] != "") {
+      totalPriceString += " + " + ScreenUtils.getBookingPrice(includedExtrasAndPrice[1]) + " equipment";
     }
     if (this._promoDiscount != null && this._promoDiscount > 0) {
       totalPriceString += " - " + ScreenUtils.getBookingPrice(discount) + " discount";
