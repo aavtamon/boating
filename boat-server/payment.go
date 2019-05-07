@@ -52,9 +52,16 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.WriteHeader(http.StatusBadRequest);
     }
   } else if (r.Method == http.MethodPut) {
+    sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+    sessionId := TSessionId(sessionCookie.Value);
+    if (!isAdmin(sessionId)) {
+      w.WriteHeader(http.StatusUnauthorized);
+      return;
+    }
+  
     request := parsePaymentRequest(r.Body);
     if (request == nil) {
-      w.WriteHeader(http.StatusInternalServerError);
+      w.WriteHeader(http.StatusBadRequest);
       w.Write([]byte("Incorrect payment request format"));
 
       return;
@@ -98,6 +105,13 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
           w.WriteHeader(http.StatusNotFound);
         } else {
           if (strings.HasSuffix(r.URL.Path, "/deposit")) {
+            sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+            sessionId := TSessionId(sessionCookie.Value);
+            if (!isAdmin(sessionId)) {
+              w.WriteHeader(http.StatusUnauthorized);
+              return;
+            }
+          
             if (refundDeposit(reservation)) {
               storedReservation, _ := json.Marshal(reservation);
               w.WriteHeader(http.StatusOK);
@@ -419,4 +433,13 @@ func getNonRefundableFee(reservation *TReservation) uint64 {
   } else {
     return 0;
   }
+}
+
+func isAdmin(sessionId TSessionId) bool {
+  if (*Sessions[sessionId].AccountId == NO_OWNER_ACCOUNT_ID) {
+    return false;
+  }
+
+  account := GetOwnerAccount(*Sessions[sessionId].AccountId);
+  return account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN;
 }
