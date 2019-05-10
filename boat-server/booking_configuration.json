@@ -21,9 +21,7 @@
     "lanier": {
       "name": "Lake Lanier",
       "time_zone_offset": -5,
-      "start_hour": 10,
-      "end_hour": 18,
-      "duration": 2,
+      "schedule": {"10": [4, 6, 8], "12": [4, 6], "14": [4]},
       "service_interval": 1,
       "boats": {
         "ana": {
@@ -38,7 +36,6 @@
           "maximum_capacity": 16,
           "tank_size": 32,
           "rate": [
-            {"range_min": 2, "range_max": 2, "price": 150},
             {"range_min": 4, "range_max": 4, "price": 250},
             {"range_min": 6, "range_max": 6, "price": 350},
             {"range_min": 8, "range_max": 8, "price": 400}

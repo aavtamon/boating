@@ -52,13 +52,6 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       w.WriteHeader(http.StatusBadRequest);
     }
   } else if (r.Method == http.MethodPut) {
-    sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-    sessionId := TSessionId(sessionCookie.Value);
-    if (!isAdmin(sessionId)) {
-      w.WriteHeader(http.StatusUnauthorized);
-      return;
-    }
-  
     request := parsePaymentRequest(r.Body);
     if (request == nil) {
       w.WriteHeader(http.StatusBadRequest);

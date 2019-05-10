@@ -201,7 +201,7 @@ func refreshBookingAvailability() {
 
   for locationId := range bookingConfiguration.Locations {
     for boatId := range bookingConfiguration.Locations[locationId].Boats {
-      recalculateAllAvailableSlots(locationId, boatId);
+        recalculateAllAvailableSlots(locationId, boatId);
     }
   }  
   
@@ -210,13 +210,10 @@ func refreshBookingAvailability() {
 
 
 func (observer TReservationObserver) OnReservationChanged(reservation *TReservation) {
-  location := bookingConfiguration.Locations[reservation.LocationId];
-  boat := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId];
-
   reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
   reservationDate := time.Date(reservationTime.Year(), reservationTime.Month(), reservationTime.Day(), 0, 0, 0, 0, time.UTC);
 
-  calculateSlotsForDate(location, boat, reservationDate);
+  calculateSlotsForDate(reservation.LocationId, reservation.BoatId, reservationDate);
 }
 
 func (observer TReservationObserver) OnReservationRemoved(reservation *TReservation) {
@@ -226,10 +223,7 @@ func (observer TReservationObserver) OnReservationRemoved(reservation *TReservat
 
 
 func recalculateAllAvailableSlots(locationId string, boatId string) {
-  location := bookingConfiguration.Locations[locationId];
-  boat := bookingConfiguration.Locations[locationId].Boats[boatId];
-
-  fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", location.Name, boat.Name);
+  fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", locationId, boatId);
 
   availableDates = make(map[int64]int);
   availableSlots = make(map[int64][]TBookingSlot);
@@ -240,7 +234,7 @@ func recalculateAllAvailableSlots(locationId string, boatId string) {
     if (slotDate.Before(schedulingBeginDate) || slotDate.After(schedulingEndDate)) {
       // skipping slot
     } else {
-      calculateSlotsForDate(location, boat, slotDate);
+      calculateSlotsForDate(locationId, boatId, slotDate);
     }
   }
   
@@ -248,56 +242,60 @@ func recalculateAllAvailableSlots(locationId string, boatId string) {
   fmt.Println("Recalculation complete");
 }
 
-func calculateSlotsForDate(location TRentalLocation, boat TBoat, date time.Time) {
+
+func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
   dateMs := date.UnixNano() / int64(time.Millisecond);
-  
-  //fmt.Printf("Recalculating slots for location %s and boat %s. Date=%d\n", location.Name, boat.Name, dateMs);
+
+  location := bookingConfiguration.Locations[locationId];
+  boat := bookingConfiguration.Locations[locationId].Boats[boatId];
+
+  //fmt.Printf("Recalculating slots for location %s and boat %s. Date=%d\n", locationId, boatId, dateMs);
 
   result := []TBookingSlot{};
   
-  for hour := location.StartHour; hour <= location.EndHour; hour += (location.Duration + location.ServiceInterval) {
-    slotTime := date.Add(time.Hour * time.Duration(hour)).UnixNano() / int64(time.Millisecond);
-    
-    slotPrice := uint64(0);
-    for dur := location.Duration; hour + dur <= location.EndHour; dur += location.Duration {
-      slotPrice = 0;
+  for startHourString, durations := range location.BookingSchedule {
+    startHour, _ := strconv.Atoi(startHourString);
+    slotTime := date.Add(time.Hour * time.Duration(startHour)).UnixNano() / int64(time.Millisecond);
+    for _, duration := range durations {
+      var price uint64 = 0;
       for _, rate := range boat.Rate {
-        if (rate.RangeMin >= int64(dur) && int64(dur) <= rate.RangeMax) {
-          slotPrice = rate.Price;
+        if (int(rate.RangeMax) >= duration && int(rate.RangeMin) >= duration) {
+          price = rate.Price;
           break;
         }
       }
-    
-      if (slotPrice != 0) {
-        slot := TBookingSlot {DateTime: slotTime, Duration: dur, Price: slotPrice};
-        if (!isBooked(slot)) {
+      
+      if (price > 0) {
+        slot := TBookingSlot {DateTime: slotTime, Duration: duration, Price: price};
+        if (!isBooked(locationId, boatId, slot)) {
           result = append(result, slot);
-        }        
-      } else {
-        fmt.Printf("Problem detected while building slots - there is no price range for duration %d\n", dur);
+        }
       }
     }
   }
   
   availableSlots[dateMs] = result;
-
   availableDates[dateMs] = len(result);
-  
-  //fmt.Println("******");
 }
 
-func isBooked(slot TBookingSlot) bool {
+
+
+func isBooked(locationId string, boatId string, slot TBookingSlot) bool {
+  location := bookingConfiguration.Locations[locationId];
+
   for _, reservation := range GetAllReservations() {
     if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
       continue;
     }
-  
-    if (reservation.Slot.DateTime <= slot.DateTime && reservation.Slot.DateTime + int64(time.Duration(reservation.Slot.Duration) * time.Hour / time.Millisecond) > slot.DateTime) {
-      return true;
+    
+    if (reservation.LocationId != locationId || reservation.BoatId != boatId) {
+      continue;
     }
     
-    if (reservation.Slot.DateTime >= slot.DateTime && reservation.Slot.DateTime < slot.DateTime + int64(time.Duration(slot.Duration) * time.Hour / time.Millisecond)) {
-      return true;
+    
+    if (slot.DateTime < reservation.Slot.DateTime + int64(time.Duration(reservation.Slot.Duration + location.ServiceInterval) * time.Hour / time.Millisecond) && slot.DateTime + int64(time.Duration(slot.Duration) * time.Hour / time.Millisecond) > reservation.Slot.DateTime) {
+        
+      return true;    
     }
   }
   

@@ -94,7 +94,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
     existingReservation := GetReservation(reservationId);
     if (existingReservation == nil) {
     
-      if (isBooked(reservation.Slot)) {
+      if (isBooked(reservation.LocationId, reservation.BoatId, reservation.Slot)) {
         w.WriteHeader(http.StatusConflict);
         return;
       }
