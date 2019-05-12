@@ -17,13 +17,47 @@ AdminHome = {
       });
     });
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+    
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").click(function() {
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").click(function() {
+      if (this._selectedRentalElement != null) {
+        Main.showMessage("Cancel Reservation?", "<center>Do you REALLY want to cancel this reservation and inform the customer about it?</center>", function(action) {
+          if (action == Main.ACTION_YES) {
+            Main.showPopup("Cancellation reservation...", "Reservation is being cancelled");
+            
+            Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+              if (status == Backend.STATUS_SUCCESS) {
+                Backend.refundReservation(function(status) {
+                  if (status == Backend.STATUS_SUCCESS) {
+                    Backend.cancelReservation(this._selectedRentalElement._reservationId, function(status) {
+                      if (status == Backend.STATUS_SUCCESS) {
+                        Main.hidePopup();
+                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                        Backend.resetReservationContext();
+
+                        this._showRentals();
+                      } else {
+                        Main.showMessage("Update Not Successful", "Refund issued but reservation is not cancelled.");
+                      }
+                    });
+                  } else {
+                    Main.showMessage("Update Not Successful", "Refund cannot be issued");
+                  }
+                });
+              }
+            }.bind(this));
+          }
+        }.bind(this), Main.DIALOG_TYPE_YESNO);
+      }
+    }.bind(this));
+    
+    
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").click(function() {
       if (this._selectedRentalElement != null) {
         Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
           if (status == Backend.STATUS_SUCCESS) {
@@ -36,7 +70,7 @@ AdminHome = {
     }.bind(this));
     
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").click(function() {
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").click(function() {
       if (this._selectedRentalElement != null) {
         Main.showMessage("Accident Settled?", "<center>Are you sure you want to mark this accident settled?</center>", function(action) {
           if (action == Main.ACTION_YES) {
@@ -67,7 +101,7 @@ AdminHome = {
       }
     }.bind(this));
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").click(function() {
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").click(function() {
       Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
         if (status == Backend.STATUS_SUCCESS) {
           Main.loadScreen("admin_completion");
@@ -200,25 +234,33 @@ AdminHome = {
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-SafetyTest-Value").html(safetyTest);
 
     if (rental.status == Backend.RESERVATION_STATUS_BOOKED) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").show();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Deposit not taken");
+      
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", false);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", false);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").show();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Rental in progress");
+      
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", false);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     } else if (rental.status == Backend.RESERVATION_STATUS_ACCIDENT) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").show();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").hide();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Accident not settled");
+      
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", false);
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-FinishButton").hide();
-      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Complete").show();
+      $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Completed");
+      
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     }
     
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").prop('disabled', rental.safety_test == null);

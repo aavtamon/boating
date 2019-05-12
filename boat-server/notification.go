@@ -57,7 +57,11 @@ func NotifyReservationCancelled(reservationId TReservationId) {
     
     emailAdminReservationCancelled(reservation);
   } else {
-    // We do not notify renters about cancellation. We only notify about refund
+    // Cancelled by the admin
+    emailRenterReservationCancelled(reservation);
+    textRenterReservationCancelled(reservation);
+    
+    emailAdminReservationCancelled(reservation);
   }
 }
 
@@ -217,6 +221,12 @@ func emailRenterReservationRefunded(reservation *TReservation) bool {
   fmt.Printf("Sending reservation-refunded email for reservation %s\n", reservation.Id);
   
   return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, "renter_reservation_refunded.html");
+}
+
+func emailRenterReservationCancelled(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-cancelled email for reservation %s\n", reservation.Id);
+  
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Reservation %s is cancelled", reservation.Id), reservation, "renter_reservation_cancelled.html");
 }
 
 func emailRenterDepositPaid(reservation *TReservation) bool {
@@ -392,6 +402,16 @@ func textRenterReservationRefunded(reservation *TReservation) bool {
   fmt.Printf("Texting booking refunded for reservation %s\n", reservation.Id);
   
   return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled, your refund in the amount of $%d dollars will be availbale within 5 business days.", reservation.Id, reservation.RefundAmount));
+}
+
+func textRenterReservationCancelled(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting reservation cancelled for reservation %s\n", reservation.Id);
+  
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your boat reservation %s is cancelled by us. The full amount of $%d dollars tha you paid is refunded and will be availbale within 5 business days.", reservation.Id, reservation.RefundAmount));
 }
 
 func textRenterDepositPaid(reservation *TReservation) bool {

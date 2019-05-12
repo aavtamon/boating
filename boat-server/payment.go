@@ -97,10 +97,11 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
         if (reservation == nil) {
           w.WriteHeader(http.StatusNotFound);
         } else {
+          sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+          sessionId := TSessionId(sessionCookie.Value);
+          isAdmin := isAdmin(sessionId);
           if (strings.HasSuffix(r.URL.Path, "/deposit")) {
-            sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-            sessionId := TSessionId(sessionCookie.Value);
-            if (!isAdmin(sessionId)) {
+            if (!isAdmin) {
               w.WriteHeader(http.StatusUnauthorized);
               return;
             }
@@ -115,12 +116,16 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
               w.WriteHeader(http.StatusBadRequest);
             }
           } else {
-            if (refundReservation(reservation)) {
+            if (refundReservation(reservation, isAdmin)) {
               storedReservation, _ := json.Marshal(reservation);
               w.WriteHeader(http.StatusOK);
               w.Write(storedReservation);
 
-              NotifyReservationRefunded(reservation.Id);
+              if (isAdmin) {
+                NotifyReservationCancelled(reservation.Id);
+              } else {
+                NotifyReservationRefunded(reservation.Id);
+              }
             } else {
               w.WriteHeader(http.StatusBadRequest);
             }
@@ -211,7 +216,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   }
 }
 
-func refundReservation(reservation *TReservation) bool {
+func refundReservation(reservation *TReservation, isAdmin bool) bool {
   fmt.Printf("Starting refund processing for reservation %s\n", reservation.Id);
 
   if (reservation.PaymentStatus != PAYMENT_STATUS_PAYED) {
@@ -220,8 +225,13 @@ func refundReservation(reservation *TReservation) bool {
     return false;
   }
 
-  cancellationFee := getNonRefundableFee(reservation);
-  fmt.Printf("Non refundable fees = %d\n", cancellationFee);
+  cancellationFee := 0;
+  if (isAdmin) {
+    fmt.Printf("Cancelling by admin - no fees\n");
+  } else {
+    cancellationFee := getNonRefundableFee(reservation);
+    fmt.Printf("Non refundable fees = %d\n", cancellationFee);
+  }
   
   refundAmount := reservation.PaymentAmount;
   

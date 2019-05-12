@@ -10,7 +10,8 @@
 }
 
 #AdminHome-Screen-AdminInfo-BoatRentals,
-#AdminHome-Screen-AdminInfo-RentalInfo {
+#AdminHome-Screen-AdminInfo-RentalInfo,
+#AdminHome-Screen-AdminInfo-Actions {
   height: 360px;
 }
 
@@ -21,6 +22,11 @@
 
 #AdminHome-Screen-AdminInfo-RentalInfo {
   width: 350px;
+  margin-right: 50px;
+}
+
+#AdminHome-Screen-AdminInfo-Actions {
+  width: 200px;
 }
 
 #AdminHome-Screen-AdminInfo-RentalInfo-Details-Date-Label,
@@ -50,7 +56,15 @@
   font-weight: bold;
 }
 
-#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton,
-AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-CompleteButton {
+#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton,
+#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton,
+#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton,
+#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton {
   font-size: 15px;
+  margin-top: 100px;
 }

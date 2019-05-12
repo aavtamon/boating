@@ -1,5 +1,6 @@
 OwnerBooking = {
   ownerAccount: null,
+  availableSlots: null,
   currentTime: null,
 
   
@@ -28,6 +29,12 @@ OwnerBooking = {
     this._slot = null;
     
     $("#OwnerBooking-Screen-SelectionPanel-Calendar").datepicker({
+      beforeShowDay: function(date) {
+        var isSelectable = OwnerBooking.availableSlots[ScreenUtils.getUTCMillis(date)] > 0;
+
+        return [isSelectable, "", null];
+      },
+      
       onSelect: function(dateText, instance) {
         var newSelectedDate = ScreenUtils.getUTCMillis(new Date(dateText));
         
