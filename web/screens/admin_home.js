@@ -37,18 +37,19 @@ AdminHome = {
                     Backend.cancelReservation(this._selectedRentalElement._reservationId, function(status) {
                       if (status == Backend.STATUS_SUCCESS) {
                         Main.hidePopup();
-                        this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
+                        this._selectedRentalElement._rental.status = Backend.RESERVATION_STATUS_CANCELLED;
                         Backend.resetReservationContext();
+                        alert("assigning status = " + this._selectedRentalElement._rental.status)
 
                         this._showRentals();
                       } else {
                         Main.showMessage("Update Not Successful", "Refund issued but reservation is not cancelled.");
                       }
-                    });
+                    }.bind(this));
                   } else {
                     Main.showMessage("Update Not Successful", "Refund cannot be issued");
                   }
-                });
+                }.bind(this));
               }
             }.bind(this));
           }
@@ -147,6 +148,8 @@ AdminHome = {
         accidentRentals.push(rentalOption[0]);
       } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
         completedRentals.push(rentalOption[0]);
+      } else if (rental.status == Backend.RESERVATION_STATUS_CANCELLED) {
+        //Do nothing - we just cancelled it
       } else {
         console.error("Unexpected reservation status: " + rental.status + " of reservation " + reservationId);
       }

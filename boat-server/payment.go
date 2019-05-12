@@ -225,11 +225,11 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
     return false;
   }
 
-  cancellationFee := 0;
+  var cancellationFee uint64 = 0;
   if (isAdmin) {
     fmt.Printf("Cancelling by admin - no fees\n");
   } else {
-    cancellationFee := getNonRefundableFee(reservation);
+    cancellationFee = getNonRefundableFee(reservation);
     fmt.Printf("Non refundable fees = %d\n", cancellationFee);
   }
   
