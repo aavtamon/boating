@@ -87,6 +87,12 @@ type TBookingConfiguration struct {
 }
 
 
+type TServerConfiguration struct {
+  Certificate string `json:"certificate"`;
+  PrivateKey string `json:"private_key"`;
+  HttpPort string `json:"http_port"`;
+  HttpsPort string `json:"https_port"`;
+}
 type TEmailConfiguration struct {
   Enabled bool `json:"enabled"`;
   SourceAddress string `json:"source_address"`;
@@ -112,6 +118,7 @@ type TBookingExpirationConfiguration struct {
 
 type TSystemConfiguration struct {
   Domain string `json:"domain"`;
+  ServerConfiguration TServerConfiguration `json:"server"`;
   EmailConfiguration TEmailConfiguration `json:"email"`;
   SMSConfiguration TSMSConfiguration `json:"sms"`;
   PaymentConfiguration TPaymentConfiguration `json:"payment"`;

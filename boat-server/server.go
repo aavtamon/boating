@@ -246,7 +246,7 @@ func startHttpServer() {
   httpMux.HandleFunc("/", pageHandler);
   
   
-  log.Fatal(http.ListenAndServe(":8080", httpMux));
+  log.Fatal(http.ListenAndServe(":" + GetSystemConfiguration().ServerConfiguration.HttpPort, httpMux));
 }
 
 
@@ -266,8 +266,8 @@ func startHttpsServer() {
   
   
   go func() {
-    log.Fatal(http.ListenAndServe(":8080", httpMux));
+    log.Fatal(http.ListenAndServe(":" + GetSystemConfiguration().ServerConfiguration.HttpPort, httpMux));
   }();
 
-  log.Fatal(http.ListenAndServeTLS(":8443", RuntimeRoot + "/" + CERTIFICATE_FILE, RuntimeRoot + "/" + PRIVATE_KEY, httpsMux));
+  log.Fatal(http.ListenAndServeTLS(":" + GetSystemConfiguration().ServerConfiguration.HttpsPort, RuntimeRoot + "/" + GetSystemConfiguration().ServerConfiguration.Certificate, RuntimeRoot + "/" + GetSystemConfiguration().ServerConfiguration.PrivateKey, httpsMux));
 }
