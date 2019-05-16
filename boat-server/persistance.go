@@ -87,16 +87,16 @@ type TReservation struct {
   PrimaryPhone string `json:"primary_phone,omitempty"`;
   AlternativePhone string `json:"alternative_phone,omitempty"`;
   PaymentStatus TPaymentStatus `json:"payment_status,omitempty"`;
-  PaymentAmount uint64 `json:"payment_amount,omitempty"`;
-  RefundAmount uint64 `json:"refund_amount,omitempty"`;
+  PaymentAmount float64 `json:"payment_amount,omitempty"`;
+  RefundAmount float64 `json:"refund_amount,omitempty"`;
   ChargeId string `json:"charge_id,omitempty"`;
   RefundId string `json:"refund_id,omitempty"`;
   DepositChargeId string `json:"deposit_charge_id,omitempty"`;
   DepositRefundId string `json:"deposit_refund_id,omitempty"`;
-  DepositAmount uint64 `json:"deposit_amount,omitempty"`;
+  DepositAmount float64 `json:"deposit_amount,omitempty"`;
   DepositStatus TPaymentStatus `json:"deposit_status,omitempty"`;
   FuelUsage int `json:"fuel_usage,omitempty"`;
-  FuelCharge uint64 `json:"fuel_charge,omitempty"`;
+  FuelCharge float64 `json:"fuel_charge,omitempty"`;
   PromoCode string `json:"promo_code"`;
   
   Status TReservationStatus `json:"status,omitempty"`;

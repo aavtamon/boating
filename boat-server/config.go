@@ -29,14 +29,14 @@ type TPickupLocation struct {
 type TBookingSlot struct {
   DateTime int64 `json:"time"`;
   Duration int `json:"duration"`;
-  Price uint64 `json:"price"`;
+  Price float64 `json:"price"`;
 }
 
 
 type TPricedRange struct {
-  RangeMin int64 `json:"range_min"`;
-  RangeMax int64 `json:"range_max"`;
-  Price uint64 `json:"price"`;
+  RangeMin int `json:"range_min"`;
+  RangeMax int `json:"range_max"`;
+  Price float64 `json:"price"`;
 }
 
 type TImageResource struct {
@@ -54,12 +54,12 @@ type TBoat struct {
   MaximumCapacity int `json:"maximum_capacity"`;
   Rate []TPricedRange `json:"rate"`;
   Images []TImageResource `json:"images"`;
-  Deposit uint64 `json:"deposit"`;
+  Deposit float64 `json:"deposit"`;
 }
 
 type TExtraEquipment struct {
   Name string `json:"name"`;
-  Price uint64 `json:"price"`;
+  Price float64 `json:"price"`;
 }
 
 

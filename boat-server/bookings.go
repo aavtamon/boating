@@ -257,7 +257,7 @@ func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
     startHour, _ := strconv.Atoi(startHourString);
     slotTime := date.Add(time.Hour * time.Duration(startHour)).UnixNano() / int64(time.Millisecond);
     for _, duration := range durations {
-      var price uint64 = 0;
+      var price float64 = 0;
       for _, rate := range boat.Rate {
         if (int(rate.RangeMax) >= duration && int(rate.RangeMin) >= duration) {
           price = rate.Price;

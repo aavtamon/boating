@@ -24,6 +24,9 @@ type TPaymentRequest struct {
 
 
 func PaymentHandler(w http.ResponseWriter, r *http.Request) {
+  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+  sessionId := TSessionId(sessionCookie.Value);
+
   if (r.Method == http.MethodGet) {
     if (strings.HasSuffix(r.URL.Path, "/promo")) {
       if (r.URL.RawQuery != "") {
@@ -67,6 +70,11 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     if (strings.HasSuffix(r.URL.Path, "/deposit")) {
+      if (!isAdmin(sessionId)) {
+        w.WriteHeader(http.StatusUnauthorized);
+        return;
+      }
+    
       if (payDeposit(reservation, request)) {
         storedReservation, _ := json.Marshal(reservation);
         w.WriteHeader(http.StatusOK);
@@ -97,8 +105,6 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
         if (reservation == nil) {
           w.WriteHeader(http.StatusNotFound);
         } else {
-          sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-          sessionId := TSessionId(sessionCookie.Value);
           isAdmin := isAdmin(sessionId);
           if (strings.HasSuffix(r.URL.Path, "/deposit")) {
             if (!isAdmin) {
@@ -153,7 +159,17 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     return false;
   }
 
-  paidAmount := reservation.Slot.Price;
+  var paidAmount float64 = -1;
+  for _, rate := range bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Rate {
+    if (reservation.Slot.Duration >= rate.RangeMin && reservation.Slot.Duration <= rate.RangeMax) {
+      paidAmount = rate.Price;
+      break;
+    }
+  }
+  if (paidAmount < 0) {
+    fmt.Printf("WARNING: reservation %s references a slot that does not have a corresponding rental rate\n", request.ReservationId);
+    return false;
+  }
   
   bookingConfiguration := GetBookingConfiguration();
   for extraId, included := range reservation.Extras {
@@ -165,7 +181,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   if (reservation.PromoCode != "") {
     discount, hasPromoCode := bookingConfiguration.PromoCodes[reservation.PromoCode];
     if (hasPromoCode) {
-      discountAmount := uint64(paidAmount * uint64(discount) / 100);
+      discountAmount := paidAmount * float64(discount / 100);
       paidAmount = paidAmount - discountAmount;
     }
   }
@@ -175,7 +191,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.ChargeParams {
-      Amount: paidAmount * 100,
+      Amount: uint64(paidAmount * 100),
       Currency: "usd",
       Desc: "Boat reservation #" + string(request.ReservationId),
     }
@@ -225,7 +241,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
     return false;
   }
 
-  var cancellationFee uint64 = 0;
+  var cancellationFee float64 = 0;
   if (isAdmin) {
     fmt.Printf("Cancelling by admin - no fees\n");
   } else {
@@ -233,6 +249,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
     fmt.Printf("Non refundable fees = %d\n", cancellationFee);
   }
   
+  // TODO: This is a potential hole - a reservation may be created with this field pre-set
   refundAmount := reservation.PaymentAmount;
   
   if (reservation.PaymentAmount > cancellationFee) {
@@ -247,7 +264,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
 
     params := &stripe.RefundParams {
       Charge: reservation.ChargeId,
-      Amount: refundAmount * 100,
+      Amount: uint64(refundAmount * 100),
     }
 
     refund, err := refund.New(params);
@@ -298,8 +315,8 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.ChargeParams {
-      Amount: depositAmount * 100,
-      NoCapture: true,
+      Amount: uint64(depositAmount * 100),
+      //NoCapture: true,
       Currency: "usd",
       Desc: "Security deposit for #" + string(request.ReservationId),
     }
@@ -351,14 +368,14 @@ func refundDeposit(reservation *TReservation) bool {
 
   depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
   fuelUsed := float64(bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].TankSize * reservation.FuelUsage / 100);
-  fuelAmount := uint64(bookingConfiguration.GasPrice * fuelUsed);
+  fuelAmount := bookingConfiguration.GasPrice * fuelUsed;
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.RefundParams {
       Charge: reservation.ChargeId,
-      Amount: (depositAmount - fuelAmount) * 100,
+      Amount: uint64((depositAmount - fuelAmount) * 100),
     }
 
   
@@ -413,11 +430,11 @@ func parsePaymentRequest(body io.ReadCloser) *TPaymentRequest {
 }
 
 
-func getNonRefundableFee(reservation *TReservation) uint64 {
+func getNonRefundableFee(reservation *TReservation) float64 {
   bookingConfiguration := GetBookingConfiguration();
   
   currentTime := time.Now().UTC().UnixNano() / int64(time.Millisecond);
-  timeLeftToTrip := (reservation.Slot.DateTime - currentTime) / 1000 / 60 / 60;
+  timeLeftToTrip := int((reservation.Slot.DateTime - currentTime) / 1000 / 60 / 60);
   
   var matchingFee *TPricedRange = nil;
   for _, fee := range bookingConfiguration.CancellationFees {
