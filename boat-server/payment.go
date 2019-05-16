@@ -181,11 +181,10 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
   if (reservation.PromoCode != "") {
     discount, hasPromoCode := bookingConfiguration.PromoCodes[reservation.PromoCode];
     if (hasPromoCode) {
-      discountAmount := paidAmount * float64(discount / 100);
+      discountAmount := paidAmount * float64(discount) / 100;
       paidAmount = paidAmount - discountAmount;
     }
   }
-
 
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;

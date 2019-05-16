@@ -11,8 +11,6 @@ import "strings"
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
-  log.Println("Reservation Handler: request method=" + r.Method);
-  
   if (r.Method == http.MethodGet) {
     handleGetReservation(w, r);
   } else if (r.Method == http.MethodPut) {
