@@ -3,7 +3,7 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Release - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Security deposit in the amount of ${{.Reservation.DepositAmount}} is issued and should appear on your original payment method in about 5 business days.
+        Security deposit in the amount of ${{printf "%.2f" .Reservation.DepositAmount}} is issued and should appear on your original payment method in about 5 business days.
       </div>
 
 {{template "email_footer"}}

@@ -11,25 +11,28 @@ import "strings"
 
 
 func ReservationHandler(w http.ResponseWriter, r *http.Request) {
+  sessionId := GetSessionId(r);
+  if (sessionId == NO_SESSION_ID) {
+    w.WriteHeader(http.StatusUnauthorized);
+    w.Write([]byte("Invalid session id\n"));
+    return;
+  }
+
   if (r.Method == http.MethodGet) {
-    handleGetReservation(w, r);
+    handleGetReservation(w, r, sessionId);
   } else if (r.Method == http.MethodPut) {
     if (strings.HasSuffix(r.URL.Path, "/email")) {
-      handleSendConfirmationEmail(w, r);
+      handleSendConfirmationEmail(w, r, sessionId);
     } else {
-      handleSaveReservation(w, r);
+      handleSaveReservation(w, r, sessionId);
     }
   } else if (r.Method == http.MethodDelete) {
-    handleDeleteReservation(w, r);
+    handleDeleteReservation(w, r, sessionId);
   }
 }
 
 
-func handleGetReservation(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "text/plain");
-  
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-
+func handleGetReservation(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
 
@@ -46,7 +49,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
       if (hasLastName) {
         reservation = RecoverReservation(reservationId, queryLastName);
       } else {
-        accountId := *Sessions[TSessionId(sessionCookie.Value)].AccountId;
+        accountId := *Sessions[sessionId].AccountId;
         if (accountId != NO_OWNER_ACCOUNT_ID) {
           reservation = RecoverOwnerReservation(reservationId, accountId);
         }
@@ -61,8 +64,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
           w.WriteHeader(http.StatusOK);
           w.Write(storedReservation);
 
-          sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-          *Sessions[TSessionId(sessionCookie.Value)].ReservationId = reservation.Id;
+          *Sessions[sessionId].ReservationId = reservation.Id;
         }
       } else {
         w.WriteHeader(http.StatusNotFound);
@@ -73,7 +75,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
       w.Write([]byte("Reservation Id and Last Name must be provided\n"))
     }
   } else {
-    reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
+    reservationId := *Sessions[sessionId].ReservationId;
     w.WriteHeader(http.StatusOK);
     if (reservationId == NO_RESERVATION_ID) {
       w.Write([]byte("{}\n"))
@@ -84,20 +86,27 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
+func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   reservation := parseReservation(r.Body);
   reservationId := reservation.Id;
 
   if (reservation != nil) {
     existingReservation := GetReservation(reservationId);
     if (existingReservation == nil) {
-    
+      // Handling reservation creation
+      
+      //TODO: Verify integrity first - not all fields can be modified by the user
+      if (reservation.PaymentStatus != "" || reservation.PaymentAmount != 0 || reservation.RefundAmount != 0 || reservation.DepositAmount != 0 || reservation.DepositStatus != "") {
+        w.WriteHeader(http.StatusBadRequest);
+        w.Write([]byte("Prohibited properties are passed in"));
+        return;
+      }
+
       if (isBooked(reservation.LocationId, reservation.BoatId, reservation.Slot)) {
         w.WriteHeader(http.StatusConflict);
         return;
       }
 
-      //TODO: Verify integrity first - not all fields can be modified by the user
 
       reservation.Status = RESERVATION_STATUS_BOOKED;
       reservationId = SaveReservation(reservation);
@@ -105,6 +114,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       
       NotifyReservationBooked(reservationId);
     } else {
+      // Handling reservation update
       // TODO: may need better validation
       
       reservationChanged := false;
@@ -113,7 +123,6 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
         reservationChanged = true;
       }
       if (existingReservation.FuelUsage != reservation.FuelUsage && (reservation.FuelUsage > 0 && reservation.FuelUsage <= 100)) {
-      
         existingReservation.FuelUsage = reservation.FuelUsage;
         reservationChanged = true;
       }
@@ -131,8 +140,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
       w.WriteHeader(http.StatusOK);
       w.Write(storedReservation);
 
-      sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-      *Sessions[TSessionId(sessionCookie.Value)].ReservationId = reservationId;
+      *Sessions[sessionId].ReservationId = reservationId;
     } else {
       w.WriteHeader(http.StatusInternalServerError);
       w.Write([]byte("Failed to store reservation"));
@@ -143,10 +151,8 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request) {
   }  
 }
 
-func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-
-  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
+func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+  reservationId := *Sessions[sessionId].ReservationId;
 
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
@@ -173,15 +179,13 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request) {
   
   NotifyReservationCancelled(reservationId);
 
-  *Sessions[TSessionId(sessionCookie.Value)].ReservationId = NO_RESERVATION_ID;
+  *Sessions[sessionId].ReservationId = NO_RESERVATION_ID;
 
   w.WriteHeader(http.StatusOK);
 }
 
-func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  
-  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
+func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+  reservationId := *Sessions[sessionId].ReservationId;
   if (reservationId == NO_RESERVATION_ID) {
     w.WriteHeader(http.StatusNotFound);
     w.Write([]byte("No reservation selected"));

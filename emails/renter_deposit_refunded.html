@@ -3,7 +3,7 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Refund - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your security deposit of ${{.Reservation.DepositAmount}} has been refunded and should appear on your credit card in about 5 days.  
+        Your security deposit of ${{printf "%.2f" .Reservation.DepositAmount}} has been refunded and should appear on your credit card in about 5 days.  
       </div>
       <br>
       Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.

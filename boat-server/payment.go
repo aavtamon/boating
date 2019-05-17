@@ -24,8 +24,12 @@ type TPaymentRequest struct {
 
 
 func PaymentHandler(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  sessionId := TSessionId(sessionCookie.Value);
+  sessionId := GetSessionId(r);
+  if (sessionId == NO_SESSION_ID) {
+    w.WriteHeader(http.StatusUnauthorized);
+    w.Write([]byte("Invalid session id\n"));
+    return;
+  }
 
   if (r.Method == http.MethodGet) {
     if (strings.HasSuffix(r.URL.Path, "/promo")) {

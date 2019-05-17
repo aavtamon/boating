@@ -3,7 +3,7 @@
       <center><h1 style='padding-top: 10px;'>Deposit Payment Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
       <br>
       <div style='font-size: 15px;'>
-        You security deposit of ${{.Reservation.DepositAmount}} has been accepted.
+        You security deposit of ${{printf "%.2f" .Reservation.DepositAmount}} has been accepted.
       </div>
       <br>
       Your deposit will be refunded when your trip is complete, after our staff completes the final boat inspection.  

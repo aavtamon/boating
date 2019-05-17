@@ -17,11 +17,7 @@ BookingPayment = {
     });
     
     $("#BookingPayment-Screen-Description-ConfirmButton").click(function() {
-      if (Backend.getTemporaryData().paymentInfo.card_ready) {
-        $("#BookingPayment-Screen-SubmitButton").click();
-      } else {
-        $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("Please provide credit card information.");
-      }
+      $("#BookingPayment-Screen-SubmitButton").click();
     });
     
         
@@ -129,6 +125,12 @@ BookingPayment = {
     
     
     ScreenUtils.form("#BookingPayment-Screen", null, function() {
+      if (!Backend.getTemporaryData().paymentInfo.card_ready) {
+        $("#BookingPayment-Screen-PaymentInformation-CreditCard-Status").html("Provide credit card information.");
+        Main.scrollToElement($("#BookingPayment-Screen-PaymentInformation-CreditCard"));
+        return;
+      }
+      
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
@@ -152,7 +154,7 @@ BookingPayment = {
     var discount = 0;
     var totalPrice = reservationContext.slot.price + includedExtrasAndPrice[1];
     if (this._promoDiscount != null && this._promoDiscount > 0) {
-      discount = Math.round(totalPrice * this._promoDiscount / 100);
+      discount = totalPrice * this._promoDiscount / 100;
       totalPrice = totalPrice - discount;
     }
     

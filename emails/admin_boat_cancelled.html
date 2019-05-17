@@ -5,9 +5,9 @@
       <div style='font-size: 15px;'>
         Reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        Refunded amount: ${{.Reservation.RefundAmount}}.
+        Refunded amount: ${{printf "%.2f" .Reservation.RefundAmount}}.
         <br>
-        Original Deposit: ${{.Reservation.PaymentAmount}}.
+        Original Deposit: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
 
 {{template "email_footer"}}

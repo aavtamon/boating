@@ -8,11 +8,18 @@ import "encoding/hex"
 
 
 func AccountHandler(w http.ResponseWriter, r *http.Request) {
+  sessionId := GetSessionId(r);
+  if (sessionId == NO_SESSION_ID) {
+    w.WriteHeader(http.StatusUnauthorized);
+    w.Write([]byte("Invalid session id\n"));
+    return;
+  }
+
   if (r.Method == http.MethodGet) {
     if (strings.HasSuffix(r.URL.Path, "/logout")) {
-      handleLogout(w, r);
+      handleLogout(w, r, sessionId);
     } else {
-      handleGetAccount(w, r);
+      handleGetAccount(w, r, sessionId);
     }
   } else {
     w.WriteHeader(http.StatusMethodNotAllowed);
@@ -21,7 +28,7 @@ func AccountHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func handleGetAccount(w http.ResponseWriter, r *http.Request) {
+func handleGetAccount(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   queryParams := parseQuery(r);
   username, hasUsername := queryParams["username"];
   password, hasPassword := queryParams["password"];
@@ -49,17 +56,14 @@ func handleGetAccount(w http.ResponseWriter, r *http.Request) {
     return;
   }
 
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE); 
-  *Sessions[TSessionId(sessionCookie.Value)].AccountId = TOwnerAccountId(username);
+  *Sessions[sessionId].AccountId = TOwnerAccountId(username);
 
   ownerAccount, _ := json.Marshal(account);
   w.WriteHeader(http.StatusOK);
   w.Write(ownerAccount);
 }
 
-func handleLogout(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  sessionId := TSessionId(sessionCookie.Value);
+func handleLogout(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   *Sessions[sessionId].AccountId = NO_OWNER_ACCOUNT_ID;
   delete(Sessions, sessionId);
   w.WriteHeader(http.StatusOK);

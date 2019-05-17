@@ -130,6 +130,12 @@ Main = {
   },
   
   
+  scrollToElement: function(screenElement) {
+    $("#Main-ScreenContainer").scrollTop(screenElement.offset().top - $("#Main-ScreenContainer").offset().top);
+    $("#Main-ScreenContainer").scrollLeft(screenElement.offset().left - $("#Main-ScreenContainer").offset().left);
+  },
+  
+  
   _loadScreen: function(requestedPath) {
     var screen = requestedPath.split('?')[0];
     

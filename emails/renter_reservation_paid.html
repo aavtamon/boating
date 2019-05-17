@@ -5,7 +5,7 @@
       <div style='font-size: 15px;'>
         Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        You paid: ${{.Reservation.PaymentAmount}}.
+        You paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
       <br>
       Your rental begins on: <b>{{.ReservationDateTime}}</b>.
@@ -39,7 +39,7 @@
       Please also take a minute to review <a href='{{.WebReference}}/files/docs/rental-agreement.html'>Rental's agreement</a>.
       <br>
       <br>
-      IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{.Boat.Deposit}}</b>.  Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental.
+      IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{printf "%.2f" .Boat.Deposit}}</b>.  Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental.
       <br>
       <br>
       Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}?Subject=Inquery regarding reservation {{.Reservation.Id}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you need any help.

@@ -70,7 +70,7 @@
     </div>
     <div id="ReservationUpdate-Screen-ReservationSummary-Price" class="info-box-row">
       <div id="ReservationUpdate-Screen-ReservationSummary-Price-Title">You payed:</div>
-      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{.Reservation.PaymentAmount}} dollars</div>
+      <div id="ReservationUpdate-Screen-ReservationSummary-Price-Value">${{printf "%.2f" .Reservation.PaymentAmount}} dollars</div>
     </div>
     <form id="ReservationUpdate-Screen-ReservationSummary-Email" class="info-box-row" action="">
       <div id="ReservationUpdate-Screen-ReservationSummary-Email-Description">

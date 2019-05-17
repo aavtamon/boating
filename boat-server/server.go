@@ -40,6 +40,7 @@ type TSession struct {
 
 type TSessionId string;
 
+const NO_SESSION_ID = TSessionId("");
 
 const SESSION_ID_COOKIE = "sessionId";
 
@@ -48,6 +49,19 @@ var RuntimeRoot string = "";
 
 var Sessions = make(map[TSessionId]TSession);
 
+
+func GetSessionId(r *http.Request) TSessionId {
+  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
+  if (sessionCookie != nil) {
+    sessionId := TSessionId(sessionCookie.Value);
+    _, hasSession := Sessions[sessionId];
+    if (hasSession) {
+      return sessionId;
+    }
+  }
+
+  return NO_SESSION_ID;
+}
 
 func parseQuery(r *http.Request) map[string]string {
   result := make(map[string]string);

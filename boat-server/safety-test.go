@@ -28,12 +28,17 @@ var NO_SAFETY_SUITE_ID = TSafetySuiteId("");
 
 
 func SafetyTestHandler(w http.ResponseWriter, r *http.Request) {
-  fmt.Println("Safety Test Handler: request method=" + r.Method);
-  
+  sessionId := GetSessionId(r);
+  if (sessionId == NO_SESSION_ID) {
+    w.WriteHeader(http.StatusUnauthorized);
+    w.Write([]byte("Invalid session id\n"));
+    return;
+  }
+
   if (r.Method == http.MethodGet) {
-    handleGetTestSuite(w, r);
+    handleGetTestSuite(w, r, sessionId);
   } else if (r.Method == http.MethodPut) {
-    handleSaveTestSuiteResults(w, r);
+    handleSaveTestSuiteResults(w, r, sessionId);
   } else {
     w.WriteHeader(http.StatusMethodNotAllowed);
     w.Write([]byte("Unsupported method"));
@@ -41,9 +46,8 @@ func SafetyTestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func handleGetTestSuite(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE); 
-  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
+func handleGetTestSuite(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+  reservationId := *Sessions[sessionId].ReservationId;
 
 
   if (reservationId == NO_RESERVATION_ID) {
@@ -63,7 +67,7 @@ func handleGetTestSuite(w http.ResponseWriter, r *http.Request) {
   
   
   suiteId := "1";
-  *Sessions[TSessionId(sessionCookie.Value)].SafetySuiteId = TSafetySuiteId(suiteId);
+  *Sessions[sessionId].SafetySuiteId = TSafetySuiteId(suiteId);
   
   testSuite := readTestSuite(suiteId);
   if (testSuite == nil) {
@@ -83,10 +87,8 @@ func handleGetTestSuite(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
-  sessionCookie, _ := r.Cookie(SESSION_ID_COOKIE);
-  
-  reservationId := *Sessions[TSessionId(sessionCookie.Value)].ReservationId;
+func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+  reservationId := *Sessions[sessionId].ReservationId;
   if (reservationId == NO_RESERVATION_ID) {
     w.WriteHeader(http.StatusBadRequest);
     w.Write([]byte("No reservaton in the context"));
@@ -94,7 +96,7 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request) {
     return;
   }
   
-  suiteId := *Sessions[TSessionId(sessionCookie.Value)].SafetySuiteId;
+  suiteId := *Sessions[sessionId].SafetySuiteId;
   if (suiteId == NO_SAFETY_SUITE_ID) {
     w.WriteHeader(http.StatusBadRequest);
     w.Write([]byte("No suite in the context"));
