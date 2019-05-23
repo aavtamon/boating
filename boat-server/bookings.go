@@ -253,22 +253,30 @@ func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
 
   result := []TBookingSlot{};
   
-  for startHourString, durations := range location.BookingSchedule {
-    startHour, _ := strconv.Atoi(startHourString);
-    slotTime := date.Add(time.Hour * time.Duration(startHour)).UnixNano() / int64(time.Millisecond);
-    for _, duration := range durations {
-      var price float64 = 0;
-      for _, rate := range boat.Rate {
-        if (int(rate.RangeMax) >= duration && int(rate.RangeMin) >= duration) {
-          price = rate.Price;
-          break;
+  // First, check if we have a schedule for every day.
+  dailySchedule := location.BookingSchedule["All"];
+  // If not, check the schedule for this current day of week
+  if (dailySchedule == nil) {
+    dailySchedule = location.BookingSchedule[date.Weekday().String()];
+  }
+  if (dailySchedule != nil) {
+    for startHourString, durations := range dailySchedule {
+      startHour, _ := strconv.Atoi(startHourString);
+      slotTime := date.Add(time.Hour * time.Duration(startHour)).UnixNano() / int64(time.Millisecond);
+      for _, duration := range durations {
+        var price float64 = 0;
+        for _, rate := range boat.Rate {
+          if (int(rate.RangeMax) >= duration && int(rate.RangeMin) >= duration) {
+            price = rate.Price;
+            break;
+          }
         }
-      }
-      
-      if (price > 0) {
-        slot := TBookingSlot {DateTime: slotTime, Duration: duration, Price: price};
-        if (!isBooked(locationId, boatId, slot)) {
-          result = append(result, slot);
+
+        if (price > 0) {
+          slot := TBookingSlot {DateTime: slotTime, Duration: duration, Price: price};
+          if (!isBooked(locationId, boatId, slot)) {
+            result = append(result, slot);
+          }
         }
       }
     }

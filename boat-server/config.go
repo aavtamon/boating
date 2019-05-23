@@ -62,11 +62,13 @@ type TExtraEquipment struct {
   Price float64 `json:"price"`;
 }
 
+type TBookingDailySchedule map[string][]int;
+
 
 type TRentalLocation struct {
   Name string `json:"name"`;
   TimeZoneOffset int `json:"time_zone_offset"`;
-  BookingSchedule map[string][]int `json:"schedule"`;
+  BookingSchedule map[string]TBookingDailySchedule `json:"schedule"`;
   ServiceInterval int `json:"service_interval"`;
   
   Boats map[string]TBoat `json:"boats"`;
