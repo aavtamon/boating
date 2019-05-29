@@ -30,7 +30,8 @@ OwnerBooking = {
     
     $("#OwnerBooking-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
-        var isSelectable = OwnerBooking.availableSlots[ScreenUtils.getUTCMillis(date)] > 0;
+        var slotType = OwnerBooking.availableSlots[ScreenUtils.getUTCMillis(date)];
+        var isSelectable = slotType != Backend.SLOT_TYPE_NONE;
 
         return [isSelectable, "", null];
       },
@@ -61,6 +62,8 @@ OwnerBooking = {
     });
     
     $("#OwnerBooking-Screen-Description-BookButton").click(function() {
+      Main.showPopup("Booking Processing...", '<center>Your booking is being processed.<br>Do not refresh or close your browser.</center>');
+      
       Backend.resetReservationContext();
       
       var reservationContent = Backend.getReservationContext();

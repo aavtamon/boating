@@ -25,7 +25,7 @@ BookingTime = {
     }
 
     if (reservationContext.slot == null) {
-      while (BookingTime.availableSlots[bookingBeginDate] == 0 && bookingBeginDate < schedulingEndDate) {
+      while (BookingTime.availableSlots[bookingBeginDate] != Backend.SLOT_TYPE_RENTER && bookingBeginDate < schedulingEndDate) {
         bookingBeginDate += 24 * 60 * 60 * 1000;
       }
       
@@ -41,7 +41,8 @@ BookingTime = {
     
     $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
-        var isSelectable = BookingTime.availableSlots[ScreenUtils.getUTCMillis(date)] > 0;
+        var slotType = BookingTime.availableSlots[ScreenUtils.getUTCMillis(date)];
+        var isSelectable = slotType == Backend.SLOT_TYPE_RENTER;
 
         return [isSelectable, "", null];
       },

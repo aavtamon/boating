@@ -23,8 +23,14 @@ type TRentalStat struct {
 }
 
 
+type TSlotType int;
+const (
+  SlotTypeNone TSlotType = 0;
+  SlotTypeRenter TSlotType = 1;
+  SlotTypeOwner TSlotType = 2;
+)
 
-type TAvailableDates map[int64]int;
+type TAvailableDates map[int64]TSlotType;
 
 
 
@@ -225,7 +231,7 @@ func (observer TReservationObserver) OnReservationRemoved(reservation *TReservat
 func recalculateAllAvailableSlots(locationId string, boatId string) {
   fmt.Printf("Recalculating ALL slots for location %s and boat %s\n", locationId, boatId);
 
-  availableDates = make(map[int64]int);
+  availableDates = make(TAvailableDates);
   availableSlots = make(map[int64][]TBookingSlot);
 
   for counter := bookingConfiguration.SchedulingBeginOffset - 1; counter <= bookingConfiguration.SchedulingEndOffset; counter++ {
@@ -253,12 +259,19 @@ func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
 
   result := []TBookingSlot{};
   
-  // First, check if we have a schedule for every day.
-  dailySchedule := location.BookingSchedule["All"];
-  // If not, check the schedule for this current day of week
-  if (dailySchedule == nil) {
-    dailySchedule = location.BookingSchedule[date.Weekday().String()];
+  var ownership TSlotType;
+  dailySchedule := location.BookingSchedule[date.Weekday().String()];
+  if (dailySchedule != nil) {
+    ownership = SlotTypeRenter; // If we have this day in the schedule then this date should be visible to renters. Otherwise it is just for owners
+    if (len(dailySchedule) == 0) {
+      // We have a day in the schedule but no specific daily schedule - use the default
+      dailySchedule = location.BookingSchedule["All"];
+    }
+  } else {
+    ownership = SlotTypeOwner;
+    dailySchedule = location.BookingSchedule["All"];
   }
+  
   if (dailySchedule != nil) {
     for startHourString, durations := range dailySchedule {
       startHour, _ := strconv.Atoi(startHourString);
@@ -283,7 +296,11 @@ func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
   }
   
   availableSlots[dateMs] = result;
-  availableDates[dateMs] = len(result);
+  if (len(result) > 0) {
+    availableDates[dateMs] = ownership;
+  } else {
+    availableDates[dateMs] = SlotTypeNone;
+  }
 }
 
 
