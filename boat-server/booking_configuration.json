@@ -11,8 +11,8 @@
   ],
   
   "promo_codes": {
-    "coworker": 50,
-    "friend": 60
+    "ak34bu274": 50,
+    "982fer4kusk": 60
   },
 
   "gas_price": 3.00,
@@ -26,10 +26,10 @@
       "boats": {
         "ana": {
           "name": "Ana",
-          "type": "Pantoon 24ft",
+          "type": "Pontoon 24ft",
           "images": [
             {"name": "", "url": "files/images/boat-picture.jpg", "description": "Nice and powerful boat.<br>Good for surfing the lake with your party."},
-            {"name": "", "url": "files/images/tubing-picture.jpg", "description": "Confortably sits up to 10 people"}
+            {"name": "", "url": "files/images/tubing-picture.jpg", "description": "Comfortably sits 10 people"}
           ],
           "engine": "140h/p",
           "mileage": 10,
@@ -57,36 +57,14 @@
       "pickup_locations": {
         "1": {
           "location": {
-            "lat": 34.2169323,
-            "lng": -83.9452699,
+            "lat": 34.199934,
+            "lng": -83.971087,
             "zoom": 0
           },
-          "name": "Great Marina",
-          "address": "1745 Lanier Islands Parkway, Suwanee 30024",
+          "name": "Aqualand Marina",
+          "address": "6800 Lights Ferry Rd, Flowery Branch, GA 30542",
           "parking_fee": "free",
-          "instructions": "none"
-        },
-        "2": {
-          "location": {
-            "lat": 34.2305583,
-            "lng": -83.9294771,
-            "zoom": 0
-          },
-          "name": "Parking lot at the beach",
-          "address": "1111 Lanier Islands Parkway, Suwanee 30024",
-          "parking_fee": "$4 per car (cach only)",
-          "instructions": "proceed to the boat ramp"
-        },
-        "3": {
-          "location": {
-            "lat": 34.2700139,
-            "lng": -83.8967458,
-            "zoom": 0
-          },
-          "name": "Dam parking",
-          "address": "2222 Buford Highway, Cumming 30519",
-          "parking_fee": "$3 per person (credit card accepted)",
-          "instructions": "follow 'boat ramp' signs"
+          "instructions": "Please metion at the entrance that you are going to dock B46"
         }
       }
     }
