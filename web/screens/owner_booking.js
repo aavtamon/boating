@@ -175,7 +175,7 @@ OwnerBooking = {
           if (time == this._selectedTime) {
             timeInterval.click();
           }
-        });
+        }.bind(this));
         
         var timeIntervals = $(".times");
         if (timeIntervals.length == 1 && this._selectedTime == null) {
