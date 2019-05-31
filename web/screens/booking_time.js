@@ -99,7 +99,7 @@ BookingTime = {
           }
         }
         
-        for (var time in times) {
+        Object.keys(times).sort().forEach(function(time) {
           var slots = times[time];
           var maxDuration = 0;
           for (var i in slots) {
@@ -127,7 +127,7 @@ BookingTime = {
           if (time == this._selectedTime) {
             timeInterval.click();
           }
-        }
+        });
         
         var timeIntervals = $(".times");
         if (timeIntervals.length == 1 && this._selectedTime == null) {

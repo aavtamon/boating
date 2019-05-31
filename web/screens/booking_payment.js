@@ -79,17 +79,18 @@ BookingPayment = {
     
     this._updateTotalPrice();
     
-    ScreenUtils.dataModelInput("#BookingPayment-Screen-ReservationSummary-PromoCode-Input", reservationContext, "promo_code");
+    ScreenUtils.dataModelInput("#BookingPayment-Screen-ReservationSummary-PromoCode-Input", reservationContext, "promo_code", null, null, function(value) {
+      return value.toUpperCase();
+    });
     
     
     var applyPromoCode = function() {
-      promoCode = $("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val();
-      if (promoCode == "") {
+      if (reservationContext.promo_code == "") {
         this._promoDiscount = null;
         $("#BookingPayment-Screen-ReservationSummary-PromoCode-Status").html("");
         this._updateTotalPrice();
       } else {
-        Backend.getPromoCode($("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val(), function(status, discount) {
+        Backend.getPromoCode(reservationContext.promo_code, function(status, discount) {
           if (status == Backend.STATUS_SUCCESS) {
             this._promoDiscount = discount;
             $("#BookingPayment-Screen-ReservationSummary-PromoCode-Status").html("");
@@ -106,7 +107,7 @@ BookingPayment = {
       applyPromoCode();
     });
     
-    if ($("#BookingPayment-Screen-ReservationSummary-PromoCode-Input").val() != null) {
+    if (reservationContext.promo_code != null) {
       applyPromoCode();
     }
 

@@ -134,6 +134,11 @@ OwnerHome = {
   _showBookings: function() {
     var bookingGroup = $("#OwnerHome-Screen-AccountInfo-OwnerReservations-Bookings");
     
+    sortingRule = function(summary1, summary2) {
+      return summary1.slot.time - summary2.slot.time;
+    };
+    this.bookingSummaries.sort(sortingRule);
+    
     for (var i in this.bookingSummaries) {
       var bookingSummary = this.bookingSummaries[i];
       
