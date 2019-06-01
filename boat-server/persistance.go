@@ -332,8 +332,7 @@ func readPersistenceDatabase() {
     persistenceDb.Reservations = make(TReservationMap);
     persistenceDb.SafetyTestResults = make(TSafetyTestResultMap);
   } else {
-    cleanObsoleteReservations();
-    cleanObsoleteSafetyTestResults();
+    savePersistenceDatabase();
   }
 }
 
@@ -361,7 +360,7 @@ func cleanObsoleteReservations() {
   
     // Boat owners reservations become completed automatically as they pass
     if (reservation.Status == RESERVATION_STATUS_BOOKED && reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID) {
-      if (reservation.Slot.DateTime / int64(time.Millisecond) + 60 * 60 * 24 < currentMoment) {
+      if (reservation.Slot.DateTime / int64(time.Second / time.Millisecond) + 60 * 60 * 24 < currentMoment) {
         reservation.Status = RESERVATION_STATUS_COMPLETED;
       }
     }
