@@ -13,7 +13,7 @@
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
       <br>
-      Pickup location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}})
+      Pickup location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
       <br>
       Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
       <br>
