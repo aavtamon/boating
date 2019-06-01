@@ -358,6 +358,15 @@ func cleanObsoleteReservations() {
   currentMoment := time.Now().UTC().Unix();
 
   for reservationId, reservation := range persistenceDb.Reservations {
+  
+    // Boat owners reservations become completed automatically as they pass
+    if (reservation.Status == RESERVATION_STATUS_BOOKED && reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID) {
+      if (reservation.Slot.DateTime / int64(time.Millisecond) + 60 * 60 * 24 < currentMoment) {
+        reservation.Status = RESERVATION_STATUS_COMPLETED;
+      }
+    }
+
+
     expiration := int64(0);
     if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
       expiration = systemConfiguration.BookingExpirationConfiguration.CancelledTimeout;
