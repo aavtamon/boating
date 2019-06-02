@@ -3,7 +3,9 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Release - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Security deposit in the amount of ${{printf "%.2f" .Reservation.DepositAmount}} is issued and should appear on your original payment method in about 5 business days.
+        A fuel charge in the amount of ${{printf "%.2f" .Reservation.FuelCharge}} is applied to the payment method used for the security deposit. The remaining part of the originally paid security deposit us released and should appear on the credit card within 5 business days.
+        <br>
+        The deposit amout that was ariginally reserved on the card was ${{printf "%.2f" .Reservation.DepositAmount}}.
       </div>
 
 {{template "email_footer"}}

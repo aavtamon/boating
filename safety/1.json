@@ -255,7 +255,7 @@
     },
 
     "TestQuestion_23": {
-      "text": "When must running lights must be switched on?",
+      "text": "When running lights must be switched on?",
       "options_format": "vertical",
       "options": {
         "TestQuestion_23-option1": "At night",

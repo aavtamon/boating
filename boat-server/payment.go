@@ -319,7 +319,7 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
 
     params := &stripe.ChargeParams {
       Amount: uint64(depositAmount * 100),
-      //NoCapture: true,
+      NoCapture: true, // Only authorizing, but no charge.
       Currency: "usd",
       Desc: "Security deposit for #" + string(request.ReservationId),
     }
@@ -369,20 +369,26 @@ func refundDeposit(reservation *TReservation) bool {
     return false;
   }
 
-  depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
+  // depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
   fuelUsed := float64(bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].TankSize * reservation.FuelUsage / 100);
   fuelAmount := bookingConfiguration.GasPrice * fuelUsed;
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
+/*
     params := &stripe.RefundParams {
-      Charge: reservation.ChargeId,
+      Charge: reservation.DepositChargeId,
       Amount: uint64((depositAmount - fuelAmount) * 100),
     }
-
   
     refund, err := refund.New(params);
+*/
+    // Charding initial authorization for the fuel amount
+    params := &stripe.CaptureParams {
+      Amount: uint64(fuelAmount * 100),
+    }
+    fuelCharge, err := charge.Capture(reservation.DepositChargeId, params);
 
     if (err != nil) {
       fmt.Printf("Deposit refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
@@ -392,7 +398,7 @@ func refundDeposit(reservation *TReservation) bool {
 
       return false;
     } else {
-      reservation.DepositRefundId = refund.ID;
+      reservation.DepositRefundId = fuelCharge.ID;
       reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
       reservation.FuelCharge = fuelAmount;
       SaveReservation(reservation);

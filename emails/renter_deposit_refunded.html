@@ -3,7 +3,11 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Refund - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your security deposit of ${{printf "%.2f" .Reservation.DepositAmount}} has been refunded and should appear on your credit card in about 5 days.  
+        A fuel charge in the amount of ${{printf "%.2f" .Reservation.FuelCharge}} was applied to your card used to pay the deposit.
+        <br>
+        The remaining part of your security deposit was released and should appear on your credit card within 5 days.
+        <br>
+        Just FYI - the originally pre-authorized amount for the deposit was ${{printf "%.2f" .Reservation.DepositAmount}}.
       </div>
       <br>
       Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
