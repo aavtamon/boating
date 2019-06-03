@@ -9,6 +9,15 @@
     {"range_min": 4, "range_max": 24, "price": 150.00},
     {"range_min": 0, "range_max": 4, "price": 200.00}
   ],
+
+  "late_fees": [
+    {"range_min": 0, "range_max": 15, "price": 0.00},
+    {"range_min": 16, "range_max": 30, "price": 25.00},
+    {"range_min": 31, "range_max": 45, "price": 50.00},
+    {"range_min": 46, "range_max": 60, "price": 100.00},
+    {"range_min": 61, "range_max": 120, "price": 200.00},
+    {"range_min": 121, "range_max": 400, "price": 400.00}
+  ],
   
   "promo_codes": {
     "AK34BU274": 50,

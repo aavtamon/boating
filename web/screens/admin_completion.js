@@ -21,6 +21,7 @@ AdminCompletion = {
     $("#AdminCompletion-Screen-ReservationSummary-Deposit-Value").html(ScreenUtils.getBookingPrice(boat.deposit));
     
     $("#AdminCompletion-Screen-FuelUsage-Input").change(this.updateTotalRefund.bind(this));
+    $("#AdminCompletion-Screen-Delay-Input").change(this.updateTotalRefund.bind(this));
     $("#AdminCompletion-Screen-AccidentStatus-Input").change(this.updateTotalRefund.bind(this));
     
     $("#AdminCompletion-Screen-Description-ConfirmButton").click(function() {
@@ -51,12 +52,34 @@ AdminCompletion = {
     var fuelChargeString = ScreenUtils.getBookingPrice(Backend.getBookingConfiguration().gas_price) + " per gallon * " + $("#AdminCompletion-Screen-FuelUsage-Input").val() + "% of tank * " + boat.tank_size + " gallons = " + ScreenUtils.getBookingPrice(fuelCharge);
     $("#AdminCompletion-Screen-FuelUsage-Charge").html(fuelChargeString);
 
+    
+    var delay = parseInt($("#AdminCompletion-Screen-Delay-Input").val());
+    
+    var matchingFee = null;
+    for (var index in Backend.getBookingConfiguration().late_fees) {
+      var fee = Backend.getBookingConfiguration().late_fees[index];
+      if (fee.range_min <= delay && delay <= fee.range_max) {
+        matchingFee = fee;
+
+        break;
+      }
+    }
+    
+    var delayCharge = 0;
+    if (matchingFee != null) {
+      delayCharge = matchingFee.price;
+    }
+    $("#AdminCompletion-Screen-Delay-Charge").html(ScreenUtils.getBookingPrice(delayCharge));
+    
     this.totalRefund = 0;
     var totalRefundString = "";
     var hadAccident = $("#AdminCompletion-Screen-AccidentStatus-Input").val() == "yes";
     if (!hadAccident) {
-      this.totalRefund = boat.deposit - fuelCharge;
-      totalRefundString = ScreenUtils.getBookingPrice(boat.deposit) + " - " + ScreenUtils.getBookingPrice(fuelCharge) + " = " + ScreenUtils.getBookingPrice(this.totalRefund);
+      this.totalRefund = boat.deposit - fuelCharge - delayCharge;
+      if (this.totalRefund < 0) {
+        this.totalRefund = 0;
+      }
+      totalRefundString = ScreenUtils.getBookingPrice(boat.deposit) + " - " + ScreenUtils.getBookingPrice(fuelCharge) + (delayCharge != 0 ? " - " + ScreenUtils.getBookingPrice(delayCharge) : "") + " = " + ScreenUtils.getBookingPrice(this.totalRefund);
     } else {
       totalRefundString = "$0 - ATTENTION: No Refund!!!";
     }
@@ -68,6 +91,7 @@ AdminCompletion = {
     Main.showPopup("Updating...", "Reservation status is being updated.");
 
     Backend.getReservationContext().fuel_usage = parseInt($("#AdminCompletion-Screen-FuelUsage-Input").val());
+    Backend.getReservationContext().delay = parseInt($("#AdminCompletion-Screen-Delay-Input").val());
     Backend.saveReservation(function(status) {
       if (status == Backend.STATUS_SUCCESS) {
         Backend.refundDeposit(function(status) {

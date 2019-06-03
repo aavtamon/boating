@@ -369,9 +369,9 @@ func refundDeposit(reservation *TReservation) bool {
     return false;
   }
 
-  // depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
   fuelUsed := float64(bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].TankSize * reservation.FuelUsage / 100);
   fuelAmount := bookingConfiguration.GasPrice * fuelUsed;
+  lateFee := getLateFee(reservation);
   
   if (GetSystemConfiguration().PaymentConfiguration.Enabled) {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
@@ -384,11 +384,17 @@ func refundDeposit(reservation *TReservation) bool {
   
     refund, err := refund.New(params);
 */
-    // Charding initial authorization for the fuel amount
-    params := &stripe.CaptureParams {
-      Amount: uint64(fuelAmount * 100),
+
+    // Charging initial authorization for the fuel amount and late fee
+    depositAmount := bookingConfiguration.Locations[reservation.LocationId].Boats[reservation.BoatId].Deposit;
+    if (fuelAmount + lateFee > depositAmount) {
+      lateFee = depositAmount - fuelAmount;
     }
-    fuelCharge, err := charge.Capture(reservation.DepositChargeId, params);
+
+    params := &stripe.CaptureParams {
+      Amount: uint64((fuelAmount + lateFee) * 100),
+    }
+    afterRentalCharge, err := charge.Capture(reservation.DepositChargeId, params);
 
     if (err != nil) {
       fmt.Printf("Deposit refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
@@ -398,9 +404,10 @@ func refundDeposit(reservation *TReservation) bool {
 
       return false;
     } else {
-      reservation.DepositRefundId = fuelCharge.ID;
+      reservation.DepositRefundId = afterRentalCharge.ID;
       reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
       reservation.FuelCharge = fuelAmount;
+      reservation.LateFee = lateFee;
       SaveReservation(reservation);
 
       fmt.Printf("Deposit refund processing for reservation %s is complete successfully\n", reservation.Id);
@@ -410,9 +417,10 @@ func refundDeposit(reservation *TReservation) bool {
   } else {
     fmt.Println("Payments turned off - deposit refund will not be processed thru the payent portal");
     
-    reservation.DepositRefundId = "fake deposit refund";
+    reservation.DepositRefundId = "fake after-rental charge/refund";
     reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
     reservation.FuelCharge = fuelAmount;
+    reservation.LateFee = lateFee;
     SaveReservation(reservation);
     
     return true;
@@ -458,6 +466,24 @@ func getNonRefundableFee(reservation *TReservation) float64 {
   }
 
   if (timeLeftToTrip < matchingFee.RangeMax) {
+    return matchingFee.Price;
+  } else {
+    return 0;
+  }
+}
+
+func getLateFee(reservation *TReservation) float64 {
+  bookingConfiguration := GetBookingConfiguration();
+  
+  var matchingFee *TPricedRange = nil;
+  for _, fee := range bookingConfiguration.LateFees {
+    if (fee.RangeMin <= reservation.Delay && reservation.Delay <= fee.RangeMax) {
+      matchingFee = &fee;
+      break;
+    }
+  }
+
+  if (matchingFee != nil) {
     return matchingFee.Price;
   } else {
     return 0;

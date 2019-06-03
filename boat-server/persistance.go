@@ -97,6 +97,8 @@ type TReservation struct {
   DepositStatus TPaymentStatus `json:"deposit_status,omitempty"`;
   FuelUsage int `json:"fuel_usage,omitempty"`;
   FuelCharge float64 `json:"fuel_charge,omitempty"`;
+  Delay int `json:"delay,omitempty"`;
+  LateFee float64 `json:"late_fee,omitempty"`;
   PromoCode string `json:"promo_code"`;
   
   Status TReservationStatus `json:"status,omitempty"`;

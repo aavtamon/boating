@@ -5,6 +5,11 @@
       <div style='font-size: 15px;'>
         A fuel charge in the amount of ${{printf "%.2f" .Reservation.FuelCharge}} was applied to your card used to pay the deposit.
         <br>
+        {{ if ne .Reservation.Delay 0 }}
+          We also applied the late fees in the amount of ${{printf "%.2f" .Reservation.LateFee}}
+          <br>
+        {{ end }}
+        
         The remaining part of your security deposit was released and should appear on your credit card within 5 days.
         <br>
         Just FYI - the originally pre-authorized amount for the deposit was ${{printf "%.2f" .Reservation.DepositAmount}}.

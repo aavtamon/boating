@@ -20,17 +20,26 @@
 
 
 #AdminCompletion-Screen-FuelUsage-Label,
+#AdminCompletion-Screen-Delay-Label,
 #AdminCompletion-Screen-AccidentStatus-Label,
 #AdminCompletion-Screen-TotalRefund-Label,
-#AdminCompletion-Screen-FuelUsage-Charge
+#AdminCompletion-Screen-FuelUsage-Charge,
+#AdminCompletion-Screen-Delay-Charge
 {
   display: inline-block;
   margin-right: 20px;
   
   font-weight: bold;
 }
+#AdminCompletion-Screen-FuelUsage-Label,
+#AdminCompletion-Screen-Delay-Label,
+#AdminCompletion-Screen-AccidentStatus-Label {
+  width: 100px;
+}
+
 
 #AdminCompletion-Screen-FuelUsage-Input,
+#AdminCompletion-Screen-Delay-Input,
 #AdminCompletion-Screen-AccidentStatus-Input
 {
   display: inline-block;
@@ -42,8 +51,8 @@
   font-size: 20px;
   font-weight: bold;
 }
-#AdminCompletion-Screen-FuelUsage-Input {
-  width: 300px;
+#AdminCompletion-Screen-FuelUsage-Input, #AdminCompletion-Screen-Delay-Input {
+  width: 350px;
 }
 
 #AdminCompletion-Screen-AccidentDescription {

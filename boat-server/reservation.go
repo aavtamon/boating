@@ -126,6 +126,10 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
         existingReservation.FuelUsage = reservation.FuelUsage;
         reservationChanged = true;
       }
+      if (existingReservation.Delay != reservation.Delay && reservation.Delay >= 0) {
+        existingReservation.Delay = reservation.Delay;
+        reservationChanged = true;
+      }
       
       if (reservationChanged) {
         SaveReservation(existingReservation);
