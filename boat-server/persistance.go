@@ -100,6 +100,7 @@ type TReservation struct {
   Delay int `json:"delay,omitempty"`;
   LateFee float64 `json:"late_fee,omitempty"`;
   PromoCode string `json:"promo_code"`;
+  Notes string `json:"notes"`;
   
   Status TReservationStatus `json:"status,omitempty"`;
 }

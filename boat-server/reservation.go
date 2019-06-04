@@ -7,6 +7,7 @@ import "io/ioutil"
 import "encoding/json"
 import "fmt"
 import "strings"
+import "encoding/base64"
 
 
 
@@ -129,6 +130,18 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
       if (existingReservation.Delay != reservation.Delay && reservation.Delay >= 0) {
         existingReservation.Delay = reservation.Delay;
         reservationChanged = true;
+      }
+      if (existingReservation.Notes != reservation.Notes) {
+        if(len(reservation.Notes) < 4000) {
+          _, err := base64.StdEncoding.DecodeString(reservation.Notes)
+          if (err == nil) {
+            existingReservation.Notes = reservation.Notes;
+            reservationChanged = true;
+          }
+        } else {
+          existingReservation.Notes = "input too long";
+          reservationChanged = true;
+        }
       }
       
       if (reservationChanged) {
