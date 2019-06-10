@@ -42,7 +42,7 @@ ScreenUtils = {
         if (includedExtras != "") {
           includedExtras += ", ";
         }
-        includedExtras = extra.name + " (+$" + extra.price + ")";
+        includedExtras = extra.name + " (+" + ScreenUtils.getBookingPrice(extra.price) + ")";
         extraPrice += extra.price;
       }
     }

@@ -49,13 +49,13 @@
             {"range_min": 6, "range_max": 6, "price": 350.00},
             {"range_min": 8, "range_max": 8, "price": 400.00}
           ],
-          "deposit": 500
+          "deposit": 500.00
         }
       },
       "extras": {
         "tube": {
           "name": "Tube / Tow Rope",
-          "price": 25 
+          "price": 25.00
         }
       },
       "center_location": {
