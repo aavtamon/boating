@@ -32,7 +32,8 @@
   <div class="info-box">
     <div id="AdminCompletion-Screen-FuelUsage" class="info-box-row">
       <div id="AdminCompletion-Screen-FuelUsage-Label">Fuel Usage:</div>
-      <select name="fuel" id="AdminCompletion-Screen-FuelUsage-Input">
+      <select id="AdminCompletion-Screen-FuelUsage-Input">
+        <option value='0'>Returned with full tank</option>
         <option value='25'>Less than 25%</option>
         <option value='50'>Between 25% and 50%</option>
         <option value='75'>Between 50% and 75%</option>
@@ -43,7 +44,7 @@
     
     <div id="AdminCompletion-Screen-Delay" class="info-box-row">
       <div id="AdminCompletion-Screen-Delay-Label">Late Arrival:</div>
-      <select name="fuel" id="AdminCompletion-Screen-Delay-Input">
+      <select id="AdminCompletion-Screen-Delay-Input">
         <option value='0'>On time</option>
         <option value='0'>Less than 15 mins</option>
         <option value='30'>Between 15 and 30 mins</option>
@@ -57,7 +58,7 @@
   
     <div id="AdminCompletion-Screen-AccidentStatus" class="info-box-row">
       <div id="AdminCompletion-Screen-AccidentStatus-Label">Any incidents:</div>
-      <select name="fuel" id="AdminCompletion-Screen-AccidentStatus-Input">
+      <select id="AdminCompletion-Screen-AccidentStatus-Input">
         <option value='no'>No</option>
         <option value='yes'>Yes</option>
       </select>
@@ -68,7 +69,7 @@
   <div class="info-box">
     <div id="AdminCompletion-Screen-TotalRefund" class="info-box-row">
       <div id="AdminCompletion-Screen-TotalRefund-Label">Total back to customer:</div>
-      <div name="fuel" id="AdminCompletion-Screen-TotalRefund-Value"></div>
+      <div id="AdminCompletion-Screen-TotalRefund-Value"></div>
     </div>
   </div>
 </div>
