@@ -43,7 +43,7 @@ html, body {
 }
 .ui-datepicker.ui-widget.ui-widget-content {
   width: 270px;
-  height: 240px;
+  height: 255px;
   padding: 5px;
 
   border-width: 1px;
@@ -219,7 +219,7 @@ label.input-field-error {
 
 .optionbox {
   display: inline-block;
-  height: 240px;
+  height: 255px;
   width: 270px;
   padding: 5px;
 

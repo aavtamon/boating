@@ -9,7 +9,7 @@
   margin-right: 50px;
 }
 
-#BookingTime-Screen-SelectionPanel-Calendar {
+#BookingTime-Screen-SelectionPanel-CalendarHolder {
   display: inline-block;
 }
 
@@ -18,4 +18,25 @@
   text-align: center;
 }
 
+
+#BookingTime-Screen-SelectionPanel-CalendarHolder-CalendarLegend {
+  margin-top: 10px;
+  text-align: left;
+}
+.calendar-legend-element {
+  display: inline-block;
+  margin-left: 10px;
+}
+.calendar-legend-date {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  font-size: 14px;
+  text-align: center;
+}
+.calendar-legend-label {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 12px;
+}
 

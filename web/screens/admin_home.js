@@ -39,7 +39,6 @@ AdminHome = {
                         Main.hidePopup();
                         this._selectedRentalElement._rental.status = Backend.RESERVATION_STATUS_CANCELLED;
                         Backend.resetReservationContext();
-                        alert("assigning status = " + this._selectedRentalElement._rental.status)
 
                         this._showRentals();
                       } else {

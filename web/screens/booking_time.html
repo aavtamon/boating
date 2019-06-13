@@ -14,7 +14,14 @@
 </div>
 <div id="BookingTime-Screen" class="screen" onshow="BookingTime.onLoad()">
   <div id="BookingTime-Screen-SelectionPanel" class="info-box">
-    <div id="BookingTime-Screen-SelectionPanel-Calendar"></div>
+    <div id="BookingTime-Screen-SelectionPanel-CalendarHolder">
+      <div id="BookingTime-Screen-SelectionPanel-CalendarHolder-Calendar"></div>
+      <div id="BookingTime-Screen-SelectionPanel-CalendarHolder-CalendarLegend">
+        <div class="calendar-legend-element"><div class="calendar-legend-date" style="color: #f8fdff; background-color: #8c3308;">o</div><div class="calendar-legend-label" style="font-weight: bold;">Selected</div></div>
+        <div class="calendar-legend-element"><div class="calendar-legend-date" style="color: #1c94c4; background-color: #f5d989;">o</div><div class="calendar-legend-label">Available</div></div>
+        <div class="calendar-legend-element"><div class="calendar-legend-date" style="color: #1c94c4; background-color: #f5d989; opacity:0.35;">o</div><div class="calendar-legend-label">Not available</div></div>
+      </div>
+    </div>
     <div id="BookingTime-Screen-SelectionPanel-TimeFrame" class="optionbox">
       <div id="BookingTime-Screen-SelectionPanel-TimeFrame-Title" class="optionbox-title">Departure Time</div>
       <div id="BookingTime-Screen-SelectionPanel-TimeFrame-Times" class="optionbox-content"></div>

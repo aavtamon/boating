@@ -39,7 +39,7 @@ BookingTime = {
     }
     
     
-    $("#BookingTime-Screen-SelectionPanel-Calendar").datepicker({
+    $("#BookingTime-Screen-SelectionPanel-CalendarHolder-Calendar").datepicker({
       beforeShowDay: function(date) {
         var slotType = BookingTime.availableSlots[ScreenUtils.getUTCMillis(date)];
         var isSelectable = slotType == Backend.SLOT_TYPE_RENTER;
