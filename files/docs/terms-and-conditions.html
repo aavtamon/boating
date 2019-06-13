@@ -1,0 +1,33 @@
+<html>
+  <script>
+    var cancellationTerms = "<ul>";
+    for (var index in Backend.getBookingConfiguration().cancellation_fees) {
+      var fee = Backend.getBookingConfiguration().cancellation_fees[index];
+      cancellationTerms += "<li>" + ScreenUtils.pad(fee.range_max, 2, "0") + " - " + ScreenUtils.pad(fee.range_min, 2, "0") + " hours: $" + fee.price + "</li>"
+    }
+    cancellationTerms += "</ul>";
+    
+    document.getElementById("cancellation-terms").innerHTML = cancellationTerms;
+    document.getElementById("cancellation-deadline").innerHTML = Backend.getBookingConfiguration().cancellation_fees[0].range_max;
+  </script>
+  
+  <body>
+    <center style="font-size: 30px; font-weight: bold; margin-bottom: 20px;">Terms and Conditions</center>
+    <div style="font-size: 25px; font-weight: bold; margin-bottom: 20px;">Use of Personal Data</div>
+    <div style="font-size: 16px;">
+      This web site uses Cookies to improve the user experience and allow you to create and modify your reservation.<br>
+      The security of your  personal information is important to us.  We will not share your personal information with any other person, group or business.  Following the conclusion of your rental, your personal information will be deleted.  However, we will keep the test results of your Boating Safety course for 180 days.  This will allow you to rent again from us without retaking the test.
+      <br>
+      We do not save your credit card information. Instead, we securily transfer it to the payment service <a href="https://stripe.com/" target="_blank">Stripe</a>.
+    </div>
+    <br>
+    <div style="font-size: 25px; font-weight: bold; margin-bottom: 20px;">Cancellation Policy</div>
+    <div style="font-size: 16px;">
+      You may cancel your reservation and receive a full refund if you cancel more than <font id="cancellation-deadline"></font> hours prior to your departure.<br>The following fees apply if cancelling the reservation less than that:<br>
+      <div id="cancellation-terms"></div>
+      Please note, that should there be inclement weather or other unforseeable circumstances we may cancel your reservation.<br>
+      Should this occur, you will be fully refunded.<br>
+    </div>
+  </body>
+  
+</html>

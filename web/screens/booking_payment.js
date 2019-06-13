@@ -135,14 +135,14 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndServces'></div><br><div style='font-size: 16px;'>Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>", function(action) {
+        Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndConditions'></div><br><div style='font-size: 16px;'>Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);
           }
         }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
         
-        $("#BookingPayment-TermsAndServces").load("files/docs/terms-and-services.html");
+        $("#BookingPayment-TermsAndConditions").load("files/docs/terms-and-conditions.html");
       }
     }.bind(this));
   },
@@ -228,7 +228,7 @@ BookingPayment = {
  
   
   _showCancellationPolicy: function() {
-    Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndServces'></div>");
-    $("#BookingPayment-TermsAndServces").load("files/docs/terms-and-services.html");
+    Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndConditions'></div>");
+    $("#BookingPayment-TermsAndConditions").load("files/docs/terms-and-conditions.html");
   },
 }
