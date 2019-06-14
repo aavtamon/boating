@@ -85,6 +85,14 @@
   font-size: 25px;
 }
 
+#ReservationUpdate-Screen-Paperwork-Title {
+  margin-bottom: 5px;
+  color: #062f73;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
 #ReservationUpdate-Screen-ButtonsPanel {
   margin-top: 20px;
   text-align: center;

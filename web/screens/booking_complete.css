@@ -21,11 +21,11 @@
   vertical-align: middle;
 }
 
-#BookingComplete-Screen-Cancellation, #BookingComplete-Screen-SafetyTest {
+#BookingComplete-Screen-Cancellation, #BookingComplete-Screen-SafetyTest, #BookingComplete-Screen-Paperwork {
   white-space: normal;
 }
 
-#BookingComplete-Screen-SafetyTest-Title {
+#BookingComplete-Screen-SafetyTest-Title, #BookingComplete-Screen-Paperwork-Title {
   display: block;
   margin-top: 10px;
   margin-bottom: 20px;
