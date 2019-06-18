@@ -111,6 +111,7 @@ type TSMSConfiguration struct {
 }
 type TPaymentConfiguration struct {
   Enabled bool `json:"enabled"`;
+  PublicKey string `json:"public_key"`;
   SecretKey string `json:"secret_key"`;
 }
 type TBookingExpirationConfiguration struct {

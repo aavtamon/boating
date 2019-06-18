@@ -16,8 +16,6 @@ Backend = {
   
   OWNER_ACCOUNT_TYPE_ADMIN: "admin",
   
-  PAYMENT_KEY: "pk_test_39gZjXaJ3YlMgPhFcISoz2MC",
-  
   SLOT_TYPE_NONE: 0,  
   SLOT_TYPE_RENTER: 1,
   SLOT_TYPE_OWNER: 2,

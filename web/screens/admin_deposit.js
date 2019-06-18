@@ -1,4 +1,5 @@
 AdminDeposit = {
+  _paymentPublicKey: null,
   
   onLoad: function() {
     var reservationContext = Backend.getReservationContext();
@@ -23,7 +24,7 @@ AdminDeposit = {
     paymentInfo.card_ready = false;
     
     
-    var stripe = Stripe(Backend.PAYMENT_KEY);    
+    var stripe = Stripe(this._paymentPublicKey);    
     var elements = stripe.elements();
     
     var style = {

@@ -23,6 +23,7 @@ type THtmlObject struct {
   CurrentTime int64;
   GeneralParams *TGeneralParams;
   BookingConfiguration *TBookingConfiguration;
+  PaymentPublicKey string;
   AvailableDates TAvailableDates;
   Reservation *TReservation;
   ReservationSummaries []*TReservationSummary;
@@ -159,6 +160,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         GeneralParams: GetGeneralParams(),
         BookingConfiguration: GetBookingConfiguration(),
         AvailableDates: GetAvailableDates(),
+        PaymentPublicKey: GetSystemConfiguration().PaymentConfiguration.PublicKey,
         
         ReservationSummaries: GetOwnerReservationSummaries(*Sessions[sessionId].AccountId),
         Reservation: GetReservation(*Sessions[sessionId].ReservationId),
