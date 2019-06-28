@@ -30,7 +30,7 @@
     "lanier": {
       "name": "Lake Lanier",
       "time_zone_offset": -5,
-      "schedule": {"All": {"10": [4, 6, 8], "12": [4, 6], "14": [4]}, "Saturday": {}, "Sunday": {}},
+      "schedule": {"All": {"10": [4, 6, 8], "12": [4, 6], "14": [4]}, "Monday": {"10": [6, 8], "12": [6]}, "Tuesday": {"10": [6, 8], "12": [6]}, "Wednesday": {"10": [6, 8], "12": [6]}, "Thursday": {"10": [6, 8], "12": [6]}, "Friday": {"10": [6, 8], "12": [6]}, "Saturday": {}, "Sunday": {}},
       "service_interval": 1,
       "boats": {
         "ana": {
