@@ -8,6 +8,7 @@ import "strings"
 import "io/ioutil"
 import "html/template"
 import "net/http"
+import "net/url"
 import "math/rand"
 import "time"
 
@@ -74,7 +75,7 @@ func parseQuery(r *http.Request) map[string]string {
       if (len(queryNameValue) != 2) {
         fmt.Println("Malformed query component: " + queryPart);
       }
-      result[queryNameValue[0]] = queryNameValue[1];
+      result[queryNameValue[0]], _ = url.QueryUnescape(queryNameValue[1]);
     }
   }
 
