@@ -274,7 +274,7 @@ AdminHome = {
       if (status == Backend.STATUS_SUCCESS) {
         Main.loadScreen(screen);
       } else {
-        Main.showPopup("Operation failed", "Failed to retrieve the referenced reservation");
+        Main.showMessage("Operation failed", "Failed to retrieve the referenced reservation");
       }
     });
   }
