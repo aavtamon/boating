@@ -5,8 +5,7 @@
 <script>
   {{if .Reservation}}
     {{if eq .Reservation.OwnerAccountId ""}}
-      SafetyTest.reservationId = {{.Reservation.Id}};
-      SafetyTest.reservationEmail = {{.Reservation.Email}};
+      SafetyTest.reservation = {{.Reservation}};
     {{end}}
   {{end}}
 </script>
@@ -31,10 +30,10 @@
   <div id="SafetyTest-Screen-TestPassed" class="info-box">
     <div id="SafetyTest-Screen-TestPassed-Score"></div>
     <form id="SafetyTest-Screen-TestPassed-Email" class="">
-      <div id="SafetyTest-Screen-TestPassed-Email-Description">We can email you the test results</div>
+      <div id="SafetyTest-Screen-TestPassed-Email-Description">We already emailed your test results to <b>{{.Reservation.Email}}</b>.<br>We can also email them to an additional email:</div>
       <div id="SafetyTest-Screen-TestPassed-Email-Label">Email:</div>
       <input type="email" name="email" id="SafetyTest-Screen-TestPassed-Email-Input" class="input-field" required>
-      <input type="submit" id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button" value="Send Confirmation Email" />
+      <input type="submit" id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button" value="Email Test Results" />
     </form>
   </div>
   

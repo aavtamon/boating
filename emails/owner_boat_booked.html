@@ -6,7 +6,7 @@
       <br>
       Your boat <b>{{.Boat.Name}}</b> was booked for a rental.
       <br>
-      The rental begins on <b>{{.ReservationDateTime}}</b>.
+      The rental begins on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
       Rental duration is <b>{{.Reservation.Slot.Duration}} hours</b>.
 

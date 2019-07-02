@@ -43,16 +43,19 @@ type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 type TSafetyTestResult struct {
   SuiteId TSafetySuiteId `json:"suite_id"`;
   Score int `json:"score"`;
+  FirstName string `json:"first_name"`;
   LastName string `json:"last_name"`;
+  DLState string `json:"dl_state"`;
+  DLNumber string `json:"dl_number"`;
   PassDate int64 `json:"pass_date"`;
   ExpirationDate int64 `json:"expiration_date"`;
 }
 
-type TSafetyTestResultMap map[string]*TSafetyTestResult;
+type TSafetyTestResults map[string]*TSafetyTestResult;
 
 
 type TPersistancenceDatabase struct {
-  SafetyTestResults TSafetyTestResultMap `json:"safety_test_results"`;
+  SafetyTestResults TSafetyTestResults `json:"safety_test_results"`;
   Reservations TReservationMap `json:"reservations"`;
 }
 
@@ -264,20 +267,22 @@ func FindSafetyTestResult(reservation *TReservation) *TSafetyTestResult {
     return nil;
   }
 
-  result := persistenceDb.SafetyTestResults[reservation.DLNumber];
+  dlId := reservation.DLState + "-" + reservation.DLNumber;
+  result := persistenceDb.SafetyTestResults[dlId];
   
-  if (result != nil && result.LastName == reservation.LastName && result.ExpirationDate > time.Now().UTC().Unix()) {
+  if (result != nil && result.ExpirationDate > time.Now().UTC().Unix()) {
     return result;
   }
   
   return nil;
 }
 
-func SaveSafetyTestResult(dlNumber string, testResult *TSafetyTestResult) {
-  fmt.Printf("Persistance: saving safety test result for dl %s\n", dlNumber);
+func SaveSafetyTestResult(testResult *TSafetyTestResult) {
+  dlId := testResult.DLState + "-" + testResult.DLNumber;
+  fmt.Printf("Persistance: saving safety test result for dl %s\n", dlId);
   
   accessLock.Lock();
-  persistenceDb.SafetyTestResults[dlNumber] = testResult;
+  persistenceDb.SafetyTestResults[dlId] = testResult;
   
   savePersistenceDatabase();
   accessLock.Unlock();
@@ -333,7 +338,7 @@ func readPersistenceDatabase() {
   
   if (persistenceDb.Reservations == nil) {
     persistenceDb.Reservations = make(TReservationMap);
-    persistenceDb.SafetyTestResults = make(TSafetyTestResultMap);
+    persistenceDb.SafetyTestResults = make(TSafetyTestResults);
   } else {
     savePersistenceDatabase();
   }

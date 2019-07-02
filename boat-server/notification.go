@@ -15,12 +15,13 @@ type TReservationEmailObject struct {
   WebReference string;
   
   Reservation *TReservation;
-  ReservationDateTime string;
   PickupLocation TPickupLocation;
   Boat TBoat;
   GeneralParams *TGeneralParams;
   
   SafetyTestResult *TSafetyTestResult;
+  
+  FormatDateTime func(int64) string;
 }
 
 
@@ -183,6 +184,17 @@ func EmailReservationConfirmation(reservationId TReservationId, email string) bo
   }
   
   return sendReservationEmail(email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, templateName);
+}
+
+func EmailTestResults(reservationId TReservationId, email string) bool {
+  reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    return false;
+  }
+  
+  fmt.Printf("Sending test results confirmation email for reservation %s to %s\n", reservation.Id, email);
+  
+  return sendReservationEmail(email, "Safety Test results", reservation, "safety_test_status.html");
 }
 
 
@@ -452,13 +464,13 @@ func textOwnerDayBeforeReminder(reservation *TReservation) bool {
 
   fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
   
-  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming soon - " + getFormattedDateTime(reservation.Slot.DateTime));
 }
 
 func textRenterDayBeforeReminder(reservation *TReservation) bool {
   fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
   
-  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + getFormattedDateTime(reservation.Slot.DateTime));
 }
 
 func textOwnerGetReadyReminder(reservation *TReservation) bool {
@@ -469,13 +481,13 @@ func textOwnerGetReadyReminder(reservation *TReservation) bool {
 
   fmt.Printf("Texting get-ready reminder for reservation %s\n", reservation.Id);
   
-  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM") + ". Get ready for it.");
+  return sendTextMessage(account.PrimaryPhone, "Your boat ride is coming - " + getFormattedDateTime(reservation.Slot.DateTime) + ". Get ready for it.");
 }
 
 func textRenterGetReadyReminder(reservation *TReservation) bool {
   fmt.Printf("Texting day-before reminder for reservation %s\n", reservation.Id);
   
-  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"));
+  return sendTextMessage(reservation.PrimaryPhone, "Your boat ride is coming soon - " + getFormattedDateTime(reservation.Slot.DateTime));
 }
 
 
@@ -495,12 +507,15 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
     WebReference: fmt.Sprintf("https://%s:8443", GetSystemConfiguration().Domain),
     
     Reservation: reservation,
-    ReservationDateTime: time.Unix(reservation.Slot.DateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM"),
     PickupLocation: GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId],
     Boat: GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId],
 //    OwnerAccount: GetOwnerAccount(reservation.OwnerAccountId),
     SafetyTestResult: FindSafetyTestResult(reservation),
     GeneralParams: GetGeneralParams(),
+    
+    FormatDateTime: func(dateTime int64) string {
+      return getFormattedDateTime(dateTime);
+    },
   }
   
   buf := new(bytes.Buffer);
@@ -569,6 +584,10 @@ func sendTextMessage(phoneNumber string, messageText string) bool {
 }
 
 
+
+func getFormattedDateTime(dateTime int64) string {
+  return time.Unix(dateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM");
+}
 
 
 

@@ -1,11 +1,10 @@
 SafetyTest = {
-  reservationId: null,
-  reservationEmail: null,
+  reservation: null,
   
-  _suite: {},
+  _testResult: {},
   
   onLoad: function() {
-    if (!this.reservationId) {
+    if (!this.reservation) {
       Main.loadScreen("home");
       
       return;
@@ -24,7 +23,12 @@ SafetyTest = {
       if ($(".test").length > $(".test-option:checked").length) {
         Main.showMessage("Please complete all tests", "You did not complete all the questions. Please go back and review them all. A competed question has a little green circle on the left.");
       } else {
-        Backend.submitSafetyTestSuite(this._suite, function(status, checkedSuite) {
+        this._testResult.first_name = this.reservation.first_name;
+        this._testResult.last_name = this.reservation.last_name;
+        this._testResult.dl_state = this.reservation.dl_state;
+        this._testResult.dl_number = this.reservation.dl_number;
+        
+        Backend.submitSafetyTestSuite(this._testResult, function(status, checkedSuite) {
           if (status == Backend.STATUS_SUCCESS) {
             this._verifyTestResults(checkedSuite);
           } else {
@@ -35,7 +39,7 @@ SafetyTest = {
     }.bind(this));
     
     
-    $("#SafetyTest-Screen-TestPassed-Email-Input").val(this.reservationEmail);
+    $("#SafetyTest-Screen-TestPassed-Email-Input").val(this.reservation.email);
     
     $("#SafetyTest-Screen-TestFailed-RetakeButton").click(function() {
       Main.loadScreen("safety_tips");
@@ -49,8 +53,8 @@ SafetyTest = {
   _populateSafetySuite: function() {
     var testsHtml = "";
 
-    for (var testId in this._suite.tests) {
-      var test = this._suite.tests[testId];
+    for (var testId in this._testResult.safety_suite.tests) {
+      var test = this._testResult.safety_suite.tests[testId];
 
       var optionFormat = test.options_format || "horizontal";
 
@@ -70,13 +74,13 @@ SafetyTest = {
       testsHtml += testHtml;
     }
 
-    $("#SafetyTest-Screen-SafetyTestPanel-Info-Total").html(Object.keys(this._suite.tests).length);
-    $("#SafetyTest-Screen-SafetyTestPanel-Info-Correct").html(this._suite.passing_grade);
+    $("#SafetyTest-Screen-SafetyTestPanel-Info-Total").html(Object.keys(this._testResult.safety_suite.tests).length);
+    $("#SafetyTest-Screen-SafetyTestPanel-Info-Correct").html(this._testResult.safety_suite.passing_grade);
 
     $("#SafetyTest-Screen-SafetyTestPanel-Tests").html(testsHtml);
     $(".test").change(function() {
       $(this).find(".test-icon").addClass("completed");
-      SafetyTest._suite.tests[$(this).attr("id")].answer_option_id = $(this).find(":checked").attr("id");
+      SafetyTest._testResult.safety_suite.tests[$(this).attr("id")].answer_option_id = $(this).find(":checked").attr("id");
     });
   },
     
@@ -90,7 +94,7 @@ SafetyTest = {
 
     Backend.retrieveSafetyTestSuite(function(status, suite) {
       if (status == Backend.STATUS_SUCCESS) {
-        this._suite = suite;
+        this._testResult.safety_suite = suite;
         this._populateSafetySuite();
       } else {
         $("#SafetyTest-Screen-SafetyTestPanel-tests").html("Failed to retrieve tests");
@@ -102,16 +106,16 @@ SafetyTest = {
     $("#SafetyTest-Screen-SafetyTestPanel").hide();
 
     var numOfCorrectTests = 0;
-    for (var id in checkedTestResult.tests) {
-      if (checkedTestResult.tests[id].status) {
+    for (var id in checkedTestResult.safety_suite.tests) {
+      if (checkedTestResult.safety_suite.tests[id].status) {
         numOfCorrectTests++;
       }
     }
 
-    var totalNumberOfTests = Object.keys(checkedTestResult.tests).length;
+    var totalNumberOfTests = Object.keys(checkedTestResult.safety_suite.tests).length;
     var percentage = (100 * numOfCorrectTests / totalNumberOfTests).toFixed(2);
 
-    if (numOfCorrectTests >= checkedTestResult.passing_grade) {
+    if (numOfCorrectTests >= checkedTestResult.safety_suite.passing_grade) {
       var message = "Congratulation! You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You passed."
 
       $("#SafetyTest-Screen-TestPassed").show();
@@ -127,9 +131,9 @@ SafetyTest = {
   _sendEmail: function() {
     var email = $("#SafetyTest-Screen-TestPassed-Email-Input").val();
     
-    Backend.sendConfirmationEmail(email, function(status) {
+    Backend.emailTestResults(email, function(status) {
       if (status == Backend.STATUS_SUCCESS) {
-        Main.showMessage("Confirmation email sent", "We resent your reservation to the provided email <b>" + email + "</b><br>The email will indicate that you passed the safety training.");
+        Main.showMessage("Test results are sent", "We sent you the test results to the provided email <b>" + email + "</b><br>The email will indicate that you passed the safety training.");
       } else if (status == Backend.STATUS_NOT_FOUND) {
         Main.showMessage("Not Successful", "For some reason the email was not sent. Please try again.");
       } else {

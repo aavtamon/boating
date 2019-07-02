@@ -85,8 +85,10 @@
     <div id="ReservationUpdate-Screen-SafetyTest-Note">IMPORTANT NOTE:</div>
     GA State law requires you to take and pass a safety training course, in order to be allowed to operate a motor boat.
     <br>
-    {{if .SafetyTestStatus}}
-      Our records indicate that you have passed a safery test that is still valid. You are good to go!
+    {{if .SafetyTestResult}}
+      Our records indicate that you have passed a safety test that is still valid. You are good to go!
+      <br>
+      If, however, you would like to retake the test or add more drivers, please use this <a href="#safety_tips">Safety Test</a> link to take the test.
     {{else}}
       Our records indicate that you haven't taken/passed the course and exam yet. Use <a id="ReservationUpdate-Screen-SafetyTest-Link" href="#safety_tips">Safety Test</a> link to take the test.
     {{end}}
@@ -96,7 +98,7 @@
     <div id="ReservationUpdate-Screen-Paperwork-Title">Required Paperwork</div>
       In order to speed up your boarding process, please print and fill out <a href="files/docs/boat_rental_agreement.docx" target="_blank">Boat Rental Agreement</a> and <a href="files/docs/boat_rental_waiver.docx" target="_blank">Release Of Liability Agreement</a> and bring them with you.
       <br>
-      We will need to have these forms completed and signed before you can take off. It will greatly save your time in you fill them out in a comfort of your home and will let you spend more time enjoying the lake.
+      We will need to have these forms completed and signed before you can take off. It will greatly save your time if you fill them out in a comfort of your home and will let you spend more time enjoying the lake.
     </div>
   <div id="ReservationUpdate-Screen-ButtonsPanel">
     <button id="ReservationUpdate-Screen-ButtonsPanel-CancelButton" class="standard-button">Cancel Reservation</button>

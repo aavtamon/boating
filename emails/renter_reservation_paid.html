@@ -8,7 +8,7 @@
         You paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
       <br>
-      Your rental begins on: <b>{{.ReservationDateTime}}</b>.
+      Your rental begins on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>
@@ -37,7 +37,7 @@
       <br>
       In order to speed up your boarding process, please print and fill out <a href="{{.WebReference}}/files/docs/boat_rental_agreement.docx" target="_blank">Boat Rental Agreement</a> and <a href="{{.WebReference}}/files/docs/boat_rental_waiver.docx" target="_blank">Release Of Liability Agreement</a> and bring with you.
       <br>
-      We will need to have these forms completed and signed before you can take off. It will greatly save your time in you fill them out in a comfort of your home and will let you spend more time enjoying the lake.
+      We will need to have these forms completed and signed before you can take off. It will greatly save your time if you fill them out in a comfort of your home and will let you spend more time enjoying the lake.
       <br>
       <br>
       IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{printf "%.2f" .Boat.Deposit}}</b>. Please make sure to bring a credit card to pay the deposit. Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental less fuel charges.

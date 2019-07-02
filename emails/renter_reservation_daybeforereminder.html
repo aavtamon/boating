@@ -6,7 +6,7 @@
         Your reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
       </div>
       <br>
-      Your rental will begin on: <b>{{.ReservationDateTime}}</b>.
+      Your rental will begin on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>

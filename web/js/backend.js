@@ -106,7 +106,28 @@ Backend = {
   
   sendConfirmationEmail: function(email, callback) {
     this._communicate("reservation/booking/email?email=" + email, "put", null, false, [], {
-      success: function(persistentContext) {
+      success: function() {
+        if (callback) {
+          callback(Backend.STATUS_SUCCESS);
+        }
+      }.bind(this),
+      error: function(request, status) {
+        if (callback) {
+          if (status == 404) {
+            callback(Backend.STATUS_NOT_FOUND);
+          } else if (status == 400) {
+            callback(Backend.STATUS_BAD_REQUEST);
+          } else {
+            callback(Backend.STATUS_ERROR);
+          }
+        }
+      }
+    });    
+  },
+  
+  emailTestResults: function(email, callback) {
+    this._communicate("safety-test/email?email=" + email, "put", null, false, [], {
+      success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
         }

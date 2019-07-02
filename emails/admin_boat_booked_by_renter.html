@@ -8,7 +8,7 @@
         Amount paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
       <br>
-      The rental is on: <b>{{.ReservationDateTime}}</b>.
+      The rental is on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>

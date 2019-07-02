@@ -90,7 +90,7 @@
       "options": {
         "TestQuestion_8-option1": "Nothing, as it is responsibility of the other boat to take evasive maneuvers.",
         "TestQuestion_8-option2": "Slow down, and continue to approach.",
-        "TestQuestion_8-option3": "steer your boat to the starboard (right), passing the other boat on your port (left) side.",
+        "TestQuestion_8-option3": "Steer your boat to the starboard (right), passing the other boat on your port (left) side.",
         "TestQuestion_8-option4": "Steer your boat to the port (left), passing the other boat on your starboard (right) side."
       },
       "answer_option_id": "TestQuestion_8-option3"

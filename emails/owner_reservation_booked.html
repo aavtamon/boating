@@ -8,7 +8,7 @@
         Your reservation confirmation number is: {{.Reservation.Id}}.
       </div>
       <br>
-      The ride is on: <b>{{.ReservationDateTime}}</b>.
+      The ride is on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
       Boat name: <b>{{.Boat.Name}}</b>
       <br>

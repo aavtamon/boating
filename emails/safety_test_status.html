@@ -1,0 +1,38 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Safety Test Status Confirmation</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Boater Safety Test comletion is required for your reservation <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+      </div>
+      <br>
+
+      {{if .SafetyTestResult}}
+        Our records indicate that {{.SafetyTestResult.FirstName}} {{.SafetyTestResult.LastName}} successfully passed the Safety Test.
+        <br>
+        Please print the below card and take it on board as a proof of passing the mandatory safety training.
+        You got {{.SafetyTestResult.Score}}% correct answers.
+        <br>
+        <br>
+        <hr>
+        <br>
+        <div style="border-width: 2px; border-color: black; border-style: solid; border-radius: 10px;">
+          <div style="text-align: center; font-size: 25px; text-decoration: underline; font-weight:bold;">Boater Safety Test Certificate</div>
+          <br>
+          <div style="font-size: 22px; text-align:left; margin-left: 10px;">Issued to {{.SafetyTestResult.FirstName}} {{.SafetyTestResult.LastName}}  (DL {{.SafetyTestResult.DLState}} #{{.SafetyTestResult.DLNumber}})
+          <br>
+          As a proof of passing the Boater Safety Test on {{call .FormatDateTime .SafetyTestResult.PassDate}}.</div>
+          <div style="font-size: 20px; text-align:left; margin-left: 10px;">The scored result is {{.SafetyTestResult.Score}}%.</div>
+          <br>
+          <div style="font-size: 20px; text-align:left; margin-left: 10px;">The certificate is valid thru {{call .FormatDateTime .SafetyTestResult.ExpirationDate}}.</div>
+          <br>
+          <div style="text-align: right; margin-right: 10px; font-size: 22px;">{{.SafetyTestResult.FirstName}} {{.SafetyTestResult.LastName}}  ______________  (sign)</div>
+        </div>
+        <br>
+        <hr>
+      {{else}}
+        Our records indicate that you haven't yet taken or haven't passed the Boater Safety Test.
+        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to take the course and complete the required certification.
+      {{end}}
+
+{{template "email_footer"}}

@@ -2,6 +2,6 @@
 
       <center><h1 style='padding-top: 10px;'>Rental Of Your Boat Was Cancelled ({{.Reservation.Id}})</h1></center>
       <br>
-      The rental of <b>{{.Boat.Name}}</b> on <b>{{.ReservationDateTime}}</b> for <b>{{.Reservation.Slot.Duration}} hours</b> was cancelled.
+      The rental of <b>{{.Boat.Name}}</b> on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b> for <b>{{.Reservation.Slot.Duration}} hours</b> was cancelled.
 
 {{template "email_footer"}}

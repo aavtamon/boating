@@ -6,6 +6,7 @@ import "fmt"
 import "io"
 import "io/ioutil"
 import "time"
+import "strings"
 
 
 type TSafetyTest struct {
@@ -24,6 +25,14 @@ type TSafetyTestSuite struct {
   Tests map[string]*TSafetyTest `json:"tests"`;
 }
 
+type TCompletedSafetySuite struct {
+  FirstName string `json:"first_name"`;
+  LastName string `json:"last_name"`;
+  DLState string `json:"dl_state"`;
+  DLNumber string `json:"dl_number"`;
+  SafetySuite TSafetyTestSuite `json:"safety_suite"`;
+}
+
 var NO_SAFETY_SUITE_ID = TSafetySuiteId("");
 
 
@@ -38,7 +47,11 @@ func SafetyTestHandler(w http.ResponseWriter, r *http.Request) {
   if (r.Method == http.MethodGet) {
     handleGetTestSuite(w, r, sessionId);
   } else if (r.Method == http.MethodPut) {
-    handleSaveTestSuiteResults(w, r, sessionId);
+    if (strings.HasSuffix(r.URL.Path, "/email")) {
+      handleEmailTestResults(w, r, sessionId);
+    } else {
+      handleSaveTestResults(w, r, sessionId);
+    }
   } else {
     w.WriteHeader(http.StatusMethodNotAllowed);
     w.Write([]byte("Unsupported method"));
@@ -87,7 +100,7 @@ func handleGetTestSuite(w http.ResponseWriter, r *http.Request, sessionId TSessi
 }
 
 
-func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   reservationId := *Sessions[sessionId].ReservationId;
   if (reservationId == NO_RESERVATION_ID) {
     w.WriteHeader(http.StatusBadRequest);
@@ -104,8 +117,8 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request, sessionI
     return;
   }
   
-  resultTestSuite := parseSafetySuite(r.Body);
-  if (resultTestSuite == nil) {
+  completedTestResult := parseSafetyTestResult(r.Body);
+  if (completedTestResult == nil) {
     w.WriteHeader(http.StatusBadRequest);
     w.Write([]byte("Incorrect test results provided"));
 
@@ -122,7 +135,7 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request, sessionI
   
   
   passedTests := 0;
-  for testId, resultTest := range resultTestSuite.Tests {
+  for testId, resultTest := range completedTestResult.SafetySuite.Tests {
     test := testSuite.Tests[testId];
     resultTest.Status = resultTest.AnswerOptionId == test.AnswerOptionId;
     if (resultTest.Status) {
@@ -142,18 +155,21 @@ func handleSaveTestSuiteResults(w http.ResponseWriter, r *http.Request, sessionI
     testResult := &TSafetyTestResult {
       PassDate: time.Now().UTC().UnixNano() / int64(time.Millisecond),
       ExpirationDate: time.Now().UTC().AddDate(0, 0, testSuite.ValidityPeriod).UnixNano() / int64(time.Millisecond),
-      LastName: reservation.LastName,
-      Score: passedTests,
+      FirstName: completedTestResult.FirstName,
+      LastName: completedTestResult.LastName,
+      DLState: completedTestResult.DLState,
+      DLNumber: completedTestResult.DLNumber,
+      Score: int(100 * passedTests / len(testSuite.Tests)),
       SuiteId: suiteId,
     };
   
-
-    SaveSafetyTestResult(reservation.DLNumber, testResult);
+    SaveSafetyTestResult(testResult);
+    EmailTestResults(reservationId, reservation.Email);
   }
   
-  processedTestSuite, _ := json.Marshal(resultTestSuite);
+  processedTestResult, _ := json.Marshal(completedTestResult);
   w.WriteHeader(http.StatusOK);
-  w.Write(processedTestSuite);
+  w.Write(processedTestResult);
 }
 
 
@@ -176,18 +192,52 @@ func readTestSuite(suiteId string) *TSafetyTestSuite {
 }
 
 
+func handleEmailTestResults(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
+  reservationId := *Sessions[sessionId].ReservationId;
+  if (reservationId == NO_RESERVATION_ID) {
+    w.WriteHeader(http.StatusNotFound);
+    w.Write([]byte("No reservation selected"));
 
-func parseSafetySuite(body io.ReadCloser) *TSafetyTestSuite {
+    return;
+  }
+
+  if (r.URL.RawQuery != "") {
+    queryParams := parseQuery(r);
+
+    reservation := GetReservation(TReservationId(reservationId));
+    if (reservation == nil) {
+      w.WriteHeader(http.StatusNotFound);
+      w.Write([]byte("Reservartion not found\n"))
+    } else {
+      email, hasEmail := queryParams["email"];
+      if (!hasEmail) {
+        email = reservation.Email;
+      }
+    
+      if (EmailTestResults(reservationId, email)) {
+        w.WriteHeader(http.StatusOK);
+      } else {
+        w.WriteHeader(http.StatusInternalServerError);
+      }
+    }
+  } else {
+    w.WriteHeader(http.StatusBadRequest);
+    w.Write([]byte("Email address is not provided\n"))
+  }
+}
+
+
+func parseSafetyTestResult(body io.ReadCloser) *TCompletedSafetySuite {
   bodyBuffer, _ := ioutil.ReadAll(body);
   body.Close();
   
-  suite := &TSafetyTestSuite{};
-  err := json.Unmarshal(bodyBuffer, suite);
+  completedTestSuite := &TCompletedSafetySuite{};
+  err := json.Unmarshal(bodyBuffer, completedTestSuite);
   if (err != nil) {
-    fmt.Println("Incorrect suite from the app: ", err);
+    fmt.Println("Incorrect completed suite from received: ", err);
     return nil;
   }
   
-  return suite;
+  return completedTestSuite;
 }
 
