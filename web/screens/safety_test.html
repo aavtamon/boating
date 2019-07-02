@@ -6,39 +6,60 @@
   {{if .Reservation}}
     {{if eq .Reservation.OwnerAccountId ""}}
       SafetyTest.reservation = {{.Reservation}};
+      SafetyTest.safetyTestResult = {{.SafetyTestResult}};
     {{end}}
   {{end}}
 </script>
 
 <div id="SafetyTest-Screen-Description" class="screen-description">
   <button id="SafetyTest-Screen-Description-BackButton" class="standard-button previous">Safety Tips</button>
-  Safety Test To Operate Motor Boat
+  Safety Test To Operate A Motor Boat
 </div>
 
-<div id="SafetyTest-Screen" class="screen" onshow="SafetyTest.onLoad()">
-  <div id="SafetyTest-Screen-SafetyCourse" class="info-box">
-    Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}} (Driver's Licence #{{.Reservation.DLNumber}}). Thanks for taking the test.
-    <br>
-    <br>
-    Your test has <div id="SafetyTest-Screen-SafetyTestPanel-Info-Total"/> questions. You will need to get at least <div id="SafetyTest-Screen-SafetyTestPanel-Info-Correct"/> of them correctly to pass. Good luck!    
-  </div>
-  
+<form id="SafetyTest-Screen" class="screen" onshow="SafetyTest.onLoad()">
   <div id="SafetyTest-Screen-SafetyTestPanel" class="info-box">
+    Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}} or a co-driver. Thanks for taking the test.
+    <br>
+    {{if .SafetyTestResult}}
+      <br>
+      Our records indicate that you already have driver(s) on this reservation that passed the test and can operate a motor boat.
+      <br>
+      If you want to re-take the test or you are an additional driver, please enter your information and answer the questions below.
+      <br>
+    {{end}}
+    <br>
+  
+    <div id="SafetyTest-Screen-SafetyTestPanel-DriverInfo">
+      <div id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Label">First Name:</div>
+      <input type="text" name="first-name" id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Input" required>
+      <div id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Label">Last Name:</div>
+      <input type="text" name="last-name" id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Input" required>
+      <div id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Label">DL#:</div>
+      <select id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-State-Input"></select>
+      <input type="text" name="id-number" id="SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Number-Input" required>
+    </div>
+    <br>
+    <br>
+    <div id="SafetyTest-Screen-SafetyTestPanel-Info">
+      Your test has <div id="SafetyTest-Screen-SafetyTestPanel-Info-Total"/> questions. You will need to get at least <div id="SafetyTest-Screen-SafetyTestPanel-Info-Correct"/> of them correctly to pass. Good luck!
+    </div>
+    A green indicator in front of a question means that you provided the answer. It does not indicate that you answered correctly.
     <div id="SafetyTest-Screen-SafetyTestPanel-Tests"></div>
     <center><button id="SafetyTest-Screen-SafetyTestPanel-SubmitButton" class="standard-button">Submit</button></center>
   </div>
+  
   <div id="SafetyTest-Screen-TestPassed" class="info-box">
     <div id="SafetyTest-Screen-TestPassed-Score"></div>
-    <form id="SafetyTest-Screen-TestPassed-Email" class="">
+    <div id="SafetyTest-Screen-TestPassed-Email">
       <div id="SafetyTest-Screen-TestPassed-Email-Description">We already emailed your test results to <b>{{.Reservation.Email}}</b>.<br>We can also email them to an additional email:</div>
       <div id="SafetyTest-Screen-TestPassed-Email-Label">Email:</div>
       <input type="email" name="email" id="SafetyTest-Screen-TestPassed-Email-Input" class="input-field" required>
       <input type="submit" id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button" value="Email Test Results" />
-    </form>
+    </div>
   </div>
   
   <div id="SafetyTest-Screen-TestFailed" class="info-box">
     <div id="SafetyTest-Screen-TestFailed-Score"></div>
     <center><button id="SafetyTest-Screen-TestFailed-RetakeButton" class="standard-button">Retake test</button></center>
   </div>  
-</div>
+</form>

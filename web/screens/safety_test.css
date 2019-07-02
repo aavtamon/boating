@@ -1,3 +1,38 @@
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Label,
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Label,
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Label {
+  display: inline-block;
+  margin-right: 10px;
+  
+  font-weight: bold;
+}
+
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Input,
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Input,
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-State-Input,
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Number-Input {
+  display: inline-block;
+  margin-right: 20px;
+}
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Input {
+  width: 150px;  
+}
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Input {
+  width: 200px;  
+}
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-State-Input {
+  width: 70px;
+  margin-right: 10px;
+}
+#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Number-Input {
+  width: 200px;
+}
+
+
+#SafetyTest-Screen-SafetyTestPanel-Info {
+  font-size: 20px; 
+}
+
 #SafetyTest-Screen-SafetyTestPanel-Info-Total,
 #SafetyTest-Screen-SafetyTestPanel-Info-Correct {
   display: inline-block;

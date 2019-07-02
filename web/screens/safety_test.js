@@ -1,5 +1,6 @@
 SafetyTest = {
   reservation: null,
+  safetyTestResult: null,
   
   _testResult: {},
   
@@ -15,18 +16,34 @@ SafetyTest = {
       Main.loadScreen("safety_tips");
     }.bind(this));
     
+    if (!this.safetyTestResult) {
+      Backend.getTemporaryData().dl_state = this.reservation.dl_state;
+      Backend.getTemporaryData().dl_number = this.reservation.dl_number;
+      Backend.getTemporaryData().first_name = this.reservation.first_name;
+      Backend.getTemporaryData().last_name = this.reservation.last_name;
+    }
+    
+    ScreenUtils.stateSelect("#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-State-Input", Backend.getTemporaryData(), "dl_state");
+    ScreenUtils.dataModelInput("#SafetyTest-Screen-SafetyTestPanel-DriverInfo-DL-Number-Input", Backend.getTemporaryData(), "dl_number");
+    ScreenUtils.dataModelInput("#SafetyTest-Screen-SafetyTestPanel-DriverInfo-FirstName-Input", Backend.getTemporaryData(), "first_name");
+    ScreenUtils.dataModelInput("#SafetyTest-Screen-SafetyTestPanel-DriverInfo-LastName-Input", Backend.getTemporaryData(), "last_name");
+    
+    $("#SafetyTest-Screen-TestPassed").hide();
+    $("#SafetyTest-Screen-TestFailed").hide();
     
     this._retrieveTestSuite();
     
     
-    $("#SafetyTest-Screen-SafetyTestPanel-SubmitButton").click(function() {
+    ScreenUtils.form("#SafetyTest-Screen",
+                     {"id-number": {minlength: 7, maxlength: 15}},
+                     function() {
       if ($(".test").length > $(".test-option:checked").length) {
         Main.showMessage("Please complete all tests", "You did not complete all the questions. Please go back and review them all. A competed question has a little green circle on the left.");
       } else {
-        this._testResult.first_name = this.reservation.first_name;
-        this._testResult.last_name = this.reservation.last_name;
-        this._testResult.dl_state = this.reservation.dl_state;
-        this._testResult.dl_number = this.reservation.dl_number;
+        this._testResult.first_name = Backend.getTemporaryData().first_name;
+        this._testResult.last_name = Backend.getTemporaryData().last_name;
+        this._testResult.dl_state = Backend.getTemporaryData().dl_state;
+        this._testResult.dl_number = Backend.getTemporaryData().dl_number;
         
         Backend.submitSafetyTestSuite(this._testResult, function(status, checkedSuite) {
           if (status == Backend.STATUS_SUCCESS) {
@@ -38,8 +55,6 @@ SafetyTest = {
       }
     }.bind(this));
     
-    
-    $("#SafetyTest-Screen-TestPassed-Email-Input").val(this.reservation.email);
     
     $("#SafetyTest-Screen-TestFailed-RetakeButton").click(function() {
       Main.loadScreen("safety_tips");
@@ -86,10 +101,6 @@ SafetyTest = {
     
 
   _retrieveTestSuite: function() {
-    $("#SafetyTest-Screen-SafetyTestPanel").show();
-    $("#SafetyTest-Screen-TestPassed").hide();
-    $("#SafetyTest-Screen-TestFailed").hide();
-
     $("#SafetyTest-Screen-SafetyTestPanel-Tests").html("The tests are being retrieved");
 
     Backend.retrieveSafetyTestSuite(function(status, suite) {
@@ -97,7 +108,7 @@ SafetyTest = {
         this._testResult.safety_suite = suite;
         this._populateSafetySuite();
       } else {
-        $("#SafetyTest-Screen-SafetyTestPanel-tests").html("Failed to retrieve tests");
+        $("#SafetyTest-Screen-SafetyTestPanel-Tests").html("Failed to retrieve tests");
       }
     }.bind(this));
   },
@@ -116,12 +127,12 @@ SafetyTest = {
     var percentage = (100 * numOfCorrectTests / totalNumberOfTests).toFixed(2);
 
     if (numOfCorrectTests >= checkedTestResult.safety_suite.passing_grade) {
-      var message = "Congratulation! You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You passed."
+      var message = "Congratulation " + checkedTestResult.first_name + "! You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You passed."
 
       $("#SafetyTest-Screen-TestPassed").show();
       $("#SafetyTest-Screen-TestPassed-Score").html(message);
     } else {    
-      var message = "Unfortunately you failed the test. You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You failed. Would you like to re-review the safety tips and retake the test?";
+      var message = "Unfortunately you failed the test, " + checkedTestResult.first_name + ". You got " + numOfCorrectTests + " out of " + totalNumberOfTests + " right. This is " + percentage + "%. You failed.<br>Would you like to re-review safety tips and retake the test?";
 
       $("#SafetyTest-Screen-TestFailed").show();
       $("#SafetyTest-Screen-TestFailed-Score").html(message);
