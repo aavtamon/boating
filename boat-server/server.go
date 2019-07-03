@@ -309,3 +309,11 @@ func getFormattedDateTime(dateTime int64) string {
   return time.Unix(dateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM");
 }
 
+func isAdmin(sessionId TSessionId) bool {
+  if (*Sessions[sessionId].AccountId == NO_OWNER_ACCOUNT_ID) {
+    return false;
+  }
+
+  account := GetOwnerAccount(*Sessions[sessionId].AccountId);
+  return account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN;
+}

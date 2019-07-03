@@ -191,7 +191,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId T
   reservation.Status = RESERVATION_STATUS_CANCELLED;
   SaveReservation(reservation);
   
-  NotifyReservationCancelled(reservationId);
+  NotifyReservationCancelled(reservation, isAdmin(sessionId));
 
   *Sessions[sessionId].ReservationId = NO_RESERVATION_ID;
 

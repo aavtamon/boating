@@ -28,7 +28,7 @@ AdminHome = {
       if (this._selectedRentalElement != null) {
         Main.showMessage("Cancel Reservation?", "<center>Do you REALLY want to cancel this reservation and inform the customer about it?</center>", function(action) {
           if (action == Main.ACTION_YES) {
-            Main.showPopup("Cancellation reservation...", "Reservation is being cancelled");
+            Main.showPopup("Cancelling reservation...", "Reservation is being cancelled...");
             
             Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
               if (status == Backend.STATUS_SUCCESS) {

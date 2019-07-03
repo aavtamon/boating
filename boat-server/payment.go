@@ -139,11 +139,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK);
         w.Write(storedReservation);
 
-        if (isAdmin) {
-          NotifyReservationCancelled(reservation.Id);
-        } else {
-          NotifyReservationRefunded(reservation.Id);
-        }
+        NotifyReservationRefunded(reservation.Id);
       } else {
         w.WriteHeader(http.StatusBadRequest);
       }
@@ -487,13 +483,4 @@ func getLateFee(reservation *TReservation) float64 {
   } else {
     return 0;
   }
-}
-
-func isAdmin(sessionId TSessionId) bool {
-  if (*Sessions[sessionId].AccountId == NO_OWNER_ACCOUNT_ID) {
-    return false;
-  }
-
-  account := GetOwnerAccount(*Sessions[sessionId].AccountId);
-  return account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN;
 }

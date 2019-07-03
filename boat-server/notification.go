@@ -44,8 +44,7 @@ func NotifyReservationBooked(reservationId TReservationId) {
   }
 }
 
-func NotifyReservationCancelled(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+func NotifyReservationCancelled(reservation *TReservation, isAdmin bool) {
   if (reservation == nil) {
     return;
   }
@@ -54,12 +53,14 @@ func NotifyReservationCancelled(reservationId TReservationId) {
   if (isOwnerReservation) {
     emailOwnerReservationCancelled(reservation);
     textOwnerReservationCancelled(reservation);
-  } else {
+  } else if (isAdmin) {
     // Cancelled by the admin
     emailRenterReservationCancelled(reservation);
     textRenterReservationCancelled(reservation);
+  } else {
+    // Do nothing special - if reservation is removed by a renter, he is only notified about the refund
   }
-  emailAdminReservationCancelled(reservation);
+  emailAdminReservationCancelled(reservation);    
 }
 
 func NotifyReservationUpdated(reservationId TReservationId) {
@@ -103,8 +104,6 @@ func NotifyReservationRefunded(reservationId TReservationId) {
   
   emailRenterReservationRefunded(reservation);
   textRenterReservationRefunded(reservation);
-  
-  emailAdminReservationCancelled(reservation);
 }
 
 func NotifyDepositPaid(reservationId TReservationId) {
