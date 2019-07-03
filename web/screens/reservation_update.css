@@ -85,6 +85,11 @@
   font-size: 25px;
 }
 
+#ReservationUpdate-Screen-SafetyTest-Email-PrintableLink {
+  margin-left: 50px;
+  font-size: 20px;
+}
+
 #ReservationUpdate-Screen-Paperwork-Title {
   margin-bottom: 5px;
   color: #062f73;
