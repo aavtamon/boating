@@ -363,6 +363,12 @@ label.input-field-error {
   background-image: url(../imgs/left-arrow.png);
 }
 
+.standard-button.terminal {
+  padding-left: 20px;
+  padding-right: 20px;
+  background-image: none;
+}
+
 .standard-button.no-text {
   padding: 0px;
   min-width: 35px;

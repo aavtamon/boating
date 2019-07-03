@@ -239,7 +239,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Deposit not taken");
       
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", false);
-      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", false);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", !rental.safety_test_status);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     } else if (rental.status == Backend.RESERVATION_STATUS_DEPOSITED) {
