@@ -32,8 +32,6 @@ OwnerHome = {
     var optionsSelector = $("#OwnerHome-Screen-AccountInfo-BoatRentals-Rentals");
     optionsSelector.empty();
     
-
-    
     var upcomingRentals = [];
     var inprocessRentals = [];
     var accidentRentals = [];
@@ -78,7 +76,9 @@ OwnerHome = {
     
     var upcomingRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Upcoming rentals</div></div>").appendTo(optionsSelector);
     var inprocessRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">In-process rentals</div></div>").appendTo(optionsSelector);
-    var accidentRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Accident rentals</div></div>").appendTo(optionsSelector);
+    if (accidentRentals.length > 0) {
+      var accidentRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Accident rentals</div></div>").appendTo(optionsSelector);
+    }
     var completedRentalsGroup = $("<div class=\"optionbox-optiongroup\"><div class=\"optionbox-optiongroup-title\">Completed rentals</div></div>").appendTo(optionsSelector);
     
     for (var i in upcomingRentals) {
@@ -108,9 +108,6 @@ OwnerHome = {
     if (inprocessRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(inprocessRentalsGroup);
     }
-    if (accidentRentalsGroup.children().length == 1) {
-      $("<div class=\"optionbox-nooption\">None</div>").appendTo(accidentRentalsGroup);
-    }
     if (completedRentalsGroup.children().length == 1) {
       $("<div class=\"optionbox-nooption\">None</div>").appendTo(completedRentalsGroup);
     }
@@ -127,7 +124,7 @@ OwnerHome = {
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Boat-Value").html(Backend.getBookingConfiguration().locations[rental.location_id].boats[rental.boat_id].name);
     
     $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Reservation-Value").html(rentalElement._reservationId);
-    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Value").html(ScreenUtils.getBookingPrice(rental.slot.price));
+    $("#OwnerHome-Screen-AccountInfo-RentalInfo-Details-Income-Value").html(ScreenUtils.getBookingPrice(rental.payment_amount));
   },
   
   

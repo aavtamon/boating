@@ -83,8 +83,8 @@ Backend = {
   },
   
 
-  cancelReservation: function(reservationId, callback) {
-    this._communicate("reservation/booking/?reservation_id=" + reservationId, "delete", null, false, [], {
+  cancelReservation: function(callback) {
+    this._communicate("reservation/booking/", "delete", null, false, [], {
       success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -105,7 +105,7 @@ Backend = {
   },
   
   sendConfirmationEmail: function(email, callback) {
-    this._communicate("reservation/booking/email?email=" + email, "put", null, false, [], {
+    this._communicate("reservation/booking/email/?email=" + email, "put", null, false, [], {
       success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -126,7 +126,7 @@ Backend = {
   },
   
   emailSafetyTestResults: function(email, dlState, dlNumber, callback) {
-    this._communicate("safety-test/email?email=" + email + (dlState != null && dlNumber != null ? "&dl_state=" + dlState + "&dl_number=" + dlNumber : ""), "put", null, false, [], {
+    this._communicate("safety-test/email/?email=" + email + (dlState != null && dlNumber != null ? "&dl_state=" + dlState + "&dl_number=" + dlNumber : ""), "put", null, false, [], {
       success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);
@@ -187,7 +187,7 @@ Backend = {
   
 
   refundReservation: function(callback) {
-    this._communicate("reservation/payment/?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
+    this._communicate("reservation/payment/", "delete", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         
@@ -221,7 +221,7 @@ Backend = {
       payment_token: paymentToken
     }
     
-    this._communicate("reservation/payment/deposit", "put", paymentRequest, true, [], {
+    this._communicate("reservation/payment/deposit/", "put", paymentRequest, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         
@@ -247,7 +247,7 @@ Backend = {
   
 
   refundDeposit: function(callback) {
-    this._communicate("reservation/payment/deposit?reservation_id=" + this._reservationContext.id, "delete", null, true, [], {
+    this._communicate("reservation/payment/deposit/", "delete", null, true, [], {
       success: function(persistentContext) {
         this._reservationContext = persistentContext;
         
@@ -270,7 +270,7 @@ Backend = {
   },
   
   getPromoCode: function(promoCode, callback) {
-    this._communicate("reservation/payment/promo?code=" + promoCode, "get", null, false, [], {
+    this._communicate("reservation/payment/promo/?code=" + promoCode, "get", null, false, [], {
       success: function(discount) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, discount);
@@ -301,7 +301,7 @@ Backend = {
   
   
   getAvailableSlots: function(dateMs, callback) {
-    this._communicate("bookings/available_slots?date=" + dateMs, "get", null, true, [], {
+    this._communicate("bookings/available_slots/?date=" + dateMs, "get", null, true, [], {
       success: function(slots) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, slots);
@@ -343,7 +343,7 @@ Backend = {
   },
   
   logOut: function(callback) {
-    this._communicate("account/logout", "get", null, true, [], {
+    this._communicate("account/logout/", "get", null, true, [], {
       success: function() {
         this.accountDetails = null;
         if (callback) {
@@ -360,7 +360,7 @@ Backend = {
   
   
   retrieveSafetyTestSuite: function(callback) {
-    this._communicate("safety-test", "get", null, true, [], {
+    this._communicate("safety-test/", "get", null, true, [], {
       success: function(testSuite) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, testSuite);
@@ -375,7 +375,7 @@ Backend = {
   },
   
   submitSafetyTestSuite: function(suite, callback) {
-    this._communicate("safety-test", "put", suite, true, [], {
+    this._communicate("safety-test/", "put", suite, true, [], {
       success: function(testSuite) {
         if (callback) {
           callback(Backend.STATUS_SUCCESS, testSuite);

@@ -47,7 +47,7 @@ func SafetyTestHandler(w http.ResponseWriter, r *http.Request) {
   if (r.Method == http.MethodGet) {
     handleGetTestSuite(w, r, sessionId);
   } else if (r.Method == http.MethodPut) {
-    if (strings.HasSuffix(r.URL.Path, "/email")) {
+    if (strings.HasSuffix(r.URL.Path, "/email/")) {
       handleEmailTestResults(w, r, sessionId);
     } else {
       handleSaveTestResults(w, r, sessionId);

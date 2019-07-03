@@ -107,11 +107,11 @@ ReservationUpdate = {
 
         Backend.refundReservation(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
-            Backend.cancelReservation(ReservationUpdate.reservation.Id, function(status) {
+            Backend.cancelReservation(function(status) {
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.resetReservationContext();
               } else {
-                console.error("Refund issued but the reservation is not removed: " + ReservationUpdate.reservation.Id);
+                console.error("Refund issued but the reservation is not removed: " + this.reservation.Id);
                 //TODO: Handle it!
               }
 
@@ -120,11 +120,11 @@ ReservationUpdate = {
                 Main.loadScreen("home");
                 //history.back();
               });
-            });
+            }.bind(this));
           } else {
             Main.showMessage("Cancellation Failed", "For some reason we were unable to issue you a refund. Please give us a call and we will assist you with this cancellation.");
           }
-        });
+        }.bind(this));
       }
     }, Main.DIALOG_TYPE_CONFIRMATION);
   },

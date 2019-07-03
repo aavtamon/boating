@@ -34,7 +34,7 @@ AdminHome = {
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.refundReservation(function(status) {
                   if (status == Backend.STATUS_SUCCESS) {
-                    Backend.cancelReservation(this._selectedRentalElement._reservationId, function(status) {
+                    Backend.cancelReservation(function(status) {
                       if (status == Backend.STATUS_SUCCESS) {
                         Main.hidePopup();
                         this._selectedRentalElement._rental.status = Backend.RESERVATION_STATUS_CANCELLED;

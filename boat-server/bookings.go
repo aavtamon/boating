@@ -15,6 +15,7 @@ type TRental struct {
   BoatId string `json:"boat_id,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
   SafetyTestStatus bool `json:"safety_test_status"`;
+  PaymentAmount float64 `json:"payment_amount,omitempty"`;
   Status TReservationStatus `json:"status,omitempty"`;
 }
 
@@ -51,7 +52,7 @@ func BookingsHandler(w http.ResponseWriter, r *http.Request) {
   if (r.Method == http.MethodGet) {
     w.Header().Set("Content-Type", "application/json")
 
-    if (strings.HasSuffix(r.URL.Path, "available_slots")) {
+    if (strings.HasSuffix(r.URL.Path, "available_slots/")) {
       queryParams := parseQuery(r);
       
       dateStr, hasDate := queryParams["date"];
@@ -167,6 +168,7 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
           rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;
           rentalStat.Rentals[reservation.Id].LastName = reservation.LastName;
           rentalStat.Rentals[reservation.Id].SafetyTestStatus = len(FindSafetyTestResults(reservation)) > 0;
+          rentalStat.Rentals[reservation.Id].PaymentAmount = reservation.PaymentAmount;
           rentalStat.Rentals[reservation.Id].Status = reservation.Status;
         }
       }

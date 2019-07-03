@@ -32,7 +32,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
   }
 
   if (r.Method == http.MethodGet) {
-    if (strings.HasSuffix(r.URL.Path, "/promo")) {
+    if (strings.HasSuffix(r.URL.Path, "/promo/")) {
       if (r.URL.RawQuery != "") {
         queryParams := parseQuery(r);
 
@@ -73,7 +73,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    if (strings.HasSuffix(r.URL.Path, "/deposit")) {
+    if (strings.HasSuffix(r.URL.Path, "/deposit/")) {
       if (!isAdmin(sessionId)) {
         w.WriteHeader(http.StatusUnauthorized);
         return;
@@ -100,54 +100,53 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       }
     }
   } else if (r.Method == http.MethodDelete) {
-    if (r.URL.RawQuery != "") {
-      queryParams := parseQuery(r);
-      
-      queryReservationId, hasReservationId := queryParams["reservation_id"];
-      if (hasReservationId) {
-        reservation := GetReservation(TReservationId(queryReservationId));
-        if (reservation == nil) {
-          w.WriteHeader(http.StatusNotFound);
+    reservationId := *Sessions[sessionId].ReservationId;
+
+    if (reservationId == NO_RESERVATION_ID) {
+      w.WriteHeader(http.StatusNotFound);
+      w.Write([]byte("No reservation selected"));
+
+      return;
+    }
+  
+    reservation := GetReservation(reservationId);
+    if (reservation == nil) {
+      w.WriteHeader(http.StatusNotFound);
+      w.Write([]byte("Reservation not found"));
+
+      return;
+    }
+    
+    isAdmin := isAdmin(sessionId);
+    if (strings.HasSuffix(r.URL.Path, "/deposit/")) {
+      if (!isAdmin) {
+        w.WriteHeader(http.StatusUnauthorized);
+        return;
+      }
+
+      if (refundDeposit(reservation)) {
+        storedReservation, _ := json.Marshal(reservation);
+        w.WriteHeader(http.StatusOK);
+        w.Write(storedReservation);
+
+        NotifyDepositRefunded(reservation.Id);
+      } else {
+        w.WriteHeader(http.StatusBadRequest);
+      }
+    } else {
+      if (refundReservation(reservation, isAdmin)) {
+        storedReservation, _ := json.Marshal(reservation);
+        w.WriteHeader(http.StatusOK);
+        w.Write(storedReservation);
+
+        if (isAdmin) {
+          NotifyReservationCancelled(reservation.Id);
         } else {
-          isAdmin := isAdmin(sessionId);
-          if (strings.HasSuffix(r.URL.Path, "/deposit")) {
-            if (!isAdmin) {
-              w.WriteHeader(http.StatusUnauthorized);
-              return;
-            }
-          
-            if (refundDeposit(reservation)) {
-              storedReservation, _ := json.Marshal(reservation);
-              w.WriteHeader(http.StatusOK);
-              w.Write(storedReservation);
-
-              NotifyDepositRefunded(reservation.Id);
-            } else {
-              w.WriteHeader(http.StatusBadRequest);
-            }
-          } else {
-            if (refundReservation(reservation, isAdmin)) {
-              storedReservation, _ := json.Marshal(reservation);
-              w.WriteHeader(http.StatusOK);
-              w.Write(storedReservation);
-
-              if (isAdmin) {
-                NotifyReservationCancelled(reservation.Id);
-              } else {
-                NotifyReservationRefunded(reservation.Id);
-              }
-            } else {
-              w.WriteHeader(http.StatusBadRequest);
-            }
-          }
+          NotifyReservationRefunded(reservation.Id);
         }
       } else {
         w.WriteHeader(http.StatusBadRequest);
-        w.Write([]byte("Resevration id is not provided"));
       }
-    } else {
-      w.WriteHeader(http.StatusBadRequest);
-      w.Write([]byte("Resevration id is not provided"));
     }
   }
 }

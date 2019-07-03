@@ -22,7 +22,7 @@ func ReservationHandler(w http.ResponseWriter, r *http.Request) {
   if (r.Method == http.MethodGet) {
     handleGetReservation(w, r, sessionId);
   } else if (r.Method == http.MethodPut) {
-    if (strings.HasSuffix(r.URL.Path, "/email")) {
+    if (strings.HasSuffix(r.URL.Path, "/email/")) {
       handleSendConfirmationEmail(w, r, sessionId);
     } else {
       handleSaveReservation(w, r, sessionId);
@@ -171,15 +171,6 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
 func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId TSessionId) {
   reservationId := *Sessions[sessionId].ReservationId;
 
-  if (r.URL.RawQuery != "") {
-    queryParams := parseQuery(r);
-
-    queryReservationId, hasReservationId := queryParams["reservation_id"];
-    if (hasReservationId) {
-      reservationId = TReservationId(queryReservationId);
-    }
-  }
-
   fmt.Printf("Removing reservation %s\n", reservationId);
 
   if (reservationId == NO_RESERVATION_ID) {
@@ -189,8 +180,14 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId T
     return;
   }
 
-  //RemoveReservation(reservationId);
   reservation := GetReservation(reservationId);
+  if (reservation == nil) {
+    w.WriteHeader(http.StatusNotFound);
+    w.Write([]byte("Reservation not found"));
+
+    return;
+  }
+  
   reservation.Status = RESERVATION_STATUS_CANCELLED;
   SaveReservation(reservation);
   

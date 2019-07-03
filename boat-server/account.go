@@ -16,7 +16,7 @@ func AccountHandler(w http.ResponseWriter, r *http.Request) {
   }
 
   if (r.Method == http.MethodGet) {
-    if (strings.HasSuffix(r.URL.Path, "/logout")) {
+    if (strings.HasSuffix(r.URL.Path, "/logout/")) {
       handleLogout(w, r, sessionId);
     } else {
       handleGetAccount(w, r, sessionId);

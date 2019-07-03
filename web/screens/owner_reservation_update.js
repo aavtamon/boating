@@ -49,7 +49,7 @@ OwnerReservationUpdate = {
       if (action == Main.ACTION_OK) {
         Main.showPopup("Cancellation Processing", "Your cancellation request is being processed.<br>Do not refresh or close your browser");
 
-        Backend.cancelReservation(OwnerReservationUpdate.reservationId, function(status) {
+        Backend.cancelReservation(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
             Backend.resetReservationContext();
             
