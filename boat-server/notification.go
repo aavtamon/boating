@@ -194,9 +194,9 @@ func EmailTestResults(reservationId TReservationId, dlId string, email string) b
   fmt.Printf("Sending test results confirmation email for reservation %s to %s\n", reservation.Id, email);
   
   if (dlId == "") {
-    return sendReservationEmail(email, "Safety Test results", reservation, nil, "safety_test_status.html");
+    return sendReservationEmail(email, "Safety Test Status", reservation, nil, "safety_test_status.html");
   } else {
-    return sendReservationEmail(email, "Safety Test confirmation", reservation, map[string]string{"dlId": dlId}, "safety_test_confirmation.html");
+    return sendReservationEmail(email, "Safety Test Confirmation", reservation, map[string]string{"dlId": dlId}, "safety_test_confirmation.html");
   }
 }
 
