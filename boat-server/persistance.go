@@ -104,6 +104,7 @@ type TReservation struct {
   LateFee float64 `json:"late_fee,omitempty"`;
   PromoCode string `json:"promo_code"`;
   Notes string `json:"notes"`;
+  AdditionalDrivers []string `json:"additional_drivers,omitempty"`;
   
   Status TReservationStatus `json:"status,omitempty"`;
 }
@@ -262,19 +263,27 @@ func RemoveReservation(reservationId TReservationId) {
   notifyReservationRemoved(&reservation);
 }
 
-func FindSafetyTestResult(reservation *TReservation) *TSafetyTestResult {
+func FindSafetyTestResults(reservation *TReservation) TSafetyTestResults {
   if (reservation == nil) {
     return nil;
   }
 
-  dlId := reservation.DLState + "-" + reservation.DLNumber;
-  result := persistenceDb.SafetyTestResults[dlId];
+  results := make(TSafetyTestResults);
   
-  if (result != nil && result.ExpirationDate > time.Now().UTC().Unix()) {
-    return result;
+  primaryDlId := reservation.DLState + "-" + reservation.DLNumber;
+  primaryResult := persistenceDb.SafetyTestResults[primaryDlId];
+  if (primaryResult != nil && primaryResult.ExpirationDate > reservation.Slot.DateTime) {
+    results[primaryDlId] = primaryResult;
   }
   
-  return nil;
+  for _,dlId := range reservation.AdditionalDrivers {
+    additionalResult := persistenceDb.SafetyTestResults[dlId];
+    if (additionalResult != nil && additionalResult.ExpirationDate > reservation.Slot.DateTime) {
+      results[dlId] = additionalResult;
+    }
+  }
+  
+  return results;
 }
 
 func SaveSafetyTestResult(testResult *TSafetyTestResult) {
@@ -392,9 +401,9 @@ func cleanObsoleteReservations() {
 func cleanObsoleteSafetyTestResults() {
   currentMoment := time.Now().UTC().Unix();
 
-  for dl, testResult := range persistenceDb.SafetyTestResults {
+  for dlId, testResult := range persistenceDb.SafetyTestResults {
     if (testResult.ExpirationDate + systemConfiguration.SafetyTestHoldTime * 60 * 60 * 24 < currentMoment) {
-      delete(persistenceDb.SafetyTestResults, dl);
+      delete(persistenceDb.SafetyTestResults, dlId);
     }
   }
 }

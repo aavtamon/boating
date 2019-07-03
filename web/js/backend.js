@@ -125,8 +125,8 @@ Backend = {
     });    
   },
   
-  emailTestResults: function(email, callback) {
-    this._communicate("safety-test/email?email=" + email, "put", null, false, [], {
+  emailSafetyTestResults: function(email, dlState, dlNumber, callback) {
+    this._communicate("safety-test/email?email=" + email + (dlState != null && dlNumber != null ? "&dl_state=" + dlState + "&dl_number=" + dlNumber : ""), "put", null, false, [], {
       success: function() {
         if (callback) {
           callback(Backend.STATUS_SUCCESS);

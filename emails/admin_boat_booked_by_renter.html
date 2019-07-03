@@ -21,10 +21,10 @@
       <br>
       <br>
 
-      {{if .SafetyTestResult}}
-        Safety test passed
+      {{if eq (len .SafetyTestResults) 0}}
+        Safety test not taken.
       {{else}}
-        Safety test not taken
+        Safety test passed.
       {{end}}
 
 {{template "email_footer"}}

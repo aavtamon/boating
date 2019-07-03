@@ -38,20 +38,20 @@
     <a href="#safety_tips" id="BookingComplete-Screen-SafetyTest-Title">Mandatory Safety Test</a>
     GA State law <b>requires</b> all boaters to take a safety training course and pass the exam in order to be allowed to operate a motor boat.
     <br>
-    {{if .SafetyTestResult}}
-      Our records indicate that you have passed a safety test that is still valid. You are good to go!
+    {{if eq (len .SafetyTestResults) 0}}
+      Our records indicate that you don't have any drivers on this reservation who took the course and passed the exam yet. Use <a href="#safety_tips">Safety Test</a> link to take the test.
       <br>
-      If, however, you would like to retake the test or add more drivers, please use this <a href="#safety_tips">Safety Test</a> link to take the test.
-    {{else}}
-      Our records indicate that you haven't taken/passed the course and exam yet. Use <a href="#safety_tips">Safety Test</a> link to take the test.
-      <br>
-      You will have to take the test if you haven't taken it. The certification usually valid for 180 days and then have to be re-taken.
+      You will have to take the test if you haven't taken it. The certification is valid for 180 days and then have to be re-taken.
       <br>
       You will be required to pass it before you can operate a motor boat.
       <br>
       You can access this link later by going to <a href="javascript:Main.loadScreen('reservation_retrieval');">My Reservation</a> and pulling your reservation.
       <br>
       The link is also included in the reservation confirmation email that was sent to you.    
+    {{else}}
+      Our records indicate that you have at least one driver on this reservation who passed the safety test. You are good to go!
+      <br>
+      If, however, you would like to retake the test or add more drivers, please use this <a href="#safety_tips">Safety Test</a> link to take the test.
     {{end}}
   </div>
   <div id="BookingComplete-Screen-Paperwork" class="info-box">

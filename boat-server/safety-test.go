@@ -162,9 +162,18 @@ func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSe
       Score: int(100 * passedTests / len(testSuite.Tests)),
       SuiteId: suiteId,
     };
+    
+    dlId := testResult.DLState + "-" + testResult.DLNumber;
   
     SaveSafetyTestResult(testResult);
-    EmailTestResults(reservationId, reservation.Email);
+    
+    if (testResult.DLState != reservation.DLState || testResult.DLNumber != reservation.DLNumber) {
+      // We only register an additional driver if it is not the primary renter
+      reservation.AdditionalDrivers = append(reservation.AdditionalDrivers, dlId);
+      SaveReservation(reservation);
+    }
+    
+    EmailTestResults(reservationId, dlId, reservation.Email);
   }
   
   processedTestResult, _ := json.Marshal(completedTestResult);
@@ -213,8 +222,16 @@ func handleEmailTestResults(w http.ResponseWriter, r *http.Request, sessionId TS
       if (!hasEmail) {
         email = reservation.Email;
       }
+      
+      dlState, hasDlState := queryParams["dl_state"];
+      dlNumber, hasDlNumber := queryParams["dl_number"];
+
+      var dlId string = "";
+      if (hasDlState && hasDlNumber) {
+        dlId = dlState + "-" + dlNumber;
+      }
     
-      if (EmailTestResults(reservationId, email)) {
+      if (EmailTestResults(reservationId, dlId, email)) {
         w.WriteHeader(http.StatusOK);
       } else {
         w.WriteHeader(http.StatusInternalServerError);

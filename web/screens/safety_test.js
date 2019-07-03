@@ -1,6 +1,6 @@
 SafetyTest = {
   reservation: null,
-  safetyTestResult: null,
+  safetyTestResults: null,
   
   _testResult: {},
   
@@ -16,7 +16,16 @@ SafetyTest = {
       Main.loadScreen("safety_tips");
     }.bind(this));
     
-    if (!this.safetyTestResult) {
+    
+    var foundResultForPrimaryRenter = false;
+    for (var dlId in this.safetyTestResults) {
+      var testResult = this.safetyTestResults[dlId];
+      if (testResult.dl_state == this.reservation.dl_state && testResult.dl_number == this.reservation.dl_number) {
+        foundResultForPrimaryRenter = true;
+        break;
+      }
+    }
+    if (!foundResultForPrimaryRenter) {
       Backend.getTemporaryData().dl_state = this.reservation.dl_state;
       Backend.getTemporaryData().dl_number = this.reservation.dl_number;
       Backend.getTemporaryData().first_name = this.reservation.first_name;
@@ -34,7 +43,7 @@ SafetyTest = {
     this._retrieveTestSuite();
     
     
-    ScreenUtils.form("#SafetyTest-Screen",
+    ScreenUtils.form("#SafetyTest-Screen-SafetyTestPanel",
                      {"id-number": {minlength: 7, maxlength: 15}},
                      function() {
       if ($(".test").length > $(".test-option:checked").length) {
@@ -45,7 +54,10 @@ SafetyTest = {
         this._testResult.dl_state = Backend.getTemporaryData().dl_state;
         this._testResult.dl_number = Backend.getTemporaryData().dl_number;
         
+        Main.showPopup("Submitting...", '<center>Your test results are being processed.<br>Do not refresh or close your browser.</center>');
+        
         Backend.submitSafetyTestSuite(this._testResult, function(status, checkedSuite) {
+          Main.hidePopup();
           if (status == Backend.STATUS_SUCCESS) {
             this._verifyTestResults(checkedSuite);
           } else {
@@ -61,7 +73,7 @@ SafetyTest = {
     }.bind(this));
     
     
-    ScreenUtils.form("#SafetyTest-Screen-TestPassed-Email", null, this._sendEmail);
+    ScreenUtils.form("#SafetyTest-Screen-TestPassed", null, this._sendEmail);
   },
   
 
@@ -141,8 +153,8 @@ SafetyTest = {
   
   _sendEmail: function() {
     var email = $("#SafetyTest-Screen-TestPassed-Email-Input").val();
-    
-    Backend.emailTestResults(email, function(status) {
+
+    Backend.emailSafetyTestResults(email, Backend.getTemporaryData().dl_state, Backend.getTemporaryData().dl_number, function(status) {
       if (status == Backend.STATUS_SUCCESS) {
         Main.showMessage("Test results are sent", "We sent you the test results to the provided email <b>" + email + "</b><br>The email will indicate that you passed the safety training.");
       } else if (status == Backend.STATUS_NOT_FOUND) {

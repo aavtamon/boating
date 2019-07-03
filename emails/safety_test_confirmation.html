@@ -1,0 +1,51 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Safety Test Confirmation</h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Boater Safety Test confirmation for reservation <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+      </div>
+      <br>
+
+      {{$completedDlId := index .Extras "dlId"}}
+      {{if $completedDlId}}
+        {{$testResult := index .SafetyTestResults $completedDlId}}
+        {{if $testResult}}
+          Hello, {{$testResult.FirstName}} {{$testResult.LastName}}. Thank you for completing Boater Safety Test.
+          <br>
+          Our records indicate that you passed it and scored {{$testResult.Score}}%.
+          <br>
+          <br>
+          Please print the below card and take it on board as a proof of passing the mandatory safety training.
+          <br>
+          <br>
+          <hr>
+          <br>
+          <center>
+          <div style="border-width: 2px; border-color: black; border-style: solid; border-radius: 10px; display:inline-block; padding: 10px;">
+            <div style="text-align: center; font-size: 25px; text-decoration: underline; font-weight:bold;">Boater Safety Test Certificate</div>
+            <br>
+            <div style="font-size: 22px; text-align:left; margin-left: 10px;">Issued to {{$testResult.FirstName}} {{$testResult.LastName}}  (DL {{$testResult.DLState}} #{{$testResult.DLNumber}})
+            <br>
+            As a proof of passing the Boater Safety Test on {{call .FormatDateTime $testResult.PassDate}}.</div>
+            <div style="font-size: 20px; text-align:left; margin-left: 10px;">The scored result is {{$testResult.Score}}%.</div>
+            <br>
+            <div style="font-size: 20px; text-align:left; margin-left: 10px;">The certificate is valid thru {{call .FormatDateTime $testResult.ExpirationDate}}.</div>
+            <br>
+            <div style="text-align: right; margin-right: 10px; font-size: 22px;">{{$testResult.FirstName}} {{$testResult.LastName}}  ______________  (sign)</div>
+          </div>
+          </center>  
+          <br>
+          <hr>
+        {{else}}
+          Something is not quite right... We cannot locate your safety test record. You may want to try to complete it again.
+          <br>
+          If the issue persists, please contact Customer Support.
+        {{end}}
+      {{else}}
+        Something is not quite right... We cannot locate your safety test record.
+        <br>
+        You may want to open your reservation <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a> and request to email the full set of certification records.
+      {{end}}
+
+{{template "email_footer"}}

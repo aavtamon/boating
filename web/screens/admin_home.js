@@ -226,8 +226,8 @@ AdminHome = {
     $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Reservation-Value").html(reservationId);
     
     var safetyTest = "";
-    if (rental.safety_test != null) {
-      safetyTest = "valid thru " + ScreenUtils.getBookingDate(rental.safety_test.expiration_date);
+    if (rental.safety_test_status) {
+      safetyTest = "<a href='javascript:AdminHome._loadSafetyCertificates(\"" + rentalElement._reservationId + "\", \"" + rental.last_name + "\")'>Passed</a>";      
     } else if (rental.status == Backend.RESERVATION_STATUS_COMPLETED) {
       safetyTest = "Not taken!";
     } else {
@@ -265,7 +265,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
     }
     
-    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").prop('disabled', rental.safety_test == null);
+    $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-DepositButton").prop('disabled', rental.safety_test_status == false);
   },
   
   
@@ -273,6 +273,16 @@ AdminHome = {
     Backend.restoreReservationContext(reservationId, lastName, function(status) {
       if (status == Backend.STATUS_SUCCESS) {
         Main.loadScreen(screen);
+      } else {
+        Main.showMessage("Operation failed", "Failed to retrieve the referenced reservation");
+      }
+    });
+  },
+  
+  _loadSafetyCertificates: function(reservationId, lastName) {
+    Backend.restoreReservationContext(reservationId, lastName, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        window.open("screens/safety_certificates.html", "_blank");
       } else {
         Main.showMessage("Operation failed", "Failed to retrieve the referenced reservation");
       }

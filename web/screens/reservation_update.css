@@ -47,13 +47,13 @@
 }
 
 
-#ReservationUpdate-Screen-ReservationSummary-Email {
+#ReservationUpdate-Screen-ReservationSummary-Email, #ReservationUpdate-Screen-SafetyTest-Email {
   margin-top: 30px;
 }
-#ReservationUpdate-Screen-ReservationSummary-Email-Description {
+#ReservationUpdate-Screen-ReservationSummary-Email-Description, #ReservationUpdate-Screen-SafetyTest-Email-Description {
   margin-bottom: 5px;
 }
-#ReservationUpdate-Screen-ReservationSummary-Email-Label {
+#ReservationUpdate-Screen-ReservationSummary-Email-Label, #ReservationUpdate-Screen-SafetyTest-Email-Label {
   display: inline-block;
   margin-right: 20px;
   
@@ -61,13 +61,13 @@
   
   vertical-align: middle;
 }
-#ReservationUpdate-Screen-ReservationSummary-Email-Input {
+#ReservationUpdate-Screen-ReservationSummary-Email-Input, #ReservationUpdate-Screen-SafetyTest-Email-Input {
   width: 400px;
   margin-right: 30px;
   
   vertical-align: middle;
 }
-#ReservationUpdate-Screen-ReservationSummary-Email-SendButton {
+#ReservationUpdate-Screen-ReservationSummary-Email-SendButton, #ReservationUpdate-Screen-SafetyTest-Email-SendButton {
   margin-bottom: 5px;
   vertical-align: middle;
 }

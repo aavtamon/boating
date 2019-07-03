@@ -30,7 +30,9 @@ type THtmlObject struct {
   ReservationSummaries []*TReservationSummary;
   OwnerAccount *TOwnerAccount;
   OwnerRentalStat *TRentalStat;
-  SafetyTestResult *TSafetyTestResult;
+  SafetyTestResults TSafetyTestResults;
+  
+  FormatDateTime func(int64) string;
 }
 
 type TSession struct {
@@ -154,7 +156,10 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
   } else {
     if (strings.HasSuffix(pathToFile, ".html")) {
       //fmt.Printf("Serving page %s\n", pathToFile);
-      htmlTemplate, _ := template.ParseFiles(pathToFile);
+      htmlTemplate, err := template.ParseFiles(pathToFile);
+      if (err != nil) {
+        fmt.Printf("Error parsing template: %s\n", err);
+      }
       
       htmlObject := THtmlObject {
         CurrentTime: time.Now().UTC().UnixNano() / int64(time.Millisecond),
@@ -169,11 +174,18 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         OwnerAccount: GetOwnerAccount(*Sessions[sessionId].AccountId),
         OwnerRentalStat: GetOwnerRentalStat(*Sessions[sessionId].AccountId),
         
-        SafetyTestResult: FindSafetyTestResult(GetReservation(*Sessions[sessionId].ReservationId)),
+        SafetyTestResults: FindSafetyTestResults(GetReservation(*Sessions[sessionId].ReservationId)),
+        
+        FormatDateTime: func(dateTime int64) string {
+          return getFormattedDateTime(dateTime);
+        },
       }
       
       
-      htmlTemplate.Execute(w, htmlObject);
+      err = htmlTemplate.Execute(w, htmlObject);
+      if (err != nil) {
+        fmt.Printf("Error executing template: %s\n", err);
+      }
     } else {
       //fmt.Printf("Serving file %s\n", pathToFile);
       body, _ := ioutil.ReadFile(pathToFile);
@@ -288,3 +300,12 @@ func startHttpsServer() {
 
   log.Fatal(http.ListenAndServeTLS(":" + GetSystemConfiguration().ServerConfiguration.HttpsPort, RuntimeRoot + "/" + GetSystemConfiguration().ServerConfiguration.Certificate, RuntimeRoot + "/" + GetSystemConfiguration().ServerConfiguration.PrivateKey, httpsMux));
 }
+
+
+
+// Utils
+
+func getFormattedDateTime(dateTime int64) string {
+  return time.Unix(dateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM");
+}
+

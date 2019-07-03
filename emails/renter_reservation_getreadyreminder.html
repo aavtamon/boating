@@ -20,10 +20,14 @@
       <br>
       We hope to see you soon!
 
-      {{if not .SafetyTestResult}}
+      {{if eq (len .SafetyTestResults) 0}}
         Our records indicate that you have not yet completed the required safety test.  Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (before you can take the boat). If you have plan on having multiple boat operators, each person will have to complete the test.
+      {{else}}
+        Our records indicate that you have drivers on this reservation that passed the required safety test. You are good to go!
         <br>
-        Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link.
+        However, you can still review safety tips, retake the test, or add more drivers by following the link below.
       {{end}}
+      <br>
+      Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to review safety tips and take the test.
 
 {{template "email_footer"}}

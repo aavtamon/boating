@@ -2,7 +2,6 @@ package main
 
 import "net/smtp"
 import "fmt"
-import "time"
 import "bytes"
 import "html/template"
 import "bitbucket.org/ckvist/twilio/twirest"
@@ -18,8 +17,8 @@ type TReservationEmailObject struct {
   PickupLocation TPickupLocation;
   Boat TBoat;
   GeneralParams *TGeneralParams;
-  
-  SafetyTestResult *TSafetyTestResult;
+  Extras map[string]string;
+  SafetyTestResults TSafetyTestResults;
   
   FormatDateTime func(int64) string;
 }
@@ -183,10 +182,10 @@ func EmailReservationConfirmation(reservationId TReservationId, email string) bo
     templateName = "renter_reservation_paid.html";
   }
   
-  return sendReservationEmail(email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, templateName);
+  return sendReservationEmail(email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, nil, templateName);
 }
 
-func EmailTestResults(reservationId TReservationId, email string) bool {
+func EmailTestResults(reservationId TReservationId, dlId string, email string) bool {
   reservation := GetReservation(reservationId);
   if (reservation == nil) {
     return false;
@@ -194,7 +193,11 @@ func EmailTestResults(reservationId TReservationId, email string) bool {
   
   fmt.Printf("Sending test results confirmation email for reservation %s to %s\n", reservation.Id, email);
   
-  return sendReservationEmail(email, "Safety Test results", reservation, "safety_test_status.html");
+  if (dlId == "") {
+    return sendReservationEmail(email, "Safety Test results", reservation, nil, "safety_test_status.html");
+  } else {
+    return sendReservationEmail(email, "Safety Test confirmation", reservation, map[string]string{"dlId": dlId}, "safety_test_confirmation.html");
+  }
 }
 
 
@@ -209,7 +212,7 @@ func emailOwnerReservationBooked(reservation *TReservation) bool {
     return false;
   }
   
-  return sendReservationEmail(account.Email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, "owner_reservation_booked.html");
+  return sendReservationEmail(account.Email, fmt.Sprintf("Booking confirmation for %s", reservation.Id), reservation, nil, "owner_reservation_booked.html");
 }
 
 func emailOwnerReservationCancelled(reservation *TReservation) bool {
@@ -220,43 +223,43 @@ func emailOwnerReservationCancelled(reservation *TReservation) bool {
     return false;
   }
   
-  return sendReservationEmail(account.Email, fmt.Sprintf("Booking %s cancelled", reservation.Id), reservation, "owner_reservation_cancelled.html");
+  return sendReservationEmail(account.Email, fmt.Sprintf("Booking %s cancelled", reservation.Id), reservation, nil, "owner_reservation_cancelled.html");
 }
 
 func emailRenterReservationPaid(reservation *TReservation) bool {
   fmt.Printf("Sending reservation-paid email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Payment confirmation for %s", reservation.Id), reservation, "renter_reservation_paid.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Payment confirmation for %s", reservation.Id), reservation, nil, "renter_reservation_paid.html");
 }
 
 func emailRenterReservationRefunded(reservation *TReservation) bool {
   fmt.Printf("Sending reservation-refunded email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, "renter_reservation_refunded.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Refund confirmation for %s", reservation.Id), reservation, nil, "renter_reservation_refunded.html");
 }
 
 func emailRenterReservationCancelled(reservation *TReservation) bool {
   fmt.Printf("Sending reservation-cancelled email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Reservation %s is cancelled", reservation.Id), reservation, "renter_reservation_cancelled.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Reservation %s is cancelled", reservation.Id), reservation, nil, "renter_reservation_cancelled.html");
 }
 
 func emailRenterDepositPaid(reservation *TReservation) bool {
   fmt.Printf("Sending deposit-paid email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit payment confirmation for %s", reservation.Id), reservation, "renter_deposit_paid.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit payment confirmation for %s", reservation.Id), reservation, nil, "renter_deposit_paid.html");
 }
 
 func emailRenterDepositRefunded(reservation *TReservation) bool {
   fmt.Printf("Sending deposit-refunded email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit released for %s", reservation.Id), reservation, "renter_deposit_refunded.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit released for %s", reservation.Id), reservation, nil, "renter_deposit_refunded.html");
 }
 
 func emailRenterDepositWithheld(reservation *TReservation) bool {
   fmt.Printf("Sending deposit-withheld email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit withheld for %s", reservation.Id), reservation, "renter_deposit_withheld.html");
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit withheld for %s", reservation.Id), reservation, nil, "renter_deposit_withheld.html");
 }
 
 func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
@@ -267,13 +270,13 @@ func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
     return false;
   }
   
-  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, "owner_reservation_daybeforereminder.html");
+  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, nil, "owner_reservation_daybeforereminder.html");
 }
 
 func emailRenterDayBeforeReminder(reservation *TReservation) bool {
   fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_daybeforereminder.html");
+  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, nil, "renter_reservation_daybeforereminder.html");
 }
 
 func emailOwnerGetReadyReminder(reservation *TReservation) bool {
@@ -284,13 +287,13 @@ func emailOwnerGetReadyReminder(reservation *TReservation) bool {
     return false;
   }
   
-  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, "owner_reservation_getreadyreminder.html");
+  return sendReservationEmail(account.Email, "PizBoats Ride Reminder", reservation, nil, "owner_reservation_getreadyreminder.html");
 }
 
 func emailRenterGetReadyReminder(reservation *TReservation) bool {
   fmt.Printf("Sending get-ready email for reservation %s\n", reservation.Id);
   
-  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, "renter_reservation_getreadyreminder.html");
+  return sendReservationEmail(reservation.Email, "PizBoats Ride Reminder", reservation, nil, "renter_reservation_getreadyreminder.html");
 }
 
 func emailAdminReservationBookedByRenter(reservation *TReservation) bool {
@@ -299,9 +302,9 @@ func emailAdminReservationBookedByRenter(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked_by_renter.html");
+      sendReservationEmail(account.Email, "Reservation placed", reservation, nil, "admin_boat_booked_by_renter.html");
     } else {
-      sendReservationEmail(account.Email, "Your boat was booked", reservation, "owner_boat_booked.html");
+      sendReservationEmail(account.Email, "Your boat was booked", reservation, nil, "owner_boat_booked.html");
     }
   }
   
@@ -314,7 +317,7 @@ func emailAdminReservationBookedByOwner(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Reservation placed", reservation, "admin_boat_booked_by_owner.html");
+      sendReservationEmail(account.Email, "Reservation placed", reservation, nil, "admin_boat_booked_by_owner.html");
     }
   }
   
@@ -327,9 +330,9 @@ func emailAdminReservationCancelled(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Reservation cancelled", reservation, "admin_boat_cancelled.html");
+      sendReservationEmail(account.Email, "Reservation cancelled", reservation, nil, "admin_boat_cancelled.html");
     } else {
-      sendReservationEmail(account.Email, "Your boat booking was cancelled", reservation, "owner_boat_cancelled.html");
+      sendReservationEmail(account.Email, "Your boat booking was cancelled", reservation, nil, "owner_boat_cancelled.html");
     }
   }
   
@@ -342,7 +345,7 @@ func emailAdminDepositPaid(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Deposit paid", reservation, "admin_deposit_paid.html");
+      sendReservationEmail(account.Email, "Deposit paid", reservation, nil, "admin_deposit_paid.html");
     }
   }
   
@@ -355,7 +358,7 @@ func emailAdminDepositRefunded(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Deposit refunded", reservation, "admin_deposit_refunded.html");
+      sendReservationEmail(account.Email, "Deposit refunded", reservation, nil, "admin_deposit_refunded.html");
     }
   }
   
@@ -368,7 +371,7 @@ func emailAdminDepositWithheld(reservation *TReservation) bool {
   adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
   for _, account := range adminAccounts {
     if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-      sendReservationEmail(account.Email, "Attention: Deposit withheld", reservation, "admin_deposit_withheld.html");
+      sendReservationEmail(account.Email, "Attention: Deposit withheld", reservation, nil, "admin_deposit_withheld.html");
     }
   }
   
@@ -495,7 +498,7 @@ func textRenterGetReadyReminder(reservation *TReservation) bool {
 
 
 
-func sendReservationEmail(destinationAddress string, emailSubject string, reservation *TReservation, emailTemplateName string) bool {
+func sendReservationEmail(destinationAddress string, emailSubject string, reservation *TReservation, extras map[string]string, emailTemplateName string) bool {
   emailTemplate, err := template.ParseFiles(RuntimeRoot + "/" + EMAIL_TEMPLATES_LOCATION + "/" + emailTemplateName, RuntimeRoot + "/" + EMAIL_TEMPLATES_LOCATION + "/email_envelope.html");
   
   if (err != nil) {
@@ -510,8 +513,9 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
     PickupLocation: GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId],
     Boat: GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId],
 //    OwnerAccount: GetOwnerAccount(reservation.OwnerAccountId),
-    SafetyTestResult: FindSafetyTestResult(reservation),
+    SafetyTestResults: FindSafetyTestResults(reservation),
     GeneralParams: GetGeneralParams(),
+    Extras: extras,
     
     FormatDateTime: func(dateTime int64) string {
       return getFormattedDateTime(dateTime);
@@ -519,7 +523,10 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
   }
   
   buf := new(bytes.Buffer);
-  emailTemplate.Execute(buf, emailObject);
+  err = emailTemplate.Execute(buf, emailObject);
+  if (err != nil) {
+    fmt.Printf("Error executing template: %s\n", err);
+  }
   
   return sendEmail(destinationAddress, emailSubject, buf.String());
 }
@@ -583,11 +590,6 @@ func sendTextMessage(phoneNumber string, messageText string) bool {
   }
 }
 
-
-
-func getFormattedDateTime(dateTime int64) string {
-  return time.Unix(dateTime / 1000, 0).UTC().Format("Mon Jan 2 2006, 15:04 PM");
-}
 
 
 

@@ -27,23 +27,23 @@ ReservationUpdate = {
     
     
     $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val(this.reservation.email);
-    
+    ScreenUtils.form("#ReservationUpdate-Screen-ReservationSummary-Email", null, this._sendReservationConfirmationEmail);    
+
+    $("#ReservationUpdate-Screen-SafetyTest-Email-Input").val(this.reservation.email);
+    ScreenUtils.form("#ReservationUpdate-Screen-SafetyTest-Email", null, this._sendSafetyTestCertificationEmail);
     
     $("#ReservationUpdate-Screen-ButtonsPanel-CancelButton").click(function() {
       this._cancelReservation();
     }.bind(this));
-    
-    
-    ScreenUtils.form("#ReservationUpdate-Screen-ReservationSummary-Email", null, this._sendEmail);    
   },
   
 
-  _sendEmail: function() {
+  _sendReservationConfirmationEmail: function() {
     var email = $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
     Backend.sendConfirmationEmail(email, function(status) {
       if (status == Backend.STATUS_SUCCESS) {
-        Main.showMessage("Confirmation email sent", "The email was sent to <b>" + email + "</b>");
+        Main.showMessage("Confirmation email sent", "Reservation confirmation email was sent to <b>" + email + "</b>");
       } else if (status == Backend.STATUS_NOT_FOUND) {
         Main.showMessage("Not Successful", "For some reason the email was not sent. Please try again.");
       } else {
@@ -51,6 +51,22 @@ ReservationUpdate = {
       }
     });
   },
+  
+  
+  _sendSafetyTestCertificationEmail: function() {
+    var email = $("#ReservationUpdate-Screen-SafetyTest-Email-Input").val();
+    
+    Backend.emailSafetyTestResults(email, null, null, function(status) {
+      if (status == Backend.STATUS_SUCCESS) {
+        Main.showMessage("Boat Safety certification info is sent", "We sent you the Boat Safety certification status to <b>" + email + "</b>.<br>The email shows the drivers who passed the safety training and can operatre a motor boat.");
+      } else if (status == Backend.STATUS_NOT_FOUND) {
+        Main.showMessage("Not Successful", "For some reason the email was not sent. Please try again.");
+      } else {
+        Main.showMessage("Not Successful", "An error occured. Please try again");
+      }
+    });
+  },
+
   
   
   _cancelReservation: function() {

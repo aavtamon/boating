@@ -14,7 +14,7 @@ type TRental struct {
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
   LastName string `json:"last_name,omitempty"`;
-  SafetyTest *TSafetyTestResult `json:"safety_test,omitempty"`;
+  SafetyTestStatus bool `json:"safety_test_status"`;
   Status TReservationStatus `json:"status,omitempty"`;
 }
 
@@ -166,7 +166,7 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
           rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
           rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;
           rentalStat.Rentals[reservation.Id].LastName = reservation.LastName;
-          rentalStat.Rentals[reservation.Id].SafetyTest = FindSafetyTestResult(reservation);
+          rentalStat.Rentals[reservation.Id].SafetyTestStatus = len(FindSafetyTestResults(reservation)) > 0;
           rentalStat.Rentals[reservation.Id].Status = reservation.Status;
         }
       }

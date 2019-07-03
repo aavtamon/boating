@@ -6,7 +6,7 @@
   {{if .Reservation}}
     {{if eq .Reservation.OwnerAccountId ""}}
       SafetyTest.reservation = {{.Reservation}};
-      SafetyTest.safetyTestResult = {{.SafetyTestResult}};
+      SafetyTest.safetyTestResults = {{.SafetyTestResults}};
     {{end}}
   {{end}}
 </script>
@@ -16,11 +16,12 @@
   Safety Test To Operate A Motor Boat
 </div>
 
-<form id="SafetyTest-Screen" class="screen" onshow="SafetyTest.onLoad()">
-  <div id="SafetyTest-Screen-SafetyTestPanel" class="info-box">
+<div id="SafetyTest-Screen" class="screen" onshow="SafetyTest.onLoad()">
+  <form id="SafetyTest-Screen-SafetyTestPanel" class="info-box" action="">
     Hello, {{.Reservation.FirstName}} {{.Reservation.LastName}} or a co-driver. Thanks for taking the test.
     <br>
-    {{if .SafetyTestResult}}
+    {{if eq (len .SafetyTestResults) 0}}
+    {{else}}
       <br>
       Our records indicate that you already have driver(s) on this reservation that passed the test and can operate a motor boat.
       <br>
@@ -46,9 +47,9 @@
     A green indicator in front of a question means that you provided the answer. It does not indicate that you answered correctly.
     <div id="SafetyTest-Screen-SafetyTestPanel-Tests"></div>
     <center><button id="SafetyTest-Screen-SafetyTestPanel-SubmitButton" class="standard-button">Submit</button></center>
-  </div>
+  </form>
   
-  <div id="SafetyTest-Screen-TestPassed" class="info-box">
+  <form id="SafetyTest-Screen-TestPassed" class="info-box" action="">
     <div id="SafetyTest-Screen-TestPassed-Score"></div>
     <div id="SafetyTest-Screen-TestPassed-Email">
       <div id="SafetyTest-Screen-TestPassed-Email-Description">We already emailed your test results to <b>{{.Reservation.Email}}</b>.<br>We can also email them to an additional email:</div>
@@ -56,10 +57,10 @@
       <input type="email" name="email" id="SafetyTest-Screen-TestPassed-Email-Input" class="input-field" required>
       <input type="submit" id="SafetyTest-Screen-TestPassed-Email-SendButton" class="standard-button" value="Email Test Results" />
     </div>
-  </div>
+  </form>
   
   <div id="SafetyTest-Screen-TestFailed" class="info-box">
     <div id="SafetyTest-Screen-TestFailed-Score"></div>
     <center><button id="SafetyTest-Screen-TestFailed-RetakeButton" class="standard-button">Retake test</button></center>
   </div>  
-</form>
+</div>

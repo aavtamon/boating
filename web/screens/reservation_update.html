@@ -85,12 +85,20 @@
     <div id="ReservationUpdate-Screen-SafetyTest-Note">IMPORTANT NOTE:</div>
     GA State law requires you to take and pass a safety training course, in order to be allowed to operate a motor boat.
     <br>
-    {{if .SafetyTestResult}}
-      Our records indicate that you have passed a safety test that is still valid. You are good to go!
+    {{if eq (len .SafetyTestResults) 0}}
+      Our records indicate that you don't have any drivers on this reservation who took the course and passed the exam yet. Use <a id="ReservationUpdate-Screen-SafetyTest-Link" href="#safety_tips">Safety Test</a> link to take the test.
+    {{else}}
+      Our records indicate that you have at least one driver on the reservation that passed the safety test. You are good to go!
       <br>
       If, however, you would like to retake the test or add more drivers, please use this <a href="#safety_tips">Safety Test</a> link to take the test.
-    {{else}}
-      Our records indicate that you haven't taken/passed the course and exam yet. Use <a id="ReservationUpdate-Screen-SafetyTest-Link" href="#safety_tips">Safety Test</a> link to take the test.
+      <form id="ReservationUpdate-Screen-SafetyTest-Email" action="">
+        <div id="ReservationUpdate-Screen-SafetyTest-Email-Description">
+          You can email Boat Safety certification status for all drivers who passed the test.
+        </div>
+        <div id="ReservationUpdate-Screen-SafetyTest-Email-Label">Email:</div>
+        <input type="email" name="email" id="ReservationUpdate-Screen-SafetyTest-Email-Input" class="input-field" required>
+        <input id="ReservationUpdate-Screen-SafetyTest-Email-SendButton" type="submit" class="standard-button" value="Send" />
+      </form>
     {{end}}
   </div>
   
