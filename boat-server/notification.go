@@ -54,15 +54,12 @@ func NotifyReservationCancelled(reservationId TReservationId) {
   if (isOwnerReservation) {
     emailOwnerReservationCancelled(reservation);
     textOwnerReservationCancelled(reservation);
-    
-    emailAdminReservationCancelled(reservation);
   } else {
     // Cancelled by the admin
     emailRenterReservationCancelled(reservation);
     textRenterReservationCancelled(reservation);
-    
-    emailAdminReservationCancelled(reservation);
   }
+  emailAdminReservationCancelled(reservation);
 }
 
 func NotifyReservationUpdated(reservationId TReservationId) {
