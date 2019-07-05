@@ -33,15 +33,17 @@ func NotifyReservationBooked(reservationId TReservationId) {
     return;
   }
   
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
-  if (isOwnerReservation) {
-    emailOwnerReservationBooked(reservation);
-    textOwnerReservationBooked(reservation);
-    
-    emailAdminReservationBookedByOwner(reservation);
-  } else {
-    // We do not notify renters about booking. We only notify about payment
-  }
+  go func() {
+    isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+    if (isOwnerReservation) {
+      emailOwnerReservationBooked(reservation);
+      textOwnerReservationBooked(reservation);
+
+      emailAdminReservationBookedByOwner(reservation);
+    } else {
+      // We do not notify renters about booking. We only notify about payment
+    }
+  }();
 }
 
 func NotifyReservationCancelled(reservation *TReservation, isAdmin bool) {
@@ -49,18 +51,20 @@ func NotifyReservationCancelled(reservation *TReservation, isAdmin bool) {
     return;
   }
   
-  isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
-  if (isOwnerReservation) {
-    emailOwnerReservationCancelled(reservation);
-    textOwnerReservationCancelled(reservation);
-  } else if (isAdmin) {
-    // Cancelled by the admin
-    emailRenterReservationCancelled(reservation);
-    textRenterReservationCancelled(reservation);
-  } else {
-    // Do nothing special - if reservation is removed by a renter, he is only notified about the refund
-  }
-  emailAdminReservationCancelled(reservation);    
+  go func() {
+    isOwnerReservation := reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID;
+    if (isOwnerReservation) {
+      emailOwnerReservationCancelled(reservation);
+      textOwnerReservationCancelled(reservation);
+    } else if (isAdmin) {
+      // Cancelled by the admin
+      emailRenterReservationCancelled(reservation);
+      textRenterReservationCancelled(reservation);
+    } else {
+      // Do nothing special - if reservation is removed by a renter, he is only notified about the refund
+    }
+    emailAdminReservationCancelled(reservation);    
+  }();
 }
 
 func NotifyReservationUpdated(reservationId TReservationId) {
@@ -69,19 +73,21 @@ func NotifyReservationUpdated(reservationId TReservationId) {
     return;
   }
   
-  isRenterReservation := reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID;
-  if (isRenterReservation) {
-    if (reservation.Status == RESERVATION_STATUS_ACCIDENT) {
-      emailRenterDepositWithheld(reservation);
-      textRenterDepositWithheld(reservation);
+  go func() {
+    isRenterReservation := reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID;
+    if (isRenterReservation) {
+      if (reservation.Status == RESERVATION_STATUS_ACCIDENT) {
+        emailRenterDepositWithheld(reservation);
+        textRenterDepositWithheld(reservation);
 
-      emailAdminDepositWithheld(reservation);
+        emailAdminDepositWithheld(reservation);
+      } else {
+        // We do not notify about completion in normal case, we notify that the deposit is returned
+      }
     } else {
-      // We do not notify about completion in normal case, we notify that the deposit is returned
+      // We do not notify owner about completion.
     }
-  } else {
-    // We do not notify owner about completion.
-  }
+  }();
 }
 
 func NotifyReservationPaid(reservationId TReservationId) {
@@ -90,10 +96,12 @@ func NotifyReservationPaid(reservationId TReservationId) {
     return;
   }
   
-  emailRenterReservationPaid(reservation);
-  textRenterReservationPaid(reservation);
-  
-  emailAdminReservationBookedByRenter(reservation);
+  go func() {
+    emailRenterReservationPaid(reservation);
+    textRenterReservationPaid(reservation);
+
+    emailAdminReservationBookedByRenter(reservation);
+  }();
 }
 
 func NotifyReservationRefunded(reservationId TReservationId) {
@@ -102,8 +110,10 @@ func NotifyReservationRefunded(reservationId TReservationId) {
     return;
   }
   
-  emailRenterReservationRefunded(reservation);
-  textRenterReservationRefunded(reservation);
+  go func() {
+    emailRenterReservationRefunded(reservation);
+    textRenterReservationRefunded(reservation);
+  }();
 }
 
 func NotifyDepositPaid(reservationId TReservationId) {
@@ -112,10 +122,12 @@ func NotifyDepositPaid(reservationId TReservationId) {
     return;
   }
   
-  emailRenterDepositPaid(reservation);
-  textRenterDepositPaid(reservation);
-  
-  emailAdminDepositPaid(reservation);
+  go func() {
+    emailRenterDepositPaid(reservation);
+    textRenterDepositPaid(reservation);
+
+    emailAdminDepositPaid(reservation);
+  }();
 }
 
 func NotifyDepositRefunded(reservationId TReservationId) {
@@ -124,10 +136,12 @@ func NotifyDepositRefunded(reservationId TReservationId) {
     return;
   }
   
-  emailRenterDepositRefunded(reservation);
-  textRenterDepositRefunded(reservation);
-  
-  emailAdminDepositRefunded(reservation);
+  go func() {
+    emailRenterDepositRefunded(reservation);
+    textRenterDepositRefunded(reservation);
+
+    emailAdminDepositRefunded(reservation);
+  }();
 }
 
 func NotifyDayBeforeReminder(reservationId TReservationId) {
