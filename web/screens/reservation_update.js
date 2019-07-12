@@ -41,7 +41,9 @@ ReservationUpdate = {
   _sendReservationConfirmationEmail: function() {
     var email = $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
+    Main.showPopup("Sending confirmation...", '<center>Confirmation email is being sent</center>');
     Backend.sendConfirmationEmail(email, function(status) {
+      Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
         Main.showMessage("Confirmation email sent", "Reservation confirmation email was sent to <b>" + email + "</b>");
       } else if (status == Backend.STATUS_NOT_FOUND) {
@@ -56,7 +58,9 @@ ReservationUpdate = {
   _sendSafetyTestCertificationEmail: function() {
     var email = $("#ReservationUpdate-Screen-SafetyTest-Email-Input").val();
     
+    Main.showPopup("Sending test results...", '<center>Safety test results are being sent</center>');
     Backend.emailSafetyTestResults(email, null, null, function(status) {
+      Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
         Main.showMessage("Boat Safety certification info is sent", "We sent you the Boat Safety certification status to <b>" + email + "</b>.<br>The email shows the drivers who passed the safety training and can operatre a motor boat.");
       } else if (status == Backend.STATUS_NOT_FOUND) {

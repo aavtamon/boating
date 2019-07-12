@@ -154,7 +154,9 @@ SafetyTest = {
   _sendEmail: function() {
     var email = $("#SafetyTest-Screen-TestPassed-Email-Input").val();
 
+    Main.showPopup("Sending test results...", '<center>Safety test results are being sent</center>');
     Backend.emailSafetyTestResults(email, Backend.getTemporaryData().dl_state, Backend.getTemporaryData().dl_number, function(status) {
+      Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
         Main.showMessage("Test results are sent", "We sent you the test results to the provided email <b>" + email + "</b><br>The email will indicate that you passed the safety training.");
       } else if (status == Backend.STATUS_NOT_FOUND) {
