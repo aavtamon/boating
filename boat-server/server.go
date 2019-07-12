@@ -290,7 +290,7 @@ func startHttpsServer() {
   httpsMux.HandleFunc("/bookings/", BookingsHandler);
   httpsMux.HandleFunc("/account/", AccountHandler);
   httpsMux.HandleFunc("/safety-test/", SafetyTestHandler);
-  httpsMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot)));
+  httpsMux.Handle("/files/", http.FileServer(http.Dir(RuntimeRoot + "/" + WEB_ROOT)));
   httpsMux.HandleFunc("/", pageHandler);
   
   
