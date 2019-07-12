@@ -121,9 +121,10 @@ AdminCompletion = {
   reportAccident: function() {
     Main.showPopup("Updating...", "Reservation status is being updated.");
 
-    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_ACCIDENT;
-
+    Backend.getReservationContext().fuel_usage = parseInt($("#AdminCompletion-Screen-FuelUsage-Input").val());
+    Backend.getReservationContext().delay = parseInt($("#AdminCompletion-Screen-Delay-Input").val());
     Backend.getReservationContext().notes = btoa($("#AdminCompletion-Screen-AccidentDescription").val());
+    Backend.getReservationContext().status = Backend.RESERVATION_STATUS_ACCIDENT;
 
     Backend.saveReservation(function(status) {
       if (status == Backend.STATUS_SUCCESS) {

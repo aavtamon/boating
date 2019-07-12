@@ -466,7 +466,7 @@ func textRenterDepositWithheld(reservation *TReservation) bool {
 
   fmt.Printf("Texting deposit withheld for reservation %s\n", reservation.Id);
   
-  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your ride %s is complete but we had to withheld your security deposit ($%d). We will follow up with you on that", reservation.Id, reservation.DepositAmount));
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your ride %s is complete but we had to withhold your security deposit ($%d). We will follow up with you on that", reservation.Id, reservation.DepositAmount));
 }
 
 func textOwnerDayBeforeReminder(reservation *TReservation) bool {
