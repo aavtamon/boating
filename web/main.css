@@ -223,6 +223,49 @@
   background-color: #c5f9f9;
 }
 
+#Main-AcceptCookie {
+  display: none;
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 35px;
+  
+  padding: 10px 20px 10px 20px;
+  
+  text-align: center;
+  
+  border-radius: 10px;
+  
+  font-size: 20px;
+  line-height: 30px;
+  color: white;
+  background-color: #878b90f0;
+}
+#Main-AcceptCookie-AcceptButton {
+  display: inline-block;
+  padding: 2px 10px 2px 10px;
+  line-height: 20px;
+  
+  border-style: outset;
+  border-width: 3px;
+  border-color: white;
+  border-radius: 5px;
+  
+  cursor: pointer;
+
+  color: azure;
+  
+  user-select: none;
+}
+#Main-AcceptCookie-AcceptButton:hover {
+  background-color: #959aa0;
+}
+#Main-AcceptCookie-AcceptButton:active {
+  border-style: inset;
+  color: white;
+  background-color: #616467;
+}
+
 
 #Main-RecycleBin {
   display: none;

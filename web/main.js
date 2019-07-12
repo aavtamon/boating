@@ -38,6 +38,8 @@ Main = {
     } else {
       this.loadScreen(requestedPath);
     }
+    
+    this.showPrivacyPolicyPanel();
   },
   
   loadScreen: function(screen) {
@@ -111,6 +113,20 @@ Main = {
   
   hideMessage: function() {
     $("#Main-Dialog").hide();
+  },
+  
+  
+  showPrivacyPolicyPanel: function() {
+    var privacyPolicyAccepted = Utils.getCookie("privacyPolicyAccepted");
+    if (!privacyPolicyAccepted) {
+      setTimeout(function() {
+        $("#Main-AcceptCookie").fadeIn();
+      }, 3000);
+    }
+  },
+  acceptPrivacyPolicy: function() {
+    $("#Main-AcceptCookie").fadeOut();
+    Utils.setCookie("privacyPolicyAccepted", "true");
   },
   
   

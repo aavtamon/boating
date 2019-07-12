@@ -19,9 +19,20 @@ Utils = {
   getCookie: function(name) {
     var cookies = document.cookie.split(";");
     for (var i in cookies) {
-      var cookie = cookies[i];
+      var cookie = cookies[i].trim();
       var keyValuePair = cookie.split("=");
-      return keyValuePair.length > 1 ? keyValuePair[1] : "";
+      if (keyValuePair.length > 1) {
+        cookieName = keyValuePair[0];
+        if (cookieName == name) {
+          return keyValuePair[1];
+        }
+      }
     }
+    
+    return null;
+  },
+  
+  setCookie: function(name, value) {
+    document.cookie = name + "=" + (value || "") + "; path=/";    
   }
 }
