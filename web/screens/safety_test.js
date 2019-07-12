@@ -54,7 +54,7 @@ SafetyTest = {
         this._testResult.dl_state = Backend.getTemporaryData().dl_state;
         this._testResult.dl_number = Backend.getTemporaryData().dl_number;
         
-        Main.showPopup("Submitting...", '<center>Your test results are being processed.<br>Do not refresh or close your browser.</center>');
+        Main.showPopup("Submitting...", 'Your test results are being processed.<br>Do not refresh or close your browser.');
         
         Backend.submitSafetyTestSuite(this._testResult, function(status, checkedSuite) {
           Main.hidePopup();
@@ -154,7 +154,7 @@ SafetyTest = {
   _sendEmail: function() {
     var email = $("#SafetyTest-Screen-TestPassed-Email-Input").val();
 
-    Main.showPopup("Sending test results...", '<center>Safety test results are being sent</center>');
+    Main.showPopup("Sending test results...", 'Safety test results are being sent');
     Backend.emailSafetyTestResults(email, Backend.getTemporaryData().dl_state, Backend.getTemporaryData().dl_number, function(status) {
       Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {

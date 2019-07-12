@@ -111,6 +111,8 @@
   color: white;
 }
 
+
+
 #Main-Popup {
   position: fixed;
   display: none;
@@ -121,10 +123,53 @@
   
   background-color: #64646480;
 }
-
 #Main-Popup-Frame {
+  position: absolute;
+  width: 30%;
+  top: 40%;
+  left: 35%;
+
+  padding: 10px;
+  text-align: center;
+  overflow-x: hidden;
+  
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+
+  color: #fffed7;
+  background-color: #646464A0;
+}
+#Main-Popup-Frame-Spinner {
+  height: 30px;
+  background-image: url(imgs/progress-indicator.gif);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 #Main-Popup-Frame-Title {
+  font-size: 24px;  
+  white-space: nowrap;
+}
+#Main-Popup-Frame-Details {
+  font-size: 20px;
+}
+
+
+#Main-Dialog {
+  position: fixed;
+  display: none;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  
+  background-color: #64646480;
+}
+
+#Main-Dialog-Frame {
+}
+#Main-Dialog-Frame-Title {
   position: absolute;
   width: 50%;
   top: 10%;
@@ -140,7 +185,7 @@
   background-color: rgb(122, 151, 239);
   color: white;
 }
-#Main-Popup-Frame-Content {
+#Main-Dialog-Frame-Content {
   position: absolute;
   width: calc(50% - 20px);
   top: calc(10% + 29px);
@@ -155,26 +200,26 @@
   border-style: ridge;
   border-top: none;
 }
-#Main-Popup-Frame-Content-Message {
+#Main-Dialog-Frame-Content-Message {
   font-size: 18px;
 }
-#Main-Popup-Frame-Content-Buttons {
+#Main-Dialog-Frame-Content-Buttons {
   margin-top: 20px;
   margin-bottom: 10px;
   
   text-align: center;
 }
-#Main-Popup-Frame-Content-Buttons-1,
-#Main-Popup-Frame-Contant-Buttons-2,
-#Main-Popup-Frame-Content-Buttons-3 {
+#Main-Dialog-Frame-Content-Buttons-1,
+#Main-Dialog-Frame-Contant-Buttons-2,
+#Main-Dialog-Frame-Content-Buttons-3 {
   margin-right: 20px;
   
   font-size: 15px;
   
   background-color: #f1ffff;
 }
-#Main-Popup-Frame-Content-Buttons-OK:active,
-#Main-Popup-Frame-Content-Buttons-Cancel:active {
+#Main-Dialog-Frame-Content-Buttons-OK:active,
+#Main-Dialog-Frame-Content-Buttons-Cancel:active {
   background-color: #c5f9f9;
 }
 

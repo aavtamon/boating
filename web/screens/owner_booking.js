@@ -62,7 +62,7 @@ OwnerBooking = {
     });
     
     $("#OwnerBooking-Screen-Description-BookButton").click(function() {
-      Main.showPopup("Booking Processing...", '<center>Your booking is being processed.<br>Do not refresh or close your browser.</center>');
+      Main.showPopup("Booking Processing...", 'Your booking is being processed.<br>Do not refresh or close your browser.');
       
       Backend.resetReservationContext();
       

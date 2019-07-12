@@ -31,7 +31,7 @@ OwnerReservationUpdate = {
   _sendEmail: function() {
     var email = $("#OwnerReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
-    Main.showPopup("Sending confirmation...", '<center>Confirmation email is being sent</center>');
+    Main.showPopup("Sending confirmation...", 'Confirmation email is being sent');
     Backend.sendConfirmationEmail(email, function(status) {
       Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {

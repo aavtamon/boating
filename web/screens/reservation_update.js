@@ -41,7 +41,7 @@ ReservationUpdate = {
   _sendReservationConfirmationEmail: function() {
     var email = $("#ReservationUpdate-Screen-ReservationSummary-Email-Input").val();
     
-    Main.showPopup("Sending confirmation...", '<center>Confirmation email is being sent</center>');
+    Main.showPopup("Sending confirmation...", 'Confirmation email is being sent');
     Backend.sendConfirmationEmail(email, function(status) {
       Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
@@ -58,7 +58,7 @@ ReservationUpdate = {
   _sendSafetyTestCertificationEmail: function() {
     var email = $("#ReservationUpdate-Screen-SafetyTest-Email-Input").val();
     
-    Main.showPopup("Sending test results...", '<center>Safety test results are being sent</center>');
+    Main.showPopup("Sending test results...", 'Safety test results are being sent');
     Backend.emailSafetyTestResults(email, null, null, function(status) {
       Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
