@@ -107,7 +107,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     session, hasSession := Sessions[sessionId];
     if (hasSession) {
       sessionTimePlusInactivity := session.LastAccessed.Add(SESSION_MAX_LIFE * time.Minute);
-      if (sessionTimePlusInactivity.Before(time.Now())) {
+      if (sessionTimePlusInactivity.Before(time.Now().UTC())) {
         delete(Sessions, sessionId);
         
         sessionCookie = nil; //we will need to regenerate the cookie
@@ -130,11 +130,11 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
     initialReservationId := NO_RESERVATION_ID;
     initialAccountId := NO_OWNER_ACCOUNT_ID;
     initialSuiteId := NO_SAFETY_SUITE_ID;
-    lastAccessed := time.Now();
+    lastAccessed := time.Now().UTC();
     
     Sessions[sessionId] = TSession{ReservationId: &initialReservationId, AccountId: &initialAccountId, SafetySuiteId: &initialSuiteId, LastAccessed: &lastAccessed};
   } else {
-    *Sessions[sessionId].LastAccessed = time.Now();
+    *Sessions[sessionId].LastAccessed = time.Now().UTC();
   }
   
   removeOldSessions();
@@ -231,7 +231,7 @@ func removeOldSessions() {
     return;
   }
 
-  now := time.Now();
+  now := time.Now().UTC();
   for sessionId, session := range Sessions {
       sessionTimePlusInactivity := session.LastAccessed.Add(SESSION_MAX_LIFE * time.Minute);
       if (sessionTimePlusInactivity.Before(now)) {

@@ -7,11 +7,8 @@ import "time"
 import "math/rand"
 import "sync"
 import "strings"
-
-
-const PERSISTENCE_DATABASE_FILE_NAME = "persistence_db.json";
-const ACCOUNT_DATABASE_FILE_NAME = "account_db.json";
-
+import "os";
+import "strconv";
 
 
 
@@ -333,16 +330,16 @@ func notifyReservationRemoved(reservation *TReservation) {
 
 
 func readPersistenceDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.PersistenceDbName);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
-      fmt.Println("Persistance: failed to dersereialize reservation database - initializing", err);
+      fmt.Println("Persistance: failed to dersereialize reservation database - initializing: ", err);
     } else {
       fmt.Println("Persistance: reservation database is read");
     }
   } else {
-    fmt.Println("Persistance: failed to read reservation database - initializing", err);
+    fmt.Println("Persistance: failed to read reservation database - initializing: ", err);
   }
   
   if (persistenceDb.Reservations == nil) {
@@ -356,17 +353,46 @@ func readPersistenceDatabase() {
 func savePersistenceDatabase() {
   cleanObsoleteReservations();
   cleanObsoleteSafetyTestResults();
-
+  
+  persistentDbPath := RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.PersistenceDbName;
+  
+  // First, create a backup copy
+  dbContent, err := ioutil.ReadFile(persistentDbPath);
+  if (err == nil) {
+    backupFile := GetSystemConfiguration().PersistenceDb.BackupPath + "/" + strconv.FormatInt(time.Now().UTC().Unix(), 10);
+    err = ioutil.WriteFile(backupFile, dbContent, 0644);
+    if (err != nil) {
+      fmt.Println("Persistance: failed to create a backup copy: ", err);
+    }
+  } else {
+    fmt.Println("Persistance: failed to read persistence db - skipping backup: ", err);
+  }
+  
+  // Next, check if we need to remove the oldest file
+  backupFiles, err := ioutil.ReadDir(GetSystemConfiguration().PersistenceDb.BackupPath);
+  if (err != nil) {
+    fmt.Println("Persistance: failed to enumerate backup files: ", err);
+  } else {
+    if (len(backupFiles) > GetSystemConfiguration().PersistenceDb.BackupQuantity) {
+      //sort.Strings(backupFiles);
+      err = os.Remove(GetSystemConfiguration().PersistenceDb.BackupPath + "/" + backupFiles[0].Name());
+      if (err != nil) {
+        fmt.Println("Persistance: failed to remove the olderst backup file: ", err);
+      }
+    }
+  }
+  
+  // Finally, save to / overwrite the persistence db
   databaseByteArray, err := json.MarshalIndent(persistenceDb, "", "  ");
   if (err == nil) {
-    err = ioutil.WriteFile(RuntimeRoot + "/" + PERSISTENCE_DATABASE_FILE_NAME, databaseByteArray, 0644);
+    err = ioutil.WriteFile(persistentDbPath, databaseByteArray, 0644);
     if (err != nil) {
-      fmt.Println("Persistance: failed to save reservation database to file", err);
+      fmt.Println("Persistance: failed to save reservation database to file: ", err);
     } else {
       fmt.Println("Persistance: saving database");
     }
   } else {
-    fmt.Println("Persistance: failed to serialize reservation database", err);
+    fmt.Println("Persistance: failed to serialize reservation database: ", err);
   }
 }
 
@@ -410,7 +436,7 @@ func cleanObsoleteSafetyTestResults() {
 
 
 func readOwnerAccountDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + ACCOUNT_DATABASE_FILE_NAME);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.AccountDbName);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {

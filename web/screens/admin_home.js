@@ -35,8 +35,8 @@ AdminHome = {
                 Backend.refundReservation(function(status) {
                   if (status == Backend.STATUS_SUCCESS) {
                     Backend.cancelReservation(function(status) {
+                      Main.hidePopup();
                       if (status == Backend.STATUS_SUCCESS) {
-                        Main.hidePopup();
                         this._selectedRentalElement._rental.status = Backend.RESERVATION_STATUS_CANCELLED;
                         Backend.resetReservationContext();
 
@@ -46,9 +46,13 @@ AdminHome = {
                       }
                     }.bind(this));
                   } else {
+                    Main.hidePopup();
                     Main.showMessage("Update Not Successful", "Refund cannot be issued");
                   }
                 }.bind(this));
+              } else {
+                Main.hidePopup();
+                Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
               }
             }.bind(this));
           }
@@ -81,8 +85,8 @@ AdminHome = {
                 Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
 
                 Backend.saveReservation(function(status) {
+                  Main.hidePopup();
                   if (status == Backend.STATUS_SUCCESS) {
-                    Main.hidePopup();
                     this._selectedRentalElement._rental.status = Backend.getReservationContext().status;
                     Backend.resetReservationContext();
 
@@ -93,6 +97,7 @@ AdminHome = {
                   }
                 }.bind(this));
               } else {
+                Main.hidePopup();
                 Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
               }
             }.bind(this));

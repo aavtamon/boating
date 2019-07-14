@@ -119,6 +119,12 @@ type TBookingExpirationConfiguration struct {
   CompletedTimeout int64 `json:"completed"`;
 }
 
+type TPersistenceDbConfiguration struct {
+  AccountDbName string `json:"account_db_name"`;
+  PersistenceDbName string `json:"persistence_db_name"`;
+  BackupPath string `json:"backup_path"`;
+  BackupQuantity int `json:"backup_quantity"`;
+}
 
 type TSystemConfiguration struct {
   Domain string `json:"domain"`;
@@ -128,6 +134,7 @@ type TSystemConfiguration struct {
   PaymentConfiguration TPaymentConfiguration `json:"payment"`;
   BookingExpirationConfiguration TBookingExpirationConfiguration `json:"booking_expiration"`;
   SafetyTestHoldTime int64 `json:"safety_test_hold_time"`;
+  PersistenceDb TPersistenceDbConfiguration `json:"persistence_db"`;
 }
 
 
