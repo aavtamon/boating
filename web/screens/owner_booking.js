@@ -73,6 +73,7 @@ OwnerBooking = {
       reservationContent.slot = this._slot;
       
       Backend.saveReservation(function(status, reservationId) {
+        Main.hidePopup();
         if (status == Backend.STATUS_SUCCESS) {
           Main.showMessage("Reservation confirmed", "Your reservation <a href=\"#owner_reservation_update?id=" + reservationId + "\">" + reservationId + "</a> is booked.", function(action) {
             Main.loadScreen("owner_home");
