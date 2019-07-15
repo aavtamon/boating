@@ -5,6 +5,7 @@ Main = {
   ACTION_CANCEL: "cancel",
   
   DIALOG_TYPE_CONFIRMATION: "confirmation",
+  DIALOG_TYPE_ACCEPT: "accept",
   DIALOG_TYPE_YESNO: "yesno",
   DIALOG_TYPE_INFORMATION: "information",
   
@@ -74,40 +75,46 @@ Main = {
     $("#Main-Dialog").show();
     
     if (dialogType == Main.DIALOG_TYPE_INFORMATION) {
-      $("#Main-Dialog-Frame-Content-Buttons-1").html("OK");
-      $("#Main-Dialog-Frame-Content-Buttons-1").show();
-      $("#Main-Dialog-Frame-Content-Buttons-1").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
-      $("#Main-Dialog-Frame-Content-Buttons-1").focus();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").html("OK");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").show();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Dialog-Frame-Content-Buttons-OK").focus();
 
-      $("#Main-Dialog-Frame-Content-Buttons-2").hide();
-      $("#Main-Dialog-Frame-Content-Buttons-3").hide();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").hide();
     } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
-      $("#Main-Dialog-Frame-Content-Buttons-1").html("OK");
-      $("#Main-Dialog-Frame-Content-Buttons-1").show();
-      $("#Main-Dialog-Frame-Content-Buttons-1").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Dialog-Frame-Content-Buttons-OK").html("OK");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").show();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
 
-      $("#Main-Dialog-Frame-Content-Buttons-2").hide();
-      
-      $("#Main-Dialog-Frame-Content-Buttons-3").html("Cancel");
-      $("#Main-Dialog-Frame-Content-Buttons-3").show();
-      $("#Main-Dialog-Frame-Content-Buttons-3").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-3").click(onClick.bind(this, Main.ACTION_CANCEL));
-      $("#Main-Dialog-Frame-Content-Buttons-3").focus();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
+    } else if (dialogType == Main.DIALOG_TYPE_ACCEPT) {
+      $("#Main-Dialog-Frame-Content-Buttons-OK").html("Accept");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").show();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
+
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
     } else if (dialogType == Main.DIALOG_TYPE_YESNO) {
-      $("#Main-Dialog-Frame-Content-Buttons-1").html("Yes");
-      $("#Main-Dialog-Frame-Content-Buttons-1").show();
-      $("#Main-Dialog-Frame-Content-Buttons-1").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-1").click(onClick.bind(this, Main.ACTION_YES));
-      $("#Main-Dialog-Frame-Content-Buttons-1").focus();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").html("Yes");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").show();
+      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_YES));
+      $("#Main-Dialog-Frame-Content-Buttons-OK").focus();
       
-      $("#Main-Dialog-Frame-Content-Buttons-2").html("No");
-      $("#Main-Dialog-Frame-Content-Buttons-2").show();
-      $("#Main-Dialog-Frame-Content-Buttons-2").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-2").click(onClick.bind(this, Main.ACTION_NO));
-
-      $("#Main-Dialog-Frame-Content-Buttons-3").hide();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("No");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_NO));
     }
   },
   

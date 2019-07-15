@@ -209,9 +209,8 @@
   
   text-align: center;
 }
-#Main-Dialog-Frame-Content-Buttons-1,
-#Main-Dialog-Frame-Contant-Buttons-2,
-#Main-Dialog-Frame-Content-Buttons-3 {
+#Main-Dialog-Frame-Content-Buttons-OK,
+#Main-Dialog-Frame-Content-Buttons-Cancel {
   margin-right: 20px;
   
   font-size: 15px;
@@ -220,7 +219,7 @@
 }
 #Main-Dialog-Frame-Content-Buttons-OK:active,
 #Main-Dialog-Frame-Content-Buttons-Cancel:active {
-  background-color: #c5f9f9;
+  background-color: #e1fbfb;
 }
 
 #Main-AcceptCookie {

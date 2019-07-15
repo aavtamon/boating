@@ -136,12 +136,12 @@ BookingPayment = {
       if (this._cancellationPolicyAccepted) {
         this._pay(stripe, card);
       } else {
-        Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndConditions'></div><br><div style='font-size: 16px;'>Press <b>OK</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>", function(action) {
+        Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndConditions'></div><br><div style='font-size: 16px;'>Press <b>Accept</b> to agree and proceed with the reservaion.<br>Press <b>Cancel</b> if you disagree with this policy, and your reservation will not be processed.</div>", function(action) {
           if (action == Main.ACTION_OK) {
             this._cancellationPolicyAccepted = true;
             this._pay(stripe, card);
           }
-        }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
+        }.bind(this), Main.DIALOG_TYPE_ACCEPT);
         
         $("#BookingPayment-TermsAndConditions").load("screens/terms_and_conditions");
       }
