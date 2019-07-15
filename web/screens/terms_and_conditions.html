@@ -1,16 +1,5 @@
+<!DOCTYPE html>
 <html>
-  <script>
-    var cancellationTerms = "<ul>";
-    for (var index in Backend.getBookingConfiguration().cancellation_fees) {
-      var fee = Backend.getBookingConfiguration().cancellation_fees[index];
-      cancellationTerms += "<li>" + ScreenUtils.pad(fee.range_max, 2, "0") + " - " + ScreenUtils.pad(fee.range_min, 2, "0") + " hours: $" + fee.price + "</li>"
-    }
-    cancellationTerms += "</ul>";
-    
-    document.getElementById("cancellation-terms").innerHTML = cancellationTerms;
-    document.getElementById("cancellation-deadline").innerHTML = Backend.getBookingConfiguration().cancellation_fees[0].range_max;
-  </script>
-  
   <body>
     <center style="font-size: 30px; font-weight: bold; margin-bottom: 20px;">Terms and Conditions</center>
     <div style="font-size: 25px; font-weight: bold; margin-bottom: 20px;">Use of Personal Data</div>
@@ -23,8 +12,12 @@
     <br>
     <div style="font-size: 25px; font-weight: bold; margin-bottom: 20px;">Cancellation Policy</div>
     <div style="font-size: 16px;">
-      You may cancel your reservation and receive a full refund if you cancel more than <font id="cancellation-deadline">48 hours</font> hours prior to your departure.<br>Cancellation fees apply if cancelling the reservation less than that.<br>
-      <div id="cancellation-terms"></div>
+      You may cancel your reservation and receive a full refund if you cancel more than {{(index .BookingConfiguration.CancellationFees 0).RangeMax}} hours hours prior to your departure.<br>Cancellation fees apply if cancelling the reservation less than that:<br>
+      <ul>
+        {{range $_, $pricedRange := .BookingConfiguration.CancellationFees}}
+          <li>{{printf "%02d" $pricedRange.RangeMax}} - {{printf "%02d" $pricedRange.RangeMin}} hours: ${{printf "%.2f" $pricedRange.Price}}</li>
+        {{end}}
+      </ul>
       Please note, that should there be inclement weather or other unforseeable circumstances we may cancel your reservation.<br>
       Should this occur, you will be fully refunded.<br>
     </div>

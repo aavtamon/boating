@@ -143,7 +143,7 @@ BookingPayment = {
           }
         }.bind(this), Main.DIALOG_TYPE_CONFIRMATION);
         
-        $("#BookingPayment-TermsAndConditions").load("files/docs/terms-and-conditions.html");
+        $("#BookingPayment-TermsAndConditions").load("screens/terms_and_conditions");
       }
     }.bind(this));
   },
@@ -230,6 +230,6 @@ BookingPayment = {
   
   _showCancellationPolicy: function() {
     Main.showMessage("Important Policy Information", "<div id='BookingPayment-TermsAndConditions'></div>");
-    $("#BookingPayment-TermsAndConditions").load("files/docs/terms-and-conditions.html");
+    $("#BookingPayment-TermsAndConditions").load("screens/terms_and_conditions");
   },
 }
