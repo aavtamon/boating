@@ -458,13 +458,21 @@ func readOwnerAccountDatabase() {
 func generateReservationId() TReservationId {
   rand.Seed(time.Now().UTC().UnixNano());
   
-  var bytes [10]byte;
+  var sessionId string;
+  var bytes [3]byte;
   
-  for i := 0; i < 10; i++ {
-    bytes[i] = 65 + byte(rand.Intn(26));
+  for groupIndex := 0; groupIndex < 4; groupIndex++ {
+    for i := 0; i < 3; i++ {
+      bytes[i] = 48 + byte(rand.Intn(10));
+    }
+    
+    if (groupIndex > 0) {
+      sessionId += "-";
+    }
+    sessionId += string(bytes[:]);
   }
   
-  return TReservationId(bytes[:]);
+  return TReservationId(sessionId);
 }
 
 
