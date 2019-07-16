@@ -100,8 +100,8 @@ AdminCompletion = {
             Backend.getReservationContext().status = Backend.RESERVATION_STATUS_COMPLETED;
 
             Backend.saveReservation(function(status) {
+              Main.hidePopup();
               if (status == Backend.STATUS_SUCCESS) {
-                Main.hidePopup();
                 Backend.resetReservationContext();
                 Main.loadScreen("admin_home");
               } else {
@@ -109,10 +109,12 @@ AdminCompletion = {
               }
             }.bind(this));
           } else {
+            Main.hidePopup();
             Main.showMessage("Deposit Refund Not Successful", "Deposit was not refunded.");
           }
         }.bind(this));  
       } else {
+        Main.hidePopup();
         Main.showMessage("Update Not Successful", "Fuel usage can not be updated.");
       }
     }.bind(this));
@@ -127,8 +129,8 @@ AdminCompletion = {
     Backend.getReservationContext().status = Backend.RESERVATION_STATUS_ACCIDENT;
 
     Backend.saveReservation(function(status) {
+      Main.hidePopup();
       if (status == Backend.STATUS_SUCCESS) {
-        Main.hidePopup();
         Backend.resetReservationContext();
         Main.loadScreen("admin_home");
       } else {

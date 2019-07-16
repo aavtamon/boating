@@ -197,6 +197,7 @@ BookingPayment = {
 
     stripe.createToken(card, cardData).then(function(result) {
       if (result.error) {
+        Main.hidePopup();
         Main.showMessage("Payment Not Successful", result.error.message);
       } else {
         Backend.saveReservation(function(status, reservationId) {
@@ -213,13 +214,16 @@ BookingPayment = {
                 Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
               }
 
-              //TODO: Consider removing of the previously saved reservation
+              //TODO: Consider removing the previously saved reservation
             });
           } else if (status == Backend.STATUS_NOT_FOUND) {
+            Main.hidePopup();
             Main.showMessage("Not Successful", "We cannot save your reservation. Try again later");
           } else if (status == Backend.STATUS_CONFLICT) {
+            Main.hidePopup();
             Main.showMessage("Not Successful", "We are sorry, but it looks like this time was just booked. Please choose another one");
           } else {
+            Main.hidePopup();
             Main.showMessage("Not Successful", "An error occured. Please try again");
           }
         });

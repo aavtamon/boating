@@ -112,6 +112,7 @@ ReservationUpdate = {
         Backend.refundReservation(function(status) {
           if (status == Backend.STATUS_SUCCESS) {
             Backend.cancelReservation(function(status) {
+              Main.hidePopup();
               if (status == Backend.STATUS_SUCCESS) {
                 Backend.resetReservationContext();
               } else {
@@ -126,6 +127,7 @@ ReservationUpdate = {
               });
             }.bind(this));
           } else {
+            Main.hidePopup();
             Main.showMessage("Cancellation Failed", "For some reason we were unable to issue you a refund. Please give us a call and we will assist you with this cancellation.");
           }
         }.bind(this));

@@ -101,6 +101,7 @@ AdminDeposit = {
 
     stripe.createToken(card, cardData).then(function(result) {
       if (result.error) {
+        Main.hidePopup();
         Main.showMessage("Payment Not Successful", result.error.message);
       } else {
         Backend.payDeposit(result.token.id, function(status) {
@@ -109,8 +110,8 @@ AdminDeposit = {
             
             Backend.getReservationContext().status = Backend.RESERVATION_STATUS_DEPOSITED;
             Backend.saveReservation(function(status) {
+              Main.hidePopup();
               if (status == Backend.STATUS_SUCCESS) {
-                Main.hidePopup();
                 Backend.resetReservationContext();
                 Main.loadScreen("admin_home");
               } else {
@@ -118,6 +119,7 @@ AdminDeposit = {
               }
             });
           } else {
+            Main.hidePopup();
             Main.showMessage("Payment Not Successful", "Something went wrong. Please try again");
           }
         });
