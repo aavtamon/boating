@@ -5,7 +5,7 @@
       <div style='font-size: 15px;'>
         A fuel charge in the amount of ${{printf "%.2f" .Reservation.FuelCharge}} and a late fee in the amount of ${{printf "%.2f" .Reservation.LateFee}} is applied to the payment method used for the security deposit. The remaining part of the originally paid security deposit was released and should appear on the credit card within 5 business days.
         <br>
-        The deposit amout that was ariginally reserved on the card was ${{printf "%.2f" .Reservation.DepositAmount}}.
+        The deposit amount that was originally reserved on the card was ${{printf "%.2f" .Reservation.DepositAmount}}.
       </div>
 
 {{template "email_footer"}}
