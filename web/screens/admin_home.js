@@ -16,6 +16,10 @@ AdminHome = {
         Main.loadScreen("owner_login");
       });
     });
+
+    $("#AdminHome-Screen-Description-DocumentButton").click(function() {
+      Main.loadScreen("admin_documents");
+    });
     
     
     $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);

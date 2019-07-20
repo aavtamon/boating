@@ -1,0 +1,26 @@
+#AdminDocuments-Screen-RentalManagement, #AdminDocuments-Screen-BoatOwnerManagement {
+  padding: 20px;
+}
+
+#AdminDocuments-Screen-RentalManagement-Title, #AdminDocuments-Screen-BoatOwnerManagement-Title {
+  text-align: center;
+  
+  font-size: 25px;
+  color: #062f73;
+}
+
+#AdminDocuments-Screen-RentalManagement-DocumentTable, #AdminDocuments-Screen-BoatOwnerManagement-DocumentTable {
+  margin-top: 20px;
+  padding: 10px;
+  
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+#AdminDocuments-Screen-RentalManagement-DocumentTable th, #AdminDocuments-Screen-BoatOwnerManagement-DocumentTable th {
+  border: 1px solid black;
+}
+#AdminDocuments-Screen-RentalManagement-DocumentTable td, #AdminDocuments-Screen-BoatOwnerManagement-DocumentTable td {
+  padding: 10px;
+  border: 1px solid black;
+}

@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="screens/admin_documents.css">
+<script src="screens/admin_documents.js"></script>
+
+<script>
+  AdminDocuments.adminAccount = {{.OwnerAccount}};
+</script>
+
+<div id="AdminDocuments-Screen-Description" class="screen-description">
+  <button id="AdminDocuments-Screen-Description-BackButton" class="standard-button previous">Rental Dashboard</button>
+  Rental Document Vault
+</div>
+<div id="AdminDocuments-Screen" class="screen" onshow="AdminDocuments.onLoad()">
+  <div id="AdminDocuments-Screen-RentalManagement">
+    <div id="AdminDocuments-Screen-RentalManagement-Title">Rental Management Documents</div>
+    <table id="AdminDocuments-Screen-RentalManagement-DocumentTable">
+      <tr>
+        <th width="250px;">Document</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><a href="files/docs/boat_rental_agreement.pdf" target="_blank">Renter's Agreement</a></td>
+        <td>Rental contract. Two copies must be printed and signed. One goes to the renter, the other one is kept by PizBoats.</td>
+      </tr>
+      <tr>
+        <td><a href="files/docs/boat_rental_waiver.pdf" target="_blank">Renter's Waiver</a></td>
+        <td>One copy is filled and signed by the renter and is kept by PizBoats.</td>
+      </tr>
+      <tr>
+        <td><a href="files/docs/boat_inspection_form.pdf" target="_blank">Boat Inspecition Form</a></td>
+        <td>One copy is filled and signed by the renter and is kept by PizBoats.</td>
+      </tr>
+      <tr>
+        <td><a href="files/docs/boat_rental_policies.html" target="_blank">Rental Policies</a></td>
+        <td>The form is printed and provided to the renter.</td>
+      </tr>
+    </table>
+  </div>
+  
+  <div id="AdminDocuments-Screen-BoatOwnerManagement">
+    <div id="AdminDocuments-Screen-BoatOwnerManagement-Title">Boat Owner Documents</div>
+    <table id="AdminDocuments-Screen-BoatOwnerManagement-DocumentTable">
+      <tr>
+        <th width="250px;">Document</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><a href="files/docs/boat_owner_agreement.pdf" target="_blank">Boat Owner Agreement</a></td>
+        <td>Boat Owner Contract. Two copies must be printed and signed. One copy goes to the boat owner. The other is kept by PizBoats.</td>
+      </tr>
+        <td><a href="files/docs/personal_boat_usage_policies.html" target="_blank">Personal Boat Usage Policy</a></td>
+        <td>The policy is provided to the boat owner as a summary of his boat usage rights and responsibilities.</td>
+      </tr>
+    </table>
+  </div>
+</div>

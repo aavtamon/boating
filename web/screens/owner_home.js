@@ -161,16 +161,16 @@ OwnerHome = {
     
     var curDate = ScreenUtils.getDateForTime(this.currentTime);
     curDate.setUTCDate(1);
-    var begginingOfMonthMillis = curDate.getTime();
+    var beginningOfMonthMillis = curDate.getTime();
     
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
       
       if (rental.status == Backend.RESERVATION_STATUS_COMPLETED
-         && rental.slot.time > begginingOfMonthMillis) {
+         && rental.slot.time > beginningOfMonthMillis) {
 
         numberOfRentals++;
-        earnedMoney += rental.slot.price;
+        earnedMoney += rental.payment_amount;
       }
     }
     
