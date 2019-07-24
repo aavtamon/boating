@@ -345,9 +345,9 @@ func readPersistenceDatabase() {
   if (persistenceDb.Reservations == nil) {
     persistenceDb.Reservations = make(TReservationMap);
     persistenceDb.SafetyTestResults = make(TSafetyTestResults);
-  } else {
-    savePersistenceDatabase();
   }
+  
+  savePersistenceDatabase();
 }
 
 func savePersistenceDatabase() {
