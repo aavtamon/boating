@@ -1,9 +1,9 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Reservation Cancelled - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <center><h1 style='padding-top: 10px;'>Reservation Cancelled - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Reservation confirmation number is: {{.Reservation.Id}}.
         <br>
         Refunded amount: ${{printf "%.2f" .Reservation.RefundAmount}}.
         <br>
