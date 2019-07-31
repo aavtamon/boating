@@ -1,9 +1,12 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Booking Cancellation - {{.Reservation.Id}}</h1></center>
+      <center><h1 style='padding-top: 10px;'>Rental Reservation Cancelled - {{.Reservation.Id}}</h1></center>
       <br>
-      Your reservation {{.Reservation.Id}} for personal boat use was cancelled.
+      Your reservation {{.Reservation.Id}} to use your personal boat use was cancelled.
       <br>
-      Please let us know if you have any questions.
+      <br>
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
+      <br>
+      <br>
 
 {{template "email_footer"}}

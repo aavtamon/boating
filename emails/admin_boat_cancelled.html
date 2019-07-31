@@ -3,11 +3,14 @@
       <center><h1 style='padding-top: 10px;'>Reservation Cancelled - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Reservation confirmation number is: {{.Reservation.Id}}.
+        Reservation Confirmation Number: {{.Reservation.Id}}.
         <br>
-        Refunded amount: ${{printf "%.2f" .Reservation.RefundAmount}}.
+        <br>
+        Amount Refunded: ${{printf "%.2f" .Reservation.RefundAmount}}.
         <br>
         Original Deposit: ${{printf "%.2f" .Reservation.PaymentAmount}}.
+        <br>
+        <br>
       </div>
 
 {{template "email_footer"}}

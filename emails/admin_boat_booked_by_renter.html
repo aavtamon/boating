@@ -1,23 +1,24 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Reservation placed by renter - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <center><h1 style='padding-top: 10px;'>Reservation Placed by Renter - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Reservation Confirmation Number: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        Amount paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
+        <br>
+        Amount Paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
       <br>
-      The rental is on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      The Rental Begins: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
+      Boat Name: <b>{{.Boat.Name}}</b>
       <br>
       <br>
-      Pickup location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}})
+      Pickup Location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}})
       <br>
-      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      Parking Fee: <b>{{.PickupLocation.ParkingFee}}</b>
       <br>
-      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      Special Instructions: <b>{{.PickupLocation.Instructions}}</b>
       <br>
       <br>
 

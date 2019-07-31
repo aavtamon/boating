@@ -1,13 +1,13 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Reservation placed by boat owner - {{.Reservation.Id}}</h1></center>
+      <center><h1 style='padding-top: 10px;'>Reservation Placed by Boat Owner - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Reservation confirmation number is: {{.Reservation.Id}}.
+        Reservation Confirmation Number: {{.Reservation.Id}}.
       </div>
       <br>
-      The rental is on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      Personal Boat Use Begins: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
+      Boat Name:         <b>{{.Boat.Name}}</b>
 
 {{template "email_footer"}}

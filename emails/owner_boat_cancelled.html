@@ -1,7 +1,12 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Rental Of Your Boat Was Cancelled ({{.Reservation.Id}})</h1></center>
+      <center><h1 style='padding-top: 10px;'>The Rental Of Your Boat Was Cancelled ({{.Reservation.Id}})</h1></center>
       <br>
-      The rental of <b>{{.Boat.Name}}</b> on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b> for <b>{{.Reservation.Slot.Duration}} hours</b> was cancelled.
+      Rental of <b>{{.Boat.Name}}</b> on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b> for <b>{{.Reservation.Slot.Duration}} hours</b> was cancelled.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
+      <br>
+      <br>
 
 {{template "email_footer"}}

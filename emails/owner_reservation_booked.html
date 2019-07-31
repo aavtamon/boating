@@ -8,11 +8,13 @@
         Your reservation confirmation number is: {{.Reservation.Id}}.
       </div>
       <br>
-      The ride is on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      Your Personal Boat Use Begins At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
+      Boat Name: <b>{{.Boat.Name}}</b>
       <br>
+      <br>   
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
       <br>
-      Please take a moment to review <a href='{{.WebReference}}/files/docs/personal_boat_usage_policies.html'>Personal usage policy</a>
+      <br>      
 
 {{template "email_footer"}}

@@ -3,7 +3,7 @@
       <center><h1 style='padding-top: 10px;'>ATTENTION: Security Deposit Withheld - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Security deposit in the amount of ${{printf "%.2f" .Reservation.DepositAmount}} was withheld for the rental {{.Reservation.Id}}. Make sure to follow up with the renter asap to settle damage / insurance claim.
+        The security deposit in the amount of ${{printf "%.2f" .Reservation.DepositAmount}} was withheld for rental {{.Reservation.Id}}.  Make sure to follow up with the renter asap to settle damage/insurance claim.
       </div>
 
 {{template "email_footer"}}

@@ -1,13 +1,19 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Your Boat Was Booked</h1></center>
+      <center><h1 style='padding-top: 10px;'>Your Boat Was Reserved For Rental</h1></center>
       <br>
-      Booking confirmation number <b>{{.Reservation.Id}}</b>.
+      Rental Confirmation Number: <b>{{.Reservation.Id}}</b>.
+      <br>
       <br>
       Your boat <b>{{.Boat.Name}}</b> was booked for a rental.
       <br>
-      The rental begins on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      The Rental Begins At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Rental duration is <b>{{.Reservation.Slot.Duration}} hours</b>.
+      Rental Duration: <b>{{.Reservation.Slot.Duration}} hours</b>.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
+      <br>
+      <br>
 
 {{template "email_footer"}}

@@ -1,10 +1,15 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Your personal boat ride is about to start!</h1></center>
-      Your ride is on <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      <center><h1 style='padding-top: 10px;'>Your Personal Boat Use is About to Start!</h1></center>
+      The reservation confirmation number: {{.Reservation.Id}}
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
       <br>
-      The reservation confirmation number is {{.Reservation.Id}}
-
+      Your Personal Boat Use Begins At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      <br>
+      Boat Name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>   
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
+      <br>
+      <br>   
 {{template "email_footer"}}

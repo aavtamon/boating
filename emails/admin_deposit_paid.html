@@ -3,7 +3,7 @@
       <center><h1 style='padding-top: 10px;'>Deposit Payment Confirmation - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Security deposit in the amount of: ${{printf "%.2f" .Reservation.DepositAmount}} has been charged.
+        A security deposit in the amount of: ${{printf "%.2f" .Reservation.DepositAmount}} has been charged to the customer's credit card.
       </div>
 
 {{template "email_footer"}}
