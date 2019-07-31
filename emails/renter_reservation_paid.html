@@ -1,32 +1,32 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Booking Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <center><h1 style='padding-top: 10px;'>Rental Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your reservation confirmation number is <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Your Reservation Confirmation Number Is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
         <br>
-        You paid: ${{printf "%.2f" .Reservation.PaymentAmount}}.
+        Reservation Fee: ${{printf "%.2f" .Reservation.PaymentAmount}}.
       </div>
       <br>
-      Your rental begins on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      Your Rental Begins At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
+      Boat Name: <b>{{.Boat.Name}}</b>
       <br>
       <br>
-      Pickup location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
+      Pickup Location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
       <br>
-      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      Parking Fee: <b>{{.PickupLocation.ParkingFee}}</b>
       <br>
-      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      Special Instructions: <b>{{.PickupLocation.Instructions}}</b>
       <br>
       <br>
 
       {{if eq (len .SafetyTestResults) 0}}
-        Our records indicate that you have not yet completed the required safety test.  Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (before you can take the boat). If you have plan on having multiple boat operators, each person will have to complete the test.
+        Our records indicate that you have not yet completed the required boating safety test. Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (and before you can take the boat). If you plan on having multiple boat operators, each person will have to complete the test.
       {{else}}
-        Our records indicate that you have drivers on this reservation that passed the required safety test. You are good to go!
+        Our records indicate that you have operators on this reservation that passed the required safety test. No futher action regarding the boating safety test is required from you.
         <br>
-        However, you can still review safety tips, retake the test, or add more drivers by following the link below.
+        You can still review safety tips, retake the test, or add more operators by following the link below.
       {{end}}
       <br>
       Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to review safety tips and take the test.
@@ -36,12 +36,12 @@
       Please review the most important <a href="{{.WebReference}}/files/docs/boat_rental_policies.html" target="_blank">Rental Policies</a>.
       <br>
       <br>
-      In order to speed up your boarding process, please print and fill out <a href="{{.WebReference}}/files/docs/boat_rental_agreement.pdf" target="_blank">Boat Rental Agreement</a> and <a href="{{.WebReference}}/files/docs/boat_rental_waiver.pdf" target="_blank">Release Of Liability Agreement</a> and bring with you.
+      In order to speed up your boarding process, please print and fill out the <a href="{{.WebReference}}/files/docs/boat_rental_agreement.pdf" target="_blank"> Boat Rental Agreement</a> and the <a href="{{.WebReference}}/files/docs/boat_rental_waiver.pdf" target="_blank"> Release Of Liability Agreement</a> and bring them with you.
       <br>
-      We will need to have these forms completed and signed before you can take off. It will greatly save your time if you fill them out in a comfort of your home and will let you spend more time enjoying the lake.
+      We will need to have these forms completed and signed before you can take the boat. It will save time if you fill out all forms before you come to the lake.
       <br>
       <br>
-      IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{printf "%.2f" .Boat.Deposit}}</b>. Please make sure to bring a credit card to pay the deposit. Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental less fuel charges.
+      IMPORTANT: We will need to take a damage security deposit in the amount of <b>${{printf "%.2f" .Boat.Deposit}}</b>. Please make sure to bring a credit card to complete the deposit. Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental less any fuel charges.
       <br>
       <br>
       Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}?Subject=Inquiry regarding reservation {{.Reservation.Id}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you need any help.

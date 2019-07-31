@@ -1,32 +1,34 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Your boat ride is coming!</h1></center>
+      <center><h1 style='padding-top: 10px;'>Your Boat Rental is Coming!</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Your reservation confirmation number is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Your Reservation Confirmation Number Is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
       </div>
       <br>
-      Your rental will begin on: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      Your Rental Will Begin At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
       <br>
-      Boat name: <b>{{.Boat.Name}}</b>
+      Boat Name: <b>{{.Boat.Name}}</b>
       <br>
       <br>
-      Pickup location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
+      Pickup Location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
       <br>
-      Parking fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      Parking Fee: <b>{{.PickupLocation.ParkingFee}}</b>
       <br>
-      Special instructions: <b>{{.PickupLocation.Instructions}}</b>
+      Special Instructions: <b>{{.PickupLocation.Instructions}}</b>
       <br>
       <br>
       We hope to see you soon!
 
       {{if eq (len .SafetyTestResults) 0}}
-        Our records indicate that you have not yet completed the required safety test.  Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (before you can take the boat). If you have plan on having multiple boat operators, each person will have to complete the test.
+        Our records indicate that you have not yet completed the required boating safety test. Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (and before you can take the boat). If you plan on having multiple boat operators, each person will have to complete the test.
       {{else}}
-        Our records indicate that you have drivers on this reservation that passed the required safety test. You are good to go!
+        Our records indicate that you have boat operators on this reservation that passed the required safety test. No futher action regarding the boating safety test is required from you.
         <br>
-        However, you can still review safety tips, retake the test, or add more drivers by following the link below.
+        <br>
+        You can still review safety tips, retake the test, or add more operators by following the link below.
       {{end}}
+      <br>
       <br>
       Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to review safety tips and take the test.
 

@@ -3,15 +3,14 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Withheld - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        There was an accident while you rented the boat. Therefore we had to withhold your security deposit (${{printf "%.2f" .Reservation.DepositAmount}}). We will contact you soon to follow up on this case and settle damage expenses.
+        Damage to the boat was reported during your rental.  We have withheld refunding your security deposit (${{printf "%.2f" .Reservation.DepositAmount}}) pending completion of a full damage review. We will contact you soon to follow up on this case and settle the damage expenses.
       </div>
       <br>
       <br>
-      Your ride is complete but we will need to follow up with you regarding the accident. Please expect a call from us soon.
+      While your rental is complete, we will need to follow up with you regarding the reported damages. Please expect a call from us soon.
       <br>
       Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
       <br>
       <br>
-      If you have any comments or suggestions about the boat you rented, please contact us at <a href='mailto:{{.GeneralParams.SupportEmail}}' target='_top'>{{.GeneralParams.SupportEmail}}</a> 
 
 {{template "email_footer"}}

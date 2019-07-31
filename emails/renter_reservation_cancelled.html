@@ -1,15 +1,14 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Booking Cancellation - {{.Reservation.Id}}</h1></center>
+      <center><h1 style='padding-top: 10px;'>Rental Cancellation - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
         Your reservation {{.Reservation.Id}} was cancelled by PizBoats.
         <br>
-        It could've been done upon your request, or because of inclement weather or other unexpected circumstances.
+        Cancellation could have been initiated at your request, was due to inclement weather or there was some other unexpected circumstance.
         <br>
-        A refund in the amount of ${{printf "%.2f" .Reservation.RefundAmount}} has been issued and should appear on your original credit card in about 5 business days.
+        A refund in the amount of ${{printf "%.2f" .Reservation.RefundAmount}} has been issued and should appear on your original credit card in approximately 5 business days.
         <br>
-        If you have  any questions, please contact us.
       </div>
       <br>
       We hope to see you again in the near future.
