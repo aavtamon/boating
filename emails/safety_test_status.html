@@ -1,22 +1,22 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Safety Test Status</h1></center>
+      <center><h1 style='padding-top: 10px;'>Boating Safety Test Status</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        Boater Safety Test status for reservation <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        Boater Safety Test Status For Reservation: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
       </div>
       <br>
 
       {{if eq (len .SafetyTestResults) 0}}
-        Our records indicate that no one on this reservation has a valid (unexpired) Safety Test.
+        Our records indicate that no one attached to this reservation has a valid (unexpired) Boating Safety Certificate.
         <br>
-        Completion of the safety test is required in order to operate a motor boat.
+        Completion of the Boating Safety Course is required in order to operate a boat.
         <br>
-        Please use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to take the course and complete the required certification.
+        Please use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Boating Safety Test</a> link to take the course and complete the required certification.
       {{else}}
-        Our records indicate that the following drivers completed required certification and can operate a motor boat.
+        Our records indicate that the following drivers completed the required Boating Safety Course and can operate a boat.
         <br>
-        Please print the below card and take it on board as a proof of passing the mandatory safety training.
+        Please print the below card and take it with you as a proof of passing the mandatory Boater Safety Course.
         <br>
         <br>
         <hr>
@@ -24,20 +24,23 @@
         <center>
         {{range $_, $testResult := .SafetyTestResults}}
           <div style="border-width: 2px; border-color: black; border-style: solid; border-radius: 10px; display:inline-block; padding: 10px;">
-            <div style="text-align: center; font-size: 25px; text-decoration: underline; font-weight:bold;">Boater Safety Test Certificate</div>
+            <div style="text-align: center; font-size: 25px; text-decoration: underline; font-weight:bold;">Boating Safety Test Certificate</div>
             <br>
-            <div style="font-size: 22px; text-align:left;">Issued to {{$testResult.FirstName}} {{$testResult.LastName}}  (DL {{$testResult.DLState}} #{{$testResult.DLNumber}})
+            <div style="font-size: 22px; text-align:left;">Issued To: {{$testResult.FirstName}} {{$testResult.LastName}}  (DL {{$testResult.DLState}} #{{$testResult.DLNumber}})
             <br>
-            As a proof of passing the Boater Safety Test on {{call $.FormatDateTime $testResult.PassDate}}.</div>
-            <div style="font-size: 20px; text-align:left;">The scored result is {{$testResult.Score}}%.</div>
+            Succesfully Completed the Boating Safety Course On: {{call $.FormatDateTime $testResult.PassDate}}.</div>
+            <div style="font-size: 20px; text-align:left;">Your Score: {{$testResult.Score}}%.</div>
             <br>
-            <div style="font-size: 20px; text-align:left;">The certificate is valid thru {{call $.FormatDateTime $testResult.ExpirationDate}}.</div>
+            <div style="font-size: 20px; text-align:left;">This Certificate is Valid Through: {{call $.FormatDateTime $testResult.ExpirationDate}}.</div>
             <br>
-            <div style="text-align: right; font-size: 22px;">{{$testResult.FirstName}} {{$testResult.LastName}}  ______________  (sign)</div>
+            <div style="text-align: right; font-size: 22px;">{{$testResult.FirstName}} {{$testResult.LastName}}  _______________________  (sign)</div>
           </div>
           <br>
           <br>
           <hr>
+          <br>
+          Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you have any questions.
+          <br>
           <br>
         {{end}}
         </center>
