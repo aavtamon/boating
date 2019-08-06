@@ -37,8 +37,14 @@
           "name": "Ana",
           "type": "Pontoon 24ft",
           "images": [
-            {"name": "", "url": "files/images/boat-picture.jpg", "description": "Nice and powerful boat.<br>Good for surfing the lake with your party."},
-            {"name": "", "url": "files/images/tubing-picture.jpg", "description": "Comfortably sits 10 people"}
+            {"name": "Boat Ana - Exterior", "url": "files/images/boat_exterior1.jpg", "description": "Nice and powerful boat"},
+            {"name": "Boat Ana - Exterior", "url": "files/images/boat_exterior2.jpg", "description": "Good for surfing the lake with your party"},
+            {"name": "Boat Ana - Exterior", "url": "files/images/boat_exterior3.jpg", "description": "Great to spend a day on the lake with your friends and family"},
+            {"name": "Boat Ana - Interior", "url": "files/images/boat_interior1.jpg", "description": "Comfortably sits 10 people"},
+            {"name": "Boat Ana - Interior", "url": "files/images/boat_interior2.jpg", "description": "Can easily fit a party of 16"},
+            {"name": "Boat Ana - Interior", "url": "files/images/boat_interior3.jpg", "description": "Comfortable captain chair"},
+            {"name": "Boat Ana - Tubing", "url": "files/images/tubing1.jpg", "description": "Enjoy tuning on the lake. Speed up!"},
+            {"name": "Boat Ana - Tubing", "url": "files/images/tubing2.jpg", "description": "Tubing is a lot of fun. Catch a wave!"}
           ],
           "engine": "140h/p",
           "mileage": 10,

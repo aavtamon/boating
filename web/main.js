@@ -70,50 +70,66 @@ Main = {
       }
     }
     
-    dialogType = dialogType || Main.DIALOG_TYPE_INFORMATION;
-    
     $("#Main-Dialog").show();
     
+    dialogType = dialogType || Main.DIALOG_TYPE_INFORMATION;
+    
     if (dialogType == Main.DIALOG_TYPE_INFORMATION) {
+      function closeDialog() {
+        $(document).off("click");
+        $(document).off("keyup");
+        onClick(Main.ACTION_OK);
+      }
+      
+      
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("OK");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
-      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
+      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").click(closeDialog.bind(this));
       $("#Main-Dialog-Frame-Content-Buttons-OK").focus();
 
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").hide();
+      
+      setTimeout(function() {
+        $(document).click(closeDialog.bind(this));
+        $(document).keyup(function(e) {
+          if (e.keyCode === 27) {
+            closeDialog();
+          }
+        });
+      }, 10);
     } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("OK");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
 
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
     } else if (dialogType == Main.DIALOG_TYPE_ACCEPT) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("Accept");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
 
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
     } else if (dialogType == Main.DIALOG_TYPE_YESNO) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("Yes");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_YES));
       $("#Main-Dialog-Frame-Content-Buttons-OK").focus();
       
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("No");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").unbind("click");
+      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_NO));
     }
   },

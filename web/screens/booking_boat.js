@@ -20,6 +20,10 @@ BookingBoat = {
     $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton").click(function() {
       this._showBoatPicture(++this._currentImageIndex);
     }.bind(this));
+    $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Picture").click(function() {
+      this._loadPreview();
+    }.bind(this));
+      
 
     
     this._canProceedToNextStep();
@@ -87,6 +91,14 @@ BookingBoat = {
     
     $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-PreviousButton").prop("disabled", imageIndex == 0);
     $("#BookingBoat-Screen-SelectionPanel-BoatPictures-Title-NextButton").prop("disabled", imageIndex >= boat.images.length - 1);
+  },
+  
+  _loadPreview: function() {
+    var reservationContext = Backend.getReservationContext();
+    var boat = Backend.getBookingConfiguration().locations[reservationContext.location_id].boats[reservationContext.boat_id];
+    var imgResource = boat.images[this._currentImageIndex];
+    
+    Main.showMessage(imgResource.name, '<div id="BookingBoat-Screen-SelectionPanel-BoatPictures-Preview"><div id="BookingBoat-Screen-SelectionPanel-BoatPictures-Preview-Image" style="background-image: url(' + imgResource.url + ');"></div><div id="BookingBoat-Screen-SelectionPanel-BoatPictures-Preview-Description">' + imgResource.description + '</div></div>', null, Main.DIALOG_TYPE_INFORMATION);
   },
   
   
