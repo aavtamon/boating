@@ -30,10 +30,14 @@
 
 #Home-Screen-Introduction {
   display: inline-block;
-  width: calc(100% - 350px);
-  margin-right: 40px;
   
   vertical-align: top;
+  
+  font-size: 20px;
+}
+#Home-Screen-Introduction-Header {
+  text-align: center;
+  font-size: 22px;
 }
 
 #Home-Screen-Advantages {
@@ -42,7 +46,9 @@
 
 #Home-Screen-BoatPicture {
   display: inline-block;
-  width: 300px;
+  height: 250px;
+  margin-left: 10px;
+  margin-right: 10px;
   
   vertical-align: top;
 }
@@ -51,8 +57,7 @@
 #Home-Screen-TubingPicture {
   display: inline-block;
   width: 300px;
-  margin-top: 30px;
-  margin-right: 40px;
+  margin-right: 10px;
   
   vertical-align: top;
 }
