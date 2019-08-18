@@ -32,10 +32,10 @@
 #BookingBoat-Screen-SelectionPanel-BoatPictures-Preview {
 }
 #BookingBoat-Screen-SelectionPanel-BoatPictures-Preview-Image {
-  height: 300px;
+  height: 400px;
   
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 #BookingBoat-Screen-SelectionPanel-BoatPictures-Preview-Description {
