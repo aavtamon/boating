@@ -157,6 +157,8 @@ func InitializePersistance() {
   readPersistenceDatabase();
   
   InitializeBookings();
+  
+  schedulePeriodicCleanup();
 }
 
 
@@ -506,4 +508,23 @@ func getReservationSummary(reservation *TReservation) *TReservationSummary {
     Id: reservation.Id,
     Slot: reservation.Slot,
   };
+}
+
+
+func schedulePeriodicCleanup() {
+  go func() {
+    // Delay periodic action until 3am next day
+    initialDelayMins := 60 - time.Now().Minute();
+    initialDelayHours := 24 - time.Now().Hour() + 3;
+    
+    time.Sleep(time.Duration(initialDelayMins) * time.Minute + time.Duration(initialDelayHours) * time.Hour);
+    fmt.Println("Persistance: periodic database adjustment. Starting 24-hour sequence now: ", time.Now().String());
+    
+    // Start action every 24 hours
+    tickChannel := time.Tick(time.Duration(24) * time.Hour);
+    for now := range tickChannel {
+      fmt.Println("Persistance: periodic database saving at ", now.String());
+      savePersistenceDatabase();
+    }
+  }();
 }
