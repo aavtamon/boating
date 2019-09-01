@@ -166,7 +166,7 @@ OwnerHome = {
     for (var reservationId in this.rentalStat.rentals) {
       var rental = this.rentalStat.rentals[reservationId];
       
-      if (rental.status == Backend.RESERVATION_STATUS_COMPLETED
+      if ((rental.status == Backend.RESERVATION_STATUS_COMPLETED || rental.status == Backend.RESERVATION_STATUS_ARCHIVED)
          && rental.slot.time > beginningOfMonthMillis) {
 
         numberOfRentals++;

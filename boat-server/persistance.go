@@ -106,6 +106,23 @@ type TReservation struct {
   Status TReservationStatus `json:"status,omitempty"`;
 }
 
+func (reservation TReservation) isActive() bool {
+  return reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED && reservation.Status != RESERVATION_STATUS_ARCHIVED;
+}
+
+func (reservation TReservation) archive() {
+  reservation.DLState = "";
+  reservation.DLNumber = "";
+  reservation.FirstName = "";
+  reservation.LastName = "";
+  reservation.Email = "";
+  reservation.PrimaryPhone = "";
+  reservation.AlternativePhone = "";
+  reservation.AdditionalDrivers = nil;
+  reservation.Status = RESERVATION_STATUS_ARCHIVED;
+}
+
+
 type TReservationMap map[TReservationId]*TReservation;
 
 type TReservationSummary struct {
@@ -126,6 +143,7 @@ const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
 const RESERVATION_STATUS_DEPOSITED TReservationStatus = "deposited";
 const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
 const RESERVATION_STATUS_ACCIDENT TReservationStatus = "accident";
+const RESERVATION_STATUS_ARCHIVED TReservationStatus = "archived";
 
 
 
@@ -169,7 +187,7 @@ func GetReservation(reservationId TReservationId) *TReservation {
     return nil;
   }
   
-  if (reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+  if (reservation.isActive()) {
     return reservation;
   }
 
@@ -178,8 +196,7 @@ func GetReservation(reservationId TReservationId) *TReservation {
 
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && strings.EqualFold(reservation.LastName, lastName) &&
-        reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+    if (reservationId == resId && strings.EqualFold(reservation.LastName, lastName) && reservation.isActive()) {
       return reservation;
     }
   }
@@ -213,7 +230,7 @@ func GetOwnerReservationSummaries(ownerAccountId TOwnerAccountId) []*TReservatio
 
   if (ownerAccountId != NO_OWNER_ACCOUNT_ID) {
     for _, reservation := range persistenceDb.Reservations {
-      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED) {
+      if (reservation.OwnerAccountId == ownerAccountId && reservation.isActive()) {
         reservationSummaries = append(reservationSummaries, getReservationSummary(reservation));
       }
     }
@@ -408,19 +425,20 @@ func cleanObsoleteReservations() {
       if (reservation.Slot.DateTime / int64(time.Second / time.Millisecond) + 60 * 60 * 24 < currentMoment) {
         reservation.Status = RESERVATION_STATUS_COMPLETED;
       }
-    }
-
-
-    expiration := int64(0);
-    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
-      expiration = systemConfiguration.BookingExpirationConfiguration.CancelledTimeout;
-    } else if (reservation.Status == RESERVATION_STATUS_COMPLETED) {
-      expiration = systemConfiguration.BookingExpirationConfiguration.CompletedTimeout;
-    }
-
-    if (expiration > 0) {
+    } else if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
+      expiration := systemConfiguration.BookingExpirationConfiguration.CancelledTimeout;
       if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
         delete(persistenceDb.Reservations, reservationId);
+      }
+    } else if (reservation.Status == RESERVATION_STATUS_COMPLETED) {
+      expiration := systemConfiguration.BookingExpirationConfiguration.CompletedTimeout;
+      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
+        reservation.archive();
+      }
+    } else if (reservation.Status == RESERVATION_STATUS_ARCHIVED) {
+      expiration := systemConfiguration.BookingExpirationConfiguration.ArchivedTimeout;
+      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
+        delete(persistenceDb.Reservations, reservationId);  
       }
     }
   }

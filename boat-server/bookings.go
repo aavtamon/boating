@@ -311,7 +311,7 @@ func isBooked(locationId string, boatId string, slot TBookingSlot) bool {
   location := bookingConfiguration.Locations[locationId];
 
   for _, reservation := range GetAllReservations() {
-    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
+    if (!reservation.isActive()) {
       continue;
     }
     

@@ -117,6 +117,7 @@ type TPaymentConfiguration struct {
 type TBookingExpirationConfiguration struct {
   CancelledTimeout int64 `json:"cancelled"`;
   CompletedTimeout int64 `json:"completed"`;
+  ArchivedTimeout int64 `json:"archived"`;
 }
 
 type TPersistenceDbConfiguration struct {
