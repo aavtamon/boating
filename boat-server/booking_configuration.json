@@ -73,6 +73,39 @@
       "pickup_locations": {
         "1": {
           "location": {
+            "lat": 34.1863246,
+            "lng": -83.9799884,
+            "zoom": 20
+          },
+          "name": "Van Pugh",
+          "address": "Van Pugh Park, Gaines Ferry Rd, Flowery Branch, GA 30542",
+          "parking_fee": "$5",
+          "instructions": "Please proceed to Van Pugh North Beach parking"
+        },
+        "2": {
+          "location": {
+            "lat": 34.1674411,
+            "lng": -83.9760958,
+            "zoom": 20
+          },
+          "name": "Burton Mill",
+          "address": "Burton Mill Park, Flowery Branch, GA 30542",
+          "parking_fee": "$5",
+          "instructions": "Please proceed to Burton Mill Boat Ramp Access"
+        },
+        "3": {
+          "location": {
+            "lat": 34.221603,
+            "lng": -84.001325,
+            "zoom": 20
+          },
+          "name": "Two Mile Creek",
+          "address": "Two Mile Creek Park, Bethel Rd, Gainesville, GA 30506",
+          "parking_fee": "$5",
+          "instructions": "Please proceed to Two Mile Creek Public Boat Ramp"
+        },
+        "4": {
+          "location": {
             "lat": 34.199934,
             "lng": -83.971087,
             "zoom": 20
