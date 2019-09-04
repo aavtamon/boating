@@ -106,6 +106,17 @@
         },
         "4": {
           "location": {
+            "lat": 34.228072,
+            "lng": -83.936536,
+            "zoom": 20
+          },
+          "name": "Old Federal Park",
+          "address": "Old Federal Park, Jim Crow Rd, Flowery Branch, GA 30542",
+          "parking_fee": "$5",
+          "instructions": "Please proceed to Old Federal Boat Ramp"
+        },
+        "5": {
+          "location": {
             "lat": 34.199934,
             "lng": -83.971087,
             "zoom": 20

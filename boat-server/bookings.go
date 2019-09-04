@@ -9,20 +9,6 @@ import "time"
 import "fmt"
 
 
-type TRental struct {
-  Slot TBookingSlot `json:"slot,omitempty"`;
-  LocationId string `json:"location_id,omitempty"`;
-  BoatId string `json:"boat_id,omitempty"`;
-  LastName string `json:"last_name,omitempty"`;
-  SafetyTestStatus bool `json:"safety_test_status"`;
-  PaymentAmount float64 `json:"payment_amount,omitempty"`;
-  Status TReservationStatus `json:"status,omitempty"`;
-}
-
-type TRentalStat struct {
-  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
-}
-
 
 type TSlotType int;
 const (
@@ -129,55 +115,6 @@ func InitializeBookings() {
 func GetAvailableDates() TAvailableDates {
   return availableDates;
 }
-
-func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
-  if (accountId == NO_OWNER_ACCOUNT_ID) {
-    return nil;
-  }
-
-  account := ownerAccountMap[accountId];
-  
-  rentalStat := &TRentalStat{};
-  rentalStat.Rentals = make(map[TReservationId]*TRental);
-  
-  for _, reservation := range persistenceDb.Reservations {
-    if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
-      continue;
-    }
-  
-    if (reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID) {
-      boatIds, hasLocation := account.Locations[reservation.LocationId];
-      if (hasLocation) {
-        matches := false;
-        if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-          matches = true;
-        } else if (len(boatIds.Boats) > 0) {
-          for _, boatId := range boatIds.Boats {
-            if (boatId == reservation.BoatId) {
-              matches = true;
-              break;
-            }
-          }
-        }
-
-        if (matches) {
-          rentalStat.Rentals[reservation.Id] = &TRental{};
-
-          rentalStat.Rentals[reservation.Id].LocationId = reservation.LocationId;
-          rentalStat.Rentals[reservation.Id].BoatId = reservation.BoatId;
-          rentalStat.Rentals[reservation.Id].Slot = reservation.Slot;
-          rentalStat.Rentals[reservation.Id].LastName = reservation.LastName;
-          rentalStat.Rentals[reservation.Id].SafetyTestStatus = len(FindSafetyTestResults(reservation)) > 0;
-          rentalStat.Rentals[reservation.Id].PaymentAmount = reservation.PaymentAmount;
-          rentalStat.Rentals[reservation.Id].Status = reservation.Status;
-        }
-      }
-    }
-  }
-  
-  return rentalStat;
-}
-
 
 func getAvailableBookingSlots(date int64) []TBookingSlot {
   return availableSlots[date];
