@@ -123,7 +123,6 @@ ReservationUpdate = {
 
               Main.showMessage("Cancelled", "Your reservation was successfully cancelled, and your original payment method was refunded. You should expect to see your funds in the next 5 business days", function() {
                 Main.loadScreen("home");
-                //history.back();
               });
             }.bind(this));
           } else {

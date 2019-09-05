@@ -151,6 +151,7 @@ type TUsageStats struct {
 type TBoatUsageStat struct {
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
+  Hours map[string]int `json:"hours,omitempty"`;
 }
 
 
@@ -609,6 +610,8 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
 
   account := ownerAccountMap[accountId];
   
+  currentTime := time.Now().UTC();
+  
   usageStat := &TUsageStats{};
   usageStat.BoatUsageStats = make(map[string]*TBoatUsageStat);
   
@@ -633,17 +636,35 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
         }
 
         if (matches) {
+          reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
+        
           usageId := reservation.LocationId + "-" + reservation.BoatId;
           boatUsageStat, hasStat := usageStat.BoatUsageStats[usageId];
           if (!hasStat) {
             boatUsageStat = &TBoatUsageStat{};
             boatUsageStat.LocationId = reservation.LocationId;
             boatUsageStat.BoatId = reservation.BoatId;
+            boatUsageStat.Hours = make(map[string]int);
             
             usageStat.BoatUsageStats[usageId] = boatUsageStat;
+          }
+          
+          yearAsString := strconv.Itoa(reservationTime.Year());
+          if (reservationTime.Year() == currentTime.Year()) {
+            monthAsString := reservationTime.Month().String() + "'" + yearAsString;
+            hoursForMonth, hasHours := boatUsageStat.Hours[monthAsString];
+            if (!hasHours) {
+              hoursForMonth = 0;
+            }
+            hoursForMonth += reservation.Slot.Duration;
+            boatUsageStat.Hours[monthAsString] = hoursForMonth;
           } else {
-            // TODO
-            //reservation.Slot
+            hoursForYear, hasHours := boatUsageStat.Hours[yearAsString];
+            if (!hasHours) {
+              hoursForYear = 0;
+            }
+            hoursForYear += reservation.Slot.Duration;
+            boatUsageStat.Hours[yearAsString] = hoursForYear;
           }
         }
       }

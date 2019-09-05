@@ -10,6 +10,9 @@ OwnerHome = {
       return;
     }
     
+    $("#OwnerHome-Screen-Description-UsageStatsButton").click(function() {
+      Main.loadScreen("usage_stats");
+    });
     
     $("#OwnerHome-Screen-Description-LogoutButton").click(function() {
       Backend.logOut(function() {

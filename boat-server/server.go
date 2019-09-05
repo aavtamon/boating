@@ -30,6 +30,7 @@ type THtmlObject struct {
   ReservationSummaries []*TReservationSummary;
   OwnerAccount *TOwnerAccount;
   OwnerRentalStat *TRentalStat;
+  UsageStats *TUsageStats;
   SafetyTestResults TSafetyTestResults;
   
   FormatDateTime func(int64) string;
@@ -173,6 +174,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         
         OwnerAccount: GetOwnerAccount(*Sessions[sessionId].AccountId),
         OwnerRentalStat: GetOwnerRentalStat(*Sessions[sessionId].AccountId),
+        
+        UsageStats: GetUsageStats(*Sessions[sessionId].AccountId),
         
         SafetyTestResults: FindSafetyTestResults(GetReservation(*Sessions[sessionId].ReservationId)),
         

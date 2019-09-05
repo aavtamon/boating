@@ -6,6 +6,13 @@
   text-align: center;
 }
 
+#OwnerHome-Screen-Description-UsageStatsButton {
+  position: absolute;
+  left: 20px;
+  
+  font-size: 15px;
+}
+
 #OwnerHome-Screen-Description-LogoutButton {
   position: absolute;
   right: 20px;
