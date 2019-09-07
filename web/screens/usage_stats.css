@@ -1,0 +1,31 @@
+#UsageStats-Screen-BoatUsage {
+  padding: 20px;
+}
+
+#UsageStats-Screen-BoatUsage-Title {
+  text-align: center;
+  
+  font-size: 25px;
+  color: #062f73;
+}
+
+#UsageStats-Screen-BoatUsage-UsageTable {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+#UsageStats-Screen-BoatUsage-UsageTable th {
+  border: 1px solid black;
+  text-align: center;
+  
+  background: lightgray;
+}
+#UsageStats-Screen-BoatUsage-UsageTable td {
+  padding: 10px;
+  border: 1px solid black;
+  text-align: center;
+}

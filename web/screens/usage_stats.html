@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="screens/usage_stats.css">
+<script src="screens/usage_stats.js"></script>
+
+<script>
+  UsageStats.ownerAccount = {{.OwnerAccount}};
+  UsageStats.usageStats = {{.UsageStats}};
+</script>
+
+<div id="UsageStats-Screen-Description" class="screen-description">
+  <button id="UsageStats-Screen-Description-BackButton" class="standard-button previous">Dashboard</button>
+  Usage Statistics
+</div>
+<div id="UsageStats-Screen" class="screen" onshow="UsageStats.onLoad()">
+  <div id="UsageStats-Screen-BoatUsage">
+    <div id="UsageStats-Screen-BoatUsage-Title">Boats Usage Statistics</div>
+    {{if eq (len .UsageStats.BoatUsageStats) 0}}
+      No statistics available
+    {{else}}
+      <table id="UsageStats-Screen-BoatUsage-UsageTable">
+        <tr>
+          <th>Boat</th>
+          {{range $_, $period := .UsageStats.Periods}}
+            <th>{{$period}}</th>
+          {{end}}
+        </tr>
+        {{range $_, $boatUsageStat := .UsageStats.BoatUsageStats}}
+          <tr>
+            <td>{{(index (index $.BookingConfiguration.Locations $boatUsageStat.LocationId).Boats $boatUsageStat.BoatId).Name}} ({{(index $.BookingConfiguration.Locations $boatUsageStat.LocationId).Name}})</td>
+
+            {{range $_, $hours := $boatUsageStat.Hours}}
+              <td>{{$hours}}</td>
+            {{end}}
+          </tr>
+        {{end}}
+      </table>
+    {{end}}
+  </div>
+</div>

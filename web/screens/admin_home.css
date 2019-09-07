@@ -5,6 +5,13 @@
   font-size: 15px;
 }
 
+#AdminHome-Screen-Description-UsageStatsButton {
+  position: absolute;
+  left: 200px;
+  
+  font-size: 15px;
+}
+
 #AdminHome-Screen-Description-LogoutButton {
   position: absolute;
   right: 20px;

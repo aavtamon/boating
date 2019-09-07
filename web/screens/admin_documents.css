@@ -19,6 +19,8 @@
 
 #AdminDocuments-Screen-RentalManagement-DocumentTable th, #AdminDocuments-Screen-BoatOwnerManagement-DocumentTable th {
   border: 1px solid black;
+  
+  background: lightgray;
 }
 #AdminDocuments-Screen-RentalManagement-DocumentTable td, #AdminDocuments-Screen-BoatOwnerManagement-DocumentTable td {
   padding: 10px;

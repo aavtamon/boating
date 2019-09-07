@@ -21,6 +21,11 @@ AdminHome = {
       Main.loadScreen("admin_documents");
     });
     
+    $("#AdminHome-Screen-Description-UsageStatsButton").click(function() {
+      Main.loadScreen("usage_stats");
+    });
+    
+    
     
     $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
     $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);

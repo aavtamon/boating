@@ -145,13 +145,14 @@ type TRentalStat struct {
 }
 
 type TUsageStats struct {
+  Periods []string `json:"periods,omitempty"`;
   BoatUsageStats map[string]*TBoatUsageStat `json:"boat_usages,omitempty"`;
 }
 
 type TBoatUsageStat struct {
   LocationId string `json:"location_id,omitempty"`;
   BoatId string `json:"boat_id,omitempty"`;
-  Hours map[string]int `json:"hours,omitempty"`;
+  Hours []int `json:"hours,omitempty"`;
 }
 
 
@@ -614,6 +615,18 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
   
   usageStat := &TUsageStats{};
   usageStat.BoatUsageStats = make(map[string]*TBoatUsageStat);
+  usageStat.Periods = []string{};
+  
+  
+  //Build periods first - 12 last months
+  for month := currentTime.Month(); month <= time.December; month++ {
+    usageStat.Periods = append(usageStat.Periods, getPeriod(currentTime.Year() - 1, month));
+  }
+  for month := time.January; month <= currentTime.Month(); month++ {
+    usageStat.Periods = append(usageStat.Periods, getPeriod(currentTime.Year(), month));
+  }
+  
+  
   
   for _, reservation := range persistenceDb.Reservations {
     if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
@@ -644,27 +657,22 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
             boatUsageStat = &TBoatUsageStat{};
             boatUsageStat.LocationId = reservation.LocationId;
             boatUsageStat.BoatId = reservation.BoatId;
-            boatUsageStat.Hours = make(map[string]int);
+            boatUsageStat.Hours = make([]int, len(usageStat.Periods));
             
             usageStat.BoatUsageStats[usageId] = boatUsageStat;
           }
           
-          yearAsString := strconv.Itoa(reservationTime.Year());
-          if (reservationTime.Year() == currentTime.Year()) {
-            monthAsString := reservationTime.Month().String() + "'" + yearAsString;
-            hoursForMonth, hasHours := boatUsageStat.Hours[monthAsString];
-            if (!hasHours) {
-              hoursForMonth = 0;
+          reservationPeriod := getPeriod(reservationTime.Year(), currentTime.Month());
+          foundPeriodIndex := -1;
+          for periodIndex, period := range usageStat.Periods {
+            if (period == reservationPeriod) {
+              foundPeriodIndex = periodIndex;
+              break;
             }
-            hoursForMonth += reservation.Slot.Duration;
-            boatUsageStat.Hours[monthAsString] = hoursForMonth;
-          } else {
-            hoursForYear, hasHours := boatUsageStat.Hours[yearAsString];
-            if (!hasHours) {
-              hoursForYear = 0;
-            }
-            hoursForYear += reservation.Slot.Duration;
-            boatUsageStat.Hours[yearAsString] = hoursForYear;
+          }
+          
+          if (foundPeriodIndex >= 0) {
+            boatUsageStat.Hours[foundPeriodIndex] += reservation.Slot.Duration;
           }
         }
       }
@@ -674,7 +682,9 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
   return usageStat;
 }
 
-
+func getPeriod(year int, month time.Month) string {
+  return month.String()[:3] + "'" + strconv.Itoa(year)[2:];
+}
 
 
 func schedulePeriodicCleanup() {
