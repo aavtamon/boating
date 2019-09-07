@@ -661,7 +661,7 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
           usageStat.BoatUsageStats[usageId] = boatUsageStat;
         }
 
-        reservationPeriod := getPeriod(reservationTime.Year(), currentTime.Month());
+        reservationPeriod := getPeriod(reservationTime.Year(), reservationTime.Month());
         foundPeriodIndex := -1;
         for periodIndex, period := range usageStat.Periods {
           if (period == reservationPeriod) {
