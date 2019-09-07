@@ -28,7 +28,7 @@
             <td>{{(index (index $.BookingConfiguration.Locations $boatUsageStat.LocationId).Boats $boatUsageStat.BoatId).Name}} ({{(index $.BookingConfiguration.Locations $boatUsageStat.LocationId).Name}})</td>
 
             {{range $_, $hours := $boatUsageStat.Hours}}
-              <td>{{$hours}}</td>
+              <td>{{$hours}} h</td>
             {{end}}
           </tr>
         {{end}}
