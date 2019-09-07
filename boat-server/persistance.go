@@ -632,48 +632,46 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
     if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
       continue;
     }
-  
-    if (reservation.OwnerAccountId == NO_OWNER_ACCOUNT_ID) {
-      boatIds, hasLocation := account.Locations[reservation.LocationId];
-      if (hasLocation) {
-        matches := false;
-        if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-          matches = true;
-        } else if (len(boatIds.Boats) > 0) {
-          for _, boatId := range boatIds.Boats {
-            if (boatId == reservation.BoatId) {
-              matches = true;
-              break;
-            }
+    
+    boatIds, hasLocation := account.Locations[reservation.LocationId];
+    if (hasLocation) {
+      matches := false;
+      if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+        matches = true;
+      } else if (len(boatIds.Boats) > 0) {
+        for _, boatId := range boatIds.Boats {
+          if (boatId == reservation.BoatId) {
+            matches = true;
+            break;
+          }
+        }
+      }
+
+      if (matches) {
+        reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
+
+        usageId := reservation.LocationId + "-" + reservation.BoatId;
+        boatUsageStat, hasStat := usageStat.BoatUsageStats[usageId];
+        if (!hasStat) {
+          boatUsageStat = &TBoatUsageStat{};
+          boatUsageStat.LocationId = reservation.LocationId;
+          boatUsageStat.BoatId = reservation.BoatId;
+          boatUsageStat.Hours = make([]int, len(usageStat.Periods));
+
+          usageStat.BoatUsageStats[usageId] = boatUsageStat;
+        }
+
+        reservationPeriod := getPeriod(reservationTime.Year(), currentTime.Month());
+        foundPeriodIndex := -1;
+        for periodIndex, period := range usageStat.Periods {
+          if (period == reservationPeriod) {
+            foundPeriodIndex = periodIndex;
+            break;
           }
         }
 
-        if (matches) {
-          reservationTime := time.Unix(0, reservation.Slot.DateTime * int64(time.Millisecond));
-        
-          usageId := reservation.LocationId + "-" + reservation.BoatId;
-          boatUsageStat, hasStat := usageStat.BoatUsageStats[usageId];
-          if (!hasStat) {
-            boatUsageStat = &TBoatUsageStat{};
-            boatUsageStat.LocationId = reservation.LocationId;
-            boatUsageStat.BoatId = reservation.BoatId;
-            boatUsageStat.Hours = make([]int, len(usageStat.Periods));
-            
-            usageStat.BoatUsageStats[usageId] = boatUsageStat;
-          }
-          
-          reservationPeriod := getPeriod(reservationTime.Year(), currentTime.Month());
-          foundPeriodIndex := -1;
-          for periodIndex, period := range usageStat.Periods {
-            if (period == reservationPeriod) {
-              foundPeriodIndex = periodIndex;
-              break;
-            }
-          }
-          
-          if (foundPeriodIndex >= 0) {
-            boatUsageStat.Hours[foundPeriodIndex] += reservation.Slot.Duration;
-          }
+        if (foundPeriodIndex >= 0) {
+          boatUsageStat.Hours[foundPeriodIndex] += reservation.Slot.Duration;
         }
       }
     }
