@@ -170,7 +170,7 @@ func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSe
     if (testResult.DLState != reservation.DLState || testResult.DLNumber != reservation.DLNumber) {
       // We only register an additional driver if it is not the primary renter
       reservation.AdditionalDrivers = append(reservation.AdditionalDrivers, dlId);
-      SaveReservation(reservation);
+      reservation.save();
     }
     
     EmailTestResults(reservationId, dlId, reservation.Email);

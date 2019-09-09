@@ -7,6 +7,38 @@ import "crypto/md5"
 import "encoding/hex"
 
 
+
+type TBoatIds struct {
+  Boats []string `json:"boats,omitempty"`;
+}
+
+
+type TOwnerAccountId string;
+type TOwnerAccountType string;
+
+type TOwnerAccount struct {
+  Id TOwnerAccountId `json:"id,omitempty"`;
+  Type TOwnerAccountType `json:"type,omitempty"`;
+
+  Username string `json:"username,omitempty"`;
+  Token string `json:"token,omitempty"`;
+  
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
+  PrimaryPhone string `json:"primary_phone,omitempty"`;
+  
+  Locations map[string]TBoatIds `json:"locations,omitempty"`;
+}
+
+const OWNER_ACCOUNT_TYPE_BOATOWNER TOwnerAccountType = "boat_owner";
+const OWNER_ACCOUNT_TYPE_ADMIN TOwnerAccountType = "admin";
+const NO_OWNER_ACCOUNT_ID = TOwnerAccountId("");
+
+
+
+
+
 func AccountHandler(w http.ResponseWriter, r *http.Request) {
   sessionId := GetSessionId(r);
   if (sessionId == NO_SESSION_ID) {

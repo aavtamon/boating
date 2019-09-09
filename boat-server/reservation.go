@@ -8,6 +8,169 @@ import "encoding/json"
 import "fmt"
 import "strings"
 import "encoding/base64"
+import "time"
+
+
+type TSafetyTestResult struct {
+  SuiteId TSafetySuiteId `json:"suite_id"`;
+  Score int `json:"score"`;
+  FirstName string `json:"first_name"`;
+  LastName string `json:"last_name"`;
+  DLState string `json:"dl_state"`;
+  DLNumber string `json:"dl_number"`;
+  PassDate int64 `json:"pass_date"`;
+  ExpirationDate int64 `json:"expiration_date"`;
+}
+
+type TSafetyTestResults map[string]*TSafetyTestResult;
+
+
+type TReservationId string;
+type TReservationStatus string;
+type TPaymentStatus string;
+
+
+type TReservation struct {
+  Id TReservationId `json:"id"`;
+  
+  OwnerAccountId TOwnerAccountId `json:"owner_account_id"`;
+
+  Timestamp int64 `json:"modification_timestamp,omitempty"`;
+  
+  LocationId string `json:"location_id"`;
+  BoatId string `json:"boat_id"`;
+
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  PickupLocationId string `json:"pickup_location_id"`;
+  
+  NumOfAdults int `json:"adult_count"`;
+  NumOfChildren int `json:"children_count"`;
+  
+  Extras map[string]bool `json:"extras"`;
+
+  DLState string `json:"dl_state,omitempty"`;
+  DLNumber string `json:"dl_number,omitempty"`;
+  FirstName string `json:"first_name,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  Email string `json:"email,omitempty"`;
+  PrimaryPhone string `json:"primary_phone,omitempty"`;
+  AlternativePhone string `json:"alternative_phone,omitempty"`;
+  PaymentStatus TPaymentStatus `json:"payment_status,omitempty"`;
+  PaymentAmount float64 `json:"payment_amount,omitempty"`;
+  RefundAmount float64 `json:"refund_amount,omitempty"`;
+  ChargeId string;
+  RefundId string;
+  DepositChargeId string;
+  DepositRefundId string;
+  DepositAmount float64 `json:"deposit_amount,omitempty"`;
+  DepositStatus TPaymentStatus `json:"deposit_status,omitempty"`;
+  FuelUsage int `json:"fuel_usage,omitempty"`;
+  FuelCharge float64 `json:"fuel_charge,omitempty"`;
+  Delay int `json:"delay,omitempty"`;
+  LateFee float64 `json:"late_fee,omitempty"`;
+  PromoCode string `json:"promo_code"`;
+  Notes string `json:"notes"`;
+  AdditionalDrivers []string `json:"additional_drivers,omitempty"`;
+  
+  Status TReservationStatus `json:"status,omitempty"`;
+}
+
+func (reservation TReservation) isActive() bool {
+  return reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED && reservation.Status != RESERVATION_STATUS_ARCHIVED;
+}
+
+func (reservation TReservation) archive() {
+  reservation.DLState = "";
+  reservation.DLNumber = "";
+  reservation.FirstName = "";
+  reservation.LastName = "";
+  reservation.Email = "";
+  reservation.PrimaryPhone = "";
+  reservation.AlternativePhone = "";
+  reservation.AdditionalDrivers = nil;
+  reservation.Status = RESERVATION_STATUS_ARCHIVED;
+}
+
+func (reservation TReservation) save() TReservationId {
+  if (reservation.Id == NO_RESERVATION_ID) {
+    reservation.Id = generateReservationId();
+  }
+
+  reservation.Timestamp = time.Now().UTC().Unix();
+  
+  SaveReservation(&reservation);
+
+  notifyReservationUpdated(&reservation);
+
+  return reservation.Id;
+}
+
+type TReservations map[TReservationId]*TReservation;
+
+
+type TReservationSummary struct {
+  Id TReservationId `json:"id"`;
+  Slot TBookingSlot `json:"slot,omitempty"`;
+}
+
+type TRental struct {
+  Slot TBookingSlot `json:"slot,omitempty"`;
+  LocationId string `json:"location_id,omitempty"`;
+  BoatId string `json:"boat_id,omitempty"`;
+  LastName string `json:"last_name,omitempty"`;
+  SafetyTestStatus bool `json:"safety_test_status"`;
+  PaymentAmount float64 `json:"payment_amount,omitempty"`;
+  Status TReservationStatus `json:"status,omitempty"`;
+}
+
+type TRentalStat struct {
+  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
+}
+
+type TUsageStats struct {
+  Periods []string `json:"periods,omitempty"`;
+  BoatUsageStats map[string]*TBoatUsageStat `json:"boat_usages,omitempty"`;
+}
+
+type TBoatUsageStat struct {
+  LocationId string `json:"location_id,omitempty"`;
+  BoatId string `json:"boat_id,omitempty"`;
+  Hours []int `json:"hours,omitempty"`;
+}
+
+const RESERVATION_STATUS_BOOKED TReservationStatus = "booked";
+const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
+const RESERVATION_STATUS_DEPOSITED TReservationStatus = "deposited";
+const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
+const RESERVATION_STATUS_ACCIDENT TReservationStatus = "accident";
+const RESERVATION_STATUS_ARCHIVED TReservationStatus = "archived";
+
+
+
+const PAYMENT_STATUS_PAYED TPaymentStatus = "payed";
+const PAYMENT_STATUS_FAILED TPaymentStatus = "failed";
+const PAYMENT_STATUS_REFUNDED TPaymentStatus = "refunded";
+
+
+const NO_RESERVATION_ID = TReservationId("");
+
+
+
+type TChangeListener interface {
+  OnReservationChanged(reservation *TReservation);
+  OnReservationRemoved(reservation *TReservation);
+}
+
+func AddReservationListener(listener TChangeListener) {
+  listeners = append(listeners, listener);
+}
+
+var listeners []TChangeListener;
+
+
+
+
+
 
 
 
@@ -110,7 +273,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
 
 
       reservation.Status = RESERVATION_STATUS_BOOKED;
-      reservationId = SaveReservation(reservation);
+      reservationId = reservation.save();
       existingReservation = GetReservation(reservationId);
       
       NotifyReservationBooked(reservationId);
@@ -145,7 +308,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
       }
       
       if (reservationChanged) {
-        SaveReservation(existingReservation);
+        existingReservation.save();
         NotifyReservationUpdated(reservationId);
       }
     }
@@ -189,7 +352,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId T
   }
   
   reservation.Status = RESERVATION_STATUS_CANCELLED;
-  SaveReservation(reservation);
+  reservation.save();
   
   NotifyReservationCancelled(reservation, isAdmin(sessionId));
 
@@ -245,5 +408,21 @@ func parseReservation(body io.ReadCloser) *TReservation {
   }
   
   return res;
+}
+
+
+
+
+
+func notifyReservationUpdated(reservation *TReservation) {
+  for _, listener := range listeners {
+    listener.OnReservationChanged(reservation);
+  }
+}
+
+func notifyReservationRemoved(reservation *TReservation) {
+  for _, listener := range listeners {
+    listener.OnReservationRemoved(reservation);
+  }
 }
 

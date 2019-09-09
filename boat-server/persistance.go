@@ -12,187 +12,20 @@ import "strconv";
 
 
 
-type TBoatIds struct {
-  Boats []string `json:"boats,omitempty"`;
-}
-
-type TOwnerAccountId string;
-type TOwnerAccountType string;
-
-type TOwnerAccount struct {
-  Id TOwnerAccountId `json:"id,omitempty"`;
-  Type TOwnerAccountType `json:"type,omitempty"`;
-
-  Username string `json:"username,omitempty"`;
-  Token string `json:"token,omitempty"`;
-  
-  FirstName string `json:"first_name,omitempty"`;
-  LastName string `json:"last_name,omitempty"`;
-  Email string `json:"email,omitempty"`;
-  PrimaryPhone string `json:"primary_phone,omitempty"`;
-  
-  Locations map[string]TBoatIds `json:"locations,omitempty"`;
-}
-
 type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
 
 
-type TSafetyTestResult struct {
-  SuiteId TSafetySuiteId `json:"suite_id"`;
-  Score int `json:"score"`;
-  FirstName string `json:"first_name"`;
-  LastName string `json:"last_name"`;
-  DLState string `json:"dl_state"`;
-  DLNumber string `json:"dl_number"`;
-  PassDate int64 `json:"pass_date"`;
-  ExpirationDate int64 `json:"expiration_date"`;
-}
 
-type TSafetyTestResults map[string]*TSafetyTestResult;
-
-
-type TPersistancenceDatabase struct {
+type TPersistenceDatabase struct {
   SafetyTestResults TSafetyTestResults `json:"safety_test_results"`;
-  Reservations TReservationMap `json:"reservations"`;
+  Reservations TReservations `json:"reservations"`;
 }
 
-
-type TReservationId string;
-type TReservationStatus string;
-type TPaymentStatus string;
-
-type TReservation struct {
-  Id TReservationId `json:"id"`;
-  
-  OwnerAccountId TOwnerAccountId `json:"owner_account_id"`;
-
-  Timestamp int64 `json:"modification_timestamp,omitempty"`;
-  
-  LocationId string `json:"location_id"`;
-  BoatId string `json:"boat_id"`;
-
-  Slot TBookingSlot `json:"slot,omitempty"`;
-  PickupLocationId string `json:"pickup_location_id"`;
-  
-  NumOfAdults int `json:"adult_count"`;
-  NumOfChildren int `json:"children_count"`;
-  
-  Extras map[string]bool `json:"extras"`;
-
-  DLState string `json:"dl_state,omitempty"`;
-  DLNumber string `json:"dl_number,omitempty"`;
-  FirstName string `json:"first_name,omitempty"`;
-  LastName string `json:"last_name,omitempty"`;
-  Email string `json:"email,omitempty"`;
-  PrimaryPhone string `json:"primary_phone,omitempty"`;
-  AlternativePhone string `json:"alternative_phone,omitempty"`;
-  PaymentStatus TPaymentStatus `json:"payment_status,omitempty"`;
-  PaymentAmount float64 `json:"payment_amount,omitempty"`;
-  RefundAmount float64 `json:"refund_amount,omitempty"`;
-  ChargeId string;
-  RefundId string;
-  DepositChargeId string;
-  DepositRefundId string;
-  DepositAmount float64 `json:"deposit_amount,omitempty"`;
-  DepositStatus TPaymentStatus `json:"deposit_status,omitempty"`;
-  FuelUsage int `json:"fuel_usage,omitempty"`;
-  FuelCharge float64 `json:"fuel_charge,omitempty"`;
-  Delay int `json:"delay,omitempty"`;
-  LateFee float64 `json:"late_fee,omitempty"`;
-  PromoCode string `json:"promo_code"`;
-  Notes string `json:"notes"`;
-  AdditionalDrivers []string `json:"additional_drivers,omitempty"`;
-  
-  Status TReservationStatus `json:"status,omitempty"`;
-}
-
-func (reservation TReservation) isActive() bool {
-  return reservation.Status != RESERVATION_STATUS_CANCELLED && reservation.Status != RESERVATION_STATUS_COMPLETED && reservation.Status != RESERVATION_STATUS_ARCHIVED;
-}
-
-func (reservation TReservation) archive() {
-  reservation.DLState = "";
-  reservation.DLNumber = "";
-  reservation.FirstName = "";
-  reservation.LastName = "";
-  reservation.Email = "";
-  reservation.PrimaryPhone = "";
-  reservation.AlternativePhone = "";
-  reservation.AdditionalDrivers = nil;
-  reservation.Status = RESERVATION_STATUS_ARCHIVED;
-}
-
-
-type TReservationMap map[TReservationId]*TReservation;
-
-type TReservationSummary struct {
-  Id TReservationId `json:"id"`;
-  Slot TBookingSlot `json:"slot,omitempty"`;
-}
-
-type TRental struct {
-  Slot TBookingSlot `json:"slot,omitempty"`;
-  LocationId string `json:"location_id,omitempty"`;
-  BoatId string `json:"boat_id,omitempty"`;
-  LastName string `json:"last_name,omitempty"`;
-  SafetyTestStatus bool `json:"safety_test_status"`;
-  PaymentAmount float64 `json:"payment_amount,omitempty"`;
-  Status TReservationStatus `json:"status,omitempty"`;
-}
-
-type TRentalStat struct {
-  Rentals map[TReservationId]*TRental `json:"rentals,omitempty"`;
-}
-
-type TUsageStats struct {
-  Periods []string `json:"periods,omitempty"`;
-  BoatUsageStats map[string]*TBoatUsageStat `json:"boat_usages,omitempty"`;
-}
-
-type TBoatUsageStat struct {
-  LocationId string `json:"location_id,omitempty"`;
-  BoatId string `json:"boat_id,omitempty"`;
-  Hours []int `json:"hours,omitempty"`;
-}
-
-
-
-
-type TChangeListener interface {
-  OnReservationChanged(reservation *TReservation);
-  OnReservationRemoved(reservation *TReservation);
-}
-
-
-
-const RESERVATION_STATUS_BOOKED TReservationStatus = "booked";
-const RESERVATION_STATUS_CANCELLED TReservationStatus = "cancelled";
-const RESERVATION_STATUS_DEPOSITED TReservationStatus = "deposited";
-const RESERVATION_STATUS_COMPLETED TReservationStatus = "completed";
-const RESERVATION_STATUS_ACCIDENT TReservationStatus = "accident";
-const RESERVATION_STATUS_ARCHIVED TReservationStatus = "archived";
-
-
-
-const PAYMENT_STATUS_PAYED TPaymentStatus = "payed";
-const PAYMENT_STATUS_FAILED TPaymentStatus = "failed";
-const PAYMENT_STATUS_REFUNDED TPaymentStatus = "refunded";
-
-
-const OWNER_ACCOUNT_TYPE_BOATOWNER TOwnerAccountType = "boat_owner";
-const OWNER_ACCOUNT_TYPE_ADMIN TOwnerAccountType = "admin";
-
-
-
-
-const NO_OWNER_ACCOUNT_ID = TOwnerAccountId("");
-const NO_RESERVATION_ID = TReservationId("");
 
 
 
 var ownerAccountMap TOwnerAccountMap;
-var persistenceDb TPersistancenceDatabase;
-var listeners []TChangeListener;
+var persistenceDb TPersistenceDatabase;
 
 var accessLock sync.Mutex;
 
@@ -248,48 +81,28 @@ func RecoverOwnerReservation(reservationId TReservationId, ownerAccountId TOwner
   return nil;
 }
 
-func GetAllReservations() TReservationMap {
-  return persistenceDb.Reservations;
+func GetAllReservations() TReservations {
+  result := make(TReservations);
+  
+  for reservationId, reservation := range persistenceDb.Reservations {
+    if (reservation.isActive()) {
+      result[reservationId] = reservation;
+    }
+  }
+  
+  return result;
 }
 
 
-func SaveReservation(reservation *TReservation) TReservationId {
+func SaveReservation(reservation *TReservation) {
   fmt.Printf("Persistance: saving reservation %s\n", reservation.Id);
   
-  if (reservation.Id == NO_RESERVATION_ID) {
-    reservation.Id = generateReservationId();
-  }
-
-  reservation.Timestamp = time.Now().UTC().Unix();
-
   accessLock.Lock();
   persistenceDb.Reservations[reservation.Id] = reservation;
   
     
   savePersistenceDatabase();
   accessLock.Unlock();
-  
-  notifyReservationUpdated(reservation);
-
-  return reservation.Id;
-}
-
-func RemoveReservation(reservationId TReservationId) {
-  fmt.Printf("Persistance: removing reservation %s\n", reservationId);
-  
-  if (persistenceDb.Reservations[reservationId] == nil) {
-    return;
-  }
-
-  accessLock.Lock();
-  reservation := *(persistenceDb.Reservations[reservationId]);
-
-  delete(persistenceDb.Reservations, reservationId);
-  
-  savePersistenceDatabase();
-  accessLock.Unlock();
-  
-  notifyReservationRemoved(&reservation);
 }
 
 func FindSafetyTestResults(reservation *TReservation) TSafetyTestResults {
@@ -339,26 +152,6 @@ func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
   return ownerAccount;
 }
 
-func AddReservationListener(listener TChangeListener) {
-  listeners = append(listeners, listener);
-}
-
-
-
-
-func notifyReservationUpdated(reservation *TReservation) {
-  for _, listener := range listeners {
-    listener.OnReservationChanged(reservation);
-  }
-}
-
-func notifyReservationRemoved(reservation *TReservation) {
-  for _, listener := range listeners {
-    listener.OnReservationRemoved(reservation);
-  }
-}
-
-
 
 
 func readPersistenceDatabase() {
@@ -375,7 +168,7 @@ func readPersistenceDatabase() {
   }
   
   if (persistenceDb.Reservations == nil) {
-    persistenceDb.Reservations = make(TReservationMap);
+    persistenceDb.Reservations = make(TReservations);
     persistenceDb.SafetyTestResults = make(TSafetyTestResults);
   }
   

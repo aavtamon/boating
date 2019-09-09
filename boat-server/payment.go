@@ -16,6 +16,7 @@ import "github.com/stripe/stripe-go/charge"
 import "github.com/stripe/stripe-go/refund"
 
 
+
 type TPaymentRequest struct {
   ReservationId TReservationId `json:"reservation_id"`;
   PaymentToken string `json:"payment_token"`;
@@ -203,7 +204,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     if (err != nil) {
       fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
       reservation.PaymentStatus = PAYMENT_STATUS_FAILED;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Payment processing for reservation %s failed\n", reservation.Id);
 
@@ -212,7 +213,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
       reservation.ChargeId = charge.ID;
       reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
       reservation.PaymentAmount = paidAmount;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Payment processing for reservation %s is complete successfully\n", reservation.Id);
 
@@ -224,7 +225,7 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     reservation.ChargeId = "fake charge";
     reservation.PaymentStatus = PAYMENT_STATUS_PAYED;
     reservation.PaymentAmount = paidAmount;
-    SaveReservation(reservation);
+    reservation.save();
 
     return true;
   }
@@ -269,7 +270,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
 
     if (err != nil) {
       fmt.Printf("Refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Refund processing for reservation %s failed\n", reservation.Id);
 
@@ -278,7 +279,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
       reservation.RefundId = refund.ID;
       reservation.PaymentStatus = PAYMENT_STATUS_REFUNDED;
       reservation.RefundAmount = refundAmount;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Refund processing for reservation %s is complete successfully\n", reservation.Id);
 
@@ -290,7 +291,7 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
     reservation.RefundId = "fake refund";
     reservation.PaymentStatus = PAYMENT_STATUS_REFUNDED;
     reservation.RefundAmount = refundAmount;
-    SaveReservation(reservation);
+    reservation.save();
     
     return true;
   }
@@ -328,7 +329,7 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
     if (err != nil) {
       fmt.Printf("Payment for reservation %s failed with error %s\n", request.ReservationId, err.Error());
       reservation.DepositStatus = PAYMENT_STATUS_FAILED;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Deposit processing for reservation %s failed\n", reservation.Id);
 
@@ -337,7 +338,7 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
       reservation.DepositChargeId = charge.ID;
       reservation.DepositAmount = depositAmount;
       reservation.DepositStatus = PAYMENT_STATUS_PAYED;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Deposit processing for reservation %s is complete successfully\n", reservation.Id);
 
@@ -349,7 +350,7 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
     reservation.DepositChargeId = "fake deposit charge";
     reservation.DepositAmount = depositAmount;
     reservation.DepositStatus = PAYMENT_STATUS_PAYED;
-    SaveReservation(reservation);
+    reservation.save();
 
     return true;
   }
@@ -393,7 +394,7 @@ func refundDeposit(reservation *TReservation) bool {
 
     if (err != nil) {
       fmt.Printf("Deposit refund for reservation %s failed with error %s\n", reservation.Id, err.Error());
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Deposit refund processing for reservation %s failed\n", reservation.Id);
 
@@ -403,7 +404,7 @@ func refundDeposit(reservation *TReservation) bool {
       reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
       reservation.FuelCharge = fuelAmount;
       reservation.LateFee = lateFee;
-      SaveReservation(reservation);
+      reservation.save();
 
       fmt.Printf("Deposit refund processing for reservation %s is complete successfully\n", reservation.Id);
 
@@ -416,7 +417,7 @@ func refundDeposit(reservation *TReservation) bool {
     reservation.DepositStatus = PAYMENT_STATUS_REFUNDED;
     reservation.FuelCharge = fuelAmount;
     reservation.LateFee = lateFee;
-    SaveReservation(reservation);
+    reservation.save();
     
     return true;
   }

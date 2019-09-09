@@ -248,10 +248,6 @@ func isBooked(locationId string, boatId string, slot TBookingSlot) bool {
   location := bookingConfiguration.Locations[locationId];
 
   for _, reservation := range GetAllReservations() {
-    if (!reservation.isActive()) {
-      continue;
-    }
-    
     if (reservation.LocationId != locationId || reservation.BoatId != boatId) {
       continue;
     }
