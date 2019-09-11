@@ -63,11 +63,22 @@ func initializeDatabase() {
                 "delay INT," +
                 "late_fee FLOAT," +
                 "promo_code VARCHAR(255)," +
-                "Notes TEXT," +
+                "notes TEXT," +
                 "additional_drivers VARCHAR(255)," +
                 "status VARCHAR(20) NOT NULL" +
                 ")");
-                
+
+  database.Exec("CREATE TABLE IF NOT EXISTS safety_tests(" +
+                "suite_id VARCHAR(20) PRIMARY KEY," +
+                "score TINYINT NOT NULL," +
+                "first_name VARCHAR(255) NOT NULL," +
+                "last_name VARCHAR(255) NOT NULL," +
+                "dl_state VARCHAR(20) NOT NULL," +
+                "dl_number VARCHAR(20) NOT NULL," +
+                "pass_date BIGINT NOT NULL," +
+                "expiration_date BIGINT NOT NULL" +
+                ")");
+          
 /*   
  TBD - should it be moved to the database as well?
  
@@ -82,7 +93,36 @@ func initializeDatabase() {
                 "primary_phone VARCHAR(255) NOT NULL," +
                 "locations VARCHAR(255) NOT NULL" +
                 ")");
-*/                
+*/
+
+
+// TEMPORARY
+
+  for _, reservation := range persistenceDb.Reservations {
+    var extras string = "";
+    for id, included := range reservation.Extras {
+      if (included) {
+        if (extras != "") {
+          extras += ",";
+        }
+        extras += id;
+      }
+    }
+    
+    var drivers string = "";
+    for _, dl := range reservation.AdditionalDrivers {
+      if (drivers != "") {
+        drivers += ",";
+      }
+      drivers += dl;
+    }
+    
+    
+  
+    database.Exec("INSERT INTO reservations(id, owner_account_id, timestamp, location_id, boat_id, booking_slot_datetime, booking_slot_duration, booking_slot_price, pickup_location_id, num_of_adults, num_of_children, extras, dl_state, dl_number, first_name, last_name, email, primary_phone, alternative_phone, payment_status, payment_amount, refund_amount, charge_id, refund_id, deposit_charge_id, deposit_refund_id, deposit_amount, deposit_status, fuel_usage, fuel_charge, delay, late_fee, promo_code, notes, additional_drivers, status) VALUES ('" + string(reservation.Id) + "','" + string(reservation.OwnerAccountId) + "'," + strconv.FormatInt(reservation.Timestamp, 10) + ",'" + reservation.LocationId + "','" + reservation.BoatId + "'," + strconv.FormatInt(reservation.Slot.DateTime, 10) + "," + strconv.Itoa(reservation.Slot.Duration) + "," + strconv.FormatFloat(reservation.Slot.Price, 'E', 2, 32) + ",'" + reservation.PickupLocationId + "'," + strconv.Itoa(reservation.NumOfAdults) + "," + strconv.Itoa(reservation.NumOfChildren) + ",'" + extras + "','" + reservation.DLState + "','" + reservation.DLNumber + "','" + reservation.FirstName + "','" + reservation.LastName + "','" + reservation.Email + "','" + reservation.PrimaryPhone + "','" + reservation.AlternativePhone + "','" + string(reservation.PaymentStatus) + "'," + strconv.FormatFloat(reservation.PaymentAmount, 'E', 2, 32) + "," + strconv.FormatFloat(reservation.RefundAmount, 'E', 2, 32) + ",'" + reservation.ChargeId + "','" + reservation.RefundId + "','" + reservation.DepositChargeId + "','" + reservation.DepositRefundId + "'," + strconv.FormatFloat(reservation.DepositAmount, 'E', 2, 32) + ",'" + string(reservation.DepositStatus) + "'," + strconv.Itoa(reservation.FuelUsage) + "," + strconv.FormatFloat(reservation.FuelCharge, 'E', 2, 32) + "," + strconv.Itoa(reservation.Delay) + "," + strconv.FormatFloat(reservation.LateFee, 'E', 2, 32) + ",'" + reservation.PromoCode + "','" + reservation.Notes + "','" + drivers + "','" + string(reservation.Status) + "')");
+  }
+
+
 }
 
 

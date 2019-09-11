@@ -9,6 +9,21 @@ import "time"
 import "strings"
 
 
+
+type TSafetyTestResult struct {
+  SuiteId TSafetySuiteId `json:"suite_id"`;
+  Score int `json:"score"`;
+  FirstName string `json:"first_name"`;
+  LastName string `json:"last_name"`;
+  DLState string `json:"dl_state"`;
+  DLNumber string `json:"dl_number"`;
+  PassDate int64 `json:"pass_date"`;
+  ExpirationDate int64 `json:"expiration_date"`;
+}
+
+type TSafetyTestResults map[string]*TSafetyTestResult;
+
+
 type TSafetyTest struct {
   Text string `json:"text"`;
   OptionsFormat string `json:"options_format"`;
