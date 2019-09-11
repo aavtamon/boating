@@ -121,8 +121,10 @@ type TBookingExpirationConfiguration struct {
 }
 
 type TPersistenceDbConfiguration struct {
-  AccountDbName string `json:"account_db_name"`;
-  PersistenceDbName string `json:"persistence_db_name"`;
+  AccountDatabase string `json:"account_database"`;
+  Database string `json:"database"`;
+  Username string `json:"username"`;
+  Password string `json:"password"`;
   BackupPath string `json:"backup_path"`;
   BackupQuantity int `json:"backup_quantity"`;
 }

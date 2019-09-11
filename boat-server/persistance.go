@@ -8,7 +8,82 @@ import "math/rand"
 import "sync"
 import "strings"
 import "os";
+import "log";
 import "strconv";
+
+import "database/sql";
+import _"github.com/go-sql-driver/mysql";
+
+
+
+var database *sql.DB;
+
+
+func initializeDatabase() {
+  db, err := sql.Open("mysql", GetSystemConfiguration().PersistenceDb.Username + ":" + GetSystemConfiguration().PersistenceDb.Password + "@/" + GetSystemConfiguration().PersistenceDb.Database);
+  if (err != nil) {
+    log.Fatal("Persistence: Cannot initialize database", err);
+  } else {
+    fmt.Println("Persistence: database connection successful");
+    database = db;
+  }
+
+
+  database.Exec("CREATE TABLE IF NOT EXISTS reservations(" +
+                "id VARCHAR(20) PRIMARY KEY," +
+                "owner_account_id VARCHAR(255)," +
+                "timestamp BIGINT NOT NULL," +
+                "location_id VARCHAR(255) NOT NULL," +
+                "boat_id VARCHAR(255) NOT NULL," +
+                "booking_slot_datetime BIGINT NOT NULL," +
+                "booking_slot_duration TINYINT NOT NULL," +
+                "booking_slot_price FLOAT NOT NULL," +
+                "pickup_location_id VARCHAR(255)," +
+                "num_of_adults TINYINT," +
+                "num_of_children TINYINT," +
+                "extras VARCHAR(255)," +
+                "dl_state VARCHAR(20)," +
+                "dl_number VARCHAR(20)," +
+                "first_name VARCHAR(255)," +
+                "last_name VARCHAR(255)," +
+                "email VARCHAR(255)," +
+                "primary_phone VARCHAR(255)," +
+                "alternative_phone VARCHAR(255)," +
+                "payment_status VARCHAR(20)," +
+                "payment_amount FLOAT," +
+                "refund_amount FLOAT," +
+                "charge_id VARCHAR(255)," +
+                "refund_id VARCHAR(255)," +
+                "deposit_charge_id VARCHAR(255)," +
+                "deposit_refund_id VARCHAR(255)," +
+                "deposit_amount FLOAT," +
+                "deposit_status VARCHAR(20)," +
+                "fuel_usage TINYINT," +
+                "fuel_charge FLOAT," +
+                "delay INT," +
+                "late_fee FLOAT," +
+                "promo_code VARCHAR(255)," +
+                "Notes TEXT," +
+                "additional_drivers VARCHAR(255)," +
+                "status VARCHAR(20) NOT NULL" +
+                ")");
+                
+/*   
+ TBD - should it be moved to the database as well?
+ 
+  database.Exec("CREATE TABLE IF NOT EXISTS accounts(" +
+                "id VARCHAR(20) PRIMARY KEY," +
+                "owner_account_type VARCHAR(20) NOT NULL," +
+                "username VARCHAR(255) NOT NULL," +
+                "token VARCHAR(255) NOT NULL," +
+                "first_name VARCHAR(255) NOT NULL," +
+                "last_name VARCHAR(255) NOT NULL," +
+                "email VARCHAR(255) NOT NULL," +
+                "primary_phone VARCHAR(255) NOT NULL," +
+                "locations VARCHAR(255) NOT NULL" +
+                ")");
+*/                
+}
 
 
 
@@ -29,7 +104,6 @@ var persistenceDb TPersistenceDatabase;
 
 var accessLock sync.Mutex;
 
-
 func InitializePersistance() {
   readOwnerAccountDatabase();
   readPersistenceDatabase();
@@ -37,6 +111,24 @@ func InitializePersistance() {
   InitializeBookings();
   
   schedulePeriodicCleanup();
+  
+  initializeDatabase();
+
+/*
+  selDB, err := database.Query("SELECT * FROM test");
+  if (err != nil) {
+  log.Fatal("Persistence: failed to read = ", err);
+  } else {
+    for selDB.Next() {
+      var id int;
+      var name string
+      err = selDB.Scan(&id, &name);
+      if (err == nil) {
+        fmt.Println("Persistence: read %@, %@", id, name);
+      }
+    }
+  }
+*/  
 }
 
 
@@ -155,7 +247,7 @@ func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
 
 
 func readPersistenceDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.PersistenceDbName);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/persistence_db.json");
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &persistenceDb);
     if (err != nil) {
@@ -179,7 +271,7 @@ func savePersistenceDatabase() {
   cleanObsoleteReservations();
   cleanObsoleteSafetyTestResults();
   
-  persistentDbPath := RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.PersistenceDbName;
+  persistentDbPath := RuntimeRoot + "/persistence_db.json";
   
   // First, create a backup copy
   dbContent, err := ioutil.ReadFile(persistentDbPath);
@@ -262,7 +354,7 @@ func cleanObsoleteSafetyTestResults() {
 
 
 func readOwnerAccountDatabase() {
-  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.AccountDbName);
+  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.AccountDatabase);
   if (err == nil) {
     err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
     if (err != nil) {
