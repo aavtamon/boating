@@ -85,7 +85,7 @@ func handleGetTestSuite(w http.ResponseWriter, r *http.Request, sessionId TSessi
     return;
   }
   
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     w.WriteHeader(http.StatusNotFound);
     w.Write([]byte("Resevration does not exist"));
@@ -159,7 +159,7 @@ func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSe
   }
   
   if (passedTests >= testSuite.PassingGrade) {
-    reservation := GetReservation(reservationId);
+    reservation := GetActiveReservation(reservationId);
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservation does not exist"));
@@ -228,7 +228,7 @@ func handleEmailTestResults(w http.ResponseWriter, r *http.Request, sessionId TS
   if (r.URL.RawQuery != "") {
     queryParams := parseQuery(r);
 
-    reservation := GetReservation(TReservationId(reservationId));
+    reservation := GetActiveReservation(TReservationId(reservationId));
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservartion not found\n"))

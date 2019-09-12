@@ -9,6 +9,8 @@ import "fmt"
 import "strings"
 import "encoding/base64"
 import "time"
+import "math/rand"
+
 
 
 type TReservationId string;
@@ -154,7 +156,40 @@ func AddReservationListener(listener TChangeListener) {
 var listeners []TChangeListener;
 
 
+func GetActiveReservation(reservationId TReservationId) *TReservation {
+  reservation := GetReservation(reservationId);
+  
+  if (reservation.isActive()) {
+    return reservation;
+  }
+  
+  return nil;
+}
 
+func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
+  reservation := GetActiveReservation(reservationId);
+  if (reservation != nil && strings.EqualFold(reservation.LastName, lastName)) {
+    return reservation;
+  }
+  
+  return nil;
+}
+
+func RecoverOwnerReservation(reservationId TReservationId, ownerAccountId TOwnerAccountId) *TReservation {
+  reservation := GetActiveReservation(reservationId);
+  if (reservation != nil) {
+    if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
+      return reservation;
+    }
+    
+    account := GetOwnerAccount(ownerAccountId);
+    if (account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      return reservation;
+    }
+  }
+
+  return nil;
+}
 
 
 
@@ -230,7 +265,7 @@ func handleGetReservation(w http.ResponseWriter, r *http.Request, sessionId TSes
     if (reservationId == NO_RESERVATION_ID) {
       w.Write([]byte("{}\n"))
     } else {
-      reservationJson, _ := json.Marshal(GetReservation(reservationId));
+      reservationJson, _ := json.Marshal(GetActiveReservation(reservationId));
       w.Write(reservationJson);
     }
   }
@@ -241,7 +276,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
   reservationId := reservation.Id;
 
   if (reservation != nil) {
-    existingReservation := GetReservation(reservationId);
+    existingReservation := GetActiveReservation(reservationId);
     if (existingReservation == nil) {
       // Handling reservation creation
       
@@ -260,7 +295,7 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
 
       reservation.Status = RESERVATION_STATUS_BOOKED;
       reservationId = reservation.save();
-      existingReservation = GetReservation(reservationId);
+      existingReservation = GetActiveReservation(reservationId);
       
       NotifyReservationBooked(reservationId);
     } else {
@@ -329,7 +364,7 @@ func handleDeleteReservation(w http.ResponseWriter, r *http.Request, sessionId T
     return;
   }
 
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     w.WriteHeader(http.StatusNotFound);
     w.Write([]byte("Reservation not found"));
@@ -357,7 +392,7 @@ func handleSendConfirmationEmail(w http.ResponseWriter, r *http.Request, session
   }
 
   if (r.URL.RawQuery != "") {
-    reservation := GetReservation(TReservationId(reservationId));
+    reservation := GetActiveReservation(TReservationId(reservationId));
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservartion not found\n"))
@@ -411,4 +446,26 @@ func notifyReservationRemoved(reservation *TReservation) {
     listener.OnReservationRemoved(reservation);
   }
 }
+
+
+func generateReservationId() TReservationId {
+  rand.Seed(time.Now().UTC().UnixNano());
+  
+  var sessionId string;
+  var bytes [3]byte;
+  
+  for groupIndex := 0; groupIndex < 4; groupIndex++ {
+    for i := 0; i < 3; i++ {
+      bytes[i] = 48 + byte(rand.Intn(10));
+    }
+    
+    if (groupIndex > 0) {
+      sessionId += "-";
+    }
+    sessionId += string(bytes[:]);
+  }
+  
+  return TReservationId(sessionId);
+}
+
 

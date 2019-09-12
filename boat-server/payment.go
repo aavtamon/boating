@@ -68,7 +68,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    reservation := GetReservation(request.ReservationId);
+    reservation := GetActiveReservation(request.ReservationId);
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       return;
@@ -110,7 +110,7 @@ func PaymentHandler(w http.ResponseWriter, r *http.Request) {
       return;
     }
   
-    reservation := GetReservation(reservationId);
+    reservation := GetActiveReservation(reservationId);
     if (reservation == nil) {
       w.WriteHeader(http.StatusNotFound);
       w.Write([]byte("Reservation not found"));

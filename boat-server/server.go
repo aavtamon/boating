@@ -170,14 +170,14 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         PaymentPublicKey: GetSystemConfiguration().PaymentConfiguration.PublicKey,
         
         ReservationSummaries: GetOwnerReservationSummaries(*Sessions[sessionId].AccountId),
-        Reservation: GetReservation(*Sessions[sessionId].ReservationId),
+        Reservation: GetActiveReservation(*Sessions[sessionId].ReservationId),
         
         OwnerAccount: GetOwnerAccount(*Sessions[sessionId].AccountId),
         OwnerRentalStat: GetOwnerRentalStat(*Sessions[sessionId].AccountId),
         
         UsageStats: GetUsageStats(*Sessions[sessionId].AccountId),
         
-        SafetyTestResults: FindSafetyTestResults(GetReservation(*Sessions[sessionId].ReservationId)),
+        SafetyTestResults: FindSafetyTestResults(GetActiveReservation(*Sessions[sessionId].ReservationId)),
         
         FormatDateTime: func(dateTime int64) string {
           return getFormattedDateTime(dateTime);

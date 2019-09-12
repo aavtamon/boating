@@ -4,7 +4,6 @@ import "fmt"
 import "io/ioutil"
 import "encoding/json"
 import "time"
-import "math/rand"
 import "sync"
 import "strings"
 import "os";
@@ -121,8 +120,11 @@ func initializeDatabase() {
   
     database.Exec("INSERT INTO reservations(id, owner_account_id, timestamp, location_id, boat_id, booking_slot_datetime, booking_slot_duration, booking_slot_price, pickup_location_id, num_of_adults, num_of_children, extras, dl_state, dl_number, first_name, last_name, email, primary_phone, alternative_phone, payment_status, payment_amount, refund_amount, charge_id, refund_id, deposit_charge_id, deposit_refund_id, deposit_amount, deposit_status, fuel_usage, fuel_charge, delay, late_fee, promo_code, notes, additional_drivers, status) VALUES ('" + string(reservation.Id) + "','" + string(reservation.OwnerAccountId) + "'," + strconv.FormatInt(reservation.Timestamp, 10) + ",'" + reservation.LocationId + "','" + reservation.BoatId + "'," + strconv.FormatInt(reservation.Slot.DateTime, 10) + "," + strconv.Itoa(reservation.Slot.Duration) + "," + strconv.FormatFloat(reservation.Slot.Price, 'E', 2, 32) + ",'" + reservation.PickupLocationId + "'," + strconv.Itoa(reservation.NumOfAdults) + "," + strconv.Itoa(reservation.NumOfChildren) + ",'" + extras + "','" + reservation.DLState + "','" + reservation.DLNumber + "','" + reservation.FirstName + "','" + reservation.LastName + "','" + reservation.Email + "','" + reservation.PrimaryPhone + "','" + reservation.AlternativePhone + "','" + string(reservation.PaymentStatus) + "'," + strconv.FormatFloat(reservation.PaymentAmount, 'E', 2, 32) + "," + strconv.FormatFloat(reservation.RefundAmount, 'E', 2, 32) + ",'" + reservation.ChargeId + "','" + reservation.RefundId + "','" + reservation.DepositChargeId + "','" + reservation.DepositRefundId + "'," + strconv.FormatFloat(reservation.DepositAmount, 'E', 2, 32) + ",'" + string(reservation.DepositStatus) + "'," + strconv.Itoa(reservation.FuelUsage) + "," + strconv.FormatFloat(reservation.FuelCharge, 'E', 2, 32) + "," + strconv.Itoa(reservation.Delay) + "," + strconv.FormatFloat(reservation.LateFee, 'E', 2, 32) + ",'" + reservation.PromoCode + "','" + reservation.Notes + "','" + drivers + "','" + string(reservation.Status) + "')");
   }
-
-
+  
+  
+  for _, testResult := range persistenceDb.SafetyTestResults {
+    database.Exec("INSERT INTO safety_tests(suite_id, score, first_name, last_name, dl_state, dl_number, pass_date, expiration_date) VALUES ('" + string(testResult.SuiteId) + "', " + strconv.Itoa(testResult.Score) + ", '" + testResult.FirstName + "', '" + testResult.LastName + "', '"  + testResult.DLState + "', '" + testResult.DLNumber + "', " + strconv.FormatInt(testResult.PassDate, 10) + ", " + strconv.FormatInt(testResult.ExpirationDate, 10) + ")");
+  }
 }
 
 
@@ -153,7 +155,7 @@ func InitializePersistance() {
   schedulePeriodicCleanup();
   
   initializeDatabase();
-
+  
 /*
   selDB, err := database.Query("SELECT * FROM test");
   if (err != nil) {
@@ -173,45 +175,29 @@ func InitializePersistance() {
 
 
 func GetReservation(reservationId TReservationId) *TReservation {
-  reservation := persistenceDb.Reservations[reservationId];
+  selDB, _ := database.Query("SELECT * FROM reservations WHERE id='" + string(reservationId)+ "'");
+
+  if (selDB.Next()) {
+    var extras string;
+    var drivers string;
   
-  if (reservation == nil) {
-    return nil;
-  }
-  
-  if (reservation.isActive()) {
-    return reservation;
-  }
-
-  return nil;
-}
-
-func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
-  for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId && strings.EqualFold(reservation.LastName, lastName) && reservation.isActive()) {
-      return reservation;
-    }
-  }
-
-  return nil;
-}
-
-func RecoverOwnerReservation(reservationId TReservationId, ownerAccountId TOwnerAccountId) *TReservation {
-  for resId, reservation := range persistenceDb.Reservations {
-    if (reservationId == resId) {
-      if (reservation.OwnerAccountId == ownerAccountId && reservation.Status == RESERVATION_STATUS_BOOKED) {
-        return reservation;
-      }
-
-      account := GetOwnerAccount(ownerAccountId);
-      if (account != nil && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
-        return reservation;
+    reservation := new(TReservation);
+    selDB.Scan(&reservation.Id, &reservation.OwnerAccountId, &reservation.Timestamp, &reservation.LocationId, &reservation.BoatId, &reservation.Slot.DateTime, &reservation.Slot.Duration, &reservation.Slot.Price, &reservation.PickupLocationId, &reservation.NumOfAdults, &reservation.NumOfChildren, &extras, &reservation.DLState, &reservation.DLNumber, &reservation.FirstName, &reservation.LastName, &reservation.Email, &reservation.PrimaryPhone, &reservation.AlternativePhone, &reservation.PaymentStatus, &reservation.PaymentAmount, &reservation.RefundAmount, &reservation.ChargeId, &reservation.RefundId, &reservation.DepositChargeId, &reservation.DepositRefundId, &reservation.DepositAmount, &reservation.DepositStatus, &reservation.FuelUsage, &reservation.FuelCharge, &reservation.Delay, &reservation.LateFee, &reservation.PromoCode, &reservation.Notes, &drivers, &reservation.Status);
+    
+    reservation.Extras = make(map[string]bool);
+    if (len(extras) > 0) {
+      for _, extraItem := range strings.Split(extras, ",") {
+        reservation.Extras[extraItem] = true;
       }
     }
+    
+    reservation.AdditionalDrivers = strings.Split(drivers, ",");
   }
-
+  
   return nil;
 }
+
+
 
 func GetAllReservations() TReservations {
   result := make(TReservations);
@@ -411,27 +397,6 @@ func readOwnerAccountDatabase() {
   }
 }
 
-
-
-func generateReservationId() TReservationId {
-  rand.Seed(time.Now().UTC().UnixNano());
-  
-  var sessionId string;
-  var bytes [3]byte;
-  
-  for groupIndex := 0; groupIndex < 4; groupIndex++ {
-    for i := 0; i < 3; i++ {
-      bytes[i] = 48 + byte(rand.Intn(10));
-    }
-    
-    if (groupIndex > 0) {
-      sessionId += "-";
-    }
-    sessionId += string(bytes[:]);
-  }
-  
-  return TReservationId(sessionId);
-}
 
 
 

@@ -28,7 +28,7 @@ var twilioClient *twirest.TwilioClient = nil;
 
 
 func NotifyReservationBooked(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -68,7 +68,7 @@ func NotifyReservationCancelled(reservation *TReservation, isAdmin bool) {
 }
 
 func NotifyReservationUpdated(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -91,7 +91,7 @@ func NotifyReservationUpdated(reservationId TReservationId) {
 }
 
 func NotifyReservationPaid(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -105,7 +105,7 @@ func NotifyReservationPaid(reservationId TReservationId) {
 }
 
 func NotifyReservationRefunded(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -117,7 +117,7 @@ func NotifyReservationRefunded(reservationId TReservationId) {
 }
 
 func NotifyDepositPaid(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -131,7 +131,7 @@ func NotifyDepositPaid(reservationId TReservationId) {
 }
 
 func NotifyDepositRefunded(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -145,7 +145,7 @@ func NotifyDepositRefunded(reservationId TReservationId) {
 }
 
 func NotifyDayBeforeReminder(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -161,7 +161,7 @@ func NotifyDayBeforeReminder(reservationId TReservationId) {
 }
 
 func NotifyGetReadyReminder(reservationId TReservationId) {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return;
   }
@@ -177,7 +177,7 @@ func NotifyGetReadyReminder(reservationId TReservationId) {
 }
 
 func EmailReservationConfirmation(reservationId TReservationId, email string) bool {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return false;
   }
@@ -196,7 +196,7 @@ func EmailReservationConfirmation(reservationId TReservationId, email string) bo
 }
 
 func EmailTestResults(reservationId TReservationId, dlId string, email string) bool {
-  reservation := GetReservation(reservationId);
+  reservation := GetActiveReservation(reservationId);
   if (reservation == nil) {
     return false;
   }
