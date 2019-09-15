@@ -11,6 +11,7 @@ import "strings"
 
 
 type TSafetyTestResult struct {
+  Id string `json:"id"`;
   SuiteId TSafetySuiteId `json:"suite_id"`;
   Score int `json:"score"`;
   FirstName string `json:"first_name"`;
@@ -168,6 +169,7 @@ func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSe
     }
 
     testResult := &TSafetyTestResult {
+      Id: completedTestResult.DLState + "-" + completedTestResult.DLNumber,
       PassDate: time.Now().UTC().UnixNano() / int64(time.Millisecond),
       ExpirationDate: time.Now().UTC().AddDate(0, 0, testSuite.ValidityPeriod).UnixNano() / int64(time.Millisecond),
       FirstName: completedTestResult.FirstName,
@@ -178,17 +180,15 @@ func handleSaveTestResults(w http.ResponseWriter, r *http.Request, sessionId TSe
       SuiteId: suiteId,
     };
     
-    dlId := testResult.DLState + "-" + testResult.DLNumber;
-  
     SaveSafetyTestResult(testResult);
     
     if (testResult.DLState != reservation.DLState || testResult.DLNumber != reservation.DLNumber) {
       // We only register an additional driver if it is not the primary renter
-      reservation.AdditionalDrivers = append(reservation.AdditionalDrivers, dlId);
+      reservation.AdditionalDrivers = append(reservation.AdditionalDrivers, testResult.Id);
       reservation.save();
     }
     
-    EmailTestResults(reservationId, dlId, reservation.Email);
+    EmailTestResults(reservationId, testResult.Id, reservation.Email);
   }
   
   processedTestResult, _ := json.Marshal(completedTestResult);

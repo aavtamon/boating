@@ -247,7 +247,7 @@ func calculateSlotsForDate(locationId string, boatId string, date time.Time) {
 func isBooked(locationId string, boatId string, slot TBookingSlot) bool {
   location := bookingConfiguration.Locations[locationId];
 
-  for _, reservation := range GetAllReservations() {
+  for _, reservation := range GetActiveReservations() {
     if (reservation.LocationId != locationId || reservation.BoatId != boatId) {
       continue;
     }
@@ -271,7 +271,7 @@ func notifyUpcomingBookings(now time.Time) {
   comingSoonNotificationLowerBound := utcTime.Add(2 * time.Hour);
   comingSoonNotificationUpperBound := comingSoonNotificationLowerBound.Add(time.Hour);
 
-  for reservationId, reservation := range GetAllReservations() {
+  for reservationId, reservation := range GetActiveReservations() {
     if (reservation.Status != RESERVATION_STATUS_BOOKED) {
       continue;
     }

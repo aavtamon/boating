@@ -177,7 +177,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
         
         UsageStats: GetUsageStats(*Sessions[sessionId].AccountId),
         
-        SafetyTestResults: FindSafetyTestResults(GetActiveReservation(*Sessions[sessionId].ReservationId)),
+        SafetyTestResults: GetSafetyTestResults(GetActiveReservation(*Sessions[sessionId].ReservationId)),
         
         FormatDateTime: func(dateTime int64) string {
           return getFormattedDateTime(dateTime);

@@ -156,16 +156,6 @@ func AddReservationListener(listener TChangeListener) {
 var listeners []TChangeListener;
 
 
-func GetActiveReservation(reservationId TReservationId) *TReservation {
-  reservation := GetReservation(reservationId);
-  
-  if (reservation.isActive()) {
-    return reservation;
-  }
-  
-  return nil;
-}
-
 func RecoverReservation(reservationId TReservationId, lastName string) *TReservation {
   reservation := GetActiveReservation(reservationId);
   if (reservation != nil && strings.EqualFold(reservation.LastName, lastName)) {

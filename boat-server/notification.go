@@ -523,7 +523,7 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
     PickupLocation: GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId],
     Boat: GetBookingConfiguration().Locations[reservation.LocationId].Boats[reservation.BoatId],
 //    OwnerAccount: GetOwnerAccount(reservation.OwnerAccountId),
-    SafetyTestResults: FindSafetyTestResults(reservation),
+    SafetyTestResults: GetSafetyTestResults(reservation),
     GeneralParams: GetGeneralParams(),
     Extras: extras,
     
