@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "io/ioutil"
+import "os"
 import "encoding/json"
 import "time"
 import "strings"
@@ -177,6 +178,8 @@ func SaveReservation(reservation *TReservation) {
     }
     drivers += dl;
   }
+  
+  database.Exec("DELETE FROM reservations WHERE id='" + string(reservation.Id) + "'");
 
   database.Exec("INSERT INTO reservations(id, owner_account_id, timestamp, location_id, boat_id, booking_slot_datetime, booking_slot_duration, booking_slot_price, pickup_location_id, num_of_adults, num_of_children, extras, dl_state, dl_number, first_name, last_name, email, primary_phone, alternative_phone, payment_status, payment_amount, refund_amount, charge_id, refund_id, deposit_charge_id, deposit_refund_id, deposit_amount, deposit_status, fuel_usage, fuel_charge, delay, late_fee, promo_code, notes, additional_drivers, status) VALUES ('" + string(reservation.Id) + "','" + string(reservation.OwnerAccountId) + "'," + strconv.FormatInt(reservation.Timestamp, 10) + ",'" + reservation.LocationId + "','" + reservation.BoatId + "'," + strconv.FormatInt(reservation.Slot.DateTime, 10) + "," + strconv.Itoa(reservation.Slot.Duration) + "," + strconv.FormatFloat(reservation.Slot.Price, 'E', 2, 32) + ",'" + reservation.PickupLocationId + "'," + strconv.Itoa(reservation.NumOfAdults) + "," + strconv.Itoa(reservation.NumOfChildren) + ",'" + extras + "','" + reservation.DLState + "','" + reservation.DLNumber + "','" + reservation.FirstName + "','" + reservation.LastName + "','" + reservation.Email + "','" + reservation.PrimaryPhone + "','" + reservation.AlternativePhone + "','" + string(reservation.PaymentStatus) + "'," + strconv.FormatFloat(reservation.PaymentAmount, 'E', 2, 32) + "," + strconv.FormatFloat(reservation.RefundAmount, 'E', 2, 32) + ",'" + reservation.ChargeId + "','" + reservation.RefundId + "','" + reservation.DepositChargeId + "','" + reservation.DepositRefundId + "'," + strconv.FormatFloat(reservation.DepositAmount, 'E', 2, 32) + ",'" + string(reservation.DepositStatus) + "'," + strconv.Itoa(reservation.FuelUsage) + "," + strconv.FormatFloat(reservation.FuelCharge, 'E', 2, 32) + "," + strconv.Itoa(reservation.Delay) + "," + strconv.FormatFloat(reservation.LateFee, 'E', 2, 32) + ",'" + reservation.PromoCode + "','" + reservation.Notes + "','" + drivers + "','" + string(reservation.Status) + "')");  
   
@@ -210,6 +213,8 @@ func GetSafetyTestResults(reservation *TReservation) TSafetyTestResults {
 
 func SaveSafetyTestResult(testResult *TSafetyTestResult) {
   fmt.Printf("Persistance: saving safety test result for dl %s\n", testResult.Id);
+  
+  database.Exec("DELETE FROM safety_tests WHERE id='" + testResult.Id + "'");
   
   database.Exec("INSERT INTO safety_tests(id, suite_id, score, first_name, last_name, dl_state, dl_number, pass_date, expiration_date) VALUES ('" + testResult.Id + "', '" + string(testResult.SuiteId) + "', " + strconv.Itoa(testResult.Score) + ", '" + testResult.FirstName + "', '" + testResult.LastName + "', '"  + testResult.DLState + "', '" + testResult.DLNumber + "', " + strconv.FormatInt(testResult.PassDate, 10) + ", " + strconv.FormatInt(testResult.ExpirationDate, 10) + ")");
   
@@ -462,34 +467,34 @@ func savePersistenceDatabase() {
 
 
 func cleanObsoleteReservations() {
-/*
   currentMoment := time.Now().UTC().Unix();
 
-  for reservationId, reservation := range persistenceDb.Reservations {
+  //database.Query("UPDATE reservations SET status =  WHERE " + searchCriteria);
   
-    // Boat owners reservations become completed automatically as they pass
-    if (reservation.Status == RESERVATION_STATUS_BOOKED && reservation.OwnerAccountId != NO_OWNER_ACCOUNT_ID) {
-      if (reservation.Slot.DateTime / int64(time.Second / time.Millisecond) + 60 * 60 * 24 < currentMoment) {
-        reservation.Status = RESERVATION_STATUS_COMPLETED;
-      }
-    } else if (reservation.Status == RESERVATION_STATUS_CANCELLED) {
-      expiration := systemConfiguration.BookingExpirationConfiguration.CancelledTimeout;
-      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
-        delete(persistenceDb.Reservations, reservationId);
-      }
-    } else if (reservation.Status == RESERVATION_STATUS_COMPLETED) {
-      expiration := systemConfiguration.BookingExpirationConfiguration.CompletedTimeout;
-      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
-        reservation.archive();
-      }
-    } else if (reservation.Status == RESERVATION_STATUS_ARCHIVED) {
-      expiration := systemConfiguration.BookingExpirationConfiguration.ArchivedTimeout;
-      if (reservation.Timestamp + expiration * 60 * 60 * 24 < currentMoment) {
-        delete(persistenceDb.Reservations, reservationId);  
-      }
-    }
+  // Boat owners reservations become completed automatically as they pass
+  reservations := findReservations("owner_account_id<>'' AND status='" + string(RESERVATION_STATUS_BOOKED) + "' AND booking_slot_datetime < " + strconv.FormatInt((currentMoment - 60 * 60 * 24) * int64(time.Second / time.Millisecond), 10));
+  for _, reservation := range reservations {
+    reservation.Status = RESERVATION_STATUS_COMPLETED;
+    reservation.save();
   }
-*/  
+
+  // Completed reservations are eventually archived
+  reservations = findReservations("status='" + string(RESERVATION_STATUS_COMPLETED) + "' AND timestamp < " + strconv.FormatInt((currentMoment - 60 * 60 * 24 * systemConfiguration.BookingExpirationConfiguration.CompletedTimeout), 10));
+  for _, reservation := range reservations {
+    reservation.archive();
+  }
+
+  // Cancelled reservations are eventually removed
+  //reservations = findReservations("status='" + string(RESERVATION_STATUS_CANCELLED) + "' AND timestamp < " + //strconv.FormatInt((currentMoment - 60 * 60 * 24 * systemConfiguration.BookingExpirationConfiguration.CancelledTimeout), 10));
+  //for reservationId, _ := range reservations {
+  //  database.Query("DELETE FROM reservations WHERE id='" + string(reservationId) + "'");
+  //}
+
+  // Archived reservations are eventually removed
+  //reservations = findReservations("status='" + string(RESERVATION_STATUS_CANCELLED) + "' AND timestamp < " + //strconv.FormatInt((currentMoment - 60 * 60 * 24 * systemConfiguration.BookingExpirationConfiguration.ArchivedTimeout), 10));
+  //for reservationId, _ := range reservations {
+  //  database.Query("DELETE FROM reservations WHERE id='" + string(reservationId) + "'");
+  //}
 }
 
 func cleanObsoleteSafetyTestResults() {
@@ -559,8 +564,34 @@ func schedulePeriodicCleanup() {
     // Start action every 24 hours
     tickChannel := time.Tick(time.Duration(24) * time.Hour);
     for now := range tickChannel {
-      fmt.Println("Persistance: periodic database cleanup at ", now.String());
+      fmt.Println("Persistance: periodic database cleanup and backup at ", now.String());
       cleanPersistenceDatabase();
+      backupDatabase();
     }
   }();
+}
+
+func backupDatabase() {
+  // First, create a backup copy
+  backupFile := GetSystemConfiguration().PersistenceDb.BackupPath + "/" + strconv.FormatInt(time.Now().UTC().Unix(), 10);
+  //TBD - use mysqldump to backup
+//  err = ioutil.WriteFile(backupFile, dbContent, 0644);
+//  if (err != nil) {
+//    fmt.Println("Persistance: failed to create a backup copy: ", err);
+//  }
+  fmt.Println("Persistance: database backup saved to ", backupFile);
+  
+  // Next, check if we need to remove the oldest file
+  backupFiles, err := ioutil.ReadDir(GetSystemConfiguration().PersistenceDb.BackupPath);
+  if (err != nil) {
+    fmt.Println("Persistance: failed to enumerate backup files: ", err);
+  } else {
+    if (len(backupFiles) > GetSystemConfiguration().PersistenceDb.BackupQuantity) {
+      //sort.Strings(backupFiles);
+      err = os.Remove(GetSystemConfiguration().PersistenceDb.BackupPath + "/" + backupFiles[0].Name());
+      if (err != nil) {
+        fmt.Println("Persistance: failed to remove the olderst backup file: ", err);
+      }
+    }
+  }
 }
