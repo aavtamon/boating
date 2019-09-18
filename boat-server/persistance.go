@@ -440,7 +440,7 @@ func cleanObsoleteReservations() {
   //database.Query("UPDATE reservations SET status =  WHERE " + searchCriteria);
   
   // Boat owners reservations become completed automatically as they pass
-  reservations := findReservations("owner_account_id<>'' AND status='" + string(RESERVATION_STATUS_BOOKED) + "' AND booking_slot_datetime < " + strconv.FormatInt((currentMoment - 60 * 60 * 24) * int64(time.Second / time.Millisecond), 10));
+  reservations := findReservations("owner_account_id<>'' AND status='" + string(RESERVATION_STATUS_BOOKED) + "' AND booking_slot_datetime<" + strconv.FormatInt((currentMoment - 60 * 60 * 24) * int64(time.Second / time.Millisecond), 10));
   for _, reservation := range reservations {
     reservation.Status = RESERVATION_STATUS_COMPLETED;
     reservation.save();
