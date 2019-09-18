@@ -18,6 +18,10 @@ import "github.com/JamesStewy/go-mysqldump";
 var database *sql.DB;
 var dumper *mysqldump.Dumper;
 
+var ownerAccounts map[TOwnerAccountId]*TOwnerAccount;
+var activeReservations TReservations;
+
+
 
 func initializeDatabase() {
   db, err := sql.Open("mysql", GetSystemConfiguration().PersistenceDb.Username + ":" + GetSystemConfiguration().PersistenceDb.Password + "@/" + GetSystemConfiguration().PersistenceDb.Database);
@@ -102,6 +106,7 @@ func initializeDatabase() {
 */
 
 
+/*
 // TEMPORARY
   type TPersistenceDatabase struct {
     SafetyTestResults TSafetyTestResults `json:"safety_test_results"`;
@@ -136,14 +141,9 @@ func initializeDatabase() {
   }
   
 // END OF TEMPORARY
+*/
 }
 
-
-
-
-type TOwnerAccountMap map[TOwnerAccountId]*TOwnerAccount;
-
-var ownerAccountMap TOwnerAccountMap;
 
 
 
@@ -158,15 +158,24 @@ func InitializePersistance() {
 
 
 func GetActiveReservation(reservationId TReservationId) *TReservation {
-  return findReservations("id='" + string(reservationId)+ "'")[reservationId];
+  if (reservationId == NO_RESERVATION_ID) {
+    return nil;
+  }
+
+  return findActiveReservations("id='" + string(reservationId)+ "'")[reservationId];
 }
 
 func GetActiveReservations() TReservations {
-  return findActiveReservations("");
+  if (activeReservations == nil) {
+    activeReservations = findActiveReservations("");
+  }
+  return activeReservations;
 }
 
 func SaveReservation(reservation *TReservation) {
   fmt.Printf("Persistance: saving reservation %s\n", reservation.Id);
+  
+  activeReservations = nil; // reset cache
   
   var extras string = "";
   for id, included := range reservation.Extras {
@@ -230,7 +239,7 @@ func SaveSafetyTestResult(testResult *TSafetyTestResult) {
 
 
 func GetOwnerAccount(accountId TOwnerAccountId) *TOwnerAccount {
-  ownerAccount := ownerAccountMap[accountId];
+  ownerAccount := ownerAccounts[accountId];
   if (ownerAccount == nil) {
     return nil;
   }
@@ -261,7 +270,7 @@ func GetOwnerRentalStat(accountId TOwnerAccountId) *TRentalStat {
     return nil;
   }
 
-  account := ownerAccountMap[accountId];
+  account := ownerAccounts[accountId];
   
   rentalStat := &TRentalStat{};
   rentalStat.Rentals = make(map[TReservationId]*TRental);
@@ -305,7 +314,7 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
     return nil;
   }
 
-  account := ownerAccountMap[accountId];
+  account := ownerAccounts[accountId];
   
   currentTime := time.Now().UTC();
   
@@ -406,7 +415,7 @@ func findActiveReservations(additionalSearchCriteria string) TReservations {
   searchCriteria := "status<>'" + string(RESERVATION_STATUS_CANCELLED) + "' AND status<>'" + string(RESERVATION_STATUS_COMPLETED) + "' AND status<>'" + string(RESERVATION_STATUS_ARCHIVED) + "'";
   
   if (additionalSearchCriteria != "") {
-    searchCriteria += " " + additionalSearchCriteria;
+    searchCriteria += " AND " + additionalSearchCriteria;
   }
 
   return findReservations(searchCriteria);
@@ -423,57 +432,9 @@ func cleanPersistenceDatabase() {
 }
 
 
-
-/*
-func savePersistenceDatabase() {
-  cleanObsoleteReservations();
-  cleanObsoleteSafetyTestResults();
-  
-  persistentDbPath := RuntimeRoot + "/persistence_db.json";
-  
-  // First, create a backup copy
-  dbContent, err := ioutil.ReadFile(persistentDbPath);
-  if (err == nil) {
-    backupFile := GetSystemConfiguration().PersistenceDb.BackupPath + "/" + strconv.FormatInt(time.Now().UTC().Unix(), 10);
-    err = ioutil.WriteFile(backupFile, dbContent, 0644);
-    if (err != nil) {
-      fmt.Println("Persistance: failed to create a backup copy: ", err);
-    }
-  } else {
-    fmt.Println("Persistance: failed to read persistence db - skipping backup: ", err);
-  }
-  
-  // Next, check if we need to remove the oldest file
-  backupFiles, err := ioutil.ReadDir(GetSystemConfiguration().PersistenceDb.BackupPath);
-  if (err != nil) {
-    fmt.Println("Persistance: failed to enumerate backup files: ", err);
-  } else {
-    if (len(backupFiles) > GetSystemConfiguration().PersistenceDb.BackupQuantity) {
-      //sort.Strings(backupFiles);
-      err = os.Remove(GetSystemConfiguration().PersistenceDb.BackupPath + "/" + backupFiles[0].Name());
-      if (err != nil) {
-        fmt.Println("Persistance: failed to remove the olderst backup file: ", err);
-      }
-    }
-  }
-  
-  // Finally, save to / overwrite the persistence db
-  databaseByteArray, err := json.MarshalIndent(persistenceDb, "", "  ");
-  if (err == nil) {
-    err = ioutil.WriteFile(persistentDbPath, databaseByteArray, 0644);
-    if (err != nil) {
-      fmt.Println("Persistance: failed to save reservation database to file: ", err);
-    } else {
-      fmt.Println("Persistance: saving database");
-    }
-  } else {
-    fmt.Println("Persistance: failed to serialize reservation database: ", err);
-  }
-}
-*/
-
-
 func cleanObsoleteReservations() {
+  activeReservations = nil; // reset cache 
+
   currentMoment := time.Now().UTC().Unix();
 
   //database.Query("UPDATE reservations SET status =  WHERE " + searchCriteria);
@@ -514,7 +475,7 @@ func cleanObsoleteSafetyTestResults() {
 func readOwnerAccountDatabase() {
   databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/" + GetSystemConfiguration().PersistenceDb.AccountDatabase);
   if (err == nil) {
-    err := json.Unmarshal(databaseByteArray, &ownerAccountMap);
+    err := json.Unmarshal(databaseByteArray, &ownerAccounts);
     if (err != nil) {
       fmt.Println("Persistance: failed to dersereialize account database - initializing", err);
     } else {
@@ -524,15 +485,15 @@ func readOwnerAccountDatabase() {
     fmt.Println("Persistance: failed to read account database - initializing", err);
   }
   
-  if (ownerAccountMap == nil) {
-    ownerAccountMap = make(TOwnerAccountMap);
+  if (ownerAccounts == nil) {
+    ownerAccounts = make(map[TOwnerAccountId]*TOwnerAccount);
   }
 }
 
 func findMatchingAccounts(locationId string, boatId string) []*TOwnerAccount {
   result := []*TOwnerAccount{};
 
-  for _, account := range ownerAccountMap {
+  for _, account := range ownerAccounts {
     boatIds, hasLocation := account.Locations[locationId];
     if (hasLocation) {
       if (len(boatIds.Boats) == 0 && account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
