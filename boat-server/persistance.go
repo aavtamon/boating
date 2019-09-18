@@ -11,21 +11,28 @@ import "strconv";
 
 import "database/sql";
 import _"github.com/go-sql-driver/mysql";
+import "github.com/JamesStewy/go-mysqldump";
 
 
 
 var database *sql.DB;
+var dumper *mysqldump.Dumper;
 
 
 func initializeDatabase() {
   db, err := sql.Open("mysql", GetSystemConfiguration().PersistenceDb.Username + ":" + GetSystemConfiguration().PersistenceDb.Password + "@/" + GetSystemConfiguration().PersistenceDb.Database);
   if (err != nil) {
-    log.Fatal("Persistence: Cannot initialize database", err);
+    log.Fatal("Persistence: Cannot initialize database ", err);
   } else {
     fmt.Println("Persistence: database connection successful");
     database = db;
   }
-
+  
+  dumper, err = mysqldump.Register(database, GetSystemConfiguration().PersistenceDb.BackupPath, time.ANSIC);
+  if (err != nil) {
+    fmt.Println("Persistence: database backup failed to initialize ", err);
+  }
+   
 
   database.Exec("CREATE TABLE IF NOT EXISTS reservations(" +
                 "id VARCHAR(20) PRIMARY KEY," +
@@ -571,16 +578,16 @@ func schedulePeriodicCleanup() {
   }();
 }
 
+
 func backupDatabase() {
-  // First, create a backup copy
-  backupFile := GetSystemConfiguration().PersistenceDb.BackupPath + "/" + strconv.FormatInt(time.Now().UTC().Unix(), 10);
-  //TBD - use mysqldump to backup
-//  err = ioutil.WriteFile(backupFile, dbContent, 0644);
-//  if (err != nil) {
-//    fmt.Println("Persistance: failed to create a backup copy: ", err);
-//  }
-  fmt.Println("Persistance: database backup saved to ", backupFile);
-  
+  backupFile, err := dumper.Dump();
+  if (err != nil) {
+    fmt.Println("Persistance: failed to backup database ", err);
+    return;
+  } else {
+    fmt.Println("Persistance: database backup saved to ", backupFile);
+  }
+
   // Next, check if we need to remove the oldest file
   backupFiles, err := ioutil.ReadDir(GetSystemConfiguration().PersistenceDb.BackupPath);
   if (err != nil) {
