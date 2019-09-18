@@ -104,44 +104,6 @@ func initializeDatabase() {
                 "locations VARCHAR(255) NOT NULL" +
                 ")");
 */
-
-
-/*
-// TEMPORARY
-  type TPersistenceDatabase struct {
-    SafetyTestResults TSafetyTestResults `json:"safety_test_results"`;
-    Reservations TReservations `json:"reservations"`;
-  }
-
-  var persistenceDb TPersistenceDatabase;
-  databaseByteArray, err := ioutil.ReadFile(RuntimeRoot + "/persistence_db.json");
-  if (err == nil) {
-    err := json.Unmarshal(databaseByteArray, &persistenceDb);
-    if (err != nil) {
-      fmt.Println("Persistance: failed to dersereialize reservation database - initializing: ", err);
-    } else {
-      fmt.Println("Persistance: reservation database is read");
-    }
-  } else {
-    fmt.Println("Persistance: failed to read reservation database - initializing: ", err);
-  }
-  
-  if (persistenceDb.Reservations == nil) {
-    persistenceDb.Reservations = make(TReservations);
-    persistenceDb.SafetyTestResults = make(TSafetyTestResults);
-  }
-
-
-  for _, reservation := range persistenceDb.Reservations {
-    SaveReservation(reservation);
-  }
-  for _, testResult := range persistenceDb.SafetyTestResults {
-    testResult.Id = testResult.DLState + "-" + testResult.DLNumber;
-    SaveSafetyTestResult(testResult);
-  }
-  
-// END OF TEMPORARY
-*/
 }
 
 
