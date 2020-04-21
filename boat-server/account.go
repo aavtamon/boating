@@ -5,7 +5,7 @@ import "encoding/json"
 import "strings"
 import "crypto/md5"
 import "encoding/hex"
-
+import "fmt"
 
 
 type TBoatIds struct {
@@ -82,6 +82,8 @@ func handleGetAccount(w http.ResponseWriter, r *http.Request, sessionId TSession
   }
 
   if (account.Token != calculateHash(password, account.LastName)) {
+  
+fmt.Printf("Account token: <%s>\n", account.Token);  
     w.WriteHeader(http.StatusUnauthorized);
     w.Write([]byte("Wrong user name or password"));
 
@@ -107,7 +109,7 @@ func calculateHash(password string, salt string) string {
   hasher.Write([]byte(password));
   passwordHash := hex.EncodeToString(hasher.Sum([]byte(salt)));
   
-  //fmt.Printf("PASSWORD HASH: <%s>\n", passwordHash);
+  fmt.Printf("PASSWORD HASH: <%s>\n", passwordHash);
   
   return passwordHash;
 }

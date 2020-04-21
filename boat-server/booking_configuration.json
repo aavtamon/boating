@@ -20,11 +20,12 @@
   ],
   
   "promo_codes": {
+    "SP4GFTICT100P": 1,
     "AK34BU274": 50,
     "982FER4KUSK": 60
   },
 
-  "gas_price": 3.20,
+  "gas_price": 2.80,
   
   "locations": {
     "lanier": {
