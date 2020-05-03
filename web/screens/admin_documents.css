@@ -26,3 +26,9 @@
   padding: 10px;
   border: 1px solid black;
 }
+
+#AdminDocuments-Screen-RentalManagement-DocumentTable-GeneralHeader {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+}
