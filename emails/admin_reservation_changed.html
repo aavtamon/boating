@@ -1,0 +1,30 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Reservation Placed by Renter - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Reservation Confirmation Number: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        <br>
+        Reservation was modified.
+      </div>
+      <br>
+      The Rental Begins: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      <br>
+      Boat Name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Pickup Location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}})
+      <br>
+      Parking Fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      <br>
+      Special Instructions: <b>{{.PickupLocation.Instructions}}</b>
+      <br>
+      <br>
+
+      {{if eq (len .SafetyTestResults) 0}}
+        Safety test not taken.
+      {{else}}
+        Safety test passed.
+      {{end}}
+
+{{template "email_footer"}}

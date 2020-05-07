@@ -81,6 +81,12 @@ func NotifyReservationUpdated(reservationId TReservationId) {
         textRenterDepositWithheld(reservation);
 
         emailAdminDepositWithheld(reservation);
+      } else if (reservation.Status == RESERVATION_STATUS_BOOKED) {
+        // Reservation was changed
+        emailRenterReservationChanged(reservation);
+        textRenterReservationChanged(reservation);
+
+        emailAdminReservationChanged(reservation);
       } else {
         // We do not notify about completion in normal case, we notify that the deposit is returned
       }
@@ -272,6 +278,12 @@ func emailRenterDepositWithheld(reservation *TReservation) bool {
   return sendReservationEmail(reservation.Email, fmt.Sprintf("Deposit withheld for %s", reservation.Id), reservation, nil, "renter_deposit_withheld.html");
 }
 
+func emailRenterReservationChanged(reservation *TReservation) bool {
+  fmt.Printf("Sending reservation-changed email for reservation %s\n", reservation.Id);
+
+  return sendReservationEmail(reservation.Email, fmt.Sprintf("Reservation changed for %s", reservation.Id), reservation, nil, "renter_reservation_changed.html");
+}
+
 func emailOwnerDayBeforeReminder(reservation *TReservation) bool {
   fmt.Printf("Sending day-before email for reservation %s\n", reservation.Id);
   
@@ -388,6 +400,19 @@ func emailAdminDepositWithheld(reservation *TReservation) bool {
   return true;
 }
 
+func emailAdminReservationChanged(reservation *TReservation) bool {
+  fmt.Printf("Sending admin reservation-changed email for reservation %s\n", reservation.Id);
+
+  adminAccounts := findMatchingAccounts(reservation.LocationId, reservation.BoatId);
+  for _, account := range adminAccounts {
+    if (account.Type == OWNER_ACCOUNT_TYPE_ADMIN) {
+      sendReservationEmail(account.Email, "Reservation changed", reservation, nil, "admin_reservation_changed.html");
+    }
+  }
+
+  return true;
+}
+
 
 func textOwnerReservationBooked(reservation *TReservation) bool {
   if (reservation.PrimaryPhone == "") {
@@ -469,6 +494,16 @@ func textRenterDepositWithheld(reservation *TReservation) bool {
   return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your ride %s is complete but we had to withhold your security deposit ($%d). We will follow up with you on that", reservation.Id, reservation.DepositAmount));
 }
 
+func textRenterReservationChanged(reservation *TReservation) bool {
+  if (reservation.PrimaryPhone == "") {
+    return false;
+  }
+
+  fmt.Printf("Texting reservation changed for reservation %s\n", reservation.Id);
+
+  return sendTextMessage(reservation.PrimaryPhone, fmt.Sprintf("Your booking %s is updated", reservation.Id));
+}
+
 func textOwnerDayBeforeReminder(reservation *TReservation) bool {
   account := GetOwnerAccount(reservation.OwnerAccountId);
   if (account == nil) {
@@ -537,7 +572,7 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
   if (err != nil) {
     fmt.Printf("Error executing template: %s\n", err);
   }
-  
+
   return sendEmail(destinationAddress, emailSubject, buf.String());
 }
 
@@ -562,7 +597,7 @@ func sendEmail(destinationAddress string, emailSubject string, emailBody string)
   body += emailBody;
   
   body += "\n";
-  
+
   err := smtp.SendMail(GetSystemConfiguration().EmailConfiguration.MailServer + ":" + GetSystemConfiguration().EmailConfiguration.ServerPort, auth, GetSystemConfiguration().EmailConfiguration.SourceAddress, []string{destinationAddress}, []byte(body));
   if (err != nil) {
     fmt.Printf("Failed to send an email %s\n", err);

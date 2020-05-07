@@ -1,0 +1,51 @@
+{{template "email_header"}}
+
+      <center><h1 style='padding-top: 10px;'>Rental Confirmation - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <br>
+      <div style='font-size: 15px;'>
+        Your Reservation Confirmation Number Is: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
+        <br>
+        Your reservation was modified.
+      </div>
+      <br>
+      Your Rental Begins At: <b>{{call .FormatDateTime .Reservation.Slot.DateTime}}</b>.
+      <br>
+      Boat Name: <b>{{.Boat.Name}}</b>
+      <br>
+      <br>
+      Pickup Location: <b>{{.PickupLocation.Name}}</b> ({{.PickupLocation.Address}}) - <a href='https://www.google.com/maps?q={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&ll={{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}&z={{.PickupLocation.Location.Zoom}}&t=k'>{{.PickupLocation.Location.Latitude}},{{.PickupLocation.Location.Longitude}}</a>
+      <br>
+      Parking Fee: <b>{{.PickupLocation.ParkingFee}}</b>
+      <br>
+      Special Instructions: <b>{{.PickupLocation.Instructions}}</b>
+      <br>
+      <br>
+
+      {{if eq (len .SafetyTestResults) 0}}
+        Our records indicate that you have not yet completed the required boating safety test. Please complete the test before your rental begins, otherwise you will have to complete the test the day of the rental (and before you can take the boat). If you plan on having multiple boat operators, each person will have to complete the test.
+      {{else}}
+        Our records indicate that you have operators on this reservation that passed the required safety test. No futher action regarding the boating safety test is required from you.
+        <br>
+        You can still review safety tips, retake the test, or add more operators by following the link below.
+      {{end}}
+      <br>
+      Use this <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=safety_tips'>Safety Test</a> link to review safety tips and take the test.
+
+      <br>
+      <br>
+      Please review the most important <a href="{{.WebReference}}/files/docs/boat_rental_policies.html" target="_blank">Rental Policies</a>.
+      <br>
+      <br>
+      In order to speed up your boarding process, please print and fill out the <a href="{{.WebReference}}/files/docs/boat_rental_agreement_{{.Reservation.BoatId}}.pdf" target="_blank"> Boat Rental Agreement</a> and the <a href="{{.WebReference}}/files/docs/boat_rental_waiver.pdf" target="_blank"> Release Of Liability Agreement</a> and bring them with you.
+      <br>
+      We will need to have these forms completed and signed before you can take the boat. It will save time if you fill out all forms before you come to the lake.
+      <br>
+      <br>
+      <font style="color: red; font-weight:bold;">IMPORTANT:</font> We will need to take a damage security deposit in the amount of <b>${{printf "%.2f" .Boat.Deposit}}</b>. Please make sure to bring a credit card to complete the deposit. Your credit card must have sufficient funds to secure this amount. The deposit will be refunded upon successful completion of your rental less any fuel charges.
+      <br>
+      <br>
+      Please contact us at <a href='mailto:{{.GeneralParams.ReservationEmail}}?Subject=Inquiry regarding reservation {{.Reservation.Id}}' target='_top'>{{.GeneralParams.ReservationEmail}}</a> if you need any help.
+      <br>
+      We look forward to seeing you soon!
+
+{{template "email_footer"}}
