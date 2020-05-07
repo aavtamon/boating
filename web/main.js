@@ -57,10 +57,38 @@ Main = {
     $("#Main-Popup").hide();
   },
   
-  showMessage: function(title, message, actionListener, dialogType) {
+  showMessage: function(title, content, actionListener, dialogType) {
+    var dialogInterface = {
+      hide: function() {
+        Main.hideMessage();
+      },
+      
+      setContent: function(html) {
+        $("#Main-Dialog-Frame-Content-Message").html(html != null ? html : "");
+      },
+      
+      enableAction: function(action, isEnabled) {
+        if (action == Main.ACTION_OK || action == Main.ACTION_YES) {
+          $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
+          if (isEnabled) {
+            $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, action));
+          }
+          $("#Main-Dialog-Frame-Content-Buttons-OK").prop("disabled", !isEnabled);
+        } else if (action == Main.ACTION_CANCEL || action == Main.ACTION_NO) {
+          $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
+          if (isEnabled) {
+            $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, action));
+          }
+          $("#Main-Dialog-Frame-Content-Buttons-Cancel").prop("disabled", !isEnabled);
+        }
+      }
+    }
+
+    
     $("#Main-Dialog-Frame-Title").html(title);
-    $("#Main-Dialog-Frame-Content-Message").html(message);
     $("#Main-Dialog-Frame-Content-Buttons").show();
+
+    dialogInterface.setContent(content);
     
     function onClick(button) {
       $("#Main-Dialog").hide();
@@ -71,6 +99,7 @@ Main = {
     }
     
     $("#Main-Dialog").show();
+        
     
     dialogType = dialogType || Main.DIALOG_TYPE_INFORMATION;
     
@@ -101,37 +130,34 @@ Main = {
     } else if (dialogType == Main.DIALOG_TYPE_CONFIRMATION) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("OK");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
+      dialogInterface.enableAction(Main.ACTION_OK, true);
 
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
+      dialogInterface.enableAction(Main.ACTION_CANCEL, true);
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
     } else if (dialogType == Main.DIALOG_TYPE_ACCEPT) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("Accept");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_OK));
+      dialogInterface.enableAction(Main.ACTION_OK, true);
 
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("Cancel");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_CANCEL));
+      dialogInterface.enableAction(Main.ACTION_CANCEL, true);
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").focus();
     } else if (dialogType == Main.DIALOG_TYPE_YESNO) {
       $("#Main-Dialog-Frame-Content-Buttons-OK").html("Yes");
       $("#Main-Dialog-Frame-Content-Buttons-OK").show();
-      $("#Main-Dialog-Frame-Content-Buttons-OK").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-OK").click(onClick.bind(this, Main.ACTION_YES));
+      dialogInterface.enableAction(Main.ACTION_YES, true);
       $("#Main-Dialog-Frame-Content-Buttons-OK").focus();
       
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").html("No");
       $("#Main-Dialog-Frame-Content-Buttons-Cancel").show();
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").off("click");
-      $("#Main-Dialog-Frame-Content-Buttons-Cancel").click(onClick.bind(this, Main.ACTION_NO));
+      dialogInterface.enableAction(Main.ACTION_NO, true);
     }
+    
+    
+    return dialogInterface;
   },
   
   hideMessage: function() {

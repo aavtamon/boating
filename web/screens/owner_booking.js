@@ -31,7 +31,7 @@ OwnerBooking = {
     $("#OwnerBooking-Screen-SelectionPanel-Calendar").datepicker({
       beforeShowDay: function(date) {
         var slotType = OwnerBooking.availableSlots[ScreenUtils.getUTCMillis(date)];
-        var isSelectable = slotType != Backend.SLOT_TYPE_NONE;
+        var isSelectable = slotType != null && slotType != Backend.SLOT_TYPE_NONE;
 
         return [isSelectable, "", null];
       },

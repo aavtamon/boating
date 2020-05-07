@@ -292,6 +292,12 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
       // Handling reservation update
       // TODO: may need better validation
       
+      if (!isAdmin(sessionId)) {
+        w.WriteHeader(http.StatusUnauthorized);
+        w.Write([]byte("Only Admin can modify the existing reservation"));
+        return;
+      }
+      
       reservationChanged := false;
       if (existingReservation.Status != reservation.Status && (reservation.Status == RESERVATION_STATUS_BOOKED || reservation.Status == RESERVATION_STATUS_DEPOSITED || reservation.Status == RESERVATION_STATUS_ACCIDENT || reservation.Status == RESERVATION_STATUS_COMPLETED)) {
         existingReservation.Status = reservation.Status;
@@ -316,6 +322,10 @@ func handleSaveReservation(w http.ResponseWriter, r *http.Request, sessionId TSe
           existingReservation.Notes = "input too long";
           reservationChanged = true;
         }
+      }
+      if (existingReservation.Slot.DateTime != reservation.Slot.DateTime) {
+        existingReservation.Slot.DateTime = reservation.Slot.DateTime;
+        reservationChanged = true;
       }
       
       if (reservationChanged) {

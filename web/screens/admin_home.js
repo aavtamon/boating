@@ -1,8 +1,10 @@
 AdminHome = {
   adminAccount: null,
   rentalStat: null,
+  availableSlots: null,
   
   _selectedRentalElement: null,
+  _selectedMoveDate: null,
   
   onLoad: function() {
     if (this.adminAccount == null || this.adminAccount.type != Backend.OWNER_ACCOUNT_TYPE_ADMIN) {
@@ -28,6 +30,7 @@ AdminHome = {
     
     
     $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").prop("disabled", true);
     $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
     $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
     $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
@@ -56,6 +59,7 @@ AdminHome = {
                     }.bind(this));
                   } else {
                     Main.hidePopup();
+                    Backend.resetReservationContext();
                     Main.showMessage("Update Not Successful", "Refund cannot be issued");
                   }
                 }.bind(this));
@@ -68,6 +72,49 @@ AdminHome = {
         }.bind(this), Main.DIALOG_TYPE_YESNO);
       }
     }.bind(this));
+    
+    
+    $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").click(function() {
+      if (this._selectedRentalElement != null) {
+        Backend.restoreReservationContext(this._selectedRentalElement._reservationId, null, function(status) {
+          if (status == Backend.STATUS_SUCCESS) {
+            var dialog = Main.showMessage("Reschedule Reservation?", null, function(action) {
+              if (action == Main.ACTION_YES) {
+                var newSlotDate = ScreenUtils.setDateForTime(Backend.getReservationContext().slot.time, this._selectedMoveDate);
+                var newSlotTime = newSlotDate.getTime();
+                
+                Main.showMessage("Rescheduling Reservation?", "<center>Do you REALLY want to reschedule this reservation to " + ScreenUtils.getBookingTime(newSlotTime) + " on " + ScreenUtils.getBookingDate(newSlotTime) + " and inform the customer about it?</center>", function(action) {
+                  if (action == Main.ACTION_YES) {
+                    Main.showPopup("Rescheduling reservation...", "Reservation is being rescheduled...");
+                
+                    Backend.getReservationContext().slot.time = newSlotTime;
+
+                    Backend.saveReservation(function(status) {
+                      Main.hidePopup();
+                      if (status == Backend.STATUS_SUCCESS) {
+                        this._selectedRentalElement._rental.slot.time = newSlotTime;
+                        Backend.resetReservationContext();
+
+                        this._showRentals();
+                      } else {
+                        Backend.resetReservationContext();
+                        Main.showMessage("Update Not Successful", "Reservation can not be updated.");
+                      }
+                    }.bind(this));
+                  } else {
+                    Backend.resetReservationContext();
+                  }
+                }.bind(this), Main.DIALOG_TYPE_YESNO);
+              }
+            }.bind(this), Main.DIALOG_TYPE_YESNO);
+            this._initializeReschedulePopup(dialog);
+          } else {
+            Main.showMessage("Reservation Not Found", "Reservation can not be retrieved.");
+          }
+        }.bind(this));
+      }
+    }.bind(this));
+    
     
     
     $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").click(function() {
@@ -253,6 +300,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Deposit not taken");
       
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", false);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").prop("disabled", false);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", !rental.safety_test_status);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
@@ -260,6 +308,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Rental in progress");
       
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", false);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
@@ -267,6 +316,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Accident not settled");
       
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", false);
@@ -274,6 +324,7 @@ AdminHome = {
       $("#AdminHome-Screen-AdminInfo-RentalInfo-Details-Status-Value").html("Completed");
       
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton").prop("disabled", true);
+      $("#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-DepositButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton").prop("disabled", true);
       $("#AdminHome-Screen-AdminInfo-Actions-Details-SettleButton").prop("disabled", true);
@@ -301,5 +352,48 @@ AdminHome = {
         Main.showMessage("Operation failed", "Failed to retrieve the referenced reservation");
       }
     });
+  },
+  
+  
+  _initializeReschedulePopup: function(dialogInterface) {
+    var schedulingBeginDate = Date.parse(Backend.getBookingConfiguration().scheduling_begin_date);
+    var schedulingEndDate = Date.parse(Backend.getBookingConfiguration().scheduling_end_date);
+
+    var reservation = Backend.getReservationContext();
+    var bookingBeginDate = ScreenUtils.getDateForTime(reservation.slot.time).getTime();
+    if (schedulingBeginDate > bookingBeginDate) {
+      bookingBeginDate = schedulingBeginDate;
+    }
+    
+    
+    this._selectedMoveDate = null;
+    
+    dialogInterface.setContent("<center><div id='AdminHome-Screen-ReschedulePopup'></div></center>");
+    dialogInterface.enableAction(Main.ACTION_OK, false);
+  
+    $("#AdminHome-Screen-ReschedulePopup").datepicker({
+      beforeShowDay: function(date) {
+        var slotType = AdminHome.availableSlots[ScreenUtils.getUTCMillis(date)];
+        var isSelectable = slotType == Backend.SLOT_TYPE_RENTER;
+
+        return [isSelectable, "", null];
+      },
+      
+      onSelect: function(dateText, instance) {
+        var newSelectedDate = ScreenUtils.getUTCMillis(new Date(dateText));
+        
+        if (newSelectedDate == this._selectedMoveDate) {
+          return;
+        }
+        
+        this._selectedMoveDate = newSelectedDate;
+        
+        dialogInterface.enableAction(Main.ACTION_YES, true);
+      }.bind(this),
+      
+      defaultDate: ScreenUtils.getLocalTime(bookingBeginDate),
+      minDate: ScreenUtils.getLocalTime(bookingBeginDate),
+      maxDate: ScreenUtils.getLocalTime(schedulingEndDate)
+    });    
   }
 }

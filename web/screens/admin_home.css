@@ -73,12 +73,15 @@
 #AdminHome-Screen-AdminInfo-Actions-Details-DepositButton,
 #AdminHome-Screen-AdminInfo-Actions-Details-CompleteButton,
 #AdminHome-Screen-AdminInfo-Actions-Details-SettleButton,
+#AdminHome-Screen-AdminInfo-Actions-Details-MoveButton,
 #AdminHome-Screen-AdminInfo-Actions-Details-CancelButton {
   width: 100%;
   margin-top: 20px;
 }
 
-#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton {
+#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton, #AdminHome-Screen-AdminInfo-Actions-Details-MoveButton {
   font-size: 15px;
-  margin-top: 100px;
+}
+#AdminHome-Screen-AdminInfo-Actions-Details-CancelButton {
+  margin-top: 50px;
 }

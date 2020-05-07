@@ -96,6 +96,16 @@ ScreenUtils = {
 
     return date;
   },
+  setDateForTime: function(timeMs, dateTime) {
+    var date = new Date(timeMs);
+    
+    var newDate = new Date(dateTime);
+    date.setUTCFullYear(newDate.getUTCFullYear())
+    date.setUTCMonth(newDate.getUTCMonth());
+    date.setUTCDate(newDate.getUTCDate());
+
+    return date;
+  },
   
   
   
