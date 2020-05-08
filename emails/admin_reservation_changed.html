@@ -1,6 +1,6 @@
 {{template "email_header"}}
 
-      <center><h1 style='padding-top: 10px;'>Reservation Placed by Renter - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
+      <center><h1 style='padding-top: 10px;'>Reservation Changed By Admin - <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a></h1></center>
       <br>
       <div style='font-size: 15px;'>
         Reservation Confirmation Number: <a href='{{.WebReference}}/main.html#reservation_retrieval?id={{.Reservation.Id}}&name={{.Reservation.LastName}}&action=reservation_update'>{{.Reservation.Id}}</a>.
