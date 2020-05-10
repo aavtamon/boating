@@ -3,10 +3,10 @@
       <center><h1 style='padding-top: 10px;'>Security Deposit Release - {{.Reservation.Id}}</h1></center>
       <br>
       <div style='font-size: 15px;'>
-        A fuel charge of ${{printf "%.2f" .Reservation.FuelCharge}} and a late fee of ${{printf "%.2f" .Reservation.LateFee}} has been applied to your security deposit.
+        A fuel charge of ${{printf "%.2f" .Reservation.FuelCharge}} and a late fee of ${{printf "%.2f" .Reservation.LateFee}} has been applied to the renter's security deposit.
         <br>
         <br>
-        The remaining portion of your security deposit was released and should appear on the credit card in approximately 5 business days.
+        The remaining portion of the security deposit was released and should appear on the credit card in approximately 5 business days.
         <br>
         <br>
         Original Deposit: ${{printf "%.2f" .Reservation.DepositAmount}}.
