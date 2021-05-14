@@ -63,7 +63,11 @@
       },
       "extras": {
         "tube": {
-          "name": "Tube / Tow Rope",
+          "name": "3-person sit-in tube",
+          "price": 50.00
+        },
+        "banana": {
+          "name": "3-person hot-dog",
           "price": 25.00
         }
       },
