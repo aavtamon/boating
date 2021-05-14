@@ -50,8 +50,9 @@ BookingRenters = {
     for (var name in extras) {
       var extra = extras[name];
       var extraId = "BookingRenters-Screen-AdditionalInformation-Equipment-Extras-" + name;
-      $("#BookingRenters-Screen-AdditionalInformation-Equipment-Extras").append('<input id="' + extraId + '"/>');
-      $("#BookingRenters-Screen-AdditionalInformation-Equipment-Extras").append('<label for="' + extraId + '">' + extra.name + ' (+' + ScreenUtils.getBookingPrice(extra.price) + ')</label>');
+      $("#BookingRenters-Screen-AdditionalInformation-Equipment-Extras").append('<div id="' + extraId + '-container" class="extras-container"></div>');
+      $("#" + extraId + "-container").append('<input id="' + extraId + '"/>');
+      $("#" + extraId + "-container").append('<label for="' + extraId + '">' + extra.name + ' (+' + ScreenUtils.getBookingPrice(extra.price) + ')</label>');
       
       ScreenUtils.checkbox("#" + extraId, reservationContext.extras, name);
     }

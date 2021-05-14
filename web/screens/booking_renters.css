@@ -71,9 +71,14 @@
   display: inline-block;
   margin-right: 100px;
   margin-bottom: 5px;
+  vertical-align: top;
 }
 #BookingRenters-Screen-AdditionalInformation-Equipment-Extras {
   display: inline-block;
+}
+
+.extras-container {
+  margin-bottom: 10px;
 }
 
 

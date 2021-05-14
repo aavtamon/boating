@@ -73,10 +73,10 @@ BookingPayment = {
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceName-Value").html(location.name);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-PlaceAddress-Value").html(location.address);
     $("#BookingPayment-Screen-ReservationSummary-Location-Details-ParkingFee-Value").html(location.parking_fee);
-    $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);    
-    
+    $("#BookingPayment-Screen-ReservationSummary-Location-Details-PickupInstructions-Value").html(location.instructions);
+
     var includedExtrasAndPrice = ScreenUtils.getBookingExtrasAndPrice(reservationContext.extras, Backend.getBookingConfiguration().locations[reservationContext.location_id].extras);
-        $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(includedExtrasAndPrice[0] == "" ? "none" : includedExtrasAndPrice[0]);
+    $("#BookingPayment-Screen-ReservationSummary-Extras-Value").html(includedExtrasAndPrice[0] == "" ? "none" : includedExtrasAndPrice[0]);
     
     this._updateTotalPrice();
     
