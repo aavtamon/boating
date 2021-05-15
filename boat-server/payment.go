@@ -190,13 +190,13 @@ func payReservation(reservation *TReservation, request *TPaymentRequest) bool {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.ChargeParams {
-      Amount: uint64(paidAmount * 100),
-      Currency: "usd",
-      Desc: "Boat reservation #" + string(request.ReservationId),
+      Amount: stripe.Int64(int64(paidAmount * 100)),
+      Currency: stripe.String(string(stripe.CurrencyUSD)),
+      Description: stripe.String("Boat reservation #" + string(request.ReservationId)),
     }
 
     params.SetSource(request.PaymentToken);
-    params.AddMeta("reservation_id", string(request.ReservationId));
+    params.AddMetadata("reservation_id", string(request.ReservationId));
 
 
     charge, err := charge.New(params);
@@ -262,8 +262,8 @@ func refundReservation(reservation *TReservation, isAdmin bool) bool {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.RefundParams {
-      Charge: reservation.ChargeId,
-      Amount: uint64(refundAmount * 100),
+      Charge: stripe.String(reservation.ChargeId),
+      Amount: stripe.Int64(int64(refundAmount * 100)),
     }
 
     refund, err := refund.New(params);
@@ -314,14 +314,14 @@ func payDeposit(reservation *TReservation, request *TPaymentRequest) bool {
     stripe.Key = GetSystemConfiguration().PaymentConfiguration.SecretKey;
 
     params := &stripe.ChargeParams {
-      Amount: uint64(depositAmount * 100),
-      NoCapture: true, // Only authorizing, but no charge.
-      Currency: "usd",
-      Desc: "Security deposit for #" + string(request.ReservationId),
+      Amount: stripe.Int64(int64(depositAmount * 100)),
+      Capture: stripe.Bool(false), // Only authorizing, but no charge.
+      Currency: stripe.String(string(stripe.CurrencyUSD)),
+      Description: stripe.String("Security deposit for #" + string(request.ReservationId)),
     }
 
     params.SetSource(request.PaymentToken);
-    params.AddMeta("reservation_id", string(request.ReservationId));
+    params.AddMetadata("reservation_id", string(request.ReservationId));
 
 
     charge, err := charge.New(params);
@@ -388,7 +388,7 @@ func refundDeposit(reservation *TReservation) bool {
     }
 
     params := &stripe.CaptureParams {
-      Amount: uint64((fuelAmount + lateFee) * 100),
+      Amount: stripe.Int64(int64((fuelAmount + lateFee) * 100)),
     }
     afterRentalCharge, err := charge.Capture(reservation.DepositChargeId, params);
 

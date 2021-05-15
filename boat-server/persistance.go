@@ -348,9 +348,13 @@ func GetUsageStats(accountId TOwnerAccountId) *TUsageStats {
 
 
 func findReservations(searchCriteria string) TReservations {
-  selDB, _ := database.Query("SELECT * FROM reservations WHERE " + searchCriteria);
-
   reservations := make(TReservations);
+
+  selDB, err := database.Query("SELECT * FROM reservations WHERE " + searchCriteria);
+  if (err != nil) {
+    return reservations;
+  }
+  
   for selDB.Next() {
     var extras string;
     var drivers string;
