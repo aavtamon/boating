@@ -60,6 +60,7 @@ type TBoat struct {
 type TExtraEquipment struct {
   Name string `json:"name"`;
   Price float64 `json:"price"`;
+  Images []TImageResource `json:"images"`;
 }
 
 type TBookingDailySchedule map[string][]int;

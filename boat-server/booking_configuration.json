@@ -26,7 +26,7 @@
     "5693HRTDS73": 20
   },
 
-  "gas_price": 3.00,
+  "gas_price": 4.00,
   
   "locations": {
     "lanier": {
@@ -64,11 +64,13 @@
       "extras": {
         "tube": {
           "name": "3-person sit-in tube",
-          "price": 50.00
+          "price": 50.00,
+          "images": [{"name": "Sit-In", "url": "files/images/sit-in-tube.jpg", "description": "Large 3-person sit in tube"}]
         },
-        "banana": {
-          "name": "3-person hot-dog",
-          "price": 25.00
+        "deck": {
+          "name": "2-person deck-tube",
+          "price": 25.00,
+          "images": [{"name": "Deck", "url": "files/images/deck-tube.jpg", "description": "2-person WOW deck tube"}]
         }
       },
       "center_location": {

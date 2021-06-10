@@ -54,6 +54,10 @@ BookingRenters = {
       $("#" + extraId + "-container").append('<input id="' + extraId + '"/>');
       $("#" + extraId + "-container").append('<label for="' + extraId + '">' + extra.name + ' (+' + ScreenUtils.getBookingPrice(extra.price) + ')</label>');
       
+      for (var index in extra.images) {
+        $("#" + extraId + "-container").append('<a href=' + extra.images[index].url + ' target="_blank"><img class="extras-thumbnail" src=' + extra.images[index].url + '></img></a>');
+      }
+      
       ScreenUtils.checkbox("#" + extraId, reservationContext.extras, name);
     }
 
