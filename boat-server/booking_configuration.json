@@ -1,6 +1,6 @@
 {
-  "scheduling_begin_date": "1 Jan 2021",
-  "scheduling_end_date": "31 Dec 2021",
+  "scheduling_begin_date": "1 Jan 2022",
+  "scheduling_end_date": "31 Dec 2025",
   "scheduling_begin_offset": 1,
   "scheduling_end_offset": 60,
   
@@ -27,7 +27,7 @@
     "83HG53YU5S3": 25
   },
 
-  "gas_price": 4.50,
+  "gas_price": 5.50,
   
   "locations": {
     "lanier": {
@@ -55,9 +55,9 @@
           "maximum_capacity": 16,
           "tank_size": 32,
           "rate": [
-            {"range_min": 4, "range_max": 4, "price": 250.00},
-            {"range_min": 6, "range_max": 6, "price": 350.00},
-            {"range_min": 8, "range_max": 8, "price": 400.00}
+            {"range_min": 4, "range_max": 4, "price": 350.00},
+            {"range_min": 6, "range_max": 6, "price": 450.00},
+            {"range_min": 8, "range_max": 8, "price": 500.00}
           ],
           "deposit": 500.00
         }
