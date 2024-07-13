@@ -96,6 +96,7 @@ type TServerConfiguration struct {
   PrivateKey string `json:"private_key"`;
   HttpPort string `json:"http_port"`;
   HttpsPort string `json:"https_port"`;
+  GoogleAPIKey string `json:"google_api_key"`;
 }
 type TEmailConfiguration struct {
   Enabled bool `json:"enabled"`;
