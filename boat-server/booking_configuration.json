@@ -116,8 +116,8 @@
         },
         "4": {
           "location": {
-            "lat": 34.20361569876298,
-            "lng": -83.97053071958939,
+            "lat": 34.228072,
+            "lng": -83.936536,
             "zoom": 20
           },
           "name": "Old Federal Park",
@@ -127,14 +127,14 @@
         },
         "5": {
           "location": {
-            "lat": 34.199934,
-            "lng": -83.971087,
+            "lat": 34.20361569876298,
+            "lng": -83.97053071958939,
             "zoom": 20
           },
           "name": "Aqualand Marina",
           "address": "6800 Lights Ferry Rd, Flowery Branch, GA 30542",
           "parking_fee": "free",
-          "instructions": "Please say at the entrance that you are going to Pig Tails restaurant. Park at the restaurant and proceed to the dock behind the office."
+          "instructions": "Please say at the entrance that you are going to Pig Tales restaurant. Park at the restaurant and proceed to the dock behind the office."
         }
       }
     }
