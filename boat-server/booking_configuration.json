@@ -56,9 +56,9 @@
           "maximum_capacity": 16,
           "tank_size": 32,
           "rate": [
-            {"range_min": 4, "range_max": 4, "price": 350.00},
-            {"range_min": 6, "range_max": 6, "price": 450.00},
-            {"range_min": 8, "range_max": 8, "price": 500.00}
+            {"range_min": 4, "range_max": 4, "price": 800.00},
+            {"range_min": 6, "range_max": 6, "price": 900.00},
+            {"range_min": 8, "range_max": 8, "price": 1000.00}
           ],
           "deposit": 500.00
         }
@@ -116,8 +116,8 @@
         },
         "4": {
           "location": {
-            "lat": 34.228072,
-            "lng": -83.936536,
+            "lat": 34.20361569876298,
+            "lng": -83.97053071958939,
             "zoom": 20
           },
           "name": "Old Federal Park",
@@ -134,7 +134,7 @@
           "name": "Aqualand Marina",
           "address": "6800 Lights Ferry Rd, Flowery Branch, GA 30542",
           "parking_fee": "free",
-          "instructions": "Please mention at the entrance that you are going to dock B46"
+          "instructions": "Please say at the entrance that you are going to Pig Tails restaurant. Park at the restaurant and proceed to the dock behind the office."
         }
       }
     }

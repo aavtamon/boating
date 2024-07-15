@@ -145,6 +145,7 @@ type TSystemConfiguration struct {
 
 type TGeneralParams struct {
   ReservationEmail string `json:"reservation_email"`;
+  ReservationPhone string `json:"reservation_phone"`;
   SupportEmail string `json:"support_email"`;
 }
 
