@@ -552,7 +552,7 @@ func sendReservationEmail(destinationAddress string, emailSubject string, reserv
   }
 
   emailObject := TReservationEmailObject {
-    WebReference: fmt.Sprintf("https://%s:8443", GetSystemConfiguration().Domain),
+    WebReference: fmt.Sprintf("https://%s:%d", GetSystemConfiguration().Domain, GetSystemConfiguration().ServerConfiguration.HttpsPort),
     
     Reservation: reservation,
     PickupLocation: GetBookingConfiguration().Locations[reservation.LocationId].PickupLocations[reservation.PickupLocationId],
