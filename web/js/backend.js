@@ -414,8 +414,8 @@ Backend = {
 
     
     //var url = window.location.protocol + "//" + window.location.hostname + ":8081/" + resource;
-    var url = resource;
-    
+    var url = encodeURI(resource);   
+ 
     request.open(method, url, true);
     request.setRequestHeader("content-type", "application/json");
     for (var name in headers) {
