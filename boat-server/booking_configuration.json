@@ -1,6 +1,6 @@
 {
-  "scheduling_begin_date": "1 Jan 2022",
-  "scheduling_end_date": "31 Dec 2025",
+  "scheduling_begin_date": "1 Jan 2026",
+  "scheduling_end_date": "31 Dec 2028",
   "scheduling_begin_offset": 1,
   "scheduling_end_offset": 60,
   
@@ -28,7 +28,7 @@
     "83HG53YU5S3": 25
   },
 
-  "gas_price": 5.50,
+  "gas_price": 7.00,
   
   "locations": {
     "lanier": {
